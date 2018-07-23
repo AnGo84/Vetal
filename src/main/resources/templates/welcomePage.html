@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title th:utext="${title}"></title>
+
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+
+</head>
+
+
+<body>
+
+	<!-- Include _menu.html -->
+	<th:block th:include="/_menu"></th:block>
+
+	<div class="container-fluid" style="margin-top: 30px">
+		<div class="row">
+			<div class="col-sm-3 bg-light">
+				<h2>Фильтр:</h2>
+				<!-- <h5>Фильтр:</h5> -->
+				<div class="fakeimg">Fake Image</div>
+
+				<h3>Some Links</h3>
+
+				<ul class="nav nav-pills flex-column">
+					<li class="nav-item"><a class="nav-link" href="#">Папка 1</a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Папка 2</a>
+					</li>
+
+				</ul>
+				<hr class="d-sm-none">
+			</div>
+			<div class="col-sm-9">
+				<h2>
+					Message : <span th:utext="${message}"></span>
+				</h2>
+
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

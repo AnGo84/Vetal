@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/font-awesome.min.css">
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+
+</head>
+<body>
+
+	<!-- Include _menu.html
+	<th:block th:include="/_menu"></th:block>
+ 	-->
+	<div class="container py-5">
+		<div class="row">
+
+			<div class="col-md-6 mx-auto">
+
+				<div class="card rounded-0">
+
+					<div class="card-header">
+						<h4 class="card-title text-center mb-4 mt-1">Sign in</h4>
+					</div>
+
+					<div class="card-body">
+
+						<!-- /login?error=true -->
+						<div th:if="${#request.getParameter('error') == 'true'}"
+							style="color: red; margin: 10px 0px;">
+							Login Failed!!!<br /> Reason : <span
+								th:if="${#session!= null and #session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION') != null}"
+								th:utext="${#session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION').message}">
+								Static summary </span>
+
+						</div>
+
+
+						<form id="loginForm" name='f'
+							th:action="@{/j_spring_security_check}" method='POST'>
+							
+							<div class="form-group inpu input-group">
+
+								<div class="input-group-prepend">
+									<span class="input-group-text" id="basic-addon1"><i class="fa fa-user"></i></span>
+								</div>
+								<!-- <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span> -->
+								<input name="username" type="text" class="form-control"
+									placeholder="Username" aria-label="Username"
+									aria-describedby="basic-addon1">
+							</div>
+							<!-- input-group.// -->
+
+							<!-- form-group// -->
+							<div class="form-group input-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text" id="basic-addon2"><i class="fa fa-lock"></i></span>
+								</div>
+								<input name='password' type='password' class="form-control"
+									placeholder="Password" aria-label="Username"
+									aria-describedby="basic-addon2">
+
+							</div>
+							<!-- input-group.// -->
+
+							<div class="form-check">
+								<label class="form-check-label"> <input type="checkbox"
+									name="remember-me" class="form-check-input" value=""> <span
+									class="custom-control-description small text-dark">Remember
+										me on this computer</span>
+								</label>
+							</div>
+							
+							<hr/>
+
+							<!-- form-group// -->
+							<div class="form-group">
+								<button name="submit" type="submit"
+									class="btn btn-primary btn-block" value="submit">Login</button>
+							</div>
+							<!-- form-group// -->
+							<p class="text-center">
+								<a href="#" class="btn">Forgot password?</a>
+							</p>
+						</form>
+					</div>
+
+					<!-- card.// -->
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
+</body>
+</html>

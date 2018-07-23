@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+<meta charset="UTF-8">
+<title>Users</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/font-awesome.min.css">
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</head>
+<body>
+	<!-- Include _menu.html -->
+	<th:block th:include="/_menu"></th:block>
+	<div class="container">
+
+		<div class="row">
+		<!-- class="well" -->
+			<div class="col-sm-2">
+				<h2>User List</h2>
+			</div>
+			<div class="col-sm-8"></div>
+			<div class="col-sm-2">
+				<a th:href="@{/users/add}" class="btn btn-primary btn-sm custom-width float-right"
+					role="button">New</a>
+			</div>
+		</div>
+		<div th:if="${not #lists.isEmpty(users)}">
+			<table class="table table-sm table-bordered table-hover">
+				<thead>
+					<tr class="text-center">
+						<th>Id</th>
+						<th>Login</th>
+						<th>Roles</th>
+						<th>Active</th>
+						<th width="100"></th>
+						<th width="100"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="user : ${users}">
+						<td th:text="${user.id}"></td>
+						<td th:text="${user.name}"></td>
+						<td>
+							<!--
+							<table>
+								<tr th:each="role :${user.roles}">
+                                    <td th:text="${role.name}"></td>
+                                </tr> 
+							</table>
+							-->
+							<span th:each="role,iterStat : ${user.userRoles}">
+        						<span th:text="${role.name}"/>
+        						<th:block th:if="${!iterStat.last}">,
+        						</th:block>
+        					</span>    	
+							
+						</td>
+						<td class="text-center" th:text="${user.enabled}"></td>
+						<!-- "@{'/users/edit-' + ${user.id}}"
+						"@{/users/edit-(id=${user.id})}" -->
+						<td class="text-center"><a th:href="@{'/users/edit-' + ${user.id}}"
+							class="btn btn-success custom-width" role="button">Edit</a></td>
+						<td class="text-center"><a th:href="@{/users/delete-(id=${user.id})}"
+							class="btn btn-danger custom-width" role="button">Delete</a></td>
+						<!-- <td><button type="button" class="btn btn-danger custom-width">Remove</button></td> -->
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>
