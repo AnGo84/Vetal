@@ -31,6 +31,16 @@
         		<a class="nav-link" th:href="@{/admin}">Admin</a>
       		</li> -->
 
+			<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle" href="#" id="navbardrop"
+				data-toggle="dropdown"> Directories </a>
+				<div class="dropdown-menu">
+					<a class="dropdown-item" th:href="@{/production}">Production</a> 
+					<a class="dropdown-item" th:href="@{/chromaticity}">Chromaticity</a> 
+						<a class="dropdown-item"
+						href="#">Link 3</a>
+				</div></li>
+
 			<!-- <sec:authorize access="hasAuthority('ROLE_ADMIN')"> th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"-->
 			<li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')"><a
 				class="nav-link dropdown-toggle" href="#" id="navbardrop"

@@ -4,6 +4,7 @@ import java.security.Principal;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 //import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.User;
@@ -12,11 +13,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import ua.com.vetal.service.ProductionDirectoryServiceImpl;
 import ua.com.vetal.utils.WebUtils;
 
 @Controller
 public class MainController {
 	static final Logger logger = LoggerFactory.getLogger(MainController.class);
+
+	@Autowired
+	private ProductionDirectoryServiceImpl productionDirectoryService;
 
 	@RequestMapping(value = { "/", "/welcome" }, method = RequestMethod.GET)
 	public String welcomePage(Model model) {
@@ -83,4 +88,13 @@ public class MainController {
 		return "403Page";
 	}
 
+	/*
+	 * @RequestMapping(value = "/production", method = RequestMethod.GET) public
+	 * String productionDirectory(Model model, Principal principal) {
+	 * 
+	 * if (principal != null) { } model.addAttribute("directoryList",
+	 * productionDirectoryService.findAllObjects());
+	 * 
+	 * return "directoryPage"; }
+	 */
 }
