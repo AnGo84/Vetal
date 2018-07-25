@@ -37,6 +37,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// And Setting PassswordEncoder
 		auth.userDetailsService(appUserDetailsService).passwordEncoder(passwordEncoder());
 
+		// auth.inMemoryAuthentication().withUser("user").password("user").roles("USER");
+
 	}
 
 	@Override
@@ -76,7 +78,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		// Config Remember Me.
 		http.authorizeRequests().and() //
-				.rememberMe().tokenRepository(this.persistentTokenRepository()) //
+				.rememberMe()//
+				.rememberMeCookieName("vetal-remember-me")//
+				.tokenRepository(this.persistentTokenRepository()) //
 				.tokenValiditySeconds(1 * 24 * 60 * 60); // 24h
 
 	}
@@ -95,4 +99,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	// InMemoryTokenRepositoryImpl memory = new InMemoryTokenRepositoryImpl();
 	// return memory;
 	// }
+
 }

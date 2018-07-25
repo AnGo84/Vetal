@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" 
-	xmlns:th="http://www.thymeleaf.org"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 <meta charset="UTF-8">
 <title>Login</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 <link rel="stylesheet" href="css/font-awesome.min.css">
 <script src="js/jquery-3.3.1.min.js"></script>
 <script src="js/popper.min.js"></script>
@@ -42,53 +41,62 @@
 
 						</div>
 
+						<p th:if="${loginError}" class="error">Wrong user or password</p>
 
 						<form id="loginForm" name='f'
 							th:action="@{/j_spring_security_check}" method='POST'>
-							
-							<div class="form-group inpu input-group">
 
-								<div class="input-group-prepend">
-									<span class="input-group-text" id="basic-addon1"><i class="fa fa-user"></i></span>
+							<div class="form-group">
+								<label for="username">Login:</label>
+								<div class="input-group">
+
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="basic-addon1"><i
+											class="fa fa-user"></i></span>
+									</div>
+									<!-- <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span> -->
+									<input id="username" name="username" type="text"
+										class="form-control" placeholder="Enter your Login"
+										aria-label="Username" aria-describedby="basic-addon1">
 								</div>
-								<!-- <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span> -->
-								<input name="username" type="text" class="form-control"
-									placeholder="Username" aria-label="Username"
-									aria-describedby="basic-addon1">
 							</div>
-							<!-- input-group.// -->
 
-							<!-- form-group// -->
-							<div class="form-group input-group">
-								<div class="input-group-prepend">
-									<span class="input-group-text" id="basic-addon2"><i class="fa fa-lock"></i></span>
+							<div class="form-group">
+								<label for="password">Password:</label>
+								<div class="input-group">
+
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="basic-addon2"><i
+											class="fa fa-lock"></i></span>
+									</div>
+									<input id="password" name='password' type='password'
+										class="form-control" placeholder="Enter your Password"
+										aria-label="Password" aria-describedby="basic-addon2">
 								</div>
-								<input name='password' type='password' class="form-control"
-									placeholder="Password" aria-label="Username"
-									aria-describedby="basic-addon2">
-
 							</div>
-							<!-- input-group.// -->
+
 
 							<div class="form-check">
 								<label class="form-check-label"> <input type="checkbox"
-									name="remember-me" class="form-check-input" value=""> <span
+									name="remember-me" class="form-check-input"> <span
 									class="custom-control-description small text-dark">Remember
 										me on this computer</span>
 								</label>
 							</div>
-							
-							<hr/>
 
-							<!-- form-group// -->
+							<hr />
+
+
 							<div class="form-group">
 								<button name="submit" type="submit"
 									class="btn btn-primary btn-block" value="submit">Login</button>
 							</div>
-							<!-- form-group// -->
-							<p class="text-center">
-								<a href="#" class="btn">Forgot password?</a>
-							</p>
+
+							<div class="form-group">
+								<p class="text-center">
+									<a href="#" class="btn">Forgot password?</a>
+								</p>
+							</div>
 						</form>
 					</div>
 

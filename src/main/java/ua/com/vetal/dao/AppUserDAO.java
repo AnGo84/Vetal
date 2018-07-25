@@ -21,7 +21,7 @@ public class AppUserDAO {
 		try {
 			String sql = "Select e from " + AppUser.class.getName() + " e " //
 					+ " Where e.userName = :userName ";
-			System.out.println(sql);
+			// System.out.println(sql);
 			Query query = entityManager.createQuery(sql, AppUser.class);
 			query.setParameter("userName", userName);
 

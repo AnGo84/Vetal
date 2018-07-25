@@ -14,6 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "APP_USER")
@@ -24,16 +27,19 @@ public class User implements Serializable {
 	@Column(name = "User_Id", nullable = false)
 	private Long id;
 
-	@Column(name = "User_Name", length = 36, nullable = false)
+	@NotNull
+	@Size(min = 4, max = 36)
+	@Column(name = "User_Name", length = 36, nullable = false, unique = true)
 	private String name;
 
+	@Size(min = 1, max = 128)
 	@Column(name = "Encrypted_Password", length = 128, nullable = false)
 	private String encryptedPassword;
 
 	@Column(name = "Enabled", length = 1, nullable = false)
 	private boolean enabled;
 
-	// @NotEmpty
+	@NotEmpty
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "USER_ROLE", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = {
 			@JoinColumn(name = "ROLE_ID") })

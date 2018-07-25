@@ -11,7 +11,7 @@
    <a class="navbar-brand" href="#https://vetal.com.ua/">Vetal</a> 
    -->
 
-	<a class="navbar-brand" href="#"> <img src="image/logo.png"
+	<a class="navbar-brand" target="_blank" href="https://vetal.com.ua/"> <img src="image/logo.png"
 		alt="Logo" style="width: 100px;">
 	</a>
 
@@ -22,7 +22,8 @@
 	<div class="collapse navbar-collapse" id="collapsibleNavbar">
 
 		<ul class="navbar-nav mr-auto">
-			<li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a>
+			<li class="nav-item">
+				<a class="nav-link text-light" th:href="@{/}">Home</a>
 			</li>
 			<!-- <li class="nav-item"><a class="nav-link" th:href="@{/userInfo}">User
 					Info</a></li>
@@ -55,7 +56,7 @@
 
 		</ul>
 		<ul class="navbar-nav" sec:authorize="isAuthenticated()">
-			<li class="nav-item"><a class="nav-link" th:href="@{/userInfo}">User "<span
+			<li class="nav-item"><a class="nav-link" th:href="@{/userInfo}"><i class="fa fa-user"></i> User "<span
 					sec:authentication="name"></span>"</a></li>
 			<li class="nav-item"><a class="nav-link" th:href="@{/logout}">Logout</a></li>
 
