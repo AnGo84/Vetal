@@ -17,30 +17,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import ua.com.vetal.entity.ProductionDirectory;
-import ua.com.vetal.service.ProductionDirectoryServiceImpl;
+import ua.com.vetal.entity.PaperDirectory;
+import ua.com.vetal.service.PaperDirectoryServiceImpl;
 
 @Controller
-@RequestMapping("/production")
+@RequestMapping("/paper")
 // @SessionAttributes({ "title", "directoryName", "pageName" })
 
-public class ProductionDirectoryController {
-	static final Logger logger = LoggerFactory.getLogger(ProductionDirectoryController.class);
+public class PaperDirectoryController {
+	static final Logger logger = LoggerFactory.getLogger(PaperDirectoryController.class);
 
-	private String title = "Production";
-	private String directoryName = "Production";
-	private String pageName = "/production";
+	private String title = "Paper";
+	private String directoryName = "Paper";
+	private String pageName = "/paper";
 
 	@Autowired
 	MessageSource messageSource;
 
 	@Autowired
-	private ProductionDirectoryServiceImpl directoryService;
-
-	/*
-	 * @Autowired public UserController(UserServiceImpl userService) {
-	 * this.userService = userService; }
-	 */
+	private PaperDirectoryServiceImpl directoryService;
 
 	@RequestMapping(value = { "", "list" }, method = RequestMethod.GET)
 	public String personList(Model model) {
@@ -50,11 +45,11 @@ public class ProductionDirectoryController {
 
 	@RequestMapping(value = { "/add" }, method = RequestMethod.GET)
 	public String showAddUserPage(Model model) {
-		logger.info("Add new production record");
-		ProductionDirectory production = new ProductionDirectory();
+		logger.info("Add new " + title + " record");
+		PaperDirectory paper = new PaperDirectory();
 
 		model.addAttribute("edit", false);
-		model.addAttribute("directory", production);
+		model.addAttribute("directory", paper);
 		return "directoryRecordPage";
 
 	}
@@ -68,7 +63,7 @@ public class ProductionDirectoryController {
 
 	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
 	public String editUser(@PathVariable Long id, Model model) {
-		logger.info("Edit production with ID= " + id);
+		logger.info("Edit " + title + " with ID= " + id);
 		// model.addAttribute("title", "Edit user");
 		// model.addAttribute("userRolesList",
 		// userRoleService.findAllObjects());
@@ -84,9 +79,9 @@ public class ProductionDirectoryController {
 	 */
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String updateUser(@Valid @ModelAttribute("directory") ProductionDirectory directory,
-			BindingResult bindingResult, Model model) {
-		logger.info("Update Production: " + directory);
+	public String updateUser(@Valid @ModelAttribute("directory") PaperDirectory directory, BindingResult bindingResult,
+			Model model) {
+		logger.info("Update " + title + ": " + directory);
 		if (bindingResult.hasErrors()) {
 			// model.addAttribute("title", title);
 			// logger.info("BINDING RESULT ERROR");
@@ -106,7 +101,7 @@ public class ProductionDirectoryController {
 
 	@RequestMapping(value = { "/delete-{id}" }, method = RequestMethod.GET)
 	public String deleteUser(@PathVariable Long id) {
-		logger.info("Delete Production with ID= " + id);
+		logger.info("Delete Paper with ID= " + id);
 		directoryService.deleteById(id);
 		return "redirect:" + pageName;
 	}

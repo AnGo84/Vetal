@@ -17,25 +17,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import ua.com.vetal.entity.ProductionDirectory;
-import ua.com.vetal.service.ProductionDirectoryServiceImpl;
+import ua.com.vetal.entity.ChromaticityDirectory;
+import ua.com.vetal.service.ChromaticityDirectoryServiceImpl;
 
 @Controller
-@RequestMapping("/production")
+@RequestMapping("/chromaticity")
 // @SessionAttributes({ "title", "directoryName", "pageName" })
 
-public class ProductionDirectoryController {
-	static final Logger logger = LoggerFactory.getLogger(ProductionDirectoryController.class);
+public class ChromaticityDirectoryController {
+	static final Logger logger = LoggerFactory.getLogger(ChromaticityDirectoryController.class);
 
-	private String title = "Production";
-	private String directoryName = "Production";
-	private String pageName = "/production";
+	private String title = "Chromaticity";
+	private String directoryName = "Chromaticity";
+	private String pageName = "/chromaticity";
 
 	@Autowired
 	MessageSource messageSource;
 
 	@Autowired
-	private ProductionDirectoryServiceImpl directoryService;
+	private ChromaticityDirectoryServiceImpl directoryService;
 
 	/*
 	 * @Autowired public UserController(UserServiceImpl userService) {
@@ -50,11 +50,11 @@ public class ProductionDirectoryController {
 
 	@RequestMapping(value = { "/add" }, method = RequestMethod.GET)
 	public String showAddUserPage(Model model) {
-		logger.info("Add new production record");
-		ProductionDirectory production = new ProductionDirectory();
+		logger.info("Add new Chronomaticity record");
+		ChromaticityDirectory chronomaticity = new ChromaticityDirectory();
 
 		model.addAttribute("edit", false);
-		model.addAttribute("directory", production);
+		model.addAttribute("directory", chronomaticity);
 		return "directoryRecordPage";
 
 	}
@@ -68,7 +68,7 @@ public class ProductionDirectoryController {
 
 	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
 	public String editUser(@PathVariable Long id, Model model) {
-		logger.info("Edit production with ID= " + id);
+		logger.info("Edit Chromaticity with ID= " + id);
 		// model.addAttribute("title", "Edit user");
 		// model.addAttribute("userRolesList",
 		// userRoleService.findAllObjects());
@@ -84,9 +84,9 @@ public class ProductionDirectoryController {
 	 */
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String updateUser(@Valid @ModelAttribute("directory") ProductionDirectory directory,
+	public String updateUser(@Valid @ModelAttribute("directory") ChromaticityDirectory directory,
 			BindingResult bindingResult, Model model) {
-		logger.info("Update Production: " + directory);
+		logger.info("Update Chromaticity: " + directory);
 		if (bindingResult.hasErrors()) {
 			// model.addAttribute("title", title);
 			// logger.info("BINDING RESULT ERROR");
@@ -106,7 +106,7 @@ public class ProductionDirectoryController {
 
 	@RequestMapping(value = { "/delete-{id}" }, method = RequestMethod.GET)
 	public String deleteUser(@PathVariable Long id) {
-		logger.info("Delete Production with ID= " + id);
+		logger.info("Delete Chromaticity with ID= " + id);
 		directoryService.deleteById(id);
 		return "redirect:" + pageName;
 	}

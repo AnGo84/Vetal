@@ -16,23 +16,28 @@
 <body>
 	<div class="container bg-light" style="margin-top: 30px">
 		<div class="well">
-			<h1><span th:text="${directoryName}"></span> edit</h1>
-			
-			<form action="#" th:action="@{${pageName}+'/update'}" th:object="${directory}"
-				method="POST">
+			<h1>
+				<span th:text="${directoryName}"></span> edit
+			</h1>
+
+			<form action="#" th:action="@{${pageName}+'/update'}"
+				th:object="${directory}" method="POST">
 
 				<input type="hidden" id="recordId" th:field="*{id}" />
 
-				<div class="form-group form-inline">
-					<label for="recordName">Name: </label> <input class="form-control"
-						type="text" id="recordName" th:field="*{name}" />
-					
+				<div class="form-group row">
+					<div class="col-6">
+						<label for="recordName">Name: </label> <input class="form-control"
+							type="text" id="recordName" th:field="*{name}"
+							autofocus="autofocus" placeholder="Enter your Name" />
+					</div>
+
 				</div>
-				
+
 				<div class="alert alert-danger" th:if="${#fields.hasErrors('name')}">
 					<p th:text="${#fields.errors('name')}"></p>
 					<!-- th:text="${#fields.errors('name')}" -->
-				</div>		
+				</div>
 
 				<div class="row">
 

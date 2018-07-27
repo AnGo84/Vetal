@@ -47,12 +47,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable();
 
 		// The pages does not require login
-		http.authorizeRequests().antMatchers("/", "/login", "/logout").permitAll();
+		http.authorizeRequests().antMatchers("/", "/login", "/logout", "/manager", "/client", "/contractor",
+				"/production", "/paper", "/chromaticity", "/laminate", "/cringle", "/format", "/stock").permitAll();
 
 		// /userInfo page requires login as ROLE_USER or ROLE_ADMIN.
 		// If no login, it will redirect to /login page.
 		// ROLE_ACCOUNTANT ROLE_ADMIN ROLE_MANAGER
 		http.authorizeRequests().antMatchers("/userInfo").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+		http.authorizeRequests().antMatchers("/manager/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+		http.authorizeRequests().antMatchers("/client/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+		http.authorizeRequests().antMatchers("/contractor/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+		http.authorizeRequests().antMatchers("/production/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+		http.authorizeRequests().antMatchers("/paper/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+		http.authorizeRequests().antMatchers("/chromaticity/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+		http.authorizeRequests().antMatchers("/laminate/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+		http.authorizeRequests().antMatchers("/cringle/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+		http.authorizeRequests().antMatchers("/format/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+		http.authorizeRequests().antMatchers("/stock/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
 
 		// For ADMIN only.
 		http.authorizeRequests().antMatchers("/admin").access("hasRole('ROLE_ADMIN')");

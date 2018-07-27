@@ -8,16 +8,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public class ProductionDirectoryDAO {
+public class ClientDirectoryDAO {
 
 	@Autowired
 	private EntityManager entityManager;
 
 	/*
 	 * public User findUserAccount(String name) { try { String sql =
-	 * "Select e from " + ProductionDirectory.class.getName() + " e " // +
-	 * " Where e.name = :name "; System.out.println(sql); Query query =
-	 * entityManager.createQuery(sql, ProductionDirectory.class);
+	 * "Select e from " + PaperDirectory.class.getName() + " e " // +
+	 * " Where e.name = :name "; // System.out.println(sql); Query query =
+	 * entityManager.createQuery(sql, PaperDirectory.class);
 	 * query.setParameter("name", name);
 	 * 
 	 * return (User) query.getSingleResult(); } catch (NoResultException e) {

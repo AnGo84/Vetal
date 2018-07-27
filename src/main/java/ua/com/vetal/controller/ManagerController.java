@@ -1,7 +1,5 @@
 package ua.com.vetal.controller;
 
-import java.util.Locale;
-
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -11,51 +9,45 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import ua.com.vetal.entity.ProductionDirectory;
-import ua.com.vetal.service.ProductionDirectoryServiceImpl;
+import ua.com.vetal.entity.Manager;
+import ua.com.vetal.service.ManagerServiceImpl;
 
 @Controller
-@RequestMapping("/production")
-// @SessionAttributes({ "title", "directoryName", "pageName" })
+@RequestMapping("/manager")
+// @SessionAttributes({ "title", "personName", "pageName" })
 
-public class ProductionDirectoryController {
-	static final Logger logger = LoggerFactory.getLogger(ProductionDirectoryController.class);
+public class ManagerController {
+	static final Logger logger = LoggerFactory.getLogger(ManagerController.class);
 
-	private String title = "Production";
-	private String directoryName = "Production";
-	private String pageName = "/production";
+	private String title = "Manager";
+	private String personName = "Manager";
+	private String pageName = "/manager";
 
 	@Autowired
 	MessageSource messageSource;
 
 	@Autowired
-	private ProductionDirectoryServiceImpl directoryService;
-
-	/*
-	 * @Autowired public UserController(UserServiceImpl userService) {
-	 * this.userService = userService; }
-	 */
+	private ManagerServiceImpl personService;
 
 	@RequestMapping(value = { "", "list" }, method = RequestMethod.GET)
 	public String personList(Model model) {
-		model.addAttribute("directoryList", directoryService.findAllObjects());
-		return "directoryPage";
+		model.addAttribute("personList", personService.findAllObjects());
+		return "personsPage";
 	}
 
 	@RequestMapping(value = { "/add" }, method = RequestMethod.GET)
 	public String showAddUserPage(Model model) {
-		logger.info("Add new production record");
-		ProductionDirectory production = new ProductionDirectory();
+		logger.info("Add new " + title + " record");
+		Manager person = new Manager();
 
 		model.addAttribute("edit", false);
-		model.addAttribute("directory", production);
-		return "directoryRecordPage";
+		model.addAttribute("person", person);
+		return "personRecordPage";
 
 	}
 
@@ -68,13 +60,13 @@ public class ProductionDirectoryController {
 
 	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
 	public String editUser(@PathVariable Long id, Model model) {
-		logger.info("Edit production with ID= " + id);
+		logger.info("Edit " + title + " with ID= " + id);
 		// model.addAttribute("title", "Edit user");
 		// model.addAttribute("userRolesList",
 		// userRoleService.findAllObjects());
 		model.addAttribute("edit", true);
-		model.addAttribute("directory", directoryService.findById(id));
-		return "directoryRecordPage";
+		model.addAttribute("person", personService.findById(id));
+		return "personRecordPage";
 	}
 
 	/*
@@ -84,30 +76,31 @@ public class ProductionDirectoryController {
 	 */
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String updateUser(@Valid @ModelAttribute("directory") ProductionDirectory directory,
-			BindingResult bindingResult, Model model) {
-		logger.info("Update Production: " + directory);
+	public String updateUser(@Valid @ModelAttribute("person") Manager person, BindingResult bindingResult,
+			Model model) {
+		logger.info("Update " + title + ": " + person);
 		if (bindingResult.hasErrors()) {
 			// model.addAttribute("title", title);
 			// logger.info("BINDING RESULT ERROR");
-			return "directoryRecordPage";
+			return "personRecordPage";
 		}
 
-		if (directoryService.isObjectExist(directory)) {
-			FieldError fieldError = new FieldError("directory", "name", messageSource.getMessage("non.unique.name",
-					new String[] { directory.getName() }, Locale.getDefault()));
-			bindingResult.addError(fieldError);
-			return "directoryRecordPage";
-		}
+		/*
+		 * if (personService.isObjectExist(person)) { FieldError fieldError =
+		 * new FieldError("person", "name",
+		 * messageSource.getMessage("non.unique.name", new String[] {
+		 * person.getName() }, Locale.getDefault()));
+		 * bindingResult.addError(fieldError); return "personRecordPage"; }
+		 */
 
-		directoryService.saveObject(directory);
+		personService.saveObject(person);
 		return "redirect:" + pageName;
 	}
 
 	@RequestMapping(value = { "/delete-{id}" }, method = RequestMethod.GET)
 	public String deleteUser(@PathVariable Long id) {
-		logger.info("Delete Production with ID= " + id);
-		directoryService.deleteById(id);
+		logger.info("Delete " + title + " with ID= " + id);
+		personService.deleteById(id);
 		return "redirect:" + pageName;
 	}
 
@@ -119,9 +112,9 @@ public class ProductionDirectoryController {
 		return this.title;
 	}
 
-	@ModelAttribute("directoryName")
-	public String initializeDirectoryName() {
-		return this.directoryName;
+	@ModelAttribute("personName")
+	public String initializepersonName() {
+		return this.personName;
 	}
 
 	@ModelAttribute("pageName")
