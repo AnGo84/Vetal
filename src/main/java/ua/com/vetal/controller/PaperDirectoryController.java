@@ -38,13 +38,13 @@ public class PaperDirectoryController {
 	private PaperDirectoryServiceImpl directoryService;
 
 	@RequestMapping(value = { "", "list" }, method = RequestMethod.GET)
-	public String personList(Model model) {
+	public String directoryList(Model model) {
 		model.addAttribute("directoryList", directoryService.findAllObjects());
 		return "directoryPage";
 	}
 
 	@RequestMapping(value = { "/add" }, method = RequestMethod.GET)
-	public String showAddUserPage(Model model) {
+	public String showAddRecordPage(Model model) {
 		logger.info("Add new " + title + " record");
 		PaperDirectory paper = new PaperDirectory();
 
@@ -62,7 +62,7 @@ public class PaperDirectoryController {
 	 */
 
 	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
-	public String editUser(@PathVariable Long id, Model model) {
+	public String editRecord(@PathVariable Long id, Model model) {
 		logger.info("Edit " + title + " with ID= " + id);
 		// model.addAttribute("title", "Edit user");
 		// model.addAttribute("userRolesList",
@@ -79,8 +79,8 @@ public class PaperDirectoryController {
 	 */
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String updateUser(@Valid @ModelAttribute("directory") PaperDirectory directory, BindingResult bindingResult,
-			Model model) {
+	public String updateRecord(@Valid @ModelAttribute("directory") PaperDirectory directory,
+			BindingResult bindingResult, Model model) {
 		logger.info("Update " + title + ": " + directory);
 		if (bindingResult.hasErrors()) {
 			// model.addAttribute("title", title);
@@ -100,7 +100,7 @@ public class PaperDirectoryController {
 	}
 
 	@RequestMapping(value = { "/delete-{id}" }, method = RequestMethod.GET)
-	public String deleteUser(@PathVariable Long id) {
+	public String deleteRecord(@PathVariable Long id) {
 		logger.info("Delete Paper with ID= " + id);
 		directoryService.deleteById(id);
 		return "redirect:" + pageName;

@@ -47,8 +47,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable();
 
 		// The pages does not require login
-		http.authorizeRequests().antMatchers("/", "/login", "/logout", "/manager", "/client", "/contractor",
-				"/production", "/paper", "/chromaticity", "/laminate", "/cringle", "/format", "/stock").permitAll();
+		http.authorizeRequests()
+				.antMatchers("/", "/main", "/login", "/logout", "/manager", "/client", "/contractor", "/production",
+						"/paper", "/chromaticity", "/laminate", "/cringle", "/format", "/stock", "/tasks/view**",
+						"/tasks")
+				.permitAll();
 
 		// /userInfo page requires login as ROLE_USER or ROLE_ADMIN.
 		// If no login, it will redirect to /login page.
@@ -64,6 +67,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/cringle/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
 		http.authorizeRequests().antMatchers("/format/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
 		http.authorizeRequests().antMatchers("/stock/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+		http.authorizeRequests().antMatchers("tasks/add", "/tasks/update", "/tasks/edit**", "/tasks/delete**")
+				.access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
 
 		// For ADMIN only.
 		http.authorizeRequests().antMatchers("/admin").access("hasRole('ROLE_ADMIN')");
@@ -80,7 +85,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// Submit URL of login page.
 				.loginProcessingUrl("/j_spring_security_check") // Submit URL
 				.loginPage("/login")//
-				.defaultSuccessUrl("/welcome")// /userInfo
+				.defaultSuccessUrl("/main")// /userInfo
 				.failureUrl("/login?error=true")//
 				.usernameParameter("username")//
 				.passwordParameter("password")

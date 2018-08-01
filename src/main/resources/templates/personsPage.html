@@ -31,7 +31,7 @@
 					style="width: 100px;" role="button" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">New</a>
 			</div>
 		</div>
-		<div th:if="${not #lists.isEmpty(personList)}">
+		<div th:if="${personList != null and not #lists.isEmpty(personList)}">
 			<table class="table table-sm table-bordered table-hover">
 				<thead>
 					<tr class="text-center">
@@ -78,6 +78,9 @@
 					</tr>
 				</tbody>
 			</table>
+		</div>
+		<div th:if="${personList == null or #lists.isEmpty(personList)}">
+			<div>"No Managers were found, please create some first"</div>
 		</div>
 	</div>
 

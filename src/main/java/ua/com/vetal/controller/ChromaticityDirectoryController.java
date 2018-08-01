@@ -43,13 +43,13 @@ public class ChromaticityDirectoryController {
 	 */
 
 	@RequestMapping(value = { "", "list" }, method = RequestMethod.GET)
-	public String personList(Model model) {
+	public String directoryList(Model model) {
 		model.addAttribute("directoryList", directoryService.findAllObjects());
 		return "directoryPage";
 	}
 
 	@RequestMapping(value = { "/add" }, method = RequestMethod.GET)
-	public String showAddUserPage(Model model) {
+	public String showAddRecordPage(Model model) {
 		logger.info("Add new Chronomaticity record");
 		ChromaticityDirectory chronomaticity = new ChromaticityDirectory();
 
@@ -67,7 +67,7 @@ public class ChromaticityDirectoryController {
 	 */
 
 	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
-	public String editUser(@PathVariable Long id, Model model) {
+	public String editRecord(@PathVariable Long id, Model model) {
 		logger.info("Edit Chromaticity with ID= " + id);
 		// model.addAttribute("title", "Edit user");
 		// model.addAttribute("userRolesList",
@@ -84,7 +84,7 @@ public class ChromaticityDirectoryController {
 	 */
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String updateUser(@Valid @ModelAttribute("directory") ChromaticityDirectory directory,
+	public String updateRecord(@Valid @ModelAttribute("directory") ChromaticityDirectory directory,
 			BindingResult bindingResult, Model model) {
 		logger.info("Update Chromaticity: " + directory);
 		if (bindingResult.hasErrors()) {
@@ -105,7 +105,7 @@ public class ChromaticityDirectoryController {
 	}
 
 	@RequestMapping(value = { "/delete-{id}" }, method = RequestMethod.GET)
-	public String deleteUser(@PathVariable Long id) {
+	public String deleteRecord(@PathVariable Long id) {
 		logger.info("Delete Chromaticity with ID= " + id);
 		directoryService.deleteById(id);
 		return "redirect:" + pageName;

@@ -44,7 +44,7 @@ public class DirectoryController {
 	 */
 
 	@RequestMapping(value = { "/add" }, method = RequestMethod.GET)
-	public String showAddUserPage(Model model) {
+	public String showAddRecordPage(Model model) {
 		logger.info("Add new record");
 		User user = new User();
 		user.setEnabled(true);
@@ -66,7 +66,7 @@ public class DirectoryController {
 	 */
 
 	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
-	public String editUser(@PathVariable Long id, Model model) {
+	public String editRecord(@PathVariable Long id, Model model) {
 		logger.info("Edit user with ID= " + id);
 		title = "Edit user";
 		// model.addAttribute("title", "Edit user");
@@ -84,7 +84,7 @@ public class DirectoryController {
 	 */
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String updateUser(@Valid @ModelAttribute("user") AbstractDirectory abstractDirectory,
+	public String updateRecord(@Valid @ModelAttribute("user") AbstractDirectory abstractDirectory,
 			BindingResult bindingResult, Model model) {
 		logger.info("Update User: " + abstractDirectory);
 		if (bindingResult.hasErrors()) {

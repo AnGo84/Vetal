@@ -42,10 +42,11 @@
 			</tr>
 			<tr>
 				<td>Trace</td>
-				<td><pre th:text="${trace}" /></td>
+				<td><textarea class="form-control" rows="10" id="taskNote"
+						th:text="${trace}"></textarea></td>
 			</tr>
 		</table>
-		
+
 		<div>
 			<a class="btn btn-link" th:href="@{/}">Home</a>
 		</div>

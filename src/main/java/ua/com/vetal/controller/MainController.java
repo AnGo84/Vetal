@@ -5,15 +5,18 @@ import java.security.Principal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 //import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import ua.com.vetal.service.ProductionDirectoryServiceImpl;
+import ua.com.vetal.service.TaskServiceImpl;
 import ua.com.vetal.utils.WebUtils;
 
 @Controller
@@ -21,13 +24,18 @@ public class MainController {
 	static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
 	@Autowired
-	private ProductionDirectoryServiceImpl productionDirectoryService;
+	MessageSource messageSource;
 
-	@RequestMapping(value = { "/", "/welcome" }, method = RequestMethod.GET)
-	public String welcomePage(Model model) {
-		model.addAttribute("title", "Welcome");
-		model.addAttribute("message", "This is welcome page!");
-		return "welcomePage";
+	@Autowired
+	private TaskServiceImpl taskService;
+
+	@RequestMapping(value = { "/", "/main" }, method = RequestMethod.GET)
+	public String mainPage(Model model) {
+		model.addAttribute("title", "main");
+		model.addAttribute("tasksList", taskService.findAllObjects());
+		// model.addAttribute("message", "This is welcome page!");
+
+		return "mainPage";
 	}
 
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
@@ -88,6 +96,17 @@ public class MainController {
 		return "403Page";
 	}
 
+	private String getPrincipal() {
+		String userName = null;
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if (principal instanceof UserDetails) {
+			userName = ((UserDetails) principal).getUsername();
+		} else {
+			userName = principal.toString();
+		}
+		return userName;
+	}
 	/*
 	 * @RequestMapping(value = "/production", method = RequestMethod.GET) public
 	 * String productionDirectory(Model model, Principal principal) {

@@ -90,4 +90,19 @@ public abstract class AbstractPerson {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("AbstractPerson [id=");
+		builder.append(id);
+		builder.append(", lastName=");
+		builder.append(lastName);
+		builder.append(", firstName=");
+		builder.append(firstName);
+		builder.append(", middleName=");
+		builder.append(middleName);
+		builder.append("]");
+		return builder.toString();
+	}
+
 }

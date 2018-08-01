@@ -43,13 +43,13 @@ public class ProductionDirectoryController {
 	 */
 
 	@RequestMapping(value = { "", "list" }, method = RequestMethod.GET)
-	public String personList(Model model) {
+	public String directoryList(Model model) {
 		model.addAttribute("directoryList", directoryService.findAllObjects());
 		return "directoryPage";
 	}
 
 	@RequestMapping(value = { "/add" }, method = RequestMethod.GET)
-	public String showAddUserPage(Model model) {
+	public String showAddRecordPage(Model model) {
 		logger.info("Add new production record");
 		ProductionDirectory production = new ProductionDirectory();
 
@@ -67,7 +67,7 @@ public class ProductionDirectoryController {
 	 */
 
 	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
-	public String editUser(@PathVariable Long id, Model model) {
+	public String editRecord(@PathVariable Long id, Model model) {
 		logger.info("Edit production with ID= " + id);
 		// model.addAttribute("title", "Edit user");
 		// model.addAttribute("userRolesList",
@@ -84,7 +84,7 @@ public class ProductionDirectoryController {
 	 */
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String updateUser(@Valid @ModelAttribute("directory") ProductionDirectory directory,
+	public String updateRecord(@Valid @ModelAttribute("directory") ProductionDirectory directory,
 			BindingResult bindingResult, Model model) {
 		logger.info("Update Production: " + directory);
 		if (bindingResult.hasErrors()) {
@@ -105,7 +105,7 @@ public class ProductionDirectoryController {
 	}
 
 	@RequestMapping(value = { "/delete-{id}" }, method = RequestMethod.GET)
-	public String deleteUser(@PathVariable Long id) {
+	public String deleteRecord(@PathVariable Long id) {
 		logger.info("Delete Production with ID= " + id);
 		directoryService.deleteById(id);
 		return "redirect:" + pageName;

@@ -44,7 +44,7 @@ public class ClientDirectoryController {
 	}
 
 	@RequestMapping(value = { "/add" }, method = RequestMethod.GET)
-	public String showAddUserPage(Model model) {
+	public String showAddPersonPage(Model model) {
 		logger.info("Add new " + title + " record");
 		ClientDirectory paper = new ClientDirectory();
 
@@ -62,7 +62,7 @@ public class ClientDirectoryController {
 	 */
 
 	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
-	public String editUser(@PathVariable Long id, Model model) {
+	public String editPerson(@PathVariable Long id, Model model) {
 		logger.info("Edit " + title + " with ID= " + id);
 		// model.addAttribute("title", "Edit user");
 		// model.addAttribute("userRolesList",
@@ -79,8 +79,8 @@ public class ClientDirectoryController {
 	 */
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String updateUser(@Valid @ModelAttribute("directory") ClientDirectory directory, BindingResult bindingResult,
-			Model model) {
+	public String updatePerson(@Valid @ModelAttribute("directory") ClientDirectory directory,
+			BindingResult bindingResult, Model model) {
 		logger.info("Update " + title + ": " + directory);
 		if (bindingResult.hasErrors()) {
 			// model.addAttribute("title", title);
@@ -100,7 +100,7 @@ public class ClientDirectoryController {
 	}
 
 	@RequestMapping(value = { "/delete-{id}" }, method = RequestMethod.GET)
-	public String deleteUser(@PathVariable Long id) {
+	public String deletePerson(@PathVariable Long id) {
 		logger.info("Delete " + title + " with ID= " + id);
 		directoryService.deleteById(id);
 		return "redirect:" + pageName;

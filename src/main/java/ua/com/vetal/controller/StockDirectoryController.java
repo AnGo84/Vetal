@@ -44,7 +44,7 @@ public class StockDirectoryController {
 	}
 
 	@RequestMapping(value = { "/add" }, method = RequestMethod.GET)
-	public String showAddUserPage(Model model) {
+	public String showAddRecordPage(Model model) {
 		logger.info("Add new paper record");
 		StockDirectory paper = new StockDirectory();
 
@@ -62,7 +62,7 @@ public class StockDirectoryController {
 	 */
 
 	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
-	public String editUser(@PathVariable Long id, Model model) {
+	public String editRecord(@PathVariable Long id, Model model) {
 		logger.info("Edit paper with ID= " + id);
 		// model.addAttribute("title", "Edit user");
 		// model.addAttribute("userRolesList",
@@ -79,8 +79,8 @@ public class StockDirectoryController {
 	 */
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String updateUser(@Valid @ModelAttribute("directory") StockDirectory directory, BindingResult bindingResult,
-			Model model) {
+	public String updateRecord(@Valid @ModelAttribute("directory") StockDirectory directory,
+			BindingResult bindingResult, Model model) {
 		logger.info("Update Paper: " + directory);
 		if (bindingResult.hasErrors()) {
 			// model.addAttribute("title", title);
@@ -100,7 +100,7 @@ public class StockDirectoryController {
 	}
 
 	@RequestMapping(value = { "/delete-{id}" }, method = RequestMethod.GET)
-	public String deleteUser(@PathVariable Long id) {
+	public String deleteRecord(@PathVariable Long id) {
 		logger.info("Delete Paper with ID= " + id);
 		directoryService.deleteById(id);
 		return "redirect:" + pageName;

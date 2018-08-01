@@ -41,7 +41,7 @@ public class ManagerController {
 	}
 
 	@RequestMapping(value = { "/add" }, method = RequestMethod.GET)
-	public String showAddUserPage(Model model) {
+	public String showAddPersonPage(Model model) {
 		logger.info("Add new " + title + " record");
 		Manager person = new Manager();
 
@@ -59,7 +59,7 @@ public class ManagerController {
 	 */
 
 	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
-	public String editUser(@PathVariable Long id, Model model) {
+	public String editPerson(@PathVariable Long id, Model model) {
 		logger.info("Edit " + title + " with ID= " + id);
 		// model.addAttribute("title", "Edit user");
 		// model.addAttribute("userRolesList",
@@ -76,7 +76,7 @@ public class ManagerController {
 	 */
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String updateUser(@Valid @ModelAttribute("person") Manager person, BindingResult bindingResult,
+	public String updatePerson(@Valid @ModelAttribute("person") Manager person, BindingResult bindingResult,
 			Model model) {
 		logger.info("Update " + title + ": " + person);
 		if (bindingResult.hasErrors()) {
@@ -98,7 +98,7 @@ public class ManagerController {
 	}
 
 	@RequestMapping(value = { "/delete-{id}" }, method = RequestMethod.GET)
-	public String deleteUser(@PathVariable Long id) {
+	public String deletePerson(@PathVariable Long id) {
 		logger.info("Delete " + title + " with ID= " + id);
 		personService.deleteById(id);
 		return "redirect:" + pageName;
