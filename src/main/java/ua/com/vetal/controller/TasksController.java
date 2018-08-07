@@ -82,19 +82,23 @@ public class TasksController {
 	@Autowired
 	private CringleDirectoryServiceImpl cringleService;
 
-	@RequestMapping(value = { "", "list" }, method = RequestMethod.GET)
-	public String taskList(Model model) {
-		model.addAttribute("title", "main");
-		model.addAttribute("tasksList", taskService.findAllObjects());
-		return "redirect: /main";
-	}
+	/*
+	 * @RequestMapping(value = { "", "list" }, method = RequestMethod.GET)
+	 * public String taskList(Model model) {
+	 * 
+	 * model.addAttribute("title", "main"); model.addAttribute("tasksList",
+	 * taskService.findAllObjects());
+	 * 
+	 * return "redirect: /main"; }
+	 */
 
 	@RequestMapping(value = { "/add" }, method = RequestMethod.GET)
 	public String showAddTaskPage(Model model) {
 		logger.info("Add new " + title + " record");
 		Task task = new Task();
 
-		model.addAttribute("edit", false);
+		// model.addAttribute("edit", false);
+		model.addAttribute("readOnly", false);
 		model.addAttribute("task", task);
 		return "taskPage";
 
@@ -117,7 +121,24 @@ public class TasksController {
 		// model.addAttribute("title", "Edit user");
 		// model.addAttribute("userRolesList",
 		// userRoleService.findAllObjects());
-		model.addAttribute("edit", true);
+		// model.addAttribute("edit", true);
+		model.addAttribute("readOnly", false);
+		model.addAttribute("task", taskService.findById(id));
+		return "taskPage";
+	}
+
+	@RequestMapping(value = "/view-{id}", method = RequestMethod.GET)
+	public String viewTask(@PathVariable Long id, Model model) {
+		logger.info("View " + title + " with ID= " + id);
+
+		Task task = taskService.findById(id);
+		logger.info(task.toString());
+
+		// model.addAttribute("title", "Edit user");
+		// model.addAttribute("userRolesList",
+		// userRoleService.findAllObjects());
+		// model.addAttribute("edit", true);
+		model.addAttribute("readOnly", true);
 		model.addAttribute("task", taskService.findById(id));
 		return "taskPage";
 	}
@@ -167,7 +188,7 @@ public class TasksController {
 	}
 
 	/**
-	 * This method will provide Title to views
+	 * This methods will provide lists and fields to views
 	 */
 	@ModelAttribute("title")
 	public String initializeTitle() {

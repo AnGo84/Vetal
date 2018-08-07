@@ -26,21 +26,26 @@
 			<div class="col-sm-2 bg-light">
 				<h2>Фильтр:</h2>
 				<form action="#" th:action="@{'/tasks/filter'}"
-					th:object="${filterFields}" method="GET">
-					<div class="form-group">
-						<label for="filterFileName">File Name:</label> <input type="text"
-							class="form-control form-control-sm" id="filterFileName">
-					</div>
+					th:object="${filterData}" method="GET">
+
 					<div class="form-group">
 						<label for="filterAccount">Account:</label> <input type="text"
-							class="form-control form-control-sm" id="filterAccount">
+							class="form-control form-control-sm" id="filterAccount"
+							th:field="*{account}">
+					</div>
+
+					<div class="form-group">
+						<label for="filterFileName">File Name:</label> <input type="text"
+							class="form-control form-control-sm" id="filterFileName"
+							th:field="*{fileName}">
 					</div>
 
 					<div class="form-group">
 						<label for="filterClient">Client:</label> <select
-							id="filterClient" class="form-control form-control-sm">
+							id="filterClient" class="form-control form-control-sm"
+							th:field="*{client}">
 							<!-- th:field="*{client}" -->
-							<option th:each="dropDownItem : ${clientList}"
+							<option th:each="dropDownItem : ${clientFilterList}"
 								th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
 								th:attr="data-tokens=${dropDownItem.name}" />
 						</select>
@@ -48,9 +53,10 @@
 
 					<div class="form-group">
 						<label for="filterContractor">Contractor:</label> <select
-							id="filterContractor" class="form-control form-control-sm">
+							id="filterContractor" class="form-control form-control-sm"
+							th:field="*{contractor}">
 							<!-- th:field="*{contractor}" -->
-							<option th:each="dropDownItem : ${contractorList}"
+							<option th:each="dropDownItem : ${contractorFilterList}"
 								th:value="${dropDownItem.id}" th:text="${dropDownItem.fullName}"
 								th:attr="data-tokens=${dropDownItem.fullName}" />
 						</select>
@@ -58,9 +64,10 @@
 
 					<div class="form-group">
 						<label for="filterManager">Manager:</label> <select
-							id="filterManager" class="form-control form-control-sm">
+							id="filterManager" class="form-control form-control-sm"
+							th:field="*{manager}">
 							<!-- th:field="*{manager}" -->
-							<option th:each="dropDownItem : ${managerList}"
+							<option th:each="dropDownItem : ${managerFilterList}"
 								th:value="${dropDownItem.id}" th:text="${dropDownItem.fullName}"
 								th:attr="data-tokens=${dropDownItem.fullName}" />
 						</select>
@@ -69,17 +76,25 @@
 					<div class="form-group">
 						<label for="filterDateBeginFrom">Date From:</label> <input
 							id="filterDateBeginFrom" type="date"
-							class="form-control form-control-sm" />
+							class="form-control form-control-sm" th:field="*{dateBeginFrom}" />
 						<!-- th:field="*{dateBeginFrom}"  -->
 					</div>
 
 					<div class="form-group">
 						<label for="filterDateBeginTill">Date Till:</label> <input
 							id="filterDateBeginTill" type="date"
-							class="form-control form-control-sm" />
+							class="form-control form-control-sm" th:field="*{dateBeginTill}" />
 						<!-- th:field="*{dateBeginTill}"  -->
 					</div>
+
+					<hr class="d-sm-none">
+
+					<div class="form-group text-center align-self-center">
+						<input type="submit" style="width: 100px;"
+							class="btn btn-info btn-sm" value="On" />
+					</div>
 				</form>
+
 				<hr class="d-sm-none">
 
 			</div>
@@ -136,6 +151,7 @@
 								<td th:text="${task.manager.fullName}"></td>
 								<td class="text-right"
 									th:text="${#numbers.formatDecimal(task.amount,0, 'COMMA', 2, 'POINT')}"></td>
+								<!--th:text="${task.amount}"  -->
 								<td class="text-center"
 									th:text="${#dates.format(task.dateBegin, 'dd-MM-yyyy')}"></td>
 
@@ -177,8 +193,8 @@
 				<h3>Some Links</h3>
 
 				<ul class="nav nav-pills flex-column">
-					<li class="nav-item"><a class="nav-link" target="_blank" th:href="@{/openFolder}">Папка
-							with Docs</a></li>
+					<li class="nav-item"><a class="nav-link" target="_blank"
+						th:href="@{/openFolder}">Папка with Docs</a></li>
 					<li class="nav-item"><a class="nav-link"
 						href="file:///home/mbrunarskiy/Desktop">Папка null</a></li>
 

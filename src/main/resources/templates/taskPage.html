@@ -24,15 +24,30 @@
 <body>
 	<div class="container bg-light" style="margin-top: 30px">
 		<div class="well">
-			<h1>
-				<!-- <span th:text="${personName}"></span> edit -->
-				Task
-			</h1>
+
 
 			<form action="#" th:action="@{'/tasks/update'}" th:object="${task}"
 				method="POST">
+				<!-- ID -->
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group row">
+							<div class="col-sm-3 align-self-center">
+								<h2>
+									<!-- <span th:text="${personName}"></span> edit -->
+									Task №
+								</h2>
+							</div>
+							<div class="col-sm-9 align-self-center">
+								<input id="taskID" class="form-control form-control-sm"
+									type="text" th:field="*{id}" th:disabled="true"
+									placeholder="id" />
+							</div>
 
-				<input type="hidden" id="recordId" th:field="*{id}" />
+						</div>
+					</div>
+
+				</div>
 
 				<!-- Account & Manager -->
 				<div class="row">
@@ -43,7 +58,8 @@
 								class="col-sm-3 col-form-label col-form-label-sm">Account:</label>
 							<div class="col-sm-9">
 								<input class="form-control form-control-sm" type="text"
-									id="taskAccount" th:field="*{account}" autofocus="autofocus"
+									id="taskAccount" th:field="*{account}"
+									th:disabled="${readOnly}" autofocus="autofocus"
 									placeholder="Enter Account" />
 							</div>
 
@@ -64,7 +80,7 @@
 							</label>
 							<div class="col-sm-9"
 								th:if="${managerList != null and not #lists.isEmpty(managerList)}">
-								<select th:field="*{manager}"
+								<select th:field="*{manager}" th:disabled="${readOnly}"
 									class="form-control form-control-sm">
 									<option th:each="dropDownItem : ${managerList}"
 										th:value="${dropDownItem.id}"
@@ -105,7 +121,7 @@
 							<div class="col-sm-9">
 								<input class="form-control form-control-sm" type="text"
 									id="taskWorkName" th:field="*{workName}"
-									placeholder="Enter Work Name" />
+									th:disabled="${readOnly}" placeholder="Enter Work Name" />
 							</div>
 						</div>
 
@@ -125,7 +141,7 @@
 							<div class="col-sm-9">
 								<input class="form-control form-control-sm" type="text"
 									id="taskFileName" th:field="*{fileName}"
-									placeholder="Enter File Name" />
+									th:disabled="${readOnly}" placeholder="Enter File Name" />
 							</div>
 						</div>
 
@@ -150,7 +166,7 @@
 							<div class="col-sm-9"
 								th:if="${contractorList != null and not #lists.isEmpty(contractorList)}">
 								<select id="taskContractor" th:field="*{contractor}"
-									class="form-control form-control-sm">
+									th:disabled="${readOnly}" class="form-control form-control-sm">
 									<option th:each="dropDownItem : ${contractorList}"
 										th:value="${dropDownItem.id}"
 										th:text="${dropDownItem.fullName}"
@@ -179,7 +195,7 @@
 							<div class="col-sm-9"
 								th:if="${productionList != null and not #lists.isEmpty(productionList)}">
 								<select id="taskProduction" th:field="*{production}"
-									class="form-control form-control-sm">
+									th:disabled="${readOnly}" class="form-control form-control-sm">
 									<option th:each="dropDownItem : ${productionList}"
 										th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
 										th:attr="data-tokens=${dropDownItem.name}" />
@@ -210,7 +226,7 @@
 								class="col-sm-3 col-form-label col-form-label-sm">Date
 								begin: </label>
 							<div class="col-sm-9">
-								<input id="taskDateBegin" type="date"
+								<input id="taskDateBegin" type="date" th:disabled="${readOnly}"
 									class="form-control form-control-sm" th:field="*{dateBegin}"
 									th:value="${#dates.format(task.dateBegin, 'yyyy-MM-dd')}" />
 								<!-- th:value="${{task.dateBegin}}"  -->
@@ -233,7 +249,7 @@
 								class="col-sm-3 col-form-label col-form-label-sm">Date
 								end: </label>
 							<div class="col-sm-9">
-								<input id="taskDateEnd" type="date"
+								<input id="taskDateEnd" type="date" th:disabled="${readOnly}"
 									class="form-control form-control-sm" th:field="${task.dateEnd}"
 									th:value="${{task.dateEnd}}" />
 								<!-- th:value="${#dates.format(task.dateEnd, 'yyyy-MM-dd')}" *{dateEnd}-->
@@ -261,7 +277,7 @@
 							<div class="col-sm-9"
 								th:if="${clientList != null and not #lists.isEmpty(clientList)}">
 								<select id="taskClient" th:field="*{client}"
-									class="form-control form-control-sm">
+									th:disabled="${readOnly}" class="form-control form-control-sm">
 									<option th:each="dropDownItem : ${clientList}"
 										th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
 										th:attr="data-tokens=${dropDownItem.name}" />
@@ -289,7 +305,7 @@
 							<div class="col-sm-9"
 								th:if="${stockList != null and not #lists.isEmpty(stockList)}">
 								<select id="taskStock" th:field="*{stock}"
-									class="form-control form-control-sm">
+									th:disabled="${readOnly}" class="form-control form-control-sm">
 									<option th:each="dropDownItem : ${stockList}"
 										th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
 										th:attr="data-tokens=${dropDownItem.name}" />
@@ -322,7 +338,7 @@
 							<div class="col-sm-9">
 								<input class="form-control form-control-sm" type="number"
 									min="0" id="taskPrinting" th:field="*{printing}"
-									placeholder="Enter Printing amount" />
+									th:disabled="${readOnly}" placeholder="Enter Printing amount" />
 							</div>
 						</div>
 						<div class="alert alert-danger"
@@ -342,7 +358,7 @@
 							<div class="col-sm-9"
 								th:if="${chromaticityList != null and not #lists.isEmpty(chromaticityList)}">
 								<select id="taskChromaticity" th:field="*{chromaticity}"
-									class="form-control form-control-sm">
+									th:disabled="${readOnly}" class="form-control form-control-sm">
 									<option th:each="dropDownItem : ${chromaticityList}"
 										th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
 										th:attr="data-tokens=${dropDownItem.name}" />
@@ -376,7 +392,7 @@
 							<div class="col-sm-9"
 								th:if="${formatList != null and not #lists.isEmpty(formatList)}">
 								<select id="taskFormat" th:field="*{format}"
-									class="form-control form-control-sm">
+									th:disabled="${readOnly}" class="form-control form-control-sm">
 									<option th:each="dropDownItem : ${formatList}"
 										th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
 										th:attr="data-tokens=${dropDownItem.name}" />
@@ -404,7 +420,7 @@
 							<div class="col-sm-9"
 								th:if="${laminateList != null and not #lists.isEmpty(laminateList)}">
 								<select id="taskLaminate" th:field="*{laminate}"
-									class="form-control form-control-sm">
+									th:disabled="${readOnly}" class="form-control form-control-sm">
 									<option th:each="dropDownItem : ${laminateList}"
 										th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
 										th:attr="data-tokens=${dropDownItem.name}" />
@@ -437,7 +453,7 @@
 							<div class="col-sm-9"
 								th:if="${paperList != null and not #lists.isEmpty(paperList)}">
 								<select id="taskPaper" th:field="*{paper}"
-									class="form-control form-control-sm">
+									th:disabled="${readOnly}" class="form-control form-control-sm">
 									<option th:each="dropDownItem : ${paperList}"
 										th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
 										th:attr="data-tokens=${dropDownItem.name}" />
@@ -465,7 +481,7 @@
 							<div class="col-sm-9"
 								th:if="${cringleList != null and not #lists.isEmpty(cringleList)}">
 								<select id="taskCringle" th:field="*{cringle}"
-									class="form-control form-control-sm">
+									th:disabled="${readOnly}" class="form-control form-control-sm">
 									<option th:each="dropDownItem : ${cringleList}"
 										th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
 										th:attr="data-tokens=${dropDownItem.name}" />
@@ -495,7 +511,8 @@
 								class="col-sm-4 col-form-label col-form-label-sm">Carving:
 							</label>
 							<div class="col-sm-3 align-self-center">
-								<input type="checkbox" id="taskCarving" th:field="*{carving}" />
+								<input type="checkbox" id="taskCarving" th:field="*{carving}"
+									th:disabled="${readOnly}" />
 
 								<!--class= custom-control-input form-control form-control-sm form-check-input-->
 							</div>
@@ -507,7 +524,8 @@
 								class="col-sm-4 col-form-label col-form-label-sm">Bending:
 							</label>
 							<div class="col-sm-3 align-self-center">
-								<input type="checkbox" id="taskBending" th:field="*{bending}" />
+								<input type="checkbox" id="taskBending" th:field="*{bending}"
+									th:disabled="${readOnly}" />
 							</div>
 						</div>
 					</div>
@@ -517,7 +535,8 @@
 								class="col-sm-4 col-form-label col-form-label-sm">Assembly:
 							</label>
 							<div class="col-sm-3 align-self-center">
-								<input type="checkbox" id="taskAssembly" th:field="*{assembly}" />
+								<input type="checkbox" id="taskAssembly" th:field="*{assembly}"
+									th:disabled="${readOnly}" />
 							</div>
 						</div>
 					</div>
@@ -527,7 +546,8 @@
 								class="col-sm-4 col-form-label col-form-label-sm">Cutting:
 							</label>
 							<div class="col-sm-3 align-self-center">
-								<input type="checkbox" id="taskCutting" th:field="*{cutting}" />
+								<input type="checkbox" id="taskCutting" th:field="*{cutting}"
+									th:disabled="${readOnly}" />
 							</div>
 						</div>
 
@@ -545,12 +565,14 @@
 								class="col-sm-3 col-form-label col-form-label-sm">Amount:
 							</label>
 							<div class="col-sm-9">
-								<input id="taskAmount" type="number" min="0" step="1"
+								<input id="taskAmount" type="number" min="0.00" step="0.01"
 									class="form-control form-control-sm" th:field="*{amount}"
-									pattern="\d+"
+									th:disabled="${readOnly}"
 									onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)" />
 
-								<!-- data-number-to-fixed="2" data-number-stepfactor="100" -->
+								<!-- 
+								data-number-to-fixed="2" data-number-stepfactor="100" pattern="\d+" 
+								-->
 
 							</div>
 						</div>
@@ -569,25 +591,34 @@
 						<div class="form-group">
 							<label for="taskNote">Note:</label>
 							<textarea class="form-control" rows="5" id="taskNote"
-								maxlength="1000" th:field="*{note}"></textarea>
+								th:disabled="${readOnly}" maxlength="1000" th:field="*{note}"></textarea>
 						</div>
 					</div>
 				</div>
 
 				<!-- Buttons -->
-				<div class="row">
 
-					<div class="col-sm-6">
-						<input type="submit" style="width: 100px;"
-							class="btn btn-info btn-sm" value="OK" />
+				<div th:if="${readOnly}">
+					<div class="row">
+						<div class="col-sm-6">
+							<a th:href="@{/main}" style="width: 100px;"
+								class="btn btn-info btn-sm btn-info" role="button">Ok</a>
+						</div>
 					</div>
+				</div>
+				<div th:if="!${readOnly}">
+					<div class="row">
+						<div class="col-sm-6">
+							<input type="submit" style="width: 100px;"
+								class="btn btn-info btn-sm" value="OK" />
+						</div>
 
-					<div class="col-sm-6">
-						<a th:href="@{/main}" style="width: 100px;"
-							class="btn btn-info btn-outline-danger btn-sm float-right"
-							role="button">Cancel</a>
+						<div class="col-sm-6">
+							<a th:href="@{/main}" style="width: 100px;"
+								class="btn btn-info btn-outline-danger btn-sm float-right"
+								role="button">Cancel</a>
+						</div>
 					</div>
-
 				</div>
 			</form>
 

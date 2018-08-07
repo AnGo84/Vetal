@@ -33,7 +33,6 @@ public class DateConverter implements Converter<String, Date> {
 			logger.info("Date parser error: " + e.getMessage());
 			return null;
 		}
-
 	}
 
 }
