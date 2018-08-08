@@ -99,8 +99,9 @@ public class FilterData {
 		this.production = production;
 	}
 
-	@Temporal(TemporalType.DATE)
+	//@Temporal(TemporalType.DATE)
 	public Date getDateBeginFrom() {
+		//System.out.println("Get date:" + dateBeginFrom);
 		return dateBeginFrom;
 	}
 

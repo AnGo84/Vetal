@@ -76,7 +76,7 @@
 					<div class="form-group">
 						<label for="filterDateBeginFrom">Date From:</label> <input
 							id="filterDateBeginFrom" type="date"
-							class="form-control form-control-sm" th:field="*{dateBeginFrom}" />
+							class="form-control form-control-sm" th:field="*{dateBeginFrom}" th:value="${{filterData.dateBeginFrom}}"  />
 						<!-- th:field="*{dateBeginFrom}"  -->
 					</div>
 
