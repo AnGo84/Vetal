@@ -97,7 +97,7 @@ public class Task {
 	private PaperDirectory paper;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "Gringle_ID")
+	@JoinColumn(name = "Cringle_ID")
 	private CringleDirectory cringle;
 
 	@Column(name = "Carving", nullable = false)
