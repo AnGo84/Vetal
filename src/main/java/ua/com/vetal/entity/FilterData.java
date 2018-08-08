@@ -2,8 +2,7 @@ package ua.com.vetal.entity;
 
 import java.util.Date;
 
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class FilterData {
 
@@ -17,11 +16,11 @@ public class FilterData {
 	private ProductionDirectory production;
 
 	// @Temporal(TemporalType.DATE)
-	// @DateTimeFormat(pattern = "dd-MM-yyyy")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateBeginFrom;
 
 	// @Temporal(TemporalType.DATE)
-	// @DateTimeFormat(pattern = "dd-MM-yyyy")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateBeginTill;
 
 	private ClientDirectory client;
@@ -99,9 +98,12 @@ public class FilterData {
 		this.production = production;
 	}
 
-	//@Temporal(TemporalType.DATE)
+	/*
+	 * @Temporal(TemporalType.DATE)
+	 *
+	 * @DateTimeFormat(pattern = "yyyy-MM-dd")
+	 */
 	public Date getDateBeginFrom() {
-		//System.out.println("Get date:" + dateBeginFrom);
 		return dateBeginFrom;
 	}
 
