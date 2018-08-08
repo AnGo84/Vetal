@@ -1,5 +1,6 @@
 package ua.com.vetal.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Collections;
@@ -116,8 +117,12 @@ public class MainController {
 		String url = "/home/mbrunarskiy/Desktop";
 		logger.info("Try open folder " + url + " for OS: " + PlatformUtils.osName());
 		try {
-
-			FileUtils.openDirectory(url);
+			File file = new File(url);
+			if (file.exists()) {
+				FileUtils.openDirectory(url);
+			} else {
+				FileUtils.openDirectory("D:");
+			}
 		} catch (IOException e) {
 			logger.info("Error on open: " + url);
 			e.printStackTrace();
