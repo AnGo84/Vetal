@@ -3,9 +3,6 @@ package ua.com.vetal.controller;
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,46 +16,22 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import ua.com.vetal.entity.ClientDirectory;
-import ua.com.vetal.entity.Contractor;
-import ua.com.vetal.entity.FilterData;
-import ua.com.vetal.entity.Manager;
-import ua.com.vetal.entity.Task;
-import ua.com.vetal.service.ClientDirectoryServiceImpl;
-import ua.com.vetal.service.ContractorServiceImpl;
-import ua.com.vetal.service.ManagerServiceImpl;
-import ua.com.vetal.service.TaskServiceImpl;
 import ua.com.vetal.utils.FileUtils;
 import ua.com.vetal.utils.PlatformUtils;
 import ua.com.vetal.utils.WebUtils;
 
 @Controller
-@SessionAttributes({ "managersFilterList", "clientFilterList", "contractorFilterList", "filterData" })
+@SessionAttributes({ "managersFilterList", "clientFilterList", "contractorFilterList" })
 public class MainController {
 	static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
 	@Autowired
 	private MessageSource messageSource;
-
-	@Autowired
-	private TaskServiceImpl taskService;
-
-	@Autowired
-	private ClientDirectoryServiceImpl clientService;
-	@Autowired
-	private ManagerServiceImpl managerService;
-	@Autowired
-	private ContractorServiceImpl contractorService;
-
-	private FilterData filterData = new FilterData();
-	private List<Task> tasksList;
 
 	@RequestMapping(value = { "/", "/main" }, method = RequestMethod.GET)
 	public String mainPage(Model model) {
@@ -84,7 +57,6 @@ public class MainController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String loginPage(Model model) {
-
 		return "loginPage";
 	}
 
@@ -121,22 +93,15 @@ public class MainController {
 			if (file.exists()) {
 				FileUtils.openDirectory(url);
 			} else {
-				FileUtils.openDirectory("D:");
+				url = "D:";
+				logger.info("Try open folder " + url + " for OS: " + PlatformUtils.osName());
+				FileUtils.openDirectory(url);
 			}
 		} catch (IOException e) {
 			logger.info("Error on open: " + url);
 			e.printStackTrace();
 		}
 		// return "redirect/main";
-	}
-
-	@RequestMapping(value = "tasks/filter", method = RequestMethod.GET)
-	public String updateTask(@ModelAttribute("filterData") FilterData filterData, BindingResult bindingResult,
-			Model model) {
-		logger.info("FilterData: " + filterData);
-		this.filterData = filterData;
-
-		return "redirect:/main";
 	}
 
 	@RequestMapping(value = "/403", method = RequestMethod.GET)
@@ -156,75 +121,6 @@ public class MainController {
 		}
 
 		return "403Page";
-	}
-
-	@ModelAttribute("clientFilterList")
-	public List<ClientDirectory> getClientsList() {
-		List<ClientDirectory> resultList = clientService.findAllObjects();
-
-		final ClientDirectory client = new ClientDirectory();
-		client.setName("");
-
-		resultList.add(0, client);
-
-		Collections.sort(resultList, new Comparator<ClientDirectory>() {
-			@Override
-			public int compare(ClientDirectory m1, ClientDirectory m2) {
-				return m1.getName().compareTo(m2.getName());
-			}
-		});
-
-		return resultList;
-	}
-
-	@ModelAttribute("managerFilterList")
-	public List<Manager> getManagersList() {
-		List<Manager> resultList = managerService.findAllObjects();
-
-		final Manager manager = new Manager();
-		resultList.add(0, manager);
-
-		Collections.sort(resultList, new Comparator<Manager>() {
-			@Override
-			public int compare(Manager m1, Manager m2) {
-				return m1.getFullName().compareTo(m2.getFullName());
-			}
-		});
-
-		return resultList;
-	}
-
-	@ModelAttribute("contractorFilterList")
-	public List<Contractor> getContractorsList() {
-		List<Contractor> resultList = contractorService.findAllObjects();
-		final Contractor contractor = new Contractor();
-		resultList.add(0, contractor);
-		Collections.sort(resultList, new Comparator<Contractor>() {
-			@Override
-			public int compare(Contractor m1, Contractor m2) {
-				return m1.getFullName().compareTo(m2.getFullName());
-			}
-		});
-
-		return resultList;
-	}
-
-	@ModelAttribute("filterData")
-	public FilterData getFilterData() {
-		return filterData;
-	}
-
-	@ModelAttribute("tasksList")
-	public List<Task> getTasksListData() {
-		/*
-		 * if (tasksList == null || tasksList.isEmpty()) { tasksList =
-		 * taskService.findAllObjects(); }
-		 */
-		// tasksList = taskService.findAllObjects();
-		tasksList = taskService.findByFilterData(filterData);
-		// logger.info("Get TaskList : " + tasksList.size());
-
-		return tasksList;
 	}
 
 	private String getPrincipal() {

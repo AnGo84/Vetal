@@ -9,7 +9,7 @@ import ua.com.vetal.entity.Task;
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
 	// Manager findByName(String name);
-	Task findByAccount(String account);
+	Task findByAccount(Long account);
 
 	// List<Task> findByFilterData(FilterData filterData);
 

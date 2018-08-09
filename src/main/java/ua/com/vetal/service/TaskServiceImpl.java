@@ -63,13 +63,13 @@ public class TaskServiceImpl implements SimpleService<Task> {
 
 	@Override
 	public List<Task> findAllObjects() {
-		logger.info("Get all TASKS");
+		// logger.info("Get all TASKS");
 		List<Task> getList = taskRepository.findAll();
-		logger.info("List size: " + getList.size());
+		// logger.info("List size: " + getList.size());
 		return getList;
 	}
 
-	public Task findByAccount(String account) {
+	public Task findByAccount(Long account) {
 		return taskRepository.findByAccount(account);
 	}
 
@@ -150,7 +150,11 @@ public class TaskServiceImpl implements SimpleService<Task> {
 	@Override
 	public boolean isObjectExist(Task task) {
 		// return findByName(manager.getName()) != null;
-		return false;
+		return findById(task.getId()) != null;
+	}
+
+	public boolean isAccountValueExist(Task task) {
+		return findByAccount(task.getAccount()) != null;
 	}
 
 }

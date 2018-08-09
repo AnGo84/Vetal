@@ -3,6 +3,7 @@ package ua.com.vetal.controller;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import javax.validation.Valid;
 
@@ -13,16 +14,19 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import ua.com.vetal.entity.ChromaticityDirectory;
 import ua.com.vetal.entity.ClientDirectory;
 import ua.com.vetal.entity.Contractor;
 import ua.com.vetal.entity.CringleDirectory;
+import ua.com.vetal.entity.FilterData;
 import ua.com.vetal.entity.FormatDirectory;
 import ua.com.vetal.entity.LaminateDirectory;
 import ua.com.vetal.entity.Manager;
@@ -45,6 +49,7 @@ import ua.com.vetal.service.TaskServiceImpl;
 @Controller
 @RequestMapping("/tasks")
 // @SessionAttributes({ "managersList", "pageName" })
+@SessionAttributes({ "filterData" })
 
 public class TasksController {
 	static final Logger logger = LoggerFactory.getLogger(ManagerController.class);
@@ -60,6 +65,9 @@ public class TasksController {
 
 	@Autowired
 	private TaskServiceImpl taskService;
+
+	private FilterData filterData = new FilterData();
+	private List<Task> tasksList;
 
 	@Autowired
 	private ManagerServiceImpl managerService;
@@ -82,15 +90,14 @@ public class TasksController {
 	@Autowired
 	private CringleDirectoryServiceImpl cringleService;
 
-	/*
-	 * @RequestMapping(value = { "", "list" }, method = RequestMethod.GET)
-	 * public String taskList(Model model) {
-	 * 
-	 * model.addAttribute("title", "main"); model.addAttribute("tasksList",
-	 * taskService.findAllObjects());
-	 * 
-	 * return "redirect: /main"; }
-	 */
+	@RequestMapping(value = { "" }, method = RequestMethod.GET)
+	public String taskList(Model model) {
+
+		model.addAttribute("title", title);
+		// model.addAttribute("tasksList", taskService.findAllObjects());
+
+		return "tasksPage";
+	}
 
 	@RequestMapping(value = { "/add" }, method = RequestMethod.GET)
 	public String showAddTaskPage(Model model) {
@@ -167,24 +174,34 @@ public class TasksController {
 			return "taskPage";
 		}
 
-		/*
-		 * if (personService.isObjectExist(person)) { FieldError fieldError =
-		 * new FieldError("person", "name",
-		 * messageSource.getMessage("non.unique.name", new String[] {
-		 * person.getName() }, Locale.getDefault()));
-		 * bindingResult.addError(fieldError); return "personRecordPage"; }
-		 */
+		if (taskService.isAccountValueExist(task)) {
+
+			FieldError fieldError = new FieldError("task", "account", messageSource.getMessage("non.unique.field",
+					new String[] { "Счёт", task.getAccount().toString() }, new Locale("ru")));
+			// Locale.getDefault()
+			bindingResult.addError(fieldError);
+			return "taskPage";
+		}
 
 		taskService.saveObject(task);
 
-		return "redirect:/main";
+		return "redirect:/tasks";
 	}
 
 	@RequestMapping(value = { "/delete-{id}" }, method = RequestMethod.GET)
 	public String deleteTask(@PathVariable Long id) {
 		logger.info("Delete " + title + " with ID= " + id);
 		taskService.deleteById(id);
-		return "redirect:/main";
+		return "redirect:/tasks";
+	}
+
+	@RequestMapping(value = "/filter", method = RequestMethod.GET)
+	public String updateTask(@ModelAttribute("filterData") FilterData filterData, BindingResult bindingResult,
+			Model model) {
+		// logger.info("FilterData: " + filterData);
+		this.filterData = filterData;
+
+		return "redirect:/tasks";
 	}
 
 	/**
@@ -335,4 +352,72 @@ public class TasksController {
 		return resultList;
 	}
 
+	@ModelAttribute("filterData")
+	public FilterData getFilterData() {
+		return filterData;
+	}
+
+	@ModelAttribute("tasksList")
+	public List<Task> getTasksListData() {
+		/*
+		 * if (tasksList == null || tasksList.isEmpty()) { tasksList =
+		 * taskService.findAllObjects(); }
+		 */
+		// tasksList = taskService.findAllObjects();
+		tasksList = taskService.findByFilterData(filterData);
+		// logger.info("Get TaskList : " + tasksList.size());
+
+		return tasksList;
+	}
+
+	@ModelAttribute("clientFilterList")
+	public List<ClientDirectory> getClientsFilterList() {
+		List<ClientDirectory> resultList = clientService.findAllObjects();
+
+		final ClientDirectory client = new ClientDirectory();
+		client.setName("");
+
+		resultList.add(0, client);
+
+		Collections.sort(resultList, new Comparator<ClientDirectory>() {
+			@Override
+			public int compare(ClientDirectory m1, ClientDirectory m2) {
+				return m1.getName().compareTo(m2.getName());
+			}
+		});
+
+		return resultList;
+	}
+
+	@ModelAttribute("managerFilterList")
+	public List<Manager> getManagersFilterList() {
+		List<Manager> resultList = managerService.findAllObjects();
+
+		final Manager manager = new Manager();
+		resultList.add(0, manager);
+
+		Collections.sort(resultList, new Comparator<Manager>() {
+			@Override
+			public int compare(Manager m1, Manager m2) {
+				return m1.getFullName().compareTo(m2.getFullName());
+			}
+		});
+
+		return resultList;
+	}
+
+	@ModelAttribute("contractorFilterList")
+	public List<Contractor> getContractorsFilterList() {
+		List<Contractor> resultList = contractorService.findAllObjects();
+		final Contractor contractor = new Contractor();
+		resultList.add(0, contractor);
+		Collections.sort(resultList, new Comparator<Contractor>() {
+			@Override
+			public int compare(Contractor m1, Contractor m2) {
+				return m1.getFullName().compareTo(m2.getFullName());
+			}
+		});
+
+		return resultList;
+	}
 }
