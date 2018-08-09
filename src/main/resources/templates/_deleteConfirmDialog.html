@@ -1,27 +1,27 @@
 <!-- Modal Dialog -->
 <div class="modal fade" id="confirmDelete" role="dialog"
-	aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+	aria-labelledby="confirmDeleteLabel" aria-hidden="true" xmlns:th="http://www.thymeleaf.org">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title">Delete Permanently</h4>
+				<h4 class="modal-title" th:utext="#{label.delete_record}">[[#{label.delete_record}]]</h4>
 				<button type="button" class="close" data-dismiss="modal"
 					aria-hidden="true">×</button>
 				<!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
 			</div>
 			<div class="modal-body">
-				<p>Are you sure about this ?</p>
+				<p> <span  th:utext="#{message.delete_confirm_message}">Are you sure about this?</span></p>
 			</div>
 			<div class="modal-footer">
 				<div class="col-sm-6">
 					<button type="button" class="btn btn-default btn-sm"
-						style="width: 100px;" data-dismiss="modal">Cancel</button>
+						style="width: 100px;" data-dismiss="modal" th:text="#{label.cancel}">Cancel</button>
 				</div>
 
 				<div class="col-sm-6">
 					<button type="button"
 						class="btn btn-danger btn-sm custom-width float-right"
-						style="width: 100px;" id="confirm">Delete</button>
+						style="width: 100px;" id="confirm" th:text="#{label.delete}">Delete</button>
 
 				</div>
 

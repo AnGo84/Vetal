@@ -90,7 +90,7 @@ public class PaperDirectoryController {
 
 		if (directoryService.isObjectExist(directory)) {
 			FieldError fieldError = new FieldError("directory", "name", messageSource.getMessage("non.unique.name",
-					new String[] { directory.getName() }, Locale.getDefault()));
+					new String[] { "Название", directory.getName() }, new Locale("ru")));
 			bindingResult.addError(fieldError);
 			return "directoryRecordPage";
 		}

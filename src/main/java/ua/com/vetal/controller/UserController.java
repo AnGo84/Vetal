@@ -103,8 +103,8 @@ public class UserController {
 		}
 
 		if (userService.isObjectExist(user)) {
-			FieldError ssoError = new FieldError("user", "name",
-					messageSource.getMessage("non.unique.login", new String[] { user.getName() }, Locale.getDefault()));
+			FieldError ssoError = new FieldError("user", "name", messageSource.getMessage("non.unique.name",
+					new String[] { "Login", user.getName() }, new Locale("ru")));
 			bindingResult.addError(ssoError);
 			return "userPage";
 		}

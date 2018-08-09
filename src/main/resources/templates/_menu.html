@@ -23,7 +23,7 @@
 
 		<ul class="navbar-nav mr-auto">
 			<li class="nav-item"><a class="nav-link text-light"
-				th:href="@{/main}">Home</a></li>
+				th:href="@{/main}" th:text="#{menu.label.main}">Home</a></li>
 			<!-- <li class="nav-item"><a class="nav-link" th:href="@{/userInfo}">User
 					Info</a></li>
 			<li class="nav-item">
@@ -32,36 +32,47 @@
 
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle" href="#" id="navbarContactsDrop"
-				data-toggle="dropdown"> Contacts </a>
+				data-toggle="dropdown" th:text="#{menu.label.contacts}">
+					Contacts </a>
 				<div class="dropdown-menu">
-					<a class="dropdown-item" th:href="@{/client}">Clients</a> 
-					<a class="dropdown-item" th:href="@{/contractor}">Contractors</a> 
-					<a class="dropdown-item" th:href="@{/manager}">Managers</a>
-				</div>
-			</li>
+					<a class="dropdown-item" th:href="@{/client}"
+						th:text="#{menu.label.clients}">Clients</a> <a
+						class="dropdown-item" th:href="@{/contractor}"
+						th:text="#{menu.label.contractors}">Contractors</a> <a
+						class="dropdown-item" th:href="@{/manager}"
+						th:text="#{menu.label.managers}">Managers</a>
+				</div></li>
 
-			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" href="#" id="navbarDirectoriesDrop"
-					data-toggle="dropdown"> Directories </a>
+			<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle" href="#" id="navbarDirectoriesDrop"
+				data-toggle="dropdown" th:text="#{menu.label.directories}">
+					Directories </a>
 				<div class="dropdown-menu">
-					<a class="dropdown-item" th:href="@{/production}">Production</a> 
-					<a class="dropdown-item" th:href="@{/paper}">Paper</a> 
-					<a class="dropdown-item" th:href="@{/chromaticity}">Chromaticity</a>
-					<a class="dropdown-item" th:href="@{/laminate}">Laminate</a> 
-					<a class="dropdown-item" th:href="@{/cringle}">Cringle</a> 
-					<a class="dropdown-item" th:href="@{/format}">Format</a> 
-					<a class="dropdown-item" th:href="@{/stock}">Stock</a>
-				</div>
-			</li>
+					<a class="dropdown-item" th:href="@{/production}"
+						th:text="#{menu.label.productions}">Production</a> <a
+						class="dropdown-item" th:href="@{/paper}"
+						th:text="#{menu.label.papers}">Paper</a> <a class="dropdown-item"
+						th:href="@{/chromaticity}" th:text="#{menu.label.chromaticities}">Chromaticity</a>
+					<a class="dropdown-item" th:href="@{/laminate}"
+						th:text="#{menu.label.laminates}">Laminate</a> <a
+						class="dropdown-item" th:href="@{/cringle}"
+						th:text="#{menu.label.cringles}">Cringle</a> <a
+						class="dropdown-item" th:href="@{/format}"
+						th:text="#{menu.label.formats}">Format</a> <a
+						class="dropdown-item" th:href="@{/stock}"
+						th:text="#{menu.label.stocks}">Stock</a>
+				</div></li>
 
 			<!-- <sec:authorize access="hasAuthority('ROLE_ADMIN')"> th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"-->
 			<li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')"><a
 				class="nav-link dropdown-toggle" href="#" id="navbardrop"
-				data-toggle="dropdown"> Administration </a>
+				data-toggle="dropdown" th:text="#{menu.label.administration}">
+					Administration </a>
 				<div class="dropdown-menu">
 					<a class="dropdown-item" th:href="@{/admin}">Admin</a> <a
-						class="dropdown-item" th:href="@{/users}">Users</a> <a
-						class="dropdown-item" href="#">Link 3</a>
+						class="dropdown-item" th:href="@{/users}"
+						th:text="#{menu.label.users}">Users</a>
+					<!-- <a class="dropdown-item" href="#">Link 3</a> -->
 				</div></li>
 			<!-- </sec:authorize> -->
 
@@ -73,14 +84,14 @@
 
 		<ul class="navbar-nav" sec:authorize="isAnonymous()">
 
-			<li class="nav-item"><a class="nav-link" th:href="@{/login}">Sign
+			<li class="nav-item"><a class="nav-link" th:href="@{/login}" th:text="#{menu.label.sign_in}" >Sign
 					in</a></li>
 
 		</ul>
 		<ul class="navbar-nav" sec:authorize="isAuthenticated()">
 			<li class="nav-item"><a class="nav-link" th:href="@{/userInfo}"><i
-					class="fa fa-user"></i> User "<span sec:authentication="name"></span>"</a></li>
-			<li class="nav-item"><a class="nav-link" th:href="@{/logout}">Logout</a></li>
+					class="fa fa-user"></i> <span th:text="#{label.user}">User</span> "<span sec:authentication="name"></span>"</a></li>
+			<li class="nav-item"><a class="nav-link" th:href="@{/logout}" th:text="#{menu.label.sign_out}">Logout</a></li>
 
 		</ul>
 	</div>
