@@ -12,6 +12,7 @@ import javax.persistence.criteria.Root;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,7 +65,8 @@ public class TaskServiceImpl implements SimpleService<Task> {
 	@Override
 	public List<Task> findAllObjects() {
 		// logger.info("Get all TASKS");
-		List<Task> getList = taskRepository.findAll();
+		List<Task> getList = taskRepository.findAll(sortByDateBeginDesc());
+		//List<Task> getList = taskRepository.findAllByOrderByDateBeginDesc();
 		// logger.info("List size: " + getList.size());
 		return getList;
 	}
@@ -139,6 +141,7 @@ public class TaskServiceImpl implements SimpleService<Task> {
 		 * builder.equal(root.get(param.getKey()), param.getValue())); } } }
 		 */
 		query.where(predicate);
+		query.orderBy(builder.desc(root.get("dateBegin")));
 
 		tasks = entityManager.createQuery(query).getResultList();
 
@@ -154,7 +157,15 @@ public class TaskServiceImpl implements SimpleService<Task> {
 	}
 
 	public boolean isAccountValueExist(Task task) {
-		return findByAccount(task.getAccount()) != null;
+        Task findTask = findByAccount(task.getAccount());
+        System.out.println(findTask);
+        System.out.println(findTask != null && findTask.getId()!=null && !findTask.getId().equals(task.getId()));
+        System.out.println((findTask != null )+": "+ (findTask.getId()!=null)  +": "+ (!findTask.getId().equals(task.getId())));
+        System.out.println(findTask.getId() +" : "+task.getId());
+	    return (findTask != null && findTask.getId()!=null && !findTask.getId().equals(task.getId()));
 	}
 
+	private Sort sortByDateBeginDesc() {
+		return new Sort(Sort.Direction.DESC, "dateBegin");
+	}
 }

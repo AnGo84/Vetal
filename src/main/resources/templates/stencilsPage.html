@@ -1,214 +1,213 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title th:utext="${title}"></title>
+	<title th:utext="${title}"></title>
 
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<script src="js/jquery-3.3.1.min.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script src="js/jquery-3.3.1.min.js"></script>
+	<script src="js/popper.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
 
 </head>
 
 
 <body>
 
-	<!-- Include _menu.html -->
-	<th:block th:include="/_menu"></th:block>
+<!-- Include _menu.html -->
+<th:block th:include="/_menu"></th:block>
 
-	<div class="container-fluid" style="margin-top: 30px">
-		<div class="row">
-			<!-- Left PART -->
-			<div class="col-sm-2 bg-light">
-				<h2>Фильтр:</h2>
-				<form action="#" th:action="@{'/tasks/filter'}"
-					th:object="${filterData}" method="GET">
+<div class="container-fluid" style="margin-top: 30px">
+	<div class="row">
+		<!-- Left PART -->
+		<div class="col-sm-2 bg-light">
+			<h2><span th:text="#{label.filter}">Фильтр</span>:</h2>
+			<form action="#" th:action="@{'/tasks/filter'}"
+				  th:object="${filterData}" method="GET">
 
-					<div class="form-group">
-						<label for="filterAccount">Account:</label> <input type="text"
-							class="form-control form-control-sm" id="filterAccount"
-							th:field="*{account}">
-					</div>
+				<div class="form-group">
+					<label for="filterAccount"><span th:text="#{label.account}">Account</span>:</label> <input type="text"
+																											   class="form-control form-control-sm" id="filterAccount"
+																											   th:field="*{account}">
+				</div>
 
-					<div class="form-group">
-						<label for="filterFileName">File Name:</label> <input type="text"
-							class="form-control form-control-sm" id="filterFileName"
-							th:field="*{fileName}">
-					</div>
+				<div class="form-group">
+					<label for="filterFileName"><span th:text="#{label.filename}">File Name</span>:</label> <input type="text"
+																												   class="form-control form-control-sm" id="filterFileName"
+																												   th:field="*{fileName}">
+				</div>
 
-					<div class="form-group">
-						<label for="filterClient">Client:</label> <select
-							id="filterClient" class="form-control form-control-sm"
-							th:field="*{client}">
-							<!-- th:field="*{client}" -->
-							<option th:each="dropDownItem : ${clientFilterList}"
-								th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
-								th:attr="data-tokens=${dropDownItem.name}" />
-						</select>
-					</div>
+				<div class="form-group">
+					<label for="filterClient"><span th:text="#{label.client}">Client</span>:</label> <select
+						id="filterClient" class="form-control form-control-sm"
+						th:field="*{client}">
+					<!-- th:field="*{client}" -->
+					<option th:each="dropDownItem : ${clientFilterList}"
+							th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
+							th:attr="data-tokens=${dropDownItem.name}" />
+				</select>
+				</div>
 
-					<div class="form-group">
-						<label for="filterContractor">Contractor:</label> <select
-							id="filterContractor" class="form-control form-control-sm"
-							th:field="*{contractor}">
-							<!-- th:field="*{contractor}" -->
-							<option th:each="dropDownItem : ${contractorFilterList}"
-								th:value="${dropDownItem.id}" th:text="${dropDownItem.fullName}"
-								th:attr="data-tokens=${dropDownItem.fullName}" />
-						</select>
-					</div>
+				<div class="form-group">
+					<label for="filterContractor"><span th:text="#{label.contractor}">Contractor</span>:</label> <select
+						id="filterContractor" class="form-control form-control-sm"
+						th:field="*{contractor}">
+					<!-- th:field="*{contractor}" -->
+					<option th:each="dropDownItem : ${contractorFilterList}"
+							th:value="${dropDownItem.id}" th:text="${dropDownItem.fullName}"
+							th:attr="data-tokens=${dropDownItem.fullName}" />
+				</select>
+				</div>
 
-					<div class="form-group">
-						<label for="filterManager">Manager:</label> <select
-							id="filterManager" class="form-control form-control-sm"
-							th:field="*{manager}">
-							<!-- th:field="*{manager}" -->
-							<option th:each="dropDownItem : ${managerFilterList}"
-								th:value="${dropDownItem.id}" th:text="${dropDownItem.fullName}"
-								th:attr="data-tokens=${dropDownItem.fullName}" />
-						</select>
-					</div>
+				<div class="form-group">
+					<label for="filterManager"><span th:text="#{label.manager}">Manager</span>:</label> <select
+						id="filterManager" class="form-control form-control-sm"
+						th:field="*{manager}">
+					<!-- th:field="*{manager}" -->
+					<option th:each="dropDownItem : ${managerFilterList}"
+							th:value="${dropDownItem.id}" th:text="${dropDownItem.fullName}"
+							th:attr="data-tokens=${dropDownItem.fullName}" />
+				</select>
+				</div>
 
-					<div class="form-group">
-						<label for="filterDateBeginFrom">Date From:</label> <input
-							id="filterDateBeginFrom" type="date"
-							class="form-control form-control-sm" th:field="*{dateBeginFrom}" />
-						<!-- th:field="*{dateBeginFrom}"  -->
-					</div>
+				<div class="form-group">
+					<label for="filterDateBeginFrom"><span th:text="#{label.date_from}">Date From</span>:</label> <input
+						id="filterDateBeginFrom" type="date"
+						class="form-control form-control-sm" th:field="*{dateBeginFrom}" />
+					<!-- th:field="*{dateBeginFrom}"  -->
+				</div>
 
-					<div class="form-group">
-						<label for="filterDateBeginTill">Date Till:</label> <input
-							id="filterDateBeginTill" type="date"
-							class="form-control form-control-sm" th:field="*{dateBeginTill}" />
-						<!-- th:field="*{dateBeginTill}"  -->
-					</div>
-
-					<hr class="d-sm-none">
-
-					<div class="form-group text-center align-self-center">
-						<input type="submit" style="width: 100px;"
-							class="btn btn-info btn-sm" value="On" />
-					</div>
-				</form>
+				<div class="form-group">
+					<label for="filterDateBeginTill"><span th:text="#{label.date_till}">Date Till</span>:</label> <input
+						id="filterDateBeginTill" type="date"
+						class="form-control form-control-sm" th:field="*{dateBeginTill}" />
+					<!-- th:field="*{dateBeginTill}"  -->
+				</div>
 
 				<hr class="d-sm-none">
 
-			</div>
-
-			<!-- Central PART -->
-			<div class="col-sm-8">
-
-				<div class="row">
-
-					<div class="col-sm-5">
-						<h2>
-							<span th:text="${directoryName}"></span> List List of Tasks:
-						</h2>
-					</div>
-					<div class="col-sm-6"></div>
-					align-self-center float-right
-					<div class="col-sm-1">
-						<a th:href="@{/tasks/add}"
-							class="btn btn-primary btn-sm custom-width float-right "
-							style="width: 100px;" role="button"
-							sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">New</a>
-					</div>
+				<div class="form-group text-center align-self-center">
+					<input type="submit" style="width: 100px;"
+						   class="btn btn-info btn-sm" value="On" th:value="#{label.on}"/>
 				</div>
-				<!-- Table PART -->
-				<div th:if="${not #lists.isEmpty(tasksList)}">
-					<table class="table table-sm table-bordered table-hover">
-						<thead>
-							<tr class="text-center">
-								<th width="50">Id</th>
-								<th width="100">Account</th>
-								<th>Work name</th>
-								<th>Client</th>
-								<th>Manager</th>
-								<th width="100">Amount</th>
-								<th width="100">Date Begin</th>
+			</form>
 
-								<th width="80">PDF</th>
-								<th width="80"
-									sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
-								<th width="80"
-									sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
-							</tr>
-						</thead>
-						<tbody>
-							<!-- align-items-center -->
-
-							<tr th:each="task : ${tasksList}">
-								<td th:text="${task.id}"></td>
-								<td><a th:href="@{'/tasks/view-' + ${task.id}}"
-									th:text="${task.account}"></a></td>
-								<td th:text="${task.workName}"></td>
-								<td th:text="${task.client.name}"></td>
-								<td th:text="${task.manager.fullName}"></td>
-								<td class="text-right"
-									th:text="${#numbers.formatDecimal(task.amount,0, 'COMMA', 2, 'POINT')}"></td>
-								<!-- th:text="${task.amount}"  -->
-								<td class="text-center"
-									th:text="${#dates.format(task.dateBegin, 'dd-MM-yyyy')}"></td>
-
-								<td class="text-center align-self-center"><a
-									th:href="@{'/tasks/pdfReport-' + ${task.id}}"
-									style="width: 80px;"
-									class="btn btn-warning btn-sm custom-width" role="button">PDF</a></td>
-
-								<td class="text-center align-self-center"
-									sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"><a
-									th:href="@{'/tasks/edit-' + ${task.id}}" style="width: 80px;"
-									class="btn btn-success btn-sm custom-width" role="button">Edit</a></td>
-								<td class="text-center align-self-center"
-									sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">
-									<form method="GET" action="#"
-										th:action="@{'/tasks/delete-' + ${task.id}}"
-										accept-charset="UTF-8" style="display: inline">
-										<button class="btn btn-sm btn-danger custom-width"
-											type="button" style="width: 80px;" data-toggle="modal"
-											data-target="#confirmDelete" data-title="Delete Record"
-											data-message="Are you sure you want to delete this Record?">
-											<i class="glyphicon glyphicon-trash"></i>Delete
-										</button>
-									</form>
-								</td>
-								<td><button type="button"
-										class="btn btn-danger custom-width">Remove</button></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div th:if="${tasksList == null or #lists.isEmpty(tasksList)}">
-					<div>"No Tasks were found, please create some first"</div>
-				</div>
-				-->
-				<!-- !Table PART -->
-			</div>
-
-			<!-- Right PART -->
-			<div class="col-sm-2 bg-light">
-				<h3>Some Links</h3>
-
-				<ul class="nav nav-pills flex-column">
-					<li class="nav-item"><a class="nav-link" target="_blank"
-						th:href="@{/openFolder}">Папка with Docs</a></li>
-					<li class="nav-item"><a class="nav-link"
-						href="file:///home/mbrunarskiy/Desktop">Папка null</a></li>
-
-				</ul>
-				<hr class="d-sm-none">
-			</div>
+			<hr class="d-sm-none">
 
 		</div>
+
+		<!-- Central PART -->
+		<div class="col-sm-8">
+
+			<div class="row">
+
+				<div class="col-sm-10">
+					<h2>
+						<!-- <span th:text="${directoryName}"></span> List -->
+						<span th:text="#{label.tasks_list}">List of Stencils</span>:
+					</h2>
+				</div>
+				<div class="col-sm-1"></div>
+				<!-- align-self-center float-right -->
+				<div class="col-sm-1">
+					<a th:href="@{/tasks/add}"
+					   class="btn btn-primary btn-sm custom-width float-right "
+					   style="width: 100px;" role="button"
+					   sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')" th:text="#{label.new}">New</a>
+				</div>
+			</div>
+			<!-- Table PART -->
+			<div th:if="${not #lists.isEmpty(tasksList)}">
+				<table class="table table-sm table-bordered table-hover">
+					<thead>
+					<tr class="text-center">
+						<th width="50" th:text="#{label.id}">Id</th>
+						<th width="100" th:text="#{label.account}">Account</th>
+						<th th:text="#{label.work}">Work name</th>
+						<th th:text="#{label.client}">Client</th>
+						<th th:text="#{label.manager}">Manager</th>
+						<th width="100" th:text="#{label.amount}">Amount</th>
+						<th width="100" th:text="#{label.task_date}">Date Begin</th>
+
+						<th width="80">PDF</th>
+						<th width="80"
+							sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
+						<th width="80"
+							sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
+					</tr>
+					</thead>
+					<tbody>
+					<!-- align-items-center -->
+
+					<tr th:each="task : ${tasksList}">
+						<td th:text="${task.id}"></td>
+						<td><a th:href="@{'/tasks/view-' + ${task.id}}"
+							   th:text="${task.account}"></a></td>
+						<td th:text="${task.workName}"></td>
+						<td th:text="${task.client.name}"></td>
+						<td th:text="${task.manager.fullName}"></td>
+						<td class="text-right"
+							th:text="${#numbers.formatDecimal(task.amount,0, 'COMMA', 2, 'POINT')}"></td>
+						<!-- th:text="${task.amount}"  -->
+						<td class="text-center"
+							th:text="${#dates.format(task.dateBegin, 'dd-MM-yyyy')}"></td>
+
+						<td class="text-center align-self-center"><a
+								th:href="@{'/tasks/pdfReport-' + ${task.id}}"
+								style="width: 80px;"
+								class="btn btn-warning btn-sm custom-width" role="button">PDF</a></td>
+
+						<td class="text-center align-self-center"
+							sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"><a
+								th:href="@{'/tasks/edit-' + ${task.id}}" style="width: 80px;"
+								class="btn btn-success btn-sm custom-width" role="button" th:text="#{label.edit}">Edit</a></td>
+						<td class="text-center align-self-center"
+							sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">
+							<form method="GET" action="#"
+								  th:action="@{'/tasks/delete-' + ${task.id}}"
+								  accept-charset="UTF-8" style="display: inline">
+								<button class="btn btn-sm btn-danger custom-width"
+										type="button" style="width: 80px;" data-toggle="modal"
+										data-target="#confirmDelete" data-title="Delete Record"
+										data-message="Are you sure you want to delete this Record?" th:text="#{label.delete}">
+									<i class="glyphicon glyphicon-trash"></i>Delete
+								</button>
+							</form>
+						</td>
+
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			<div th:if="${tasksList == null or #lists.isEmpty(tasksList)}">
+				<div>"No Tasks were found, please create some first"</div>
+			</div>
+			<!-- !Table PART -->
+		</div>
+
+		<!-- Right PART -->
+		<div class="col-sm-2 bg-light">
+			<!-- <h3>Some Links</h3>
+
+            <ul class="nav nav-pills flex-column">
+                <li class="nav-item"><a class="nav-link" target="_blank"
+                    th:href="@{/openFolder}">Папка with Docs</a></li>
+                <li class="nav-item"><a class="nav-link"
+                    href="file:///home/mbrunarskiy/Desktop">Папка null</a></li>
+
+            </ul>
+            <hr class="d-sm-none"> -->
+		</div>
+
 	</div>
+</div>
 
 
-	<!-- Include _deleteConfirmDialog.html -->
-	<th:block th:include="/_deleteConfirmDialog.html"></th:block>
+<!-- Include _deleteConfirmDialog.html -->
+<th:block th:include="/_deleteConfirmDialog.html"></th:block>
 
 </body>
 </html>

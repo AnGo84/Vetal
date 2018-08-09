@@ -1,87 +1,89 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-<meta charset="UTF-8">
-<title th:utext="${title}">Directory</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<link rel="stylesheet" href="css/font-awesome.min.css">
-<script src="js/jquery-3.3.1.min.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <title th:utext="${title}">Directory</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 </head>
 <body>
-	<!-- Include _menu.html -->
-	<th:block th:include="/_menu"></th:block>
+<!-- Include _menu.html -->
+<th:block th:include="/_menu"></th:block>
 
-	<div class="container" style="margin-top: 20px">
+<div class="container" style="margin-top: 20px">
 
-		<div class="row">
+    <div class="row">
 
-			<div class="col-sm-5">
-				<h2><span th:text="${directoryName}"></span> List</h2>
-			</div>
-			<div class="col-sm-6"></div>
-			<!-- align-self-center float-right  -->
-			<div class="col-sm-1">
-				<a th:href="@{${pageName}+'/add'}"
-					class="btn btn-primary btn-sm custom-width float-right "
-					style="width: 100px;" role="button" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">New</a>
-			</div>
-		</div>
-		<div th:if="${directoryList !=null and not #lists.isEmpty(directoryList)}">
-			<table class="table table-sm table-bordered table-hover">
-				<thead>
-					<tr class="text-center">
-						<th width="100">Id</th>
-						<th>Name</th>
-						<th width="100"
-							sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
-						<th width="100"
-							sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
-					</tr>
-				</thead>
-				<tbody>
-					<!-- align-items-center -->
-					<tr th:each="directory : ${directoryList}">
-						<td th:text="${directory.id}"></td>
-						<td th:text="${directory.name}"></td>
+        <div class="col-sm-5">
+            <h2><span th:text="${directoryName}"></span></h2>
+        </div>
+        <div class="col-sm-6"></div>
+        <!-- align-self-center float-right  -->
+        <div class="col-sm-1">
+            <a th:href="@{${pageName}+'/add'}"
+               class="btn btn-primary btn-sm custom-width float-right "
+               style="width: 100px;" role="button"
+               sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')" th:text="#{label.new}">New</a>
+        </div>
+    </div>
+    <div th:if="${directoryList !=null and not #lists.isEmpty(directoryList)}">
+        <table class="table table-sm table-bordered table-hover">
+            <thead>
+            <tr class="text-center">
+                <th width="100"><span th:text="#{label.id}"></span></th>
+                <th><span th:text="#{label.name}"></span></th>
+                <th width="100"
+                    sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
+                <th width="100"
+                    sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- align-items-center -->
+            <tr th:each="directory : ${directoryList}">
+                <td th:text="${directory.id}"></td>
+                <td th:text="${directory.name}"></td>
 
-						<td class="text-center align-self-center"
-							sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"><a
-							th:href="@{${pageName}+'/edit-' + ${directory.id}}"
-							style="width: 100px;" class="btn btn-success btn-sm custom-width"
-							role="button">Edit</a></td>
-						<td class="text-center align-self-center"
-							sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">
+                <td class="text-center align-self-center"
+                    sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"><a
+                        th:href="@{${pageName}+'/edit-' + ${directory.id}}"
+                        style="width: 100px;" class="btn btn-success btn-sm custom-width"
+                        role="button" th:text="#{label.edit}">Edit</a></td>
+                <td class="text-center align-self-center"
+                    sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">
 
-							<form method="GET" action="#"
-								th:action="@{${pageName}+'/delete-' + ${directory.id}}"
-								accept-charset="UTF-8" style="display: inline">
-								<button class="btn btn-sm btn-danger custom-width" type="button"
-									style="width: 100px;" data-toggle="modal"
-									data-target="#confirmDelete" data-title="Delete Record"
-									data-message="Are you sure you want to delete this Record?">
-									<i class="glyphicon glyphicon-trash"></i> Delete
-								</button>
-							</form>
+                    <form method="GET" action="#"
+                          th:action="@{${pageName}+'/delete-' + ${directory.id}}"
+                          accept-charset="UTF-8" style="display: inline">
+                        <button class="btn btn-sm btn-danger custom-width" type="button"
+                                style="width: 100px;" data-toggle="modal"
+                                data-target="#confirmDelete" data-title="Delete Record"
+                                data-message="Are you sure you want to delete this Record?"
+                                th:text="#{label.delete}">
+                            <i class="glyphicon glyphicon-trash"></i> Delete
+                        </button>
+                    </form>
 
 
-						</td>
-						<!-- <td><button type="button" class="btn btn-danger custom-width">Remove</button></td> -->
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<div th:if="${directoryList == null or #lists.isEmpty(directoryList)}">
-			<div>"No Managers were found, please create some first"</div>
-		</div>
-	</div>
+                </td>
+                <!-- <td><button type="button" class="btn btn-danger custom-width">Remove</button></td> -->
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${directoryList == null or #lists.isEmpty(directoryList)}">
+        <div><span th:text="#{table.no_record_found}">"No Managers were found, please create some first"</span></div>
+    </div>
+</div>
 
-	<!-- Include _deleteConfirmDialog.html -->
-	<th:block th:include="/_deleteConfirmDialog.html"></th:block>
+<!-- Include _deleteConfirmDialog.html -->
+<th:block th:include="/_deleteConfirmDialog.html"></th:block>
 
 
 </body>

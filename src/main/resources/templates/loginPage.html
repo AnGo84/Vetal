@@ -45,7 +45,7 @@
 
 						<div th:if="${#request.getParameter('error') == 'true'}"
 							style="color: red; margin: 10px 0px;">
-							<span th:text="#{message.wrong_login_or_pasword}">Wrong
+							<span th:text="#{message.wrong_login_or_password}">Wrong
 								user or password</span>
 
 						</div>
@@ -84,7 +84,7 @@
 							</div>
 
 							<p th:if="${loginError}" class="error"
-								th:text="#{message.wrong_login_or_pasword}">Wrong user or
+								th:text="#{message.wrong_login_or_password}">Wrong user or
 								password</p>
 
 							<div class="form-check">
@@ -106,7 +106,7 @@
 
 							<div class="form-group">
 								<p class="text-center">
-									<a href="#" class="btn" th:text="#{message.forgot_pasword}">Forgot
+									<a href="#" class="btn" th:text="#{message.forgot_password}">Forgot
 										password?</a>
 								</p>
 							</div>

@@ -17,7 +17,7 @@
 	<div class="container bg-light" style="margin-top: 30px">
 		<div class="well">
 			<!-- <h1 th:text="${title}">user</h1> -->
-			<h1>User Registration Form</h1>
+			<h1><span th:text="#{label.user}">User Registration Form</span></h1>
 
 			<!-- <form th:action="@{/users/add}"  th:object="${user}" method="POST"> -->
 			<!-- <form action="#" th:object="${user}" method="POST"> -->
@@ -28,16 +28,10 @@
 				<input type="hidden" id="userId" th:field="*{id}" />
 
 				<div class="form-group form-inline">
-					<label for="userName">Login: </label> <input class="form-control"
+					<label for="userName"><span th:text="#{label.login}">Login</span>: </label> <input class="form-control"
 						type="text" id="userName" th:field="*{name}" />
 					<!-- <span class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Here there is an error</span> -->
 				</div>
-				<!-- 
-				<div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
-				</div>
-				<div class="alert alert-danger" th:if="${#fields.hasErrors('name')}">
-    				<p th:each="err : ${#fields.errors('name')}" th:text="${err}"></p>    
-				</div> -->
 
 				<div class="alert alert-danger" th:if="${#fields.hasErrors('name')}">
 					<p th:text="${#fields.errors('name')}"></p>
@@ -45,14 +39,14 @@
 				</div>
 
 				<div class="form-group">
-					<label for="enabledCheck">Active: </label> <input type="checkbox"
+					<label for="enableCheck"><span th:text="#{label.active}">Active</span>: </label> <input type="checkbox"
 						id="enableCheck" th:field="*{enabled}" />
 					<!--class="custom-control-label"  class="custom-control-input" -->
 
 				</div>
 
 				<div class="form-group">
-					<label for="rolesSelect">Roles: </label> <select id="rolesSelect"
+					<label for="rolesSelect"><span th:text="#{label.roles}">Roles</span>: </label> <select id="rolesSelect"
 						class="form-control" th:field="*{userRoles}" multiple="multiple"
 						size="5">
 						<!-- 
@@ -81,7 +75,7 @@
 					<div class="col-sm-6">
 						<a th:href="@{/users}" style="width: 100px;"
 							class="btn btn-info btn-outline-danger btn-sm float-right"
-							role="button">Cancel</a>
+							role="button" th:text="#{label.cancel}">Cancel</a>
 					</div>
 
 					<!-- IF -->
@@ -113,10 +107,8 @@
 
 			</form>
 
-			<br />
-
+			<!--<br />-->
 			<!-- Check if errorMessage is not null and not empty -->
-
 			<!-- <div th:if="${errorMessage}" th:utext="${errorMessage}"
 				style="color: red; font-style: italic;">...</div> -->
 				

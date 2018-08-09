@@ -17,7 +17,7 @@
 	<div class="container bg-light" style="margin-top: 30px">
 		<div class="well">
 			<h1>
-				<span th:text="${personName}"></span> edit
+				<span th:text="${personName}"></span>
 			</h1>
 
 			<form action="#" th:action="@{${pageName}+'/update'}"
@@ -27,7 +27,7 @@
 
 				<div class="form-group row">
 					<div class="col-6">
-						<label for="recordLastName">Last name: </label> <input class="form-control"
+						<label for="recordLastName" th:text="#{label.lastname}">Last name: </label> <input class="form-control"
 							type="text" id="recordLastName" th:field="*{lastName}"
 							autofocus="autofocus" placeholder="Enter Last Name" />
 					</div>
@@ -41,7 +41,7 @@
 
 				<div class="form-group row">
 					<div class="col-6">
-						<label for="recordFirstName">First name: </label> <input class="form-control"
+						<label for="recordFirstName" th:text="#{label.firstname}">First name: </label> <input class="form-control"
 							type="text" id="recordFirstName" th:field="*{firstName}" placeholder="Enter First Name" />
 					</div>
 
@@ -54,7 +54,7 @@
 
 				<div class="form-group row">
 					<div class="col-6">
-						<label for="recordMiddleName">Middle name: </label> <input class="form-control"
+						<label for="recordMiddleName" th:text="#{label.middlename}">Middle name: </label> <input class="form-control"
 							type="text" id="recordMiddleName" th:field="*{middleName}"placeholder="Enter Middle Name" />
 					</div>
 
@@ -75,7 +75,7 @@
 					<div class="col-sm-6">
 						<a th:href="@{${pageName}}" style="width: 100px;"
 							class="btn btn-info btn-outline-danger btn-sm float-right"
-							role="button">Cancel</a>
+							role="button" th:text="#{label.cancel}">Cancel</a>
 					</div>
 
 				</div>

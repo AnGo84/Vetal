@@ -1,77 +1,86 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title th:utext="${title}"></title>
+    <title th:utext="${title}"></title>
 
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<script src="js/jquery-3.3.1.min.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 
 </head>
 
 
 <body>
 
-	<!-- Include _menu.html -->
-	<th:block th:include="/_menu"></th:block>
+<!-- Include _menu.html -->
+<th:block th:include="/_menu"></th:block>
 
-	<div class="container-fluid" style="margin-top: 30px">
-		<div class="row">
-			<!-- Left PART -->
-			<div class="col-sm-2 bg-light">
-				<h2>Some Links</h2>
+<div class="container-fluid" style="margin-top: 30px">
+    <div class="row">
+        <!-- Left PART -->
+        <div class="col-sm-2 bg-light">
+            <h2><span th:text="#{label.links}">Some Links</span></h2>
+            <ul class="nav nav-pills flex-column">
 
-				<hr class="d-sm-none">
+                <li class="nav-item"><a class="nav-link"
+                                        href="#">Ссылка 1</a></li>
+                <li class="nav-item"><a class="nav-link"
+                                        href="#">Ссылка 2</a></li>
 
-			</div>
+            </ul>
+            <hr class="d-sm-none">
 
-			<!-- Central PART -->
-			<div class="col-sm-8">
+        </div>
 
-				<div class="row text-center">
-					<div class="col-sm-6">
-						<a th:href="@{/tasks}"> 
-						
-						<img src="image/menu/contractors.jpeg"
-							alt="Contractors" class="img-thumbnail img-fluid" width="460" height="345">
-						
-						</a>
-						
-					</div>
-					<div class="col-sm-6">
-						<a th:href="@{/stencils}"> <img src="image/menu/stencils.jpeg"
-							alt="Stencils" class="img-thumbnail img-fluid" width="460" height="345">
-						</a>
-					</div>
-				</div>
+        <!-- Central PART -->
+        <div class="col-sm-8">
 
-			</div>
+            <div class="row text-center">
+                <div class="col-sm-6">
+                    <a th:href="@{/tasks}">
 
-			<!-- Right PART -->
-			<div class="col-sm-2 bg-light">
-				<h3>Folders</h3>
+                        <img src="image/menu/contractors.jpeg"
+                             alt="Contractors" class="img-thumbnail img-fluid" width="460" height="345">
 
-				<ul class="nav nav-pills flex-column">
-					<li class="nav-item"><a class="nav-link" target="_blank"
-						th:href="@{/openFolder}">Папка with Docs</a></li>
-					<li class="nav-item"><a class="nav-link"
-						href="file:///home/mbrunarskiy/Desktop">Папка null</a></li>
+                    </a>
 
-				</ul>
-				<hr class="d-sm-none">
-			</div>
+                </div>
+                <div class="col-sm-6">
+                    <a th:href="@{/stencils}">
+                        <img src="image/menu/stencils.jpeg"
+                             alt="Stencils" class="img-thumbnail img-fluid" width="460"
+                             height="345">
+                    </a>
+                </div>
+            </div>
 
-		</div>
-	</div>
+        </div>
+
+        <!-- Right PART -->
+        <div class="col-sm-2 bg-light">
+            <h3><span th:text="#{label.folders}">Folders</span></h3>
+
+            <ul class="nav nav-pills flex-column">
+                <li class="nav-item"><a class="nav-link" target="_blank"
+                                        th:href="@{/openFolder}">Папка с договорами</a></li>
+                <!--<li class="nav-item"><a class="nav-link"
+                                        href="file:///home/mbrunarskiy/Desktop">Папка null</a></li>-->
+
+            </ul>
+            <hr class="d-sm-none">
+        </div>
+
+    </div>
+</div>
 
 
-	<!-- Include _deleteConfirmDialog.html -->
-	<th:block th:include="/_deleteConfirmDialog.html"></th:block>
+<!-- Include _deleteConfirmDialog.html -->
+<th:block th:include="/_deleteConfirmDialog.html"></th:block>
 
 </body>
 </html>

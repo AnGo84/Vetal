@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import ua.com.vetal.entity.Task;
 
+import java.util.List;
+
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
@@ -12,5 +14,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 	Task findByAccount(Long account);
 
 	// List<Task> findByFilterData(FilterData filterData);
+	//List<Task> findAllByOrderByDateBeginDesc();
 
 }

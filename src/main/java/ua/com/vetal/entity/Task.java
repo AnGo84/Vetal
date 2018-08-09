@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "tasks")
@@ -56,12 +57,14 @@ public class Task {
 	@Column(name = "Date_BEGIN", nullable = false)
 	@Temporal(TemporalType.DATE)
 	// @DateTimeFormat(pattern = "dd-MM-yyyy")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateBegin;
 
 	@NotNull
 	@Column(name = "Date_END", nullable = false)
 	@Temporal(TemporalType.DATE)
 	// @DateTimeFormat(pattern = "dd-MM-yyyy")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateEnd;
 
 	@NotNull

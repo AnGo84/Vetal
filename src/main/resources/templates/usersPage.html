@@ -21,23 +21,23 @@
 		<div class="row">
 
 			<div class="col-sm-2">
-				<h2>User List</h2>
+				<h2><span th:text="#{menu.label.users}">User List</span></h2>
 			</div>
 			<div class="col-sm-8"></div>
 			<div class="col-sm-2 align-self-center">
 				<a th:href="@{/users/add}"
 					class="btn btn-primary btn-sm custom-width float-right "
-					style="width: 100px;" role="button">New</a>
+					style="width: 100px;" role="button" th:text="#{label.new}">New</a>
 			</div>
 		</div>
 		<div th:if="${users != null and not #lists.isEmpty(users)}">
 			<table class="table table-sm table-bordered table-hover">
 				<thead>
 					<tr class="text-center">
-						<th>Id</th>
-						<th>Login</th>
-						<th>Roles</th>
-						<th>Active</th>
+						<th width="100" th:text="#{label.id}">Id</th>
+						<th th:text="#{label.login}">Login</th>
+						<th th:text="#{label.roles}">Roles</th>
+						<th width="150" th:text="#{label.active}">Active</th>
 						<th width="100"></th>
 						<th width="100"></th>
 					</tr>
@@ -60,12 +60,16 @@
 						</span>
 
 						</td>
-						<td class="text-center" th:text="${user.enabled}"></td>
+						<td class="text-center">
+							<input type="checkbox" th:disabled="true"
+								   th:value="*{user.enabled}" th:checked="${user.enabled}" /></td>
+
+						</td>
 						<!-- "@{'/users/edit-' + ${user.id}}"
 						"@{/users/edit-(id=${user.id})}" -->
 						<td class="text-center align-self-center"><a
 							th:href="@{'/users/edit-' + ${user.id}}" style="width: 100px;"
-							class="btn btn-success btn-sm custom-width" role="button">Edit</a></td>
+							class="btn btn-success btn-sm custom-width" role="button" th:text="#{label.edit}">Edit</a></td>
 						<td class="text-center align-self-center">
 							<!-- 
 						<a
@@ -79,7 +83,7 @@
 								<button class="btn btn-sm btn-danger custom-width" type="button"
 									style="width: 100px;" data-toggle="modal"
 									data-target="#confirmDelete" data-title="Delete User"
-									data-message="Are you sure you want to delete this user ?">
+									data-message="Are you sure you want to delete this user ?" th:text="#{label.delete}">
 									<i class="glyphicon glyphicon-trash"></i> Delete
 								</button>
 							</form>
@@ -92,7 +96,7 @@
 			</table>
 		</div>
 		<div th:if="${users == null or #lists.isEmpty(users)}">
-			<div>"No Managers were found, please create some first"</div>
+			<div><span th:text="#{table.no_record_found}">"No Managers were found, please create some first"</span></div>
 		</div>
 	</div>
 
