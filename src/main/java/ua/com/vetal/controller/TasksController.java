@@ -123,14 +123,24 @@ public class TasksController {
 		logger.info("Edit " + title + " with ID= " + id);
 
 		Task task = taskService.findById(id);
-		logger.info(task.toString());
+		// logger.info(task.toString());
 
 		// model.addAttribute("title", "Edit user");
-		// model.addAttribute("userRolesList",
-		// userRoleService.findAllObjects());
 		// model.addAttribute("edit", true);
 		model.addAttribute("readOnly", false);
-		model.addAttribute("task", taskService.findById(id));
+		model.addAttribute("task", task);
+		return "taskPage";
+	}
+
+	@RequestMapping(value = "/copy-{id}", method = RequestMethod.GET)
+	public String copyTask(@PathVariable Long id, Model model) {
+		logger.info("Copy " + title + " with ID= " + id);
+
+		Task task = (taskService.findById(id)).getCopy();
+		logger.info("Copy task:" + task.toString());
+
+		model.addAttribute("readOnly", false);
+		model.addAttribute("task", task);
 		return "taskPage";
 	}
 

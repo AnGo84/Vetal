@@ -49,6 +49,15 @@
 			<!-- <version>2.1.2.RELEASE</version> -->
 		</dependency>
 
+		<!-- <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency> -->
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+        </dependency>
+
 		<!-- Add typical dependencies for a web application -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -71,6 +80,7 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 
 <!-- 		<dependency>
 			<groupId>joda-time</groupId>

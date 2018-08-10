@@ -28,11 +28,13 @@ public class ChromaticityDirectoryController {
 	static final Logger logger = LoggerFactory.getLogger(ChromaticityDirectoryController.class);
 
 	private String title = "Chromaticity";
-	private String directoryName = "Chromaticity";
+
 	private String pageName = "/chromaticity";
 
 	@Autowired
-	MessageSource messageSource;
+	private MessageSource messageSource;
+
+	private String directoryName = "Chromaticity";
 
 	@Autowired
 	private ChromaticityDirectoryServiceImpl directoryService;
@@ -121,7 +123,11 @@ public class ChromaticityDirectoryController {
 
 	@ModelAttribute("directoryName")
 	public String initializeDirectoryName() {
-		return this.directoryName;
+		String name = messageSource.getMessage("label.chromaticity", null, new Locale("ru"));
+		if (name == null || name.equals("")) {
+			return directoryName;
+		}
+		return name;
 	}
 
 	@ModelAttribute("pageName")

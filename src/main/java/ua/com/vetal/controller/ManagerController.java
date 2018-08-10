@@ -1,5 +1,7 @@
 package ua.com.vetal.controller;
 
+import java.util.Locale;
+
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -114,7 +116,12 @@ public class ManagerController {
 
 	@ModelAttribute("personName")
 	public String initializepersonName() {
-		return this.personName;
+		String name = messageSource.getMessage("label.manager", null, new Locale("ru"));
+		if (name == null || name.equals("")) {
+			return personName;
+		}
+		return name;
+		// return this.personName;
 	}
 
 	@ModelAttribute("pageName")

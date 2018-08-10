@@ -116,7 +116,12 @@ public class StockDirectoryController {
 
 	@ModelAttribute("directoryName")
 	public String initializeDirectoryName() {
-		return this.directoryName;
+		String name = messageSource.getMessage("label.stock", null, new Locale("ru"));
+		if (name == null || name.equals("")) {
+			return directoryName;
+		}
+		return name;
+		// return this.directoryName;
 	}
 
 	@ModelAttribute("pageName")

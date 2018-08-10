@@ -16,9 +16,9 @@
 <body>
 <div class="container bg-light" style="margin-top: 30px">
     <div class="well">
-        <h1>
+        <h2>
             <span th:text="${directoryName}"></span>
-        </h1>
+        </h2>
 
         <form action="#" th:action="@{${pageName}+'/update'}"
               th:object="${directory}" method="POST">

@@ -66,7 +66,7 @@ public class TaskServiceImpl implements SimpleService<Task> {
 	public List<Task> findAllObjects() {
 		// logger.info("Get all TASKS");
 		List<Task> getList = taskRepository.findAll(sortByDateBeginDesc());
-		//List<Task> getList = taskRepository.findAllByOrderByDateBeginDesc();
+		// List<Task> getList = taskRepository.findAllByOrderByDateBeginDesc();
 		// logger.info("List size: " + getList.size());
 		return getList;
 	}
@@ -157,12 +157,19 @@ public class TaskServiceImpl implements SimpleService<Task> {
 	}
 
 	public boolean isAccountValueExist(Task task) {
-        Task findTask = findByAccount(task.getAccount());
-        System.out.println(findTask);
-        System.out.println(findTask != null && findTask.getId()!=null && !findTask.getId().equals(task.getId()));
-        System.out.println((findTask != null )+": "+ (findTask.getId()!=null)  +": "+ (!findTask.getId().equals(task.getId())));
-        System.out.println(findTask.getId() +" : "+task.getId());
-	    return (findTask != null && findTask.getId()!=null && !findTask.getId().equals(task.getId()));
+
+		Task findTask = findByAccount(task.getAccount());
+
+		/*
+		 * System.out.println(findTask); System.out.println(findTask != null &&
+		 * findTask.getId()!=null && !findTask.getId().equals(task.getId()));
+		 * System.out.println((findTask != null )+": "+ (findTask.getId()!=null)
+		 * +": "+ (!findTask.getId().equals(task.getId())));
+		 * System.out.println(findTask.getId() +" : "+task.getId());
+		 */
+		return (findTask != null && findTask.getId() != null && !findTask.getId().equals(task.getId()));
+
+		// return findByAccount(task.getAccount()) != null;
 	}
 
 	private Sort sortByDateBeginDesc() {

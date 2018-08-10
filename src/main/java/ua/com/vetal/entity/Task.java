@@ -128,6 +128,45 @@ public class Task {
 	@Column(name = "Amount", nullable = false)
 	private double amount;
 
+	/*
+	 * public Task() {
+	 * 
+	 * }
+	 * 
+	 * public Task(Task fromTask) { this. = copy(fromTask); }
+	 */
+
+	public Task getCopy() {
+
+		System.out.println("Copy From task:" + this);
+		Task task = new Task();
+
+		task.manager = this.manager;
+		task.workName = this.workName;
+		task.fileName = this.fileName;
+		task.contractor = this.contractor;
+		task.production = this.production;
+		task.dateBegin = this.dateBegin;
+		task.dateEnd = this.dateEnd;
+		task.client = this.client;
+		task.stock = this.stock;
+		task.printing = this.printing;
+		task.chromaticity = this.chromaticity;
+		task.format = this.format;
+		task.laminate = this.laminate;
+		task.paper = this.paper;
+		task.cringle = this.cringle;
+		task.carving = this.carving;
+		task.bending = this.bending;
+		task.assembly = this.assembly;
+		task.cutting = this.cutting;
+		task.note = this.note;
+		task.amount = this.amount;
+
+		System.out.println("COpy Return task:" + task);
+		return task;
+	}
+
 	public Long getId() {
 		return id;
 	}

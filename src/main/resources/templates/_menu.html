@@ -30,8 +30,20 @@
         		<a class="nav-link" th:href="@{/admin}">Admin</a>
       		</li> -->
 
+				
 			<li class="nav-item dropdown"><a
-				class="nav-link dropdown-toggle" href="#" id="navbarContactsDrop"
+				class="nav-link dropdown-toggle text-light" href="#" id="navbarContactsDrop"
+				data-toggle="dropdown" th:text="#{menu.label.printery}">
+					Printery </a>
+				<div class="dropdown-menu">
+					<a class="dropdown-item" th:href="@{/tasks}"
+						th:text="#{menu.label.tasks}">Tasks</a> <a
+						class="dropdown-item" th:href="@{/stencils}"
+						th:text="#{menu.label.stencils}">Stencils</a>
+				</div></li>
+
+			<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle text-light" href="#" id="navbarContactsDrop"
 				data-toggle="dropdown" th:text="#{menu.label.contacts}">
 					Contacts </a>
 				<div class="dropdown-menu">
@@ -43,8 +55,9 @@
 						th:text="#{menu.label.managers}">Managers</a>
 				</div></li>
 
+
 			<li class="nav-item dropdown"><a
-				class="nav-link dropdown-toggle" href="#" id="navbarDirectoriesDrop"
+				class="nav-link dropdown-toggle text-light" href="#" id="navbarDirectoriesDrop"
 				data-toggle="dropdown" th:text="#{menu.label.directories}">
 					Directories </a>
 				<div class="dropdown-menu">
@@ -65,7 +78,7 @@
 
 			<!-- <sec:authorize access="hasAuthority('ROLE_ADMIN')"> th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"-->
 			<li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')"><a
-				class="nav-link dropdown-toggle" href="#" id="navbardrop"
+				class="nav-link dropdown-toggle text-light" href="#" id="navbardrop"
 				data-toggle="dropdown" th:text="#{menu.label.administration}">
 					Administration </a>
 				<div class="dropdown-menu">
@@ -84,14 +97,14 @@
 
 		<ul class="navbar-nav" sec:authorize="isAnonymous()">
 
-			<li class="nav-item"><a class="nav-link" th:href="@{/login}" th:text="#{menu.label.sign_in}" >Sign
+			<li class="nav-item"><a class="nav-link text-light" th:href="@{/login}" th:text="#{menu.label.sign_in}" >Sign
 					in</a></li>
 
 		</ul>
 		<ul class="navbar-nav" sec:authorize="isAuthenticated()">
-			<li class="nav-item"><a class="nav-link" th:href="@{/userInfo}"><i
+			<li class="nav-item"><a class="nav-link text-light" th:href="@{/userInfo}"><i
 					class="fa fa-user"></i> <span th:text="#{label.user}">User</span> "<span sec:authentication="name"></span>"</a></li>
-			<li class="nav-item"><a class="nav-link" th:href="@{/logout}" th:text="#{menu.label.sign_out}">Logout</a></li>
+			<li class="nav-item"><a class="nav-link text-light" th:href="@{/logout}" th:text="#{menu.label.sign_out}">Logout</a></li>
 
 		</ul>
 	</div>
