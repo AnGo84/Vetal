@@ -52,7 +52,11 @@
 						class="dropdown-item" th:href="@{/contractor}"
 						th:text="#{menu.label.contractors}">Contractors</a> <a
 						class="dropdown-item" th:href="@{/manager}"
-						th:text="#{menu.label.managers}">Managers</a>
+						th:text="#{menu.label.managers}">Managers</a><a
+						class="dropdown-item" th:href="@{/printer}"
+						th:text="#{menu.label.printers}">Printers</a><a
+						class="dropdown-item" th:href="@{/worker}"
+						th:text="#{menu.label.workers}">Workers</a>
 				</div></li>
 
 
@@ -102,7 +106,7 @@
 
 		</ul>
 		<ul class="navbar-nav" sec:authorize="isAuthenticated()">
-			<li class="nav-item"><a class="nav-link text-light" th:href="@{/userInfo}"><i
+			<li class="nav-item"><a class="nav-link text-light" th:href="@{/user/view}"><i
 					class="fa fa-user"></i> <span th:text="#{label.user}">User</span> "<span sec:authentication="name"></span>"</a></li>
 			<li class="nav-item"><a class="nav-link text-light" th:href="@{/logout}" th:text="#{menu.label.sign_out}">Logout</a></li>
 

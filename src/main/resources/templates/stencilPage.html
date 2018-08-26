@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+
+    <meta charset="UTF-8">
+    <!-- <title th:utext="${title}">Edit user</title> -->
+    <title>stencil</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="/css/bootstrap-datepicker.min.css"> -->
+
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- <script src="/js/bootstrap.bundle.min.js"></script> -->
+    <!-- <script src="/js/bootstrap-select.min.js"></script> -->
+    <!-- <script src="/js/defaults-*.min.js"></script> -->
+    <!-- <script src="/js/bootstrap-datepicker.min.js"></script> -->
+
+
+</head>
+<body>
+<div class="container bg-light" style="margin-top: 30px">
+    <div class="well">
+
+        <form action="#" th:action="@{'/stencils/update'}" th:object="${stencil}"
+              method="POST">
+            <!-- ID -->
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group row">
+                        <div class="col-sm-7 align-self-center">
+                            <h4>
+                                <!-- <span th:text="${personName}"></span> edit -->
+                                <span th:text="#{label.stencilTaskName}">Stencil</span> №
+                            </h4>
+                        </div>
+                        <div class="col-sm-5 align-self-center">
+                            <input id="stencilID" class="form-control form-control-sm"
+                                   type="text" th:value="*{id}" th:disabled="true"
+                                   placeholder="id"/>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-sm-4"></div>
+                <!-- align-self-center float-right -->
+                <div class="col-sm-2 align-self-center">
+                    <a th:href="@{'/stencils/copy-' + ${stencil.id}}"
+                       class="btn btn-primary btn-sm custom-width float-right "
+                       style="width: 100px;" role="button"
+                       sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"
+                       th:text="#{label.copy}">Copy</a>
+                </div>
+
+                <input type="hidden" id="recordId" th:field="*{id}"/>
+
+            </div>
+
+            <!-- Account & Client -->
+            <div class="row">
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+                        <label for="stencilAccount"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.account}">Account</span>:</label>
+                        <div class="col-sm-9">
+                            <input class="form-control form-control-sm" type="text"
+                                   id="stencilAccount" th:field="*{account}"
+                                   th:disabled="${readOnly}" autofocus="autofocus"
+                                   placeholder="Enter Account"/>
+                        </div>
+
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('account')}">
+                        <!-- <p th:text="${#fields.errors('account')}" style ="margin-bottom: 0rem"></p> -->
+                        <h6>[[${#fields.errors('account')}]]</h6>
+                    </div>
+
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+
+                        <label for="stencilClient"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.client}">Client</span>: </label>
+                        <div class="col-sm-9"
+                             th:if="${clientList != null and not #lists.isEmpty(clientList)}">
+                            <select id="stencilClient" th:field="*{client}"
+                                    th:disabled="${readOnly}" class="form-control form-control-sm">
+                                <option th:each="dropDownItem : ${clientList}"
+                                        th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
+                                        th:attr="data-tokens=${dropDownItem.name}"/>
+                            </select>
+                        </div>
+                        <div class="col-sm-9"
+                             th:if="${clientList == null or #lists.isEmpty(clientList)}">
+                            <div>"No Clients were found, please create some first"</div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('client')}">
+                        <p th:text="${#fields.errors('client')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Order name & Manager -->
+            <div class="row">
+                <div class="col-6">
+
+                    <div class="form-group row">
+
+                        <label for="stencilOrderName"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.order_name}">Order name</span> : </label>
+                        <div class="col-sm-9">
+                            <input class="form-control form-control-sm" type="text"
+                                   id="stencilOrderName" th:field="*{orderName}"
+                                   th:disabled="${readOnly}" placeholder="Enter Oreder Name"/>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group row">
+                        <label for="stencilManager"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.manager}">Manager</span>: </label>
+                        <div class="col-sm-9"
+                             th:if="${managerList != null and not #lists.isEmpty(managerList)}">
+                            <select id="stencilManager" th:field="*{manager}" th:disabled="${readOnly}"
+                                    class="form-control form-control-sm">
+                                <option th:each="dropDownItem : ${managerList}"
+                                        th:value="${dropDownItem.id}"
+                                        th:text="${dropDownItem.fullName}"
+                                        th:attr="data-tokens=${dropDownItem.fullName}"/>
+
+                            </select>
+                        </div>
+
+                        <div class="col-sm-9"
+                             th:if="${managerList == null or #lists.isEmpty(managerList)}">
+                            <div>"No Managers were found, please create some first"</div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('manager')}">
+                        <p th:text="${#fields.errors('manager')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!--Dates Begin & End -->
+            <div class="row">
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="stencilDateBegin"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.stencil_date}">Date begin</span>: </label>
+                        <div class="col-sm-9">
+                            <input id="stencilDateBegin" type="date" th:disabled="${readOnly}"
+                                   class="form-control form-control-sm" th:field="*{dateBegin}"
+                                   th:value="${#dates.format(stencil.dateBegin, 'yyyy-MM-dd')}"/>
+                            <!-- th:value="${{stencil.dateBegin}}"  -->
+                        </div>
+
+                    </div>
+
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('dateBegin')}">
+                        <p th:text="${#fields.errors('dateBegin')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="stencilDateEnd"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.completion_date}">Date end</span>: </label>
+                        <div class="col-sm-9">
+                            <input id="stencilDateEnd" type="date" th:disabled="${readOnly}"
+                                   class="form-control form-control-sm" th:field="${stencil.dateEnd}"
+                                   th:value="${{stencil.dateEnd}}"/>
+                            <!-- th:value="${#dates.format(stencil.dateEnd, 'yyyy-MM-dd')}" *{dateEnd}-->
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('dateEnd')}">
+                        <p th:text="${#fields.errors('dateEnd')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <!-- Stock & Production -->
+            <div class="row">
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="stencilStock"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.stock}">Stock</span>: </label>
+                        <div class="col-sm-9"
+                             th:if="${stockList != null and not #lists.isEmpty(stockList)}">
+                            <select id="stencilStock" th:field="*{stock}"
+                                    th:disabled="${readOnly}" class="form-control form-control-sm">
+                                <option th:each="dropDownItem : ${stockList}"
+                                        th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
+                                        th:attr="data-tokens=${dropDownItem.name}"/>
+                            </select>
+                        </div>
+                        <div class="col-sm-9"
+                             th:if="${stockList == null or #lists.isEmpty(stockList)}">
+                            <div>"No Stocks were found, please create some first"</div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('stock')}">
+                        <p th:text="${#fields.errors('stock')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="stencilProduction"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.production}">Production</span>: </label>
+                        <div class="col-sm-9"
+                             th:if="${productionList != null and not #lists.isEmpty(productionList)}">
+                            <select id="stencilProduction" th:field="*{production}"
+                                    th:disabled="${readOnly}" class="form-control form-control-sm">
+                                <option th:each="dropDownItem : ${productionList}"
+                                        th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
+                                        th:attr="data-tokens=${dropDownItem.name}"/>
+                            </select>
+                        </div>
+                        <div class="col-sm-9"
+                             th:if="${productionList == null or #lists.isEmpty(productionList)}">
+                            <div>"No Productions were found, please create some first"</div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('production')}">
+                        <p th:text="${#fields.errors('production')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Printing & Adjustment -->
+            <div class="row">
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="stencilPrinting"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.printing}">Printing</span>: </label>
+                        <div class="col-sm-9">
+                            <input class="form-control form-control-sm" type="number"
+                                   min="0" id="stencilPrinting" th:field="*{printing}"
+                                   th:disabled="${readOnly}" placeholder="Enter Printing amount"/>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('printing')}">
+                        <p th:text="${#fields.errors('printing')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="stencilAdjustment"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.adjustment}">Adjustment</span>: </label>
+                        <div class="col-sm-9">
+                            <input class="form-control form-control-sm" type="number"
+                                   min="0" id="stencilAdjustment" th:field="*{adjustment}"
+                                   th:disabled="${readOnly}" placeholder="Enter Adjustment amount"/>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('adjustment')}">
+                        <p th:text="${#fields.errors('adjustment')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Paper & Paper_Format -->
+            <div class="row">
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="stencilPaper"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.paper}">Paper</span>: </label>
+                        <div class="col-sm-9"
+                             th:if="${paperList != null and not #lists.isEmpty(paperList)}">
+                            <select id="stencilPaper" th:field="*{paper}"
+                                    th:disabled="${readOnly}" class="form-control form-control-sm">
+                                <option th:each="dropDownItem : ${paperList}"
+                                        th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
+                                        th:attr="data-tokens=${dropDownItem.name}"/>
+                            </select>
+                        </div>
+                        <div class="col-sm-9"
+                             th:if="${paperList == null or #lists.isEmpty(paperList)}">
+                            <div>"No Papers were found, please create some first"</div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('paper')}">
+                        <p th:text="${#fields.errors('paper')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+
+                            <label for="paperFormat"
+                                   class="col-sm-3 col-form-label col-form-label-sm"><span
+                                    th:text="#{label.format}">Format</span>: </label>
+                            <div class="col-sm-9">
+                                <input class="form-control form-control-sm" type="text"
+                                       id="paperFormat" th:field="*{paperFormat}"
+                                       th:disabled="${readOnly}" placeholder="Enter Paper format"/>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-danger"
+                             th:if="${#fields.hasErrors('paperFormat')}">
+                            <p th:text="${#fields.errors('paperFormat')}"
+                               style="margin-bottom: 0rem"></p>
+                        </div>
+                    </div>
+
+            </div>
+
+            <!-- Sheets Numbers -->
+            <div class="row">
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="sheetNumber"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.sheet_number}">Sheets number</span>: </label>
+                        <div class="col-sm-9">
+                            <input class="form-control form-control-sm" type="number"
+                                   min="1" id="sheetNumber" th:field="*{sheetNumber}"
+                                   th:disabled="${readOnly}" placeholder="Enter Sheets number"/>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('sheetNumber')}">
+                        <p th:text="${#fields.errors('sheetNumber')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+
+                </div>
+                <div class="col-sm-6">
+
+
+                </div>
+
+            </div>
+
+            <!-- Printer & Printer date begin -->
+            <div class="row">
+                <div class="col-6">
+
+                    <div class="form-group row">
+
+                        <label for="stencilPrinter"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.printer}">Printer</span> : </label>
+                        <div class="col-sm-9">
+                            <select id="stencilPrinter" th:field="*{printer}" th:disabled="${readOnly}"
+                                    class="form-control form-control-sm">
+                                <option th:each="dropDownItem : ${printerList}"
+                                        th:value="${dropDownItem.id}"
+                                        th:text="${dropDownItem.fullName}"
+                                        th:attr="data-tokens=${dropDownItem.fullName}"/>
+
+                            </select>
+                        </div>
+                        <div class="col-sm-9"
+                             th:if="${printerList == null or #lists.isEmpty(printerList)}">
+                            <div>"No Printers were found, please create some first"</div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('printer')}">
+                        <p th:text="${#fields.errors('printer')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group row">
+
+                        <label for="stencilPrintingDateBegin"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.printing_date}">Printing Date begin</span>: </label>
+                        <div class="col-sm-9">
+                            <input id="stencilPrintingDateBegin" type="date" th:disabled="${readOnly}"
+                                   class="form-control form-control-sm" th:field="*{datePrintBegin}"
+                                   th:value="${#dates.format(stencil.datePrintBegin, 'yyyy-MM-dd')}"/>
+                            <!-- th:value="${{stencil.dateBegin}}"  -->
+                        </div>
+
+                    </div>
+
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('datePrintBegin')}">
+                        <p th:text="${#fields.errors('datePrintBegin')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Printing Note -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="stencilPrintingNote"><span th:text="#{label.note}">Note</span>:</label>
+                        <textarea class="form-control" rows="2" id="stencilPrintingNote"
+                                  th:disabled="${readOnly}" maxlength="1000" th:field="*{printingNote}"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Worker print & Worker cut -->
+            <div class="row">
+                <div class="col-6">
+
+                    <div class="form-group row">
+
+                        <label for="stencilWorkerPrint"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.worker_print}">Worker print</span> : </label>
+                        <div class="col-sm-9">
+                            <select id="stencilWorkerPrint" th:field="*{workerPrint}" th:disabled="${readOnly}"
+                                    class="form-control form-control-sm">
+                                <option th:each="dropDownItem : ${workerList}"
+                                        th:value="${dropDownItem.id}"
+                                        th:text="${dropDownItem.fullName}"
+                                        th:attr="data-tokens=${dropDownItem.fullName}"/>
+
+                            </select>
+                        </div>
+                        <div class="col-sm-9"
+                             th:if="${workerList == null or #lists.isEmpty(workerList)}">
+                            <div>"No Workers were found, please create some first"</div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('workerPrint')}">
+                        <p th:text="${#fields.errors('workerPrint')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group row">
+
+                        <label for="stencilWorkerCut"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.worker_cut}">Worker cut</span> : </label>
+                        <div class="col-sm-9">
+                            <select id="stencilWorkerCut" th:field="*{workerCut}" th:disabled="${readOnly}"
+                                    class="form-control form-control-sm">
+                                <option th:each="dropDownItem : ${workerList}"
+                                        th:value="${dropDownItem.id}"
+                                        th:text="${dropDownItem.fullName}"
+                                        th:attr="data-tokens=${dropDownItem.fullName}"/>
+
+                            </select>
+                        </div>
+                        <div class="col-sm-9"
+                             th:if="${workerList == null or #lists.isEmpty(workerList)}">
+                            <div>"No Workers were found, please create some first"</div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('workerCut')}">
+                        <p th:text="${#fields.errors('workerCut')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Fillet & Popup & Carving & Bending & Assembly & Cutting -->
+            <div class="row">
+                <div class="col-sm-2">
+
+                    <div class="form-group row">
+                        <label for="stencilFillet"
+                               class="col-sm-5 col-form-label col-form-label-sm"><span
+                                th:text="#{label.fillet}">Fillet</span>: </label>
+                        <div class="col-sm-3 align-self-center">
+                            <input type="checkbox" id="stencilFillet" th:field="*{fillet}"
+                                   th:disabled="${readOnly}"/>
+
+                            <!--class= custom-control-input form-control form-control-sm form-check-input-->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+
+                    <div class="form-group row">
+                        <label for="stencilPopup"
+                               class="col-sm-5 col-form-label col-form-label-sm"><span
+                                th:text="#{label.popup}">Popup</span>: </label>
+                        <div class="col-sm-3 align-self-center">
+                            <input type="checkbox" id="stencilPopup" th:field="*{popup}"
+                                   th:disabled="${readOnly}"/>
+
+                            <!--class= custom-control-input form-control form-control-sm form-check-input-->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+
+                    <div class="form-group row">
+                        <label for="stencilCarving"
+                               class="col-sm-5 col-form-label col-form-label-sm"><span
+                                th:text="#{label.carving}">Carving</span>: </label>
+                        <div class="col-sm-3 align-self-center">
+                            <input type="checkbox" id="stencilCarving" th:field="*{carving}"
+                                   th:disabled="${readOnly}"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+
+                    <div class="form-group row">
+                        <label for="stencilStamping"
+                               class="col-sm-5 col-form-label col-form-label-sm"><span
+                                th:text="#{label.stamping}">Stamping</span>: </label>
+                        <div class="col-sm-3 align-self-center">
+                            <input type="checkbox" id="stencilStamping" th:field="*{stamping}"
+                                   th:disabled="${readOnly}"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+
+                    <div class="form-group row">
+                        <label for="stencilEmbossing"
+                               class="col-sm-5 col-form-label col-form-label-sm"><span
+                                th:text="#{label.embossing}">Embossing</span>: </label>
+                        <div class="col-sm-3 align-self-center">
+                            <input type="checkbox" id="stencilEmbossing" th:field="*{embossing}"
+                                   th:disabled="${readOnly}"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="form-group row">
+                        <label for="stencilBending"
+                               class="col-sm-5 col-form-label col-form-label-sm"><span
+                                th:text="#{label.bending}">Bending</span>: </label>
+                        <div class="col-sm-3 align-self-center">
+                            <input type="checkbox" id="stencilBending" th:field="*{bending}"
+                                   th:disabled="${readOnly}"/>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Amount & Sticker -->
+            <div class="row">
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="stencilAmount"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.amount}">Amount</span>: </label>
+                        <div class="col-sm-9">
+                            <input id="stencilAmount" type="number" min="0.00" step="0.01"
+                                   class="form-control form-control-sm" th:field="*{amount}"
+                                   th:disabled="${readOnly}"
+                                   onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"/>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('amount')}">
+                        <p th:text="${#fields.errors('amount')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group row">
+                        <label for="stencilSticker"
+                               class="col-sm-4 col-form-label col-form-label-sm"><span
+                                th:text="#{label.glue_sticker}">Glue Sticker</span>: </label>
+                        <div class="col-sm-3 align-self-center">
+                            <input type="checkbox" id="stencilSticker" th:field="*{sticker}"
+                                   th:disabled="${readOnly}"/>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Buttons -->
+
+            <div th:if="${readOnly}">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <a th:href="@{/stencils}" style="width: 100px;"
+                           class="btn btn-info btn-sm btn-info" role="button"
+                           th:text="#{label.back}">Back</a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="!${readOnly}">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input type="submit" style="width: 100px;"
+                               class="btn btn-info btn-sm" value="OK"/>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <a th:href="@{/stencils}" style="width: 100px;"
+                           class="btn btn-info btn-outline-danger btn-sm float-right"
+                           role="button" th:text="#{label.cancel}">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <br/>
+    </div>
+</div>
+
+</body>
+</html>

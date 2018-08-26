@@ -1,16 +1,17 @@
 <!-- Modal Dialog -->
+<html xmlns:th="http://www.thymeleaf.org">
 <div class="modal fade" id="confirmDelete" role="dialog"
-	aria-labelledby="confirmDeleteLabel" aria-hidden="true" xmlns:th="http://www.thymeleaf.org">
+	aria-labelledby="confirmDeleteLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title" th:utext="#{label.delete_record}">[[#{label.delete_record}]]</h4>
+				<h4 class="modal-title" th:text="#{label.delete_record}">[[#{label.delete_record}]]</h4>
 				<button type="button" class="close" data-dismiss="modal"
 					aria-hidden="true">×</button>
 				<!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
 			</div>
 			<div class="modal-body">
-				<p> <span  th:utext="#{message.delete_confirm_message}">Are you sure about this?</span></p>
+				<p> <span  th:text="#{message.delete_confirm_message}">Are you sure about this?</span></p>
 			</div>
 			<div class="modal-footer">
 				<div class="col-sm-6">

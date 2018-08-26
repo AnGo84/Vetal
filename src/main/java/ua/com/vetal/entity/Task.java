@@ -30,7 +30,8 @@ public class Task {
 
 	@NotNull
 	@Column(name = "Account", nullable = false, unique = true)
-	private Long account;
+	@Size(max = 50)
+	private String account;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "Manager_ID")
@@ -175,11 +176,11 @@ public class Task {
 		this.id = id;
 	}
 
-	public Long getAccount() {
+	public String getAccount() {
 		return account;
 	}
 
-	public void setAccount(Long account) {
+	public void setAccount(String account) {
 		this.account = account;
 	}
 

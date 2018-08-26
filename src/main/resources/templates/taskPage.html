@@ -26,20 +26,19 @@
 	<div class="container bg-light" style="margin-top: 30px">
 		<div class="well">
 
-
 			<form action="#" th:action="@{'/tasks/update'}" th:object="${task}"
 				method="POST">
 				<!-- ID -->
 				<div class="row">
 					<div class="col-sm-6">
 						<div class="form-group row">
-							<div class="col-sm-4 align-self-center">
-								<h2>
+							<div class="col-sm-7 align-self-center">
+								<h4>
 									<!-- <span th:text="${personName}"></span> edit -->
-									<span th:text="#{label.task}">Task</span> №
-								</h2>
+									<span th:text="#{label.taskTaskName}">Task</span> №
+								</h4>
 							</div>
-							<div class="col-sm-8 align-self-center">
+							<div class="col-sm-5 align-self-center">
 								<input id="taskID" class="form-control form-control-sm"
 									type="text" th:value="*{id}" th:disabled="true"
 									placeholder="id" />
@@ -94,7 +93,7 @@
 								th:text="#{label.manager}">Manager</span>: </label>
 							<div class="col-sm-9"
 								th:if="${managerList != null and not #lists.isEmpty(managerList)}">
-								<select th:field="*{manager}" th:disabled="${readOnly}"
+								<select id="taskManager" th:field="*{manager}" th:disabled="${readOnly}"
 									class="form-control form-control-sm">
 									<option th:each="dropDownItem : ${managerList}"
 										th:value="${dropDownItem.id}"
@@ -604,7 +603,7 @@
 					<div class="col-sm-12">
 						<div class="form-group">
 							<label for="taskNote"><span th:text="#{label.note}">Note</span>:</label>
-							<textarea class="form-control" rows="4" id="taskNote"
+							<textarea class="form-control" rows="3" id="taskNote"
 								th:disabled="${readOnly}" maxlength="1000" th:field="*{note}"></textarea>
 						</div>
 					</div>

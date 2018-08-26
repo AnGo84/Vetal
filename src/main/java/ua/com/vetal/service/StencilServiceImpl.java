@@ -1,6 +1,15 @@
 package ua.com.vetal.service;
 
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ua.com.vetal.entity.FilterData;
+import ua.com.vetal.entity.Stencil;
+import ua.com.vetal.entity.Task;
+import ua.com.vetal.repositories.StencilRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -8,108 +17,94 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import ua.com.vetal.entity.FilterData;
-import ua.com.vetal.entity.Task;
-import ua.com.vetal.repositories.TaskRepository;
-
-@Service("taskService")
+@Service("stencilService")
 @Transactional
-public class TaskServiceImpl implements SimpleService<Task> {
+public class StencilServiceImpl implements SimpleService<Stencil> {
 
-	private static final Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(StencilServiceImpl.class);
 
 	@PersistenceContext
 	private EntityManager entityManager;
 
 	@Autowired
-	private TaskRepository taskRepository;
+	private StencilRepository stencilRepository;
 
 	@Override
-	public Task findById(Long id) {
+	public Stencil findById(Long id) {
 		/*
 		 * Optional<User> optinalEntity = userRepository.findById(id); User user
 		 * = optinalEntity.get(); return user;
 		 */
-		return taskRepository.getOne(id);
+		return stencilRepository.getOne(id);
 	}
 
 	@Override
-	public Task findByName(String name) {
+	public Stencil findByName(String name) {
 		// return directoryRepository.findByName(name);
 		return null;
 	}
 
 	@Override
-	public void saveObject(Task task) {
-		taskRepository.save(task);
+	public void saveObject(Stencil stencil) {
+		stencilRepository.save(stencil);
 	}
 
 	@Override
-	public void updateObject(Task task) {
-		saveObject(task);
+	public void updateObject(Stencil stencil) {
+		saveObject(stencil);
 	}
 
 	@Override
 	public void deleteById(Long id) {
-		taskRepository.deleteById(id);
+		stencilRepository.deleteById(id);
 	}
 
 	@Override
-	public List<Task> findAllObjects() {
+	public List<Stencil> findAllObjects() {
 		// logger.info("Get all TASKS");
-		List<Task> getList = taskRepository.findAll(sortByDateBeginDesc());
-		// List<Task> getList = taskRepository.findAllByOrderByDateBeginDesc();
+		List<Stencil> getList = stencilRepository.findAll(sortByDateBeginDesc());
+		// List<Task> getList = stencilRepository.findAllByOrderByDateBeginDesc();
 		// logger.info("List size: " + getList.size());
 		return getList;
 	}
 
-	public Task findByAccount(String account) {
-		return taskRepository.findByAccount(account);
+	public Stencil findByAccount(String account) {
+		return stencilRepository.findByAccount(account);
 	}
 
-	public List<Task> findByFilterData(FilterData filterData) {
-		List<Task> tasks = null;
+	public List<Stencil> findByFilterData(FilterData filterData) {
+		List<Stencil> tasks = null;
 
 		if (filterData == null) {
 			return findAllObjects();
 		}
 
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Task> query = builder.createQuery(Task.class);
-		Root<Task> root = query.from(Task.class);
+		CriteriaQuery<Stencil> query = builder.createQuery(Stencil.class);
+		Root<Stencil> root = query.from(Stencil.class);
 
 		Predicate predicate = builder.conjunction();
 
 		if (filterData.getAccount() != null && !filterData.getAccount().equals("")) {
-			predicate = builder.and(predicate, builder.equal(root.get("account"), filterData.getAccount()));
-			/*
-			 * predicate = builder.and(predicate,
-			 * builder.like(builder.lower(builder.toString(root.get("account")))
-			 * , ("%" + filterData.getAccount() + "%").toLowerCase()));
-			 */
+//			predicate = builder.and(predicate, builder.equal(root.get("account"), filterData.getAccount()));
 			predicate = builder.and(predicate, builder.like(builder.lower(root.get("account")),
 					("%" + filterData.getAccount() + "%").toLowerCase()));
+
 		}
 
-		if (filterData.getFileName() != null && !filterData.getFileName().equals("")) {
+		/*if (filterData.getFileName() != null && !filterData.getFileName().equals("")) {
 			predicate = builder.and(predicate, builder.like(builder.lower(root.get("fileName")),
 					("%" + filterData.getFileName() + "%").toLowerCase()));
-		}
+		}*/
 
 		if (filterData.getClient() != null && filterData.getClient().getId() != 0) {
 			predicate = builder.and(predicate, builder.equal(root.get("client"), filterData.getClient()));
 		}
 
-		if (filterData.getContractor() != null && filterData.getContractor().getId() != 0) {
-			predicate = builder.and(predicate, builder.equal(root.get("contractor"), filterData.getContractor()));
+		if (filterData.getPrinter() != null && filterData.getPrinter().getId() != 0) {
+			predicate = builder.and(predicate, builder.equal(root.get("printer"), filterData.getPrinter()));
 		}
 
 		if (filterData.getManager() != null && filterData.getManager().getId() != 0) {
@@ -126,22 +121,6 @@ public class TaskServiceImpl implements SimpleService<Task> {
 					builder.lessThanOrEqualTo(root.get("dateBegin"), filterData.getDateBeginTill()));
 		}
 
-		/*
-		 * for (SearchCriteria param : params) { if
-		 * (param.getOperation().equalsIgnoreCase(">")) { predicate =
-		 * builder.and(predicate,
-		 * builder.greaterThanOrEqualTo(root.get(param.getKey()),
-		 * param.getValue().toString())); } else if
-		 * (param.getOperation().equalsIgnoreCase("<")) { predicate =
-		 * builder.and(predicate,
-		 * builder.lessThanOrEqualTo(root.get(param.getKey()),
-		 * param.getValue().toString())); } else if
-		 * (param.getOperation().equalsIgnoreCase(":")) { if
-		 * (r.get(param.getKey()).getJavaType() == String.class) { predicate =
-		 * builder.and(predicate, builder.like(root.get(param.getKey()), "%" +
-		 * param.getValue() + "%")); } else { predicate = builder.and(predicate,
-		 * builder.equal(root.get(param.getKey()), param.getValue())); } } }
-		 */
 		query.where(predicate);
 		query.orderBy(builder.desc(root.get("dateBegin")));
 
@@ -153,14 +132,14 @@ public class TaskServiceImpl implements SimpleService<Task> {
 	}
 
 	@Override
-	public boolean isObjectExist(Task task) {
+	public boolean isObjectExist(Stencil stencil) {
 		// return findByName(manager.getName()) != null;
-		return findById(task.getId()) != null;
+		return findById(stencil.getId()) != null;
 	}
 
-	public boolean isAccountValueExist(Task task) {
+	public boolean isAccountValueExist(Stencil stencil) {
 
-		Task findTask = findByAccount(task.getAccount());
+		Stencil findStencil = findByAccount(stencil.getAccount());
 
 		/*
 		 * System.out.println(findTask); System.out.println(findTask != null &&
@@ -169,7 +148,7 @@ public class TaskServiceImpl implements SimpleService<Task> {
 		 * +": "+ (!findTask.getId().equals(task.getId())));
 		 * System.out.println(findTask.getId() +" : "+task.getId());
 		 */
-		return (findTask != null && findTask.getId() != null && !findTask.getId().equals(task.getId()));
+		return (findStencil != null && findStencil.getId() != null && !findStencil.getId().equals(stencil.getId()));
 
 		// return findByAccount(task.getAccount()) != null;
 	}

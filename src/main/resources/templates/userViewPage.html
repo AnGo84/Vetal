@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <!-- <title th:utext="${title}">Edit user</title> -->
+    <title>User View</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div class="container bg-light" style="margin-top: 30px">
+    <div class="well">
+        <!-- <h1 th:text="${title}">user</h1> -->
+        <!--<h1><span th:text="#{label.user}">User Registration Form</span></h1>-->
+
+        <div class="row">
+
+            <div class="col-sm-2">
+                <h2><span th:text="#{label.user}">User View Form</span></h2>
+            </div>
+            <div class="col-sm-6"></div>
+            <div class="col-sm-4 align-self-center">
+                <a th:href="@{'/user/changePassword-' + ${user.id}}"
+                   class="btn btn-primary btn-sm custom-width float-right "
+                   style="width: 200px;" role="button" th:text="#{label.change_password}">Change Password</a>
+
+            </div>
+        </div>
+
+        <form action="#" th:action="@{/users/update}" th:object="${user}"
+              method="POST">
+
+            <input type="hidden" id="userId" th:field="*{id}"/>
+
+            <div class="form-group form-inline">
+                <label for="userName"><span th:text="#{label.login}">Login</span>: </label> <input class="form-control"
+                                                                                                   type="text"
+                                                                                                   id="userName"
+                                                                                                   th:field="*{name}"
+                                                                                                   disabled="true"/>
+                <!-- <span class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Here there is an error</span> -->
+            </div>
+
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('name')}">
+                <p th:text="${#fields.errors('name')}"></p>
+                <!-- th:text="${#fields.errors('name')}" -->
+            </div>
+
+            <div class="form-group">
+                <label for="enableCheck"><span th:text="#{label.active}">Active</span>: </label> <input type="checkbox"
+                                                                                                        id="enableCheck"
+                                                                                                        disabled="true"
+                                                                                                        th:field="*{enabled}"/>
+                <!--class="custom-control-label"  class="custom-control-input" -->
+
+            </div>
+
+            <div class="form-group">
+                <label for="rolesSelect"><span th:text="#{label.roles}">Roles</span>: </label>
+                <div id="rolesSelect" th:if="${user.userRoles != null}">
+                    <ul>
+                        <!--<th:block th:object="${greeting}">-->
+                        <!--<li th:each="item : *{list}" th:text="${item}">Item description here...</li>-->
+                        <!--</th:block>-->
+                        <span
+                                th:each="role,iterStat : ${user.userRoles}"> <span
+                                th:text="${role.name}"/> <th:block th:if="${!iterStat.last}">,
+        						</th:block>
+                                </span>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="alert alert-danger"
+                 th:if="${#fields.hasErrors('userRoles')}">
+                <p th:text="${#fields.errors('userRoles')}"></p>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <a th:href="@{/main}" style="width: 100px;"
+                       class="btn btn-info btn-sm btn-info" role="button"
+                    >Ok</a>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+</body>
+</html>

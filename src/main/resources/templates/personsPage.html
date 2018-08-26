@@ -67,8 +67,8 @@
                           accept-charset="UTF-8" style="display: inline">
                         <button class="btn btn-sm btn-danger custom-width" type="button"
                                 style="width: 100px;" data-toggle="modal"
-                                data-target="#confirmDelete" data-title="Delete Record"
-                                data-message="Are you sure you want to delete this Record?" th:text="#{label.delete}">
+                                data-target="#confirmDelete" th:attr="data-title=#{label.delete_record},data-message=#{message.delete_confirm_message}"
+                                th:text="#{label.delete}">
                             <i class="glyphicon glyphicon-trash"></i> Delete
                         </button>
                     </form>

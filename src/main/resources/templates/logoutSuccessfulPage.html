@@ -16,7 +16,15 @@
       <!-- Include _menu.html -->
       <th:block th:include="/_menu"></th:block>
        
-      <h1>Logout Successful!</h1>
+      <h1><span th:text="#{message.logoutSuccessful}">Logout Successful!</span> </h1>
+
+      <div class="row">
+         <div class="col-sm-6">
+            <a th:href="@{/tasks}" style="width: 100px;"
+               class="btn btn-info btn-sm btn-info" role="button"
+               th:text="#{label.back}">Back</a>
+         </div>
+      </div>
    </body>
     
 </html>

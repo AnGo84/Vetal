@@ -1,124 +1,133 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+>
 
 <head>
-<meta charset="UTF-8">
-<title>Login</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-<link rel="stylesheet" href="css/font-awesome.min.css">
-<script src="js/jquery-3.3.1.min.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 
 </head>
 <body>
 
-	<!-- Include _menu.html
-	<th:block th:include="/_menu"></th:block>
- 	-->
-	<div class="container py-5">
-		<div class="row">
+<!-- Include _menu.html
+<th:block th:include="/_menu"></th:block>
+ -->
+<div class="container py-5">
+    <div class="row">
 
-			<div class="col-md-6 mx-auto">
+        <div class="col-md-6 mx-auto">
 
-				<div class="card rounded-0">
+            <div class="card rounded-0">
 
-					<div class="card-header">
-						<h4 class="card-title text-center mb-4 mt-1"
-							th:text="#{label.sign_in}">Sign in</h4>
-					</div>
+                <div class="card-header">
+                    <h4 class="card-title text-center mb-4 mt-1"
+                        th:text="#{label.sign_in}">Sign in</h4>
+                </div>
 
-					<div class="card-body">
+                <div class="card-body">
 
-						<!-- /login?error=true -->
+                    <!-- /login?error=true -->
 
-						<!-- <div th:if="${#request.getParameter('error') == 'true'}"
-							style="color: red; margin: 10px 0px;">
-							Login Failed!!!<br /> Reason : <span
-								th:if="${#session!= null and #session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION') != null}"
-								th:utext="${#session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION').message}">
-								Static summary </span>
+                    <!-- <div th:if="${#request.getParameter('error') == 'true'}"
+                        style="color: red; margin: 10px 0px;">
+                        Login Failed!!!<br /> Reason : <span
+                            th:if="${#session!= null and #session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION') != null}"
+                            th:utext="${#session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION').message}">
+                            Static summary </span>
 
-						</div> -->
+                    </div> -->
 
-						<div th:if="${#request.getParameter('error') == 'true'}"
-							style="color: red; margin: 10px 0px;">
+                    <div th:if="${#request.getParameter('error') == 'true'}"
+                         style="color: red; margin: 10px 0px;">
 							<span th:text="#{message.wrong_login_or_password}">Wrong
-								user or password</span>
+							user or password</span>
+                    </div>
 
-						</div>
+                    <div th:if="${param.resetSuccess}">
+                        <div class="alert alert-info">
+                            <span th:text="#{message.password_reset_successfully}">You successfully reset your password.</span>
+                        </div>
+                    </div>
 
+                    <form id="loginForm" name='f'
+                          th:action="@{/j_spring_security_check}" method='POST'>
 
-						<form id="loginForm" name='f'
-							th:action="@{/j_spring_security_check}" method='POST'>
+                        <div class="form-group">
+                            <label for="username" th:text="#{label.login}">Login:</label>
+                            <div class="input-group">
 
-							<div class="form-group">
-								<label for="username" th:text="#{label.login}">Login:</label>
-								<div class="input-group">
-
-									<div class="input-group-prepend">
+                                <div class="input-group-prepend">
 										<span class="input-group-text" id="basic-addon1"><i
-											class="fa fa-user"></i></span>
-									</div>
-									<!-- <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span> -->
-									<input id="username" name="username" type="text"
-										class="form-control" placeholder="Enter your Login"
-										aria-label="Username" aria-describedby="basic-addon1">
-								</div>
-							</div>
+                                                class="fa fa-user"></i></span>
+                                </div>
+                                <!-- <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span> -->
+                                <!--th:placeholder="Enter your Login"-->
+                                <input id="username" name="username" type="text"
+                                       class="form-control" placeholder="Enter your Login"
+                                       aria-label="Username" aria-describedby="basic-addon1">
+                            </div>
+                        </div>
 
-							<div class="form-group">
-								<label for="password" th:text="#{label.password}">Password:</label>
-								<div class="input-group">
+                        <div class="form-group">
+                            <label for="password" th:text="#{label.password}">Password:</label>
+                            <div class="input-group">
 
-									<div class="input-group-prepend">
+                                <div class="input-group-prepend">
 										<span class="input-group-text" id="basic-addon2"><i
-											class="fa fa-lock"></i></span>
-									</div>
-									<input id="password" name='password' type='password'
-										class="form-control" placeholder="Enter your Password"
-										aria-label="Password" aria-describedby="basic-addon2">
-								</div>
-							</div>
+                                                class="fa fa-lock"></i></span>
+                                </div>
+                                <input id="password" name='password' type='password'
+                                       class="form-control" placeholder="Enter your Password"
+                                       aria-label="Password" aria-describedby="basic-addon2">
+                            </div>
+                        </div>
 
-							<p th:if="${loginError}" class="error"
-								th:text="#{message.wrong_login_or_password}">Wrong user or
-								password</p>
+                        <p th:if="${loginError}" class="error"
+                           th:text="#{message.wrong_login_or_password}">Wrong user or
+                            password</p>
 
-							<div class="form-check">
-								<label class="form-check-label"> <input type="checkbox"
-									name="remember-me" class="form-check-input"> <span
-									class="custom-control-description small text-dark"
-									th:text="#{message.remember_me}">Remember me on this
+                        <div class="form-check">
+                            <label class="form-check-label"> <input type="checkbox"
+                                                                    name="remember-me" class="form-check-input"> <span
+                                    class="custom-control-description small text-dark"
+                                    th:text="#{message.remember_me}">Remember me on this
 										computer</span>
-								</label>
-							</div>
+                            </label>
+                        </div>
 
-							<hr />
+                        <hr/>
 
-							<div class="form-group">
-								<button name="submit" type="submit"
-									class="btn btn-primary btn-block" value="submit"
-									th:text="#{label.submit}">Login</button>
-							</div>
+                        <div class="form-group">
+                            <button name="submit" type="submit"
+                                    class="btn btn-primary btn-block" value="submit"
+                                    th:text="#{label.submit}">Login
+                            </button>
+                        </div>
 
-							<div class="form-group">
-								<p class="text-center">
-									<a href="#" class="btn" th:text="#{message.forgot_password}">Forgot
-										password?</a>
-								</p>
-							</div>
-						</form>
-					</div>
+                        <div class="form-group">
 
-					<!-- card.// -->
-				</div>
+                            <p class="text-center">
+                                <a href="#" th:href="@{/forgotPassword}" class="btn"
+                                   th:text="#{message.forgot_password}">Forgot
+                                    password?</a>
+                            </p>
+                        </div>
 
-			</div>
-		</div>
-	</div>
+                    </form>
+                </div>
+
+                <!-- card.// -->
+            </div>
+
+        </div>
+    </div>
+</div>
 
 
 </body>

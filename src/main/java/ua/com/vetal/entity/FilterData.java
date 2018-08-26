@@ -8,12 +8,13 @@ public class FilterData {
 
 	private Long id;
 
-	private Long account;
+	private String account;
 	private Manager manager;
 	private String workName;
 	private String fileName;
 	private Contractor contractor;
 	private ProductionDirectory production;
+	private Printer printer;
 
 	// @Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -50,11 +51,11 @@ public class FilterData {
 		this.id = id;
 	}
 
-	public Long getAccount() {
+	public String getAccount() {
 		return account;
 	}
 
-	public void setAccount(Long account) {
+	public void setAccount(String account) {
 		this.account = account;
 	}
 
@@ -96,6 +97,14 @@ public class FilterData {
 
 	public void setProduction(ProductionDirectory production) {
 		this.production = production;
+	}
+
+	public Printer getPrinter() {
+		return printer;
+	}
+
+	public void setPrinter(Printer printer) {
+		this.printer = printer;
 	}
 
 	/*
@@ -248,6 +257,8 @@ public class FilterData {
 		builder.append(contractor);
 		builder.append(", production=");
 		builder.append(production);
+		builder.append(", printer=");
+		builder.append(printer);
 		builder.append(", dateBeginFrom=");
 		builder.append(dateBeginFrom);
 		builder.append(", dateBeginTill=");

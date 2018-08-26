@@ -4,22 +4,22 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "APP_USER")
+//@Table(name = "APP_USER", uniqueConstraints = { //
+//		@UniqueConstraint(name = "APP_USER_UK", columnNames = "User_Name") })
+@Table(name = "APP_USER", uniqueConstraints = { //
+		@UniqueConstraint(name = "APP_USER_UK", columnNames = "User_Name") })
+
+//uniqueConstraints = {
+//@UniqueConstraint(columnNames = {"username"}),
+//@UniqueConstraint(columnNames = {"email"}
+
+
 public class User implements Serializable {
 
 	@Id
@@ -85,4 +85,14 @@ public class User implements Serializable {
 		this.userRoles = userRoles;
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("User{");
+		sb.append("id=").append(id);
+		sb.append(", name='").append(name).append('\'');
+		sb.append(", enabled=").append(enabled);
+		sb.append(", userRoles=").append(userRoles);
+		sb.append('}');
+		return sb.toString();
+	}
 }

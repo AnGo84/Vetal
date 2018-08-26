@@ -1,5 +1,7 @@
 package ua.com.vetal.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -16,8 +18,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "password_reset_token")
 public class PasswordResetToken {
+	//private static final int EXPIRATION = 60 * 24; //24 hours
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(nullable = false, unique = true)
@@ -27,7 +31,8 @@ public class PasswordResetToken {
 	@JoinColumn(nullable = false, name = "user_id")
 	private User user;
 
-	@Column(nullable = false)
+	@Column(name = "expiry_date", nullable = false)
+	//@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date expiryDate;
 
 	public Long getId() {
