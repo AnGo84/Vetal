@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Task_Report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="24500133-e9ba-466f-aa53-6c11785da513">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="VetalDataAdapter.xml"/>
+	<parameter name="paramID" class="java.lang.Long"/>
+	<queryString language="SQL">
+		<![CDATA[select * from vtasks WHERE (ID =  $P{paramID} )]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Account" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Account"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Work_Name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Work_Name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Manager_ID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="Manager_ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Manager_Name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Manager_Name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Contractor_ID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="Contractor_ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Contractor_Name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Contractor_Name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="File_Name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="File_Name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Production_ID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="Production_ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Production_Name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Production_Name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Date_BEGIN" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.label" value="Date_BEGIN"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Date_END" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.label" value="Date_END"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Client_ID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="Client_ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Client_Name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Client_Name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Stock_ID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="Stock_ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Stock_Name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Stock_Name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Printing" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="Printing"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Chromaticity_ID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="Chromaticity_ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Chromaticity_Name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Chromaticity_Name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Format_ID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="Format_ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Format_Name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Format_Name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Laminate_ID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="Laminate_ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Laminate_Name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Laminate_Name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Paper_ID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="Paper_ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Paper_Name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Paper_Name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Cringle_ID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="Cringle_ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Cringel_Name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Cringel_Name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Carving" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.label" value="Carving"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Bending" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.label" value="Bending"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Assembly" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.label" value="Assembly"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Cutting" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.label" value="Cutting"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Note" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Note"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<field name="Amount" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="Amount"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vtasks"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="37" splitType="Stretch">
+			<textField>
+				<reportElement x="420" y="10" width="100" height="20" uuid="6304163a-f988-4458-8bca-c87e513b6248"/>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="40" y="10" width="380" height="20" uuid="5b0f7da0-0e69-4128-a61b-eb7ac044ceae"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Тех задание на прохождение полиграфического заказа №]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="427" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="90" height="20" uuid="89bdc90b-a709-4f62-81dd-d850ded580dc"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Счёт]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="90" y="20" width="460" height="20" uuid="014c2140-440c-4dd2-a898-ed80455fc8b8"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{Manager_Name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="20" width="90" height="20" uuid="9dd7b1f4-fea9-4b25-bb12-1e01494e1636"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Менеджер]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="90" y="0" width="170" height="20" uuid="eabdcbc2-7ece-46cf-81ce-a031056b4a63"/>
+				<textFieldExpression><![CDATA[$F{Account}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="90" y="60" width="460" height="20" uuid="411dd8a8-e6ae-4300-b717-b3f64bd82720"/>
+				<textFieldExpression><![CDATA[$F{Work_Name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="60" width="90" height="20" uuid="ffb43581-686b-44a7-a56a-5bce6792de7d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Название работы]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="90" y="40" width="460" height="20" uuid="d42fb805-fc96-4f3b-86c5-24a27b5d738c"/>
+				<textFieldExpression><![CDATA[$F{File_Name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="40" width="90" height="20" uuid="55da41d6-33a0-42f7-9cc6-3bcae67166af"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Имя файла]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="90" y="80" width="460" height="20" uuid="bf9a0453-310d-4806-b836-2c9d346091d6"/>
+				<textFieldExpression><![CDATA[$F{Contractor_Name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="80" width="90" height="20" uuid="e981e335-9007-432a-bea5-0781b5e857f9"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Подрядчик]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="90" y="100" width="460" height="20" uuid="1755fcce-4546-4e01-9fdc-9ec43b8f4b7e"/>
+				<textFieldExpression><![CDATA[$F{Production_Name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="100" width="90" height="20" uuid="bb673929-5feb-48b3-835c-9ec4288f2293"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Продукция]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="90" y="120" width="170" height="20" uuid="350042c8-3098-4d84-8eb3-04c0b2e91f2c"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd.MM.yyyy").format($F{Date_BEGIN})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="120" width="90" height="20" uuid="7eccf1ff-7f2e-4109-bcd1-6552a2bbae4c"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Дата заполнения]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="370" y="120" width="180" height="20" uuid="378b9903-91e4-4545-8bc7-bfa40393a198"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd.MM.yyyy").format($F{Date_END})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="280" y="120" width="90" height="20" uuid="247687bd-de4f-4d08-8869-101241582748"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Дата выполнения]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="90" y="140" width="460" height="20" uuid="9326a445-8937-41f7-8445-70c9d8087c78"/>
+				<textFieldExpression><![CDATA[$F{Client_Name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="140" width="90" height="20" uuid="4036ad97-a06c-46fb-aac5-64cb7d2e159d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Клиент]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="90" y="160" width="460" height="20" uuid="d7e4d983-c389-4d03-a8a0-b97749762415"/>
+				<textFieldExpression><![CDATA[$F{Stock_Name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="160" width="90" height="20" uuid="c9fcff4a-0f59-4827-b33b-177572821990"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Склад]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="90" y="180" width="170" height="20" uuid="2fd92425-1a83-43c3-ba43-63011749f9fb"/>
+				<textFieldExpression><![CDATA[$F{Printing}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="180" width="90" height="20" uuid="4c6caf5b-00cc-45ac-97d5-bafaa009daba"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Тираж]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="90" y="240" width="180" height="20" uuid="646018a1-5908-4c8f-b267-9b3442c64f51"/>
+				<textFieldExpression><![CDATA[$F{Chromaticity_Name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="240" width="90" height="20" uuid="217ae0c7-2f9f-41e2-81d3-640705ce193d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Цветность]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="90" y="200" width="170" height="20" uuid="28e164d7-9bc9-4f8d-8c8f-40476d565f0f"/>
+				<textFieldExpression><![CDATA[$F{Format_Name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="200" width="90" height="20" uuid="a2d7793f-6fb8-4585-8d15-fcef9460badb"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Формат]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="370" y="240" width="180" height="20" uuid="86aac4cd-c254-4b86-a6d4-5b47a5e71b39"/>
+				<textFieldExpression><![CDATA[$F{Laminate_Name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="280" y="240" width="90" height="20" uuid="c89a421d-ff10-4fd0-bbd9-89d6136b8573"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ламинат]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="90" y="220" width="460" height="20" uuid="7b91e5d4-a27c-4f7e-b065-fff3bd2eb04f"/>
+				<textFieldExpression><![CDATA[$F{Paper_Name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="220" width="90" height="20" uuid="964a20ea-e634-43ed-93ed-b900e26d9ee5"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Бумага]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="90" y="260" width="180" height="20" uuid="29e8b81c-1248-4efb-8ba9-99a2b528920d"/>
+				<textFieldExpression><![CDATA[$F{Cringel_Name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="260" width="90" height="20" uuid="c41e8f7a-347e-443e-97b3-df826adbf774"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Люверсы]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="50" y="290" width="50" height="20" uuid="f555a14d-0ac5-4620-bb2d-999666f8bd00"/>
+				<textFieldExpression><![CDATA[($F{Carving}==Boolean.TRUE?"Да":"Нет")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="290" width="50" height="20" uuid="12f09746-dd77-44f0-9d66-698b298ae5bb"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Высечка]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="175" y="290" width="50" height="20" uuid="196cea86-8a1b-46e3-97be-d28cd517d01a"/>
+				<textFieldExpression><![CDATA[($F{Bending}==Boolean.TRUE?"Да":"Нет")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="125" y="290" width="50" height="20" uuid="27968ed2-4d85-48a8-ae21-797a055f56e2"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Биговка]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="300" y="290" width="50" height="20" uuid="58adba30-7d0a-449d-b4ec-993c1f6db068"/>
+				<textFieldExpression><![CDATA[($F{Assembly}==Boolean.TRUE?"Да":"Нет")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="250" y="290" width="50" height="20" uuid="b7e1109c-43fa-42de-9a90-ebfbabd958d3"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Сборка]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="470" y="290" width="50" height="20" uuid="6aad4a32-1cce-47e1-a233-a75d78507763"/>
+				<textFieldExpression><![CDATA[($F{Cutting}==Boolean.TRUE?"Да":"Нет")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="370" y="290" width="100" height="20" uuid="2e6f0ed9-c472-4a59-9063-7b3e9ff56045"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Порезка плотерная]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="90" y="320" width="170" height="20" uuid="e92f4995-25ef-4ab7-b534-cc583fe5623a"/>
+				<textFieldExpression><![CDATA[CONCATENATE( new java.text.DecimalFormat("#,##0.00").format( (double)$F{Amount}/100), " грн")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="320" width="90" height="20" uuid="4b25cbda-0681-48d5-b053-e29f19efb085"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Сумма (с НДС)]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="370" width="550" height="47" uuid="c2604d18-1904-4b53-ba3e-32bab95848c9"/>
+				<textFieldExpression><![CDATA[$F{Note}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="350" width="100" height="20" uuid="39175441-f625-4649-86a4-dd0502696706"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Примечание:]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

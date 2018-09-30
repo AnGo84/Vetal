@@ -29,7 +29,26 @@ public class Task {
 	private Long id;
 
 	@NotNull
-	@Column(name = "Account", nullable = false, unique = true)
+	@Column(name = "Number", nullable = false)
+	private int number;
+
+
+	@NotNull
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "Number_Base_ID")
+	private NumberBaseDirectory numberBase;
+
+	@NotNull
+	@Column(name = "Number_Suffix", nullable = false)
+	//@Size(max = 5)
+	private int numberSuffix;
+
+	@Column(name = "Full_number")
+	private String fullNumber;
+
+	//@NotNull
+	//@Column(name = "Account", nullable = false, unique = true)
+	@Column(name = "Account")
 	@Size(max = 50)
 	private String account;
 
@@ -84,6 +103,11 @@ public class Task {
 
 	@NotNull
 	@ManyToOne(optional = false)
+	@JoinColumn(name = "Printing_unit_id", nullable = false)
+	private PrintingUnitDirectory printingUnit;
+
+	@NotNull
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "Chromaticity_ID")
 	private ChromaticityDirectory chromaticity;
 
@@ -129,13 +153,6 @@ public class Task {
 	@Column(name = "Amount", nullable = false)
 	private double amount;
 
-	/*
-	 * public Task() {
-	 * 
-	 * }
-	 * 
-	 * public Task(Task fromTask) { this. = copy(fromTask); }
-	 */
 
 	public Task getCopy() {
 
@@ -152,6 +169,7 @@ public class Task {
 		task.client = this.client;
 		task.stock = this.stock;
 		task.printing = this.printing;
+		task.printingUnit = this.printingUnit;
 		task.chromaticity = this.chromaticity;
 		task.format = this.format;
 		task.laminate = this.laminate;
@@ -178,6 +196,38 @@ public class Task {
 
 	public String getAccount() {
 		return account;
+	}
+
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
+	public NumberBaseDirectory getNumberBase() {
+		return numberBase;
+	}
+
+	public void setNumberBase(NumberBaseDirectory numberBase) {
+		this.numberBase = numberBase;
+	}
+
+	public int getNumberSuffix() {
+		return numberSuffix;
+	}
+
+	public void setNumberSuffix(int numberSuffix) {
+		this.numberSuffix = numberSuffix;
+	}
+
+	public String getFullNumber() {
+		return fullNumber;
+	}
+
+	public void setFullNumber(String fullNumber) {
+		this.fullNumber = fullNumber;
 	}
 
 	public void setAccount(String account) {
@@ -262,6 +312,14 @@ public class Task {
 
 	public void setPrinting(int printing) {
 		this.printing = printing;
+	}
+
+	public PrintingUnitDirectory getPrintingUnit() {
+		return printingUnit;
+	}
+
+	public void setPrintingUnit(PrintingUnitDirectory printingUnit) {
+		this.printingUnit = printingUnit;
 	}
 
 	public ChromaticityDirectory getChromaticity() {
@@ -354,55 +412,36 @@ public class Task {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Task [id=");
-		builder.append(id);
-		builder.append(", account=");
-		builder.append(account);
-		builder.append(", manager=");
-		builder.append(manager);
-		builder.append(", workName=");
-		builder.append(workName);
-		builder.append(", fileName=");
-		builder.append(fileName);
-		builder.append(", contractor=");
-		builder.append(contractor);
-		builder.append(", production=");
-		builder.append(production);
-		builder.append(", dateBegin=");
-		builder.append(dateBegin);
-		builder.append(", dateEnd=");
-		builder.append(dateEnd);
-		builder.append(", client=");
-		builder.append(client);
-		builder.append(", stock=");
-		builder.append(stock);
-		builder.append(", printing=");
-		builder.append(printing);
-		builder.append(", chromaticity=");
-		builder.append(chromaticity);
-		builder.append(", format=");
-		builder.append(format);
-		builder.append(", laminate=");
-		builder.append(laminate);
-		builder.append(", paper=");
-		builder.append(paper);
-		builder.append(", cringle=");
-		builder.append(cringle);
-		builder.append(", carving=");
-		builder.append(carving);
-		builder.append(", bending=");
-		builder.append(bending);
-		builder.append(", assembly=");
-		builder.append(assembly);
-		builder.append(", cutting=");
-		builder.append(cutting);
-		builder.append(", note=");
-		builder.append(note);
-		builder.append(", amount=");
-		builder.append(amount);
-		builder.append("]");
-		return builder.toString();
+		final StringBuilder sb = new StringBuilder("Task{");
+		sb.append("id=").append(id);
+		sb.append(", number=").append(number);
+		sb.append(", numberBase=").append(numberBase);
+		sb.append(", numberSuffix=").append(numberSuffix);
+		sb.append(", fullNumber='").append(fullNumber).append('\'');
+		sb.append(", account='").append(account).append('\'');
+		sb.append(", manager=").append(manager);
+		sb.append(", workName='").append(workName).append('\'');
+		sb.append(", fileName='").append(fileName).append('\'');
+		sb.append(", contractor=").append(contractor);
+		sb.append(", production=").append(production);
+		sb.append(", dateBegin=").append(dateBegin);
+		sb.append(", dateEnd=").append(dateEnd);
+		sb.append(", client=").append(client);
+		sb.append(", stock=").append(stock);
+		sb.append(", printing=").append(printing);
+		sb.append(", printingUnit=").append(printingUnit);
+		sb.append(", chromaticity=").append(chromaticity);
+		sb.append(", format=").append(format);
+		sb.append(", laminate=").append(laminate);
+		sb.append(", paper=").append(paper);
+		sb.append(", cringle=").append(cringle);
+		sb.append(", carving=").append(carving);
+		sb.append(", bending=").append(bending);
+		sb.append(", assembly=").append(assembly);
+		sb.append(", cutting=").append(cutting);
+		sb.append(", note='").append(note).append('\'');
+		sb.append(", amount=").append(amount);
+		sb.append('}');
+		return sb.toString();
 	}
-
 }

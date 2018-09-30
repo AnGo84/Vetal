@@ -1,644 +1,719 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 
-<meta charset="UTF-8">
-<!-- <title th:utext="${title}">Edit user</title> -->
-<title>Task</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/css/bootstrap.min.css">
-<link rel="stylesheet" href="/css/bootstrap-select.min.css">
-<link rel="stylesheet" href="/css/font-awesome.min.css">
-<!-- <link rel="stylesheet" href="/css/bootstrap-datepicker.min.css"> -->
+    <meta charset="UTF-8">
+    <!-- <title th:utext="${title}">Edit user</title> -->
+    <title>Task</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/vetal.css">
+    <!-- <link rel="stylesheet" href="/css/bootstrap-datepicker.min.css"> -->
 
-<script src="/js/jquery-3.3.1.min.js"></script>
-<script src="/js/popper.min.js"></script>
-<script src="/js/bootstrap.min.js"></script>
-<!-- <script src="/js/bootstrap.bundle.min.js"></script> -->
-<!-- <script src="/js/bootstrap-select.min.js"></script> -->
-<!-- <script src="/js/defaults-*.min.js"></script> -->
-<!-- <script src="/js/bootstrap-datepicker.min.js"></script> -->
+    <script src="../js/jquery-3.3.1.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
 
+    <script src="../js/bootstrap-select.min.js"></script>
+    <!-- <script src="/js/bootstrap.bundle.min.js"></script> -->
+    <!-- <script src="/js/defaults-*.min.js"></script> -->
+    <!-- <script src="/js/bootstrap-datepicker.min.js"></script> -->
 
 </head>
 <body>
-	<div class="container bg-light" style="margin-top: 30px">
-		<div class="well">
-
-			<form action="#" th:action="@{'/tasks/update'}" th:object="${task}"
-				method="POST">
-				<!-- ID -->
-				<div class="row">
-					<div class="col-sm-6">
-						<div class="form-group row">
-							<div class="col-sm-7 align-self-center">
-								<h4>
-									<!-- <span th:text="${personName}"></span> edit -->
-									<span th:text="#{label.taskTaskName}">Task</span> №
-								</h4>
-							</div>
-							<div class="col-sm-5 align-self-center">
-								<input id="taskID" class="form-control form-control-sm"
-									type="text" th:value="*{id}" th:disabled="true"
-									placeholder="id" />
-							</div>
-
-						</div>
-					</div>
-
-					<div class="col-sm-4"></div>
-					<!-- align-self-center float-right -->
-					<div class="col-sm-2 align-self-center">
-						<a th:href="@{'/tasks/copy-' + ${task.id}}"
-							class="btn btn-primary btn-sm custom-width float-right "
-							style="width: 100px;" role="button"
-							sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"
-							th:text="#{label.copy}">Copy</a>
-					</div>
-
-					<input type="hidden" id="recordId" th:field="*{id}" />
-
-				</div>
-
-				<!-- Account & Manager -->
-				<div class="row">
-					<div class="col-sm-6">
-
-						<div class="form-group row">
-							<label for="taskAccount"
-								class="col-sm-3 col-form-label col-form-label-sm"><span
-								th:text="#{label.account}">Account</span>:</label>
-							<div class="col-sm-9">
-								<input class="form-control form-control-sm" type="text"
-									id="taskAccount" th:field="*{account}"
-									th:disabled="${readOnly}" autofocus="autofocus"
-									placeholder="Enter Account" />
-							</div>
-
-						</div>
-						<div class="alert alert-danger"
-							th:if="${#fields.hasErrors('account')}">
-							<!-- <p th:text="${#fields.errors('account')}" style ="margin-bottom: 0rem"></p> -->
-							<h6>[[${#fields.errors('account')}]]</h6>
-						</div>
-
-					</div>
-					<div class="col-sm-6">
-
-						<div class="form-group row">
-
-							<label for="taskManager"
-								class="col-sm-3 col-form-label col-form-label-sm"><span
-								th:text="#{label.manager}">Manager</span>: </label>
-							<div class="col-sm-9"
-								th:if="${managerList != null and not #lists.isEmpty(managerList)}">
-								<select id="taskManager" th:field="*{manager}" th:disabled="${readOnly}"
-									class="form-control form-control-sm">
-									<option th:each="dropDownItem : ${managerList}"
-										th:value="${dropDownItem.id}"
-										th:text="${dropDownItem.fullName}"
-										th:attr="data-tokens=${dropDownItem.fullName}" />
-									<!-- *for search*
-                                    data-live-search="true"
-                                    title="Choose one of the following..."
-                                    *class
-                                    selectpicker show-menu-arrow show-tick
-                                  -->
-								</select>
-							</div>
-							<div class="col-sm-9"
-								th:if="${managerList == null or #lists.isEmpty(managerList)}">
-								<div>"No Managers were found, please create some first"</div>
-							</div>
-						</div>
-
-						<div class="alert alert-danger"
-							th:if="${#fields.hasErrors('manager')}">
-							<!-- <p th:text="${#fields.errors('manager')}" style ="margin-bottom: 0rem"></p> -->
-							<h6>[[${#fields.errors('manager')}]]</h6>
-						</div>
-					</div>
-
-				</div>
-
-				<!-- Work & File name -->
-				<div class="row">
-					<div class="col-6">
-
-						<div class="form-group row">
-
-							<label for="taskWorkName"
-								class="col-sm-3 col-form-label col-form-label-sm"><span
-								th:text="#{label.work}">Work name</span> : </label>
-							<div class="col-sm-9">
-								<input class="form-control form-control-sm" type="text"
-									id="taskWorkName" th:field="*{workName}"
-									th:disabled="${readOnly}" placeholder="Enter Work Name" />
-							</div>
-						</div>
-
-						<div class="alert alert-danger"
-							th:if="${#fields.hasErrors('workName')}">
-							<p th:text="${#fields.errors('workName')}"
-								style="margin-bottom: 0rem"></p>
-						</div>
-					</div>
-
-					<div class="col-6">
-
-						<div class="form-group row">
-							<label for="taskFileName"
-								class="col-sm-3 col-form-label col-form-label-sm"><span
-								th:text="#{label.filename}">File name</span>: </label>
-							<div class="col-sm-9">
-								<input class="form-control form-control-sm" type="text"
-									id="taskFileName" th:field="*{fileName}"
-									th:disabled="${readOnly}" placeholder="Enter File Name" />
-							</div>
-						</div>
-
-						<div class="alert alert-danger"
-							th:if="${#fields.hasErrors('fileName')}">
-							<p th:text="${#fields.errors('fileName')}"
-								style="margin-bottom: 0rem"></p>
-						</div>
-					</div>
-				</div>
-
-
-				<!-- Contractors & Production -->
-				<div class="row">
-					<div class="col-sm-6">
-
-						<div class="form-group row">
-
-							<label for="taskContractor"
-								class="col-sm-3 col-form-label col-form-label-sm"><span
-								th:text="#{label.contractor}">Contractor</span>: </label>
-							<div class="col-sm-9"
-								th:if="${contractorList != null and not #lists.isEmpty(contractorList)}">
-								<select id="taskContractor" th:field="*{contractor}"
-									th:disabled="${readOnly}" class="form-control form-control-sm">
-									<option th:each="dropDownItem : ${contractorList}"
-										th:value="${dropDownItem.id}"
-										th:text="${dropDownItem.fullName}"
-										th:attr="data-tokens=${dropDownItem.fullName}" />
-								</select>
-							</div>
-							<div class="col-sm-9"
-								th:if="${contractorList == null or #lists.isEmpty(contractorList)}">
-								<div>"No Contractors were found, please create some first"</div>
-							</div>
-						</div>
-						<div class="alert alert-danger"
-							th:if="${#fields.hasErrors('contractor')}">
-							<p th:text="${#fields.errors('contractor')}"
-								style="margin-bottom: 0rem"></p>
-						</div>
-
-					</div>
-					<div class="col-sm-6">
-
-						<div class="form-group row">
-
-							<label for="taskProduction"
-								class="col-sm-3 col-form-label col-form-label-sm"><span
-								th:text="#{label.production}">Production</span>: </label>
-							<div class="col-sm-9"
-								th:if="${productionList != null and not #lists.isEmpty(productionList)}">
-								<select id="taskProduction" th:field="*{production}"
-									th:disabled="${readOnly}" class="form-control form-control-sm">
-									<option th:each="dropDownItem : ${productionList}"
-										th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
-										th:attr="data-tokens=${dropDownItem.name}" />
-								</select>
-							</div>
-							<div class="col-sm-9"
-								th:if="${productionList == null or #lists.isEmpty(productionList)}">
-								<div>"No Productions were found, please create some first"</div>
-							</div>
-						</div>
-
-						<div class="alert alert-danger"
-							th:if="${#fields.hasErrors('production')}">
-							<p th:text="${#fields.errors('production')}"
-								style="margin-bottom: 0rem"></p>
-						</div>
-					</div>
-
-				</div>
-
-				<!--Dates Begin & End -->
-				<div class="row">
-					<div class="col-sm-6">
-
-						<div class="form-group row">
-
-							<label for="taskDateBegin"
-								class="col-sm-3 col-form-label col-form-label-sm"><span
-								th:text="#{label.task_date}">Date begin</span>: </label>
-							<div class="col-sm-9">
-								<input id="taskDateBegin" type="date" th:disabled="${readOnly}"
-									class="form-control form-control-sm" th:field="*{dateBegin}"
-									th:value="${#dates.format(task.dateBegin, 'yyyy-MM-dd')}" />
-								<!-- th:value="${{task.dateBegin}}"  -->
-							</div>
-
-						</div>
-
-						<div class="alert alert-danger"
-							th:if="${#fields.hasErrors('dateBegin')}">
-							<p th:text="${#fields.errors('dateBegin')}"
-								style="margin-bottom: 0rem"></p>
-						</div>
-
-					</div>
-					<div class="col-sm-6">
-
-						<div class="form-group row">
-
-							<label for="taskDateEnd"
-								class="col-sm-3 col-form-label col-form-label-sm"><span
-								th:text="#{label.completion_date}">Date end</span>: </label>
-							<div class="col-sm-9">
-								<input id="taskDateEnd" type="date" th:disabled="${readOnly}"
-									class="form-control form-control-sm" th:field="${task.dateEnd}"
-									th:value="${{task.dateEnd}}" />
-								<!-- th:value="${#dates.format(task.dateEnd, 'yyyy-MM-dd')}" *{dateEnd}-->
-							</div>
-						</div>
-						<div class="alert alert-danger"
-							th:if="${#fields.hasErrors('dateEnd')}">
-							<p th:text="${#fields.errors('dateEnd')}"
-								style="margin-bottom: 0rem"></p>
-						</div>
-
-
-					</div>
-				</div>
-
-				<!-- Client & Stock -->
-				<div class="row">
-					<div class="col-sm-6">
-
-						<div class="form-group row">
-
-							<label for="taskClient"
-								class="col-sm-3 col-form-label col-form-label-sm"><span
-								th:text="#{label.client}">Client</span>: </label>
-							<div class="col-sm-9"
-								th:if="${clientList != null and not #lists.isEmpty(clientList)}">
-								<select id="taskClient" th:field="*{client}"
-									th:disabled="${readOnly}" class="form-control form-control-sm">
-									<option th:each="dropDownItem : ${clientList}"
-										th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
-										th:attr="data-tokens=${dropDownItem.name}" />
-								</select>
-							</div>
-							<div class="col-sm-9"
-								th:if="${clientList == null or #lists.isEmpty(clientList)}">
-								<div>"No Clients were found, please create some first"</div>
-							</div>
-						</div>
-						<div class="alert alert-danger"
-							th:if="${#fields.hasErrors('client')}">
-							<p th:text="${#fields.errors('client')}"
-								style="margin-bottom: 0rem"></p>
-						</div>
-
-					</div>
-					<div class="col-sm-6">
-
-						<div class="form-group row">
-
-							<label for="taskStock"
-								class="col-sm-3 col-form-label col-form-label-sm"><span
-								th:text="#{label.stock}">Stock</span>: </label>
-							<div class="col-sm-9"
-								th:if="${stockList != null and not #lists.isEmpty(stockList)}">
-								<select id="taskStock" th:field="*{stock}"
-									th:disabled="${readOnly}" class="form-control form-control-sm">
-									<option th:each="dropDownItem : ${stockList}"
-										th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
-										th:attr="data-tokens=${dropDownItem.name}" />
-								</select>
-							</div>
-							<div class="col-sm-9"
-								th:if="${stockList == null or #lists.isEmpty(stockList)}">
-								<div>"No Stocks were found, please create some first"</div>
-							</div>
-						</div>
-
-						<div class="alert alert-danger"
-							th:if="${#fields.hasErrors('stock')}">
-							<p th:text="${#fields.errors('stock')}"
-								style="margin-bottom: 0rem"></p>
-						</div>
-					</div>
-
-				</div>
-
-				<!-- Printing & Chromaticity -->
-				<div class="row">
-					<div class="col-sm-6">
-
-						<div class="form-group row">
-
-							<label for="taskPrinting"
-								class="col-sm-3 col-form-label col-form-label-sm"><span
-								th:text="#{label.printing}">Printing</span>: </label>
-							<div class="col-sm-9">
-								<input class="form-control form-control-sm" type="number"
-									min="0" id="taskPrinting" th:field="*{printing}"
-									th:disabled="${readOnly}" placeholder="Enter Printing amount" />
-							</div>
-						</div>
-						<div class="alert alert-danger"
-							th:if="${#fields.hasErrors('printing')}">
-							<p th:text="${#fields.errors('printing')}"
-								style="margin-bottom: 0rem"></p>
-						</div>
-
-					</div>
-					<div class="col-sm-6">
-
-						<div class="form-group row">
-
-							<label for="taskChromaticity"
-								class="col-sm-3 col-form-label col-form-label-sm"><span
-								th:text="#{label.chromaticity}">Chromaticity</span>: </label>
-							<div class="col-sm-9"
-								th:if="${chromaticityList != null and not #lists.isEmpty(chromaticityList)}">
-								<select id="taskChromaticity" th:field="*{chromaticity}"
-									th:disabled="${readOnly}" class="form-control form-control-sm">
-									<option th:each="dropDownItem : ${chromaticityList}"
-										th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
-										th:attr="data-tokens=${dropDownItem.name}" />
-								</select>
-							</div>
-							<div class="col-sm-9"
-								th:if="${chromaticityList == null or #lists.isEmpty(chromaticityList)}">
-								<div>"No Chromaticity were found, please create some
-									first"</div>
-							</div>
-						</div>
-
-						<div class="alert alert-danger"
-							th:if="${#fields.hasErrors('chromaticity')}">
-							<p th:text="${#fields.errors('chromaticity')}"
-								style="margin-bottom: 0rem"></p>
-						</div>
-					</div>
-
-				</div>
-
-				<!-- Format & Laminate -->
-				<div class="row">
-					<div class="col-sm-6">
-
-						<div class="form-group row">
-
-							<label for="taskFormat"
-								class="col-sm-3 col-form-label col-form-label-sm"><span
-								th:text="#{label.format}">Format</span>: </label>
-							<div class="col-sm-9"
-								th:if="${formatList != null and not #lists.isEmpty(formatList)}">
-								<select id="taskFormat" th:field="*{format}"
-									th:disabled="${readOnly}" class="form-control form-control-sm">
-									<option th:each="dropDownItem : ${formatList}"
-										th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
-										th:attr="data-tokens=${dropDownItem.name}" />
-								</select>
-							</div>
-							<div class="col-sm-9"
-								th:if="${formatList == null or #lists.isEmpty(formatList)}">
-								<div>"No Format were found, please create some first"</div>
-							</div>
-						</div>
-						<div class="alert alert-danger"
-							th:if="${#fields.hasErrors('format')}">
-							<p th:text="${#fields.errors('format')}"
-								style="margin-bottom: 0rem"></p>
-						</div>
-
-					</div>
-					<div class="col-sm-6">
-
-						<div class="form-group row">
-
-							<label for="taskLaminate"
-								class="col-sm-3 col-form-label col-form-label-sm"><span
-								th:text="#{label.laminate}">Laminate</span>: </label>
-							<div class="col-sm-9"
-								th:if="${laminateList != null and not #lists.isEmpty(laminateList)}">
-								<select id="taskLaminate" th:field="*{laminate}"
-									th:disabled="${readOnly}" class="form-control form-control-sm">
-									<option th:each="dropDownItem : ${laminateList}"
-										th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
-										th:attr="data-tokens=${dropDownItem.name}" />
-								</select>
-							</div>
-							<div class="col-sm-9"
-								th:if="${laminateList == null or #lists.isEmpty(laminateList)}">
-								<div>"No Laminate were found, please create some first"</div>
-							</div>
-						</div>
-
-						<div class="alert alert-danger"
-							th:if="${#fields.hasErrors('laminate')}">
-							<p th:text="${#fields.errors('laminate')}"
-								style="margin-bottom: 0rem"></p>
-						</div>
-					</div>
-
-				</div>
-
-				<!-- Paper & Cringle -->
-				<div class="row">
-					<div class="col-sm-6">
-
-						<div class="form-group row">
-
-							<label for="taskPaper"
-								class="col-sm-3 col-form-label col-form-label-sm"><span
-								th:text="#{label.paper}">Paper</span>: </label>
-							<div class="col-sm-9"
-								th:if="${paperList != null and not #lists.isEmpty(paperList)}">
-								<select id="taskPaper" th:field="*{paper}"
-									th:disabled="${readOnly}" class="form-control form-control-sm">
-									<option th:each="dropDownItem : ${paperList}"
-										th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
-										th:attr="data-tokens=${dropDownItem.name}" />
-								</select>
-							</div>
-							<div class="col-sm-9"
-								th:if="${paperList == null or #lists.isEmpty(paperList)}">
-								<div>"No Papers were found, please create some first"</div>
-							</div>
-						</div>
-						<div class="alert alert-danger"
-							th:if="${#fields.hasErrors('paper')}">
-							<p th:text="${#fields.errors('paper')}"
-								style="margin-bottom: 0rem"></p>
-						</div>
-
-					</div>
-					<div class="col-sm-6">
-
-						<div class="form-group row">
-
-							<label for="taskCringle"
-								class="col-sm-3 col-form-label col-form-label-sm"><span
-								th:text="#{label.cringle}">Cringle</span>: </label>
-							<div class="col-sm-9"
-								th:if="${cringleList != null and not #lists.isEmpty(cringleList)}">
-								<select id="taskCringle" th:field="*{cringle}"
-									th:disabled="${readOnly}" class="form-control form-control-sm">
-									<option th:each="dropDownItem : ${cringleList}"
-										th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
-										th:attr="data-tokens=${dropDownItem.name}" />
-								</select>
-							</div>
-							<div class="col-sm-9"
-								th:if="${cringleList == null or #lists.isEmpty(cringleList)}">
-								<div>"No Cringles were found, please create some first"</div>
-							</div>
-						</div>
-
-						<div class="alert alert-danger"
-							th:if="${#fields.hasErrors('laminate')}">
-							<p th:text="${#fields.errors('laminate')}"
-								style="margin-bottom: 0rem"></p>
-						</div>
-					</div>
-
-				</div>
-
-				<!-- Carving & Bending & Assembly & Cutting -->
-				<div class="row">
-					<div class="col-sm-3">
-
-						<div class="form-group row">
-							<label for="taskCarving"
-								class="col-sm-4 col-form-label col-form-label-sm"><span
-								th:text="#{label.carving}">Carving</span>: </label>
-							<div class="col-sm-3 align-self-center">
-								<input type="checkbox" id="taskCarving" th:field="*{carving}"
-									th:disabled="${readOnly}" />
-
-								<!--class= custom-control-input form-control form-control-sm form-check-input-->
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-3">
-						<div class="form-group row">
-							<label for="taskBending"
-								class="col-sm-4 col-form-label col-form-label-sm"><span
-								th:text="#{label.bending}">Bending</span>: </label>
-							<div class="col-sm-3 align-self-center">
-								<input type="checkbox" id="taskBending" th:field="*{bending}"
-									th:disabled="${readOnly}" />
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-3">
-						<div class="form-group row">
-							<label for="taskAssembly"
-								class="col-sm-4 col-form-label col-form-label-sm"><span
-								th:text="#{label.assembly}">Assembly</span>: </label>
-							<div class="col-sm-3 align-self-center">
-								<input type="checkbox" id="taskAssembly" th:field="*{assembly}"
-									th:disabled="${readOnly}" />
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-3">
-						<div class="form-group row">
-							<label for="taskCutting"
-								class="col-sm-8 col-form-label col-form-label-sm"><span
-								th:text="#{label.cutting}">Cutting</span>: </label>
-							<div class="col-sm-3 align-self-center">
-								<input type="checkbox" id="taskCutting" th:field="*{cutting}"
-									th:disabled="${readOnly}" />
-							</div>
-						</div>
-
-					</div>
-
-				</div>
-
-				<!-- Amount -->
-				<div class="row">
-					<div class="col-sm-6">
-
-						<div class="form-group row">
-
-							<label for="taskAmount"
-								class="col-sm-3 col-form-label col-form-label-sm"><span
-								th:text="#{label.amount}">Amount</span>: </label>
-							<div class="col-sm-9">
-								<input id="taskAmount" type="number" min="0.00" step="0.01"
-									class="form-control form-control-sm" th:field="*{amount}"
-									th:disabled="${readOnly}"
-									onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)" />
-
-								<!--
-                            data-number-to-fixed="2" data-number-stepfactor="100" pattern="\d+"
-                            -->
-
-							</div>
-						</div>
-						<div class="alert alert-danger"
-							th:if="${#fields.hasErrors('amount')}">
-							<p th:text="${#fields.errors('amount')}"
-								style="margin-bottom: 0rem"></p>
-						</div>
-
-					</div>
-				</div>
-
-				<!-- Note -->
-				<div class="row">
-					<div class="col-sm-12">
-						<div class="form-group">
-							<label for="taskNote"><span th:text="#{label.note}">Note</span>:</label>
-							<textarea class="form-control" rows="3" id="taskNote"
-								th:disabled="${readOnly}" maxlength="1000" th:field="*{note}"></textarea>
-						</div>
-					</div>
-				</div>
-
-				<!-- Buttons -->
-
-				<div th:if="${readOnly}">
-					<div class="row">
-						<div class="col-sm-6">
-							<a th:href="@{/tasks}" style="width: 100px;"
-								class="btn btn-info btn-sm btn-info" role="button"
-								th:text="#{label.back}">Back</a>
-						</div>
-					</div>
-				</div>
-				<div th:if="!${readOnly}">
-					<div class="row">
-						<div class="col-sm-6">
-							<input type="submit" style="width: 100px;"
-								class="btn btn-info btn-sm" value="OK" />
-						</div>
-
-						<div class="col-sm-6">
-							<a th:href="@{/tasks}" style="width: 100px;"
-								class="btn btn-info btn-outline-danger btn-sm float-right"
-								role="button" th:text="#{label.cancel}">Cancel</a>
-						</div>
-					</div>
-				</div>
-			</form>
-			
-			<br/>
-		</div>
-	</div>
+<div class="container bg-light" style="margin-top: 30px">
+    <div class="well">
+
+        <form action="#" th:action="@{'/tasks/update'}" th:object="${task}"
+              method="POST">
+            <!-- ID -->
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group row">
+                        <div class="col-sm-7 align-self-center">
+                            <h4>
+                                <!-- <span th:text="${personName}"></span> edit -->
+                                <span th:text="#{label.taskTaskName}">Task</span> №
+                            </h4>
+                        </div>
+                        <div class="col-sm-5 align-self-center">
+                            <input id="number" class="form-control form-control-sm"
+                                   th:field="*{number}" type="number"
+                                   th:disabled="${readOnly}" autofocus="autofocus"/>
+                        </div>
+                        <div class="alert alert-danger"
+                             th:if="${#fields.hasErrors('number')}">
+                            <h6>[[${#fields.errors('number')}]]</h6>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!--Id & Copy-->
+                <div class="col-sm-6 align-self-center">
+                    <div class="form-group row">
+                        <label for="stencilID"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span>ID</span>:</label>
+                        <div class="col-sm-4">
+                            <input id="stencilID" class="form-control form-control-sm"
+                                   type="text" th:value="*{id}" th:disabled="true"
+                                   placeholder="id"/>
+                        </div>
+                        <div class="col-sm-5 align-self-center">
+                            <a th:href="@{'/tasks/copy-' + ${task.id}}"
+                               class="btn btn-primary btn-sm custom-width float-right "
+                               style="width: 100px;" role="button"
+                               sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"
+                               th:text="#{label.copy}">Copy</a>
+                        </div>
+                    </div>
+
+                </div>
+                <input type="hidden" id="recordId" th:field="*{id}"/>
+
+            </div>
+
+            <!-- Account & Manager -->
+            <div class="row">
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+                        <label for="numberBaseList"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.account}">Account</span>:</label>
+                        <div class="col-sm-3">
+                            <!--<input class="form-control form-control-sm" type="text"
+                                   id="stencilAccount" th:field="*{account}"
+                                   th:disabled="${readOnly}"
+                                   placeholder="Enter Account"/>-->
+                            <!--style="width: 80px;"-->
+                            <select id="numberBaseList" th:field="*{numberBase}"
+                                    th:disabled="${readOnly}"
+                                    class="form-control form-control-sm selectpicker"
+                                    data-live-search="true">
+                                <option th:each="dropDownItem : ${numberBaseList}"
+                                        th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
+                                        th:attr="data-tokens=${dropDownItem.name}"/>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <input id="numberSuffix" class="form-control form-control-sm"
+                                   th:field="*{numberSuffix}" type="number"
+                                   th:disabled="${readOnly}"/>
+                        </div>
+
+                        <!--<div class="col-sm-9">
+                            <input class="form-control form-control-sm" type="text"
+                                   id="taskAccount" th:field="*{account}"
+                                   th:disabled="${readOnly}" autofocus="autofocus"
+                                   placeholder="Enter Account"/>
+                        </div>-->
+
+                    </div>
+                    <div class="form-inline">
+                        <div class="alert alert-danger"
+                             th:if="${#fields.hasErrors('numberBase')}">
+                            <h6>[[${#fields.errors('numberBase')}]]</h6>
+                        </div>
+                        <div class="alert alert-danger"
+                             th:if="${#fields.hasErrors('numberSuffix')}">
+                            <h6>[[${#fields.errors('numberSuffix')}]]</h6>
+                        </div>
+                    </div>
+                    <!--<div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('account')}">
+                        &lt;!&ndash; <p th:text="${#fields.errors('account')}" style ="margin-bottom: 0rem"></p> &ndash;&gt;
+                        <h6>[[${#fields.errors('account')}]]</h6>
+                    </div>-->
+
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="taskManager"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.manager}">Manager</span>: </label>
+                        <div class="col-sm-9"
+                             th:if="${managerList != null and not #lists.isEmpty(managerList)}">
+                            <select id="taskManager" th:field="*{manager}" th:disabled="${readOnly}"
+                                    class="form-control form-control-sm selectpicker"
+                                    data-live-search="true">
+                                <option th:each="dropDownItem : ${managerList}"
+                                        th:value="${dropDownItem.id}"
+                                        th:text="${dropDownItem.fullName}"
+                                        th:attr="data-tokens=${dropDownItem.fullName}"/>
+                                <!-- *for search*
+                                data-live-search="true"
+                                title="Choose one of the following..."
+                                *class
+                                selectpicker show-menu-arrow show-tick
+                              -->
+                            </select>
+                        </div>
+                        <div class="col-sm-9"
+                             th:if="${managerList == null or #lists.isEmpty(managerList)}">
+                            <div>"No Managers were found, please create some first"</div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('manager')}">
+                        <!-- <p th:text="${#fields.errors('manager')}" style ="margin-bottom: 0rem"></p> -->
+                        <h6>[[${#fields.errors('manager')}]]</h6>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Work & File name -->
+            <div class="row">
+                <div class="col-6">
+
+                    <div class="form-group row">
+
+                        <label for="taskWorkName"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.work}">Work name</span> : </label>
+                        <div class="col-sm-9">
+                            <input class="form-control form-control-sm" type="text"
+                                   id="taskWorkName" th:field="*{workName}"
+                                   th:disabled="${readOnly}" placeholder="Enter Work Name"/>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('workName')}">
+                        <p th:text="${#fields.errors('workName')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+                </div>
+
+                <div class="col-6">
+
+                    <div class="form-group row">
+                        <label for="taskFileName"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.filename}">File name</span>: </label>
+                        <div class="col-sm-9">
+                            <input class="form-control form-control-sm" type="text"
+                                   id="taskFileName" th:field="*{fileName}"
+                                   th:disabled="${readOnly}" placeholder="Enter File Name"/>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('fileName')}">
+                        <p th:text="${#fields.errors('fileName')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Contractors & Production -->
+            <div class="row">
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="taskContractor"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.contractor}">Contractor</span>: </label>
+                        <div class="col-sm-9"
+                             th:if="${contractorList != null and not #lists.isEmpty(contractorList)}">
+                            <select id="taskContractor" th:field="*{contractor}"
+                                    th:disabled="${readOnly}" class="form-control form-control-sm selectpicker"
+                                    data-live-search="true">
+                                <option th:each="dropDownItem : ${contractorList}"
+                                        th:value="${dropDownItem.id}"
+                                        th:text="${dropDownItem.fullName}"
+                                        th:attr="data-tokens=${dropDownItem.fullName}"/>
+                            </select>
+                        </div>
+                        <div class="col-sm-9"
+                             th:if="${contractorList == null or #lists.isEmpty(contractorList)}">
+                            <div>"No Contractors were found, please create some first"</div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('contractor')}">
+                        <p th:text="${#fields.errors('contractor')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="taskProduction"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.production}">Production</span>: </label>
+                        <div class="col-sm-9"
+                             th:if="${productionList != null and not #lists.isEmpty(productionList)}">
+                            <select id="taskProduction" th:field="*{production}"
+                                    th:disabled="${readOnly}" class="form-control form-control-sm selectpicker"
+                                    data-live-search="true">
+                                <option th:each="dropDownItem : ${productionList}"
+                                        th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
+                                        th:attr="data-tokens=${dropDownItem.name}"/>
+                            </select>
+                        </div>
+                        <div class="col-sm-9"
+                             th:if="${productionList == null or #lists.isEmpty(productionList)}">
+                            <div>"No Productions were found, please create some first"</div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('production')}">
+                        <p th:text="${#fields.errors('production')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!--Dates Begin & End -->
+            <div class="row">
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="taskDateBegin"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.task_date}">Date begin</span>: </label>
+                        <div class="col-sm-9">
+                            <input id="taskDateBegin" type="date" th:disabled="${readOnly}"
+                                   class="form-control form-control-sm" th:field="*{dateBegin}"
+                                   th:value="${#dates.format(task.dateBegin, 'yyyy-MM-dd')}"/>
+                            <!-- th:value="${{task.dateBegin}}"  -->
+                        </div>
+
+                    </div>
+
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('dateBegin')}">
+                        <p th:text="${#fields.errors('dateBegin')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="taskDateEnd"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.completion_date}">Date end</span>: </label>
+                        <div class="col-sm-9">
+                            <input id="taskDateEnd" type="date" th:disabled="${readOnly}"
+                                   class="form-control form-control-sm" th:field="${task.dateEnd}"
+                                   th:value="${{task.dateEnd}}"/>
+                            <!-- th:value="${#dates.format(task.dateEnd, 'yyyy-MM-dd')}" *{dateEnd}-->
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('dateEnd')}">
+                        <p th:text="${#fields.errors('dateEnd')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <!-- Client & Stock -->
+            <div class="row">
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="taskClient"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.client}">Client</span>: </label>
+                        <div class="col-sm-9"
+                             th:if="${clientList != null and not #lists.isEmpty(clientList)}">
+                            <select id="taskClient" th:field="*{client}"
+                                    th:disabled="${readOnly}" class="form-control form-control-sm selectpicker"
+                                    data-live-search="true">
+                                <option th:each="dropDownItem : ${clientList}"
+                                        th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
+                                        th:attr="data-tokens=${dropDownItem.name}"/>
+                            </select>
+                        </div>
+                        <div class="col-sm-9"
+                             th:if="${clientList == null or #lists.isEmpty(clientList)}">
+                            <div>"No Clients were found, please create some first"</div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('client')}">
+                        <p th:text="${#fields.errors('client')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="taskStock"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.stock}">Stock</span>: </label>
+                        <div class="col-sm-9"
+                             th:if="${stockList != null and not #lists.isEmpty(stockList)}">
+                            <select id="taskStock" th:field="*{stock}"
+                                    th:disabled="${readOnly}" class="form-control form-control-sm selectpicker"
+                                    data-live-search="true">
+                                <option th:each="dropDownItem : ${stockList}"
+                                        th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
+                                        th:attr="data-tokens=${dropDownItem.name}"/>
+                            </select>
+                        </div>
+                        <div class="col-sm-9"
+                             th:if="${stockList == null or #lists.isEmpty(stockList)}">
+                            <div>"No Stocks were found, please create some first"</div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('stock')}">
+                        <p th:text="${#fields.errors('stock')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Printing & Printing units & Chromaticity -->
+            <div class="row">
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="taskPrinting"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.printing}">Printing</span>:</label>
+                        <div class="col-sm-3">
+                            <input class="form-control form-control-sm" type="number"
+                                   min="0" id="taskPrinting" th:field="*{printing}"
+                                   th:disabled="${readOnly}" placeholder="Enter Printing amount"/>
+                        </div>
+
+                        <!--<label for="printingUnit"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.printing_unit}">Printing</span>: </label>-->
+                        <div class="col-sm-6"
+                             th:if="${printingUnitList != null and not #lists.isEmpty(printingUnitList)}">
+                            <select id="printingUnit" th:field="*{printingUnit}"
+                                    th:disabled="${readOnly}" class="form-control form-control-sm selectpicker"
+                                    data-live-search="true">
+                                <option th:each="dropDownItem : ${printingUnitList}"
+                                        th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
+                                        th:attr="data-tokens=${dropDownItem.name}"/>
+                            </select>
+                        </div>
+                        <div class="col-sm-6"
+                             th:if="${printingUnitList == null or #lists.isEmpty(printingUnitList)}">
+                            <div>"No Printing Units were found, please create some first"</div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('printing')}">
+                        <p th:text="${#fields.errors('printing')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="taskChromaticity"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.chromaticity}">Chromaticity</span>: </label>
+                        <div class="col-sm-9"
+                             th:if="${chromaticityList != null and not #lists.isEmpty(chromaticityList)}">
+                            <select id="taskChromaticity" th:field="*{chromaticity}"
+                                    th:disabled="${readOnly}" class="form-control form-control-sm selectpicker"
+                                    data-live-search="true">
+                                <option th:each="dropDownItem : ${chromaticityList}"
+                                        th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
+                                        th:attr="data-tokens=${dropDownItem.name}"/>
+                            </select>
+                        </div>
+                        <div class="col-sm-9"
+                             th:if="${chromaticityList == null or #lists.isEmpty(chromaticityList)}">
+                            <div>"No Chromaticity were found, please create some
+                                first"
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('chromaticity')}">
+                        <p th:text="${#fields.errors('chromaticity')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Format & Laminate -->
+            <div class="row">
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="taskFormat"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.paper_format}">Format</span>: </label>
+                        <div class="col-sm-9"
+                             th:if="${formatList != null and not #lists.isEmpty(formatList)}">
+                            <select id="taskFormat" th:field="*{format}"
+                                    th:disabled="${readOnly}" class="form-control form-control-sm selectpicker"
+                                    data-live-search="true">
+                                <option th:each="dropDownItem : ${formatList}"
+                                        th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
+                                        th:attr="data-tokens=${dropDownItem.name}"/>
+                            </select>
+                        </div>
+                        <div class="col-sm-9"
+                             th:if="${formatList == null or #lists.isEmpty(formatList)}">
+                            <div>"No Format were found, please create some first"</div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('format')}">
+                        <p th:text="${#fields.errors('format')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="taskLaminate"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.laminate}">Laminate</span>: </label>
+                        <div class="col-sm-9"
+                             th:if="${laminateList != null and not #lists.isEmpty(laminateList)}">
+                            <select id="taskLaminate" th:field="*{laminate}"
+                                    th:disabled="${readOnly}" class="form-control form-control-sm selectpicker"
+                                    data-live-search="true">
+                                <option th:each="dropDownItem : ${laminateList}"
+                                        th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
+                                        th:attr="data-tokens=${dropDownItem.name}"/>
+                            </select>
+                        </div>
+                        <div class="col-sm-9"
+                             th:if="${laminateList == null or #lists.isEmpty(laminateList)}">
+                            <div>"No Laminate were found, please create some first"</div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('laminate')}">
+                        <p th:text="${#fields.errors('laminate')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Paper & Cringle -->
+            <div class="row">
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="taskPaper"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.paper}">Paper</span>: </label>
+                        <div class="col-sm-9"
+                             th:if="${paperList != null and not #lists.isEmpty(paperList)}">
+                            <select id="taskPaper" th:field="*{paper}"
+                                    th:disabled="${readOnly}" class="form-control form-control-sm selectpicker"
+                                    data-live-search="true">
+                                <option th:each="dropDownItem : ${paperList}"
+                                        th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
+                                        th:attr="data-tokens=${dropDownItem.name}"/>
+                            </select>
+                        </div>
+                        <div class="col-sm-9"
+                             th:if="${paperList == null or #lists.isEmpty(paperList)}">
+                            <div>"No Papers were found, please create some first"</div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('paper')}">
+                        <p th:text="${#fields.errors('paper')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="taskCringle"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.cringle}">Cringle</span>: </label>
+                        <div class="col-sm-9"
+                             th:if="${cringleList != null and not #lists.isEmpty(cringleList)}">
+                            <select id="taskCringle" th:field="*{cringle}"
+                                    th:disabled="${readOnly}" class="form-control form-control-sm selectpicker"
+                                    data-live-search="true">
+                                <option th:each="dropDownItem : ${cringleList}"
+                                        th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
+                                        th:attr="data-tokens=${dropDownItem.name}"/>
+                            </select>
+                        </div>
+                        <div class="col-sm-9"
+                             th:if="${cringleList == null or #lists.isEmpty(cringleList)}">
+                            <div>"No Cringles were found, please create some first"</div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('laminate')}">
+                        <p th:text="${#fields.errors('laminate')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Carving & Bending & Assembly & Cutting -->
+            <div class="row">
+                <div class="col-sm-3">
+
+                    <div class="form-group row">
+                        <label for="taskCarving"
+                               class="col-sm-4 col-form-label col-form-label-sm"><span
+                                th:text="#{label.carving}">Carving</span>: </label>
+                        <div class="col-sm-3 align-self-center">
+                            <input type="checkbox" id="taskCarving" th:field="*{carving}"
+                                   th:disabled="${readOnly}"/>
+
+                            <!--class= custom-control-input form-control form-control-sm form-check-input-->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group row">
+                        <label for="taskBending"
+                               class="col-sm-4 col-form-label col-form-label-sm"><span
+                                th:text="#{label.bending}">Bending</span>: </label>
+                        <div class="col-sm-3 align-self-center">
+                            <input type="checkbox" id="taskBending" th:field="*{bending}"
+                                   th:disabled="${readOnly}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group row">
+                        <label for="taskAssembly"
+                               class="col-sm-4 col-form-label col-form-label-sm"><span
+                                th:text="#{label.assembly}">Assembly</span>: </label>
+                        <div class="col-sm-3 align-self-center">
+                            <input type="checkbox" id="taskAssembly" th:field="*{assembly}"
+                                   th:disabled="${readOnly}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group row">
+                        <label for="taskCutting"
+                               class="col-sm-8 col-form-label col-form-label-sm"><span
+                                th:text="#{label.cutting}">Cutting</span>: </label>
+                        <div class="col-sm-3 align-self-center">
+                            <input type="checkbox" id="taskCutting" th:field="*{cutting}"
+                                   th:disabled="${readOnly}"/>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Amount -->
+            <div class="row">
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="taskAmount"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.amount}">Amount</span>: </label>
+                        <div class="col-sm-9">
+                            <input id="taskAmount" type="number" min="0.00" step="0.01"
+                                   class="form-control form-control-sm" th:field="*{amount}"
+                                   th:disabled="${readOnly}"
+                                   onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"/>
+
+                            <!--
+                        data-number-to-fixed="2" data-number-stepfactor="100" pattern="\d+"
+                        -->
+
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('amount')}">
+                        <p th:text="${#fields.errors('amount')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Note -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="taskNote"><span th:text="#{label.note}">Note</span>:</label>
+                        <textarea class="form-control" rows="3" id="taskNote"
+                                  th:disabled="${readOnly}" maxlength="1000" th:field="*{note}"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+
+            <div th:if="${readOnly}">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <a th:href="@{/tasks}" style="width: 100px;"
+                           class="btn btn-info btn-sm btn-info" role="button"
+                           th:text="#{label.back}">Back</a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="!${readOnly}">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input type="submit" style="width: 100px;"
+                               class="btn btn-info btn-sm" value="OK"/>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <a th:href="@{/tasks}" style="width: 100px;"
+                           class="btn btn-info btn-outline-danger btn-sm float-right"
+                           role="button" th:text="#{label.cancel}">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <br/>
+    </div>
+</div>
 
 </body>
 </html>

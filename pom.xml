@@ -6,10 +6,11 @@
 	<groupId>ua.com.vetal</groupId>
 	<artifactId>Vetal</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<!--<packaging>jar</packaging>-->
+	<packaging>${artifact-packaging}</packaging>
 
-	<name>Vetal</name>
-	<description>Project for Vetal with Spring Boot</description>
+	<name>${project.artifactId}</name>
+	<description>Project for Vetal com with Spring Boot</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -17,6 +18,14 @@
 		<version>2.0.3.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
+
+	<!--
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.4.3.RELEASE</version>
+	</parent>
+	-->
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,7 +35,7 @@
 
 		<!-- <springframework.version>4.1.6.RELEASE</springframework.version> <springsecurity.version>4.0.1.RELEASE</springsecurity.version> 
 			<hibernate.version>4.3.6.Final</hibernate.version> <mysql.version>5.1.31</mysql.version> -->
-
+        <start-class>ua.com.vetal.VetalApplication</start-class>
 	</properties>
 
 	<dependencies>
@@ -99,9 +108,31 @@
 			<version>2.10</version>
 		</dependency> -->
 
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>6.7.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>
+		<!--<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+
+					<finalName>${project.artifactId}</finalName>
+				</configuration>
+			</plugin>
+		</plugins>
+		-->
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -110,5 +141,44 @@
 		</plugins>
 	</build>
 
+	<profiles>
+		<profile>
+			<id>local</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<artifact-packaging>jar</artifact-packaging>
+			</properties>
+		</profile>
+		<profile>
+			<id>remote</id>
+			<properties>
+				<artifact-packaging>war</artifact-packaging>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+					<scope>provided</scope>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+
+						<!--<version>1.4.3.RELEASE</version>-->
+						<configuration>
+							<!-- this will get rid of version info from war file name -->
+							<finalName>${project.artifactId}</finalName>
+
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>

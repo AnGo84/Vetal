@@ -9,6 +9,7 @@ public class FilterData {
 	private Long id;
 
 	private String account;
+	private String number;
 	private Manager manager;
 	private String workName;
 	private String fileName;
@@ -57,6 +58,14 @@ public class FilterData {
 
 	public void setAccount(String account) {
 		this.account = account;
+	}
+
+	public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
 	}
 
 	public Manager getManager() {
@@ -242,57 +251,33 @@ public class FilterData {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("FilterData [id=");
-		builder.append(id);
-		builder.append(", account=");
-		builder.append(account);
-		builder.append(", manager=");
-		builder.append(manager);
-		builder.append(", workName=");
-		builder.append(workName);
-		builder.append(", fileName=");
-		builder.append(fileName);
-		builder.append(", contractor=");
-		builder.append(contractor);
-		builder.append(", production=");
-		builder.append(production);
-		builder.append(", printer=");
-		builder.append(printer);
-		builder.append(", dateBeginFrom=");
-		builder.append(dateBeginFrom);
-		builder.append(", dateBeginTill=");
-		builder.append(dateBeginTill);
-		builder.append(", client=");
-		builder.append(client);
-		builder.append(", stock=");
-		builder.append(stock);
-		builder.append(", printing=");
-		builder.append(printing);
-		builder.append(", chromaticity=");
-		builder.append(chromaticity);
-		builder.append(", format=");
-		builder.append(format);
-		builder.append(", laminate=");
-		builder.append(laminate);
-		builder.append(", paper=");
-		builder.append(paper);
-		builder.append(", cringle=");
-		builder.append(cringle);
-		builder.append(", carving=");
-		builder.append(carving);
-		builder.append(", bending=");
-		builder.append(bending);
-		builder.append(", assembly=");
-		builder.append(assembly);
-		builder.append(", cutting=");
-		builder.append(cutting);
-		builder.append(", note=");
-		builder.append(note);
-		builder.append(", amount=");
-		builder.append(amount);
-		builder.append("]");
-		return builder.toString();
+		final StringBuilder sb = new StringBuilder("FilterData{");
+		sb.append("id=").append(id);
+		sb.append(", account='").append(account).append('\'');
+		sb.append(", number='").append(number).append('\'');
+		sb.append(", manager=").append(manager);
+		sb.append(", workName='").append(workName).append('\'');
+		sb.append(", fileName='").append(fileName).append('\'');
+		sb.append(", contractor=").append(contractor);
+		sb.append(", production=").append(production);
+		sb.append(", printer=").append(printer);
+		sb.append(", dateBeginFrom=").append(dateBeginFrom);
+		sb.append(", dateBeginTill=").append(dateBeginTill);
+		sb.append(", client=").append(client);
+		sb.append(", stock=").append(stock);
+		sb.append(", printing=").append(printing);
+		sb.append(", chromaticity=").append(chromaticity);
+		sb.append(", format=").append(format);
+		sb.append(", laminate=").append(laminate);
+		sb.append(", paper=").append(paper);
+		sb.append(", cringle=").append(cringle);
+		sb.append(", carving=").append(carving);
+		sb.append(", bending=").append(bending);
+		sb.append(", assembly=").append(assembly);
+		sb.append(", cutting=").append(cutting);
+		sb.append(", note='").append(note).append('\'');
+		sb.append(", amount=").append(amount);
+		sb.append('}');
+		return sb.toString();
 	}
-
 }

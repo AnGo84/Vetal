@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import ua.com.vetal.dao.StencilDAO;
 import ua.com.vetal.entity.*;
 import ua.com.vetal.service.*;
 
@@ -45,6 +46,8 @@ public class StencilsController {
 	@Autowired
 	private ManagerServiceImpl managerService;
 	@Autowired
+	private NumberBaseDirectoryServiceImpl numberBaseService;
+	@Autowired
 	private PrinterServiceImpl printerService;
 	@Autowired
 	private WorkerServiceImpl workerService;
@@ -56,6 +59,8 @@ public class StencilsController {
 	private StockDirectoryServiceImpl stockService;
 	@Autowired
 	private PaperDirectoryServiceImpl paperService;
+	@Autowired
+	private PrintingUnitDirectoryServiceImpl printingUnitService;
 
 	@RequestMapping(value = { "" }, method = RequestMethod.GET)
 	public String stencilList(Model model) {
@@ -70,6 +75,9 @@ public class StencilsController {
 	public String showAddStencilPage(Model model) {
 		logger.info("Add new " + title + " record");
 		Stencil stencil = new Stencil();
+
+		//stencil.setAccount(String.valueOf(stencilDAO.getMaxID()+1));
+		stencil.setNumber((int) (stencilService.getMaxID()+1));
 
 		// model.addAttribute("edit", false);
 		model.addAttribute("readOnly", false);
@@ -98,6 +106,9 @@ public class StencilsController {
 		logger.info("Copy " + title + " with ID= " + id);
 
 		Stencil stencil = (stencilService.findById(id)).getCopy();
+		//stencil.setAccount(String.valueOf(stencilDAO.getMaxID()+1));
+		stencil.setNumber((int) (stencilService.getMaxID()+1));
+
 		logger.info("Copy stencil:" + stencil.toString());
 
 		model.addAttribute("readOnly", false);
@@ -180,6 +191,18 @@ public class StencilsController {
 		return this.pageName;
 	}
 
+	@ModelAttribute("numberBaseList")
+	public List<NumberBaseDirectory> getNumberBaseList() {
+		List<NumberBaseDirectory> resultList = numberBaseService.findAllObjects();
+		Collections.sort(resultList, new Comparator<NumberBaseDirectory>() {
+			@Override
+			public int compare(NumberBaseDirectory m1, NumberBaseDirectory m2) {
+				return m1.getName().compareTo(m2.getName());
+			}
+		});
+
+		return resultList;
+	}
 	@ModelAttribute("managerList")
 	public List<Manager> getManagersList() {
 		List<Manager> resultList = managerService.findAllObjects();
@@ -272,6 +295,19 @@ public class StencilsController {
 		return resultList;
 	}
 
+	@ModelAttribute("printingUnitList")
+	public List<PrintingUnitDirectory> getPrintingUnitList() {
+		List<PrintingUnitDirectory> resultList = printingUnitService.findAllObjects();
+		Collections.sort(resultList, new Comparator<PrintingUnitDirectory>() {
+			@Override
+			public int compare(PrintingUnitDirectory m1, PrintingUnitDirectory m2) {
+				return m1.getName().compareTo(m2.getName());
+			}
+		});
+
+		return resultList;
+	}
+
 
 	@ModelAttribute("filterData")
 	public FilterData getFilterData() {
@@ -290,7 +326,7 @@ public class StencilsController {
 
 		return stencilList;
 	}
-
+/*
 	@ModelAttribute("clientFilterList")
 	public List<ClientDirectory> getClientsFilterList() {
 		List<ClientDirectory> resultList = clientService.findAllObjects();
@@ -341,6 +377,6 @@ public class StencilsController {
 		});
 
 		return resultList;
-	}
+	}*/
 
 }

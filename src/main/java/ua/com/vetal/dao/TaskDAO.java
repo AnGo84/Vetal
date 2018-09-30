@@ -32,4 +32,16 @@ public class TaskDAO {
 		}
 	}
 
+
+	public Long getMaxID() {
+		try {
+			String sql = "Select max(e.id) from " + Task.class.getName() + " e ";
+			//System.out.println(sql);
+			Query query = entityManager.createQuery(sql);
+			Long nom = (Long) query.getSingleResult();
+			return nom;
+		} catch (NoResultException e) {
+			return 0L;
+		}
+	}
 }

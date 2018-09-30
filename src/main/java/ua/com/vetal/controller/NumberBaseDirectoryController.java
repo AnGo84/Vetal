@@ -1,9 +1,5 @@
 package ua.com.vetal.controller;
 
-import java.util.Locale;
-
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,26 +12,30 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import ua.com.vetal.entity.FormatDirectory;
+import ua.com.vetal.entity.NumberBaseDirectory;
 import ua.com.vetal.service.FormatDirectoryServiceImpl;
+import ua.com.vetal.service.NumberBaseDirectoryServiceImpl;
+
+import javax.validation.Valid;
+import java.util.Locale;
 
 @Controller
-@RequestMapping("/format")
+@RequestMapping("/numberBases")
 // @SessionAttributes({ "title", "directoryName", "pageName" })
 
-public class FormatDirectoryController {
-	static final Logger logger = LoggerFactory.getLogger(FormatDirectoryController.class);
+public class NumberBaseDirectoryController {
+	static final Logger logger = LoggerFactory.getLogger(NumberBaseDirectoryController.class);
 
-	private String title = "Format";
-	private String directoryName = "Format";
-	private String pageName = "/format";
+	private String title = "NumberBase";
+	private String directoryName = "NumberBase";
+	private String pageName = "/numberBases";
 
 	@Autowired
 	MessageSource messageSource;
 
 	@Autowired
-	private FormatDirectoryServiceImpl directoryService;
+	private NumberBaseDirectoryServiceImpl directoryService;
 
 	/*
 	 * @Autowired public UserController(UserServiceImpl userService) {
@@ -84,7 +84,7 @@ public class FormatDirectoryController {
 	 */
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String updateRecord(@Valid @ModelAttribute("directory") FormatDirectory directory,
+	public String updateRecord(@Valid @ModelAttribute("directory") NumberBaseDirectory directory,
 			BindingResult bindingResult, Model model) {
 		logger.info("Update " + title + ": " + directory);
 		if (bindingResult.hasErrors()) {

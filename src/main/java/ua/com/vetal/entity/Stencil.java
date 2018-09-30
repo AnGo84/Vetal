@@ -19,7 +19,26 @@ public class Stencil {
 	private Long id;
 
 	@NotNull
-	@Column(name = "Account", nullable = false, unique = true)
+	@Column(name = "Number", nullable = false)
+	private int number;
+
+
+	@NotNull
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "Number_Base_ID")
+	private NumberBaseDirectory numberBase;
+
+	@NotNull
+	@Column(name = "Number_Suffix", nullable = false)
+	//@Size(max = 5)
+	private int numberSuffix;
+
+	@Column(name = "Full_number")
+	private String fullNumber;
+
+	//@NotNull
+	//@Column(name = "Account", nullable = false, unique = true)
+	@Column(name = "Account")
 	@Size(max = 50)
 	private String account;
 
@@ -65,7 +84,12 @@ public class Stencil {
 	private int printing;
 
 	@NotNull
-	@Column(name = "Adjustment", nullable = false)
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "Printing_unit_id", nullable = false)
+	private PrintingUnitDirectory printingUnit;
+
+	@NotNull
+	@Column(name = "Adjustment")
 	private int adjustment;
 
 	@ManyToOne(optional = false)
@@ -76,16 +100,14 @@ public class Stencil {
 	@Column(name = "Paper_format", nullable = false)
 	private String paperFormat;
 
-	@NotNull
-	@Column(name = "Sheet_number", nullable = false)
+	@Column(name = "Sheet_number", nullable = true)
 	private int sheetNumber;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = true)
 	@JoinColumn(name = "Printer_ID")
 	private Printer printer;
 
-	@NotNull
-	@Column(name = "Date_print_BEGIN", nullable = false)
+	@Column(name = "Date_print_BEGIN")
 	@Temporal(TemporalType.DATE)
 	// @DateTimeFormat(pattern = "dd-MM-yyyy")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -95,11 +117,11 @@ public class Stencil {
 	@Size(max = 1000)
 	private String printingNote;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = true)
 	@JoinColumn(name = "Worker_print_ID")
 	private Worker workerPrint;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = true)
 	@JoinColumn(name = "Worker_cut_ID")
 	private Worker workerCut;
 
@@ -127,12 +149,32 @@ public class Stencil {
 	@Type(type = "org.hibernate.type.NumericBooleanType")
 	private boolean bending;
 
+	@Column(name = "Plotter", nullable = false)
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	private boolean plotter;
+
+	@Column(name = "PackBox", nullable = false)
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	private boolean packBox;
+
+	@Column(name = "PackPellicle", nullable = false)
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	private boolean packPellicle;
+
+	@Column(name = "PackPackage", nullable = false)
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	private boolean packPackage;
+
+	@Column(name = "PackNP", nullable = false)
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	private boolean packNP;
+
 	@Column(name = "Numeration", nullable = false)
 	@Type(type = "org.hibernate.type.NumericBooleanType")
 	private boolean numeration;
 
 	@NotNull
-	@Column(name = "Numeration_start", nullable = false)
+	@Column(name = "Numeration_start")
 	private int numerationStart;
 
 	@NotNull
@@ -149,6 +191,9 @@ public class Stencil {
 
 		System.out.println("Copy From task:" + this);
 		Stencil task = new Stencil();
+
+		task.numberBase = this.numberBase;
+
 		task.client = this.client;
 		task.orderName = this.orderName;
 
@@ -164,6 +209,7 @@ public class Stencil {
 		task.paperFormat = this.paperFormat;
 		task.sheetNumber = this.sheetNumber;
 		task.printer = this.printer;
+		task.printingUnit = this.printingUnit;
 		task.adjustment = this.adjustment;
 		task.datePrintBegin = this.datePrintBegin;
 		task.printingNote = this.printingNote;
@@ -176,6 +222,12 @@ public class Stencil {
 		task.stamping = this.stamping;
 		task.embossing = this.embossing;
 		task.bending = this.bending;
+		task.plotter = this.plotter;
+
+		task.packBox = this.packBox;
+		task.packPellicle = this.packPellicle;
+		task.packPackage = this.packPackage;
+		task.packNP = this.packNP;
 
 		task.numeration = this.numeration;
 		task.numerationStart = this.numerationStart;
@@ -193,6 +245,38 @@ public class Stencil {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
+	public NumberBaseDirectory getNumberBase() {
+		return numberBase;
+	}
+
+	public void setNumberBase(NumberBaseDirectory numberBase) {
+		this.numberBase = numberBase;
+	}
+
+	public int getNumberSuffix() {
+		return numberSuffix;
+	}
+
+	public void setNumberSuffix(int numberSuffix) {
+		this.numberSuffix = numberSuffix;
+	}
+
+	public String getFullNumber() {
+		return fullNumber;
+	}
+
+	public void setFullNumber(String fullNumber) {
+		this.fullNumber = fullNumber;
 	}
 
 	public String getAccount() {
@@ -265,6 +349,14 @@ public class Stencil {
 
 	public void setPrinting(int printing) {
 		this.printing = printing;
+	}
+
+	public PrintingUnitDirectory getPrintingUnit() {
+		return printingUnit;
+	}
+
+	public void setPrintingUnit(PrintingUnitDirectory printingUnit) {
+		this.printingUnit = printingUnit;
 	}
 
 	public int getAdjustment() {
@@ -387,6 +479,46 @@ public class Stencil {
 		this.bending = bending;
 	}
 
+	public boolean isPlotter() {
+		return plotter;
+	}
+
+	public void setPlotter(boolean plotter) {
+		this.plotter = plotter;
+	}
+
+	public boolean isPackBox() {
+		return packBox;
+	}
+
+	public void setPackBox(boolean packBox) {
+		this.packBox = packBox;
+	}
+
+	public boolean isPackPellicle() {
+		return packPellicle;
+	}
+
+	public void setPackPellicle(boolean packPellicle) {
+		this.packPellicle = packPellicle;
+	}
+
+	public boolean isPackPackage() {
+		return packPackage;
+	}
+
+	public void setPackPackage(boolean packPackage) {
+		this.packPackage = packPackage;
+	}
+
+	public boolean isPackNP() {
+		return packNP;
+	}
+
+	public void setPackNP(boolean packNP) {
+		this.packNP = packNP;
+	}
+
 	public boolean isNumeration() {
 		return numeration;
 	}
@@ -423,7 +555,11 @@ public class Stencil {
 	public String toString() {
 		final StringBuilder sb = new StringBuilder("Stencil{");
 		sb.append("id=").append(id);
-		sb.append(", account=").append(account);
+		sb.append(", number=").append(number);
+		sb.append(", numberBase=").append(numberBase);
+		sb.append(", numberSuffix=").append(numberSuffix);
+		sb.append(", fullNumber='").append(fullNumber).append('\'');
+		sb.append(", account='").append(account).append('\'');
 		sb.append(", client=").append(client);
 		sb.append(", orderName='").append(orderName).append('\'');
 		sb.append(", manager=").append(manager);
@@ -432,6 +568,7 @@ public class Stencil {
 		sb.append(", production=").append(production);
 		sb.append(", stock=").append(stock);
 		sb.append(", printing=").append(printing);
+		sb.append(", printingUnit=").append(printingUnit);
 		sb.append(", adjustment=").append(adjustment);
 		sb.append(", paper=").append(paper);
 		sb.append(", paperFormat='").append(paperFormat).append('\'');
@@ -444,9 +581,14 @@ public class Stencil {
 		sb.append(", fillet=").append(fillet);
 		sb.append(", popup=").append(popup);
 		sb.append(", carving=").append(carving);
-		sb.append(", Stamping=").append(stamping);
-		sb.append(", Embossing=").append(embossing);
+		sb.append(", stamping=").append(stamping);
+		sb.append(", embossing=").append(embossing);
 		sb.append(", bending=").append(bending);
+		sb.append(", plotter=").append(plotter);
+		sb.append(", packBox=").append(packBox);
+		sb.append(", packPellicle=").append(packPellicle);
+		sb.append(", packPackage=").append(packPackage);
+		sb.append(", packNP=").append(packNP);
 		sb.append(", numeration=").append(numeration);
 		sb.append(", numerationStart=").append(numerationStart);
 		sb.append(", sticker=").append(sticker);

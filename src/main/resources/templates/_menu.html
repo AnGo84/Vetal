@@ -1,115 +1,127 @@
 <head>
-<link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
 </head>
 
 <nav class="navbar navbar-expand-sm bg-info navbar-dark"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+     xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-	<!-- xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-  	bg-light navbar-light
+    <!-- xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      bg-light navbar-light
    <a class="navbar-brand" href="#https://vetal.com.ua/">Vetal</a> 
    -->
 
-	<a class="navbar-brand" target="_blank" href="https://vetal.com.ua/">
-		<img src="image/logo.png" alt="Logo" style="width: 100px;">
-	</a>
+    <a class="navbar-brand" target="_blank" href="https://vetal.com.ua/">
+        <img src="image/logo.png" alt="Logo" style="width: 100px;">
+    </a>
 
-	<button class="navbar-toggler" type="button" data-toggle="collapse"
-		data-target="#collapsibleNavbar">
-		<span class="navbar-toggler-icon"></span>
-	</button>
-	<div class="collapse navbar-collapse" id="collapsibleNavbar">
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
 
-		<ul class="navbar-nav mr-auto">
-			<li class="nav-item"><a class="nav-link text-light"
-				th:href="@{/main}" th:text="#{menu.label.main}">Home</a></li>
-			<!-- <li class="nav-item"><a class="nav-link" th:href="@{/userInfo}">User
-					Info</a></li>
-			<li class="nav-item">
-        		<a class="nav-link" th:href="@{/admin}">Admin</a>
-      		</li> -->
-
-				
-			<li class="nav-item dropdown"><a
-				class="nav-link dropdown-toggle text-light" href="#" id="navbarContactsDrop"
-				data-toggle="dropdown" th:text="#{menu.label.printery}">
-					Printery </a>
-				<div class="dropdown-menu">
-					<a class="dropdown-item" th:href="@{/tasks}"
-						th:text="#{menu.label.tasks}">Tasks</a> <a
-						class="dropdown-item" th:href="@{/stencils}"
-						th:text="#{menu.label.stencils}">Stencils</a>
-				</div></li>
-
-			<li class="nav-item dropdown"><a
-				class="nav-link dropdown-toggle text-light" href="#" id="navbarContactsDrop"
-				data-toggle="dropdown" th:text="#{menu.label.contacts}">
-					Contacts </a>
-				<div class="dropdown-menu">
-					<a class="dropdown-item" th:href="@{/client}"
-						th:text="#{menu.label.clients}">Clients</a> <a
-						class="dropdown-item" th:href="@{/contractor}"
-						th:text="#{menu.label.contractors}">Contractors</a> <a
-						class="dropdown-item" th:href="@{/manager}"
-						th:text="#{menu.label.managers}">Managers</a><a
-						class="dropdown-item" th:href="@{/printer}"
-						th:text="#{menu.label.printers}">Printers</a><a
-						class="dropdown-item" th:href="@{/worker}"
-						th:text="#{menu.label.workers}">Workers</a>
-				</div></li>
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item"><a class="nav-link text-light"
+                                    th:href="@{/main}" th:text="#{menu.label.main}">Home</a></li>
+            <!-- <li class="nav-item"><a class="nav-link" th:href="@{/userInfo}">User
+                    Info</a></li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/admin}">Admin</a>
+              </li> -->
 
 
-			<li class="nav-item dropdown"><a
-				class="nav-link dropdown-toggle text-light" href="#" id="navbarDirectoriesDrop"
-				data-toggle="dropdown" th:text="#{menu.label.directories}">
-					Directories </a>
-				<div class="dropdown-menu">
-					<a class="dropdown-item" th:href="@{/production}"
-						th:text="#{menu.label.productions}">Production</a> <a
-						class="dropdown-item" th:href="@{/paper}"
-						th:text="#{menu.label.papers}">Paper</a> <a class="dropdown-item"
-						th:href="@{/chromaticity}" th:text="#{menu.label.chromaticities}">Chromaticity</a>
-					<a class="dropdown-item" th:href="@{/laminate}"
-						th:text="#{menu.label.laminates}">Laminate</a> <a
-						class="dropdown-item" th:href="@{/cringle}"
-						th:text="#{menu.label.cringles}">Cringle</a> <a
-						class="dropdown-item" th:href="@{/format}"
-						th:text="#{menu.label.formats}">Format</a> <a
-						class="dropdown-item" th:href="@{/stock}"
-						th:text="#{menu.label.stocks}">Stock</a>
-				</div></li>
+            <li class="nav-item dropdown"><a
+                    class="nav-link dropdown-toggle text-light" href="#" id="navbarContactsDrop"
+                    data-toggle="dropdown" th:text="#{menu.label.printery}">
+                Printery </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" th:href="@{/tasks}"
+                       th:text="#{menu.label.tasks}">Tasks</a> <a
+                        class="dropdown-item" th:href="@{/stencils}"
+                        th:text="#{menu.label.stencils}">Stencils</a>
+                </div>
+            </li>
 
-			<!-- <sec:authorize access="hasAuthority('ROLE_ADMIN')"> th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"-->
-			<li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')"><a
-				class="nav-link dropdown-toggle text-light" href="#" id="navbardrop"
-				data-toggle="dropdown" th:text="#{menu.label.administration}">
-					Administration </a>
-				<div class="dropdown-menu">
-					<a class="dropdown-item" th:href="@{/admin}">Admin</a> <a
-						class="dropdown-item" th:href="@{/users}"
-						th:text="#{menu.label.users}">Users</a>
-					<!-- <a class="dropdown-item" href="#">Link 3</a> -->
-				</div></li>
-			<!-- </sec:authorize> -->
+            <li class="nav-item dropdown"><a
+                    class="nav-link dropdown-toggle text-light" href="#" id="navbarContactsDrop"
+                    data-toggle="dropdown" th:text="#{menu.label.contacts}">
+                Contacts </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" th:href="@{/client}"
+                       th:text="#{menu.label.clients}">Clients</a> <a
+                        class="dropdown-item" th:href="@{/contractor}"
+                        th:text="#{menu.label.contractors}">Contractors</a> <a
+                        class="dropdown-item" th:href="@{/manager}"
+                        th:text="#{menu.label.managers}">Managers</a><a
+                        class="dropdown-item" th:href="@{/printer}"
+                        th:text="#{menu.label.printers}">Printers</a><a
+                        class="dropdown-item" th:href="@{/worker}"
+                        th:text="#{menu.label.workers}">Workers</a>
+                </div>
+            </li>
 
-			<!-- <li class="nav-item"></li> sec:authorize="hasRole('ROLE_USER')" 
-			
-			th:text="${#authorization.expression('hasAuthority('ROLE_ADMIN')')}"-->
-			<!-- th:if="${#request.userPrincipal != null}"  hasRole('ADMIN') or hasRole('DBA') -->
-		</ul>
 
-		<ul class="navbar-nav" sec:authorize="isAnonymous()">
+            <li class="nav-item dropdown"><a
+                    class="nav-link dropdown-toggle text-light" href="#" id="navbarDirectoriesDrop"
+                    data-toggle="dropdown" th:text="#{menu.label.directories}">
+                Directories </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" th:href="@{/production}"
+                       th:text="#{menu.label.productions}">Production</a> <a
+                        class="dropdown-item" th:href="@{/paper}"
+                        th:text="#{menu.label.papers}">Paper</a> <a class="dropdown-item"
+                                                                    th:href="@{/chromaticity}"
+                                                                    th:text="#{menu.label.chromaticities}">Chromaticity</a>
+                    <a class="dropdown-item" th:href="@{/laminate}"
+                       th:text="#{menu.label.laminates}">Laminate</a> <a
+                        class="dropdown-item" th:href="@{/cringle}"
+                        th:text="#{menu.label.cringles}">Cringle</a> <a
+                        class="dropdown-item" th:href="@{/format}"
+                        th:text="#{menu.label.formats}">Format</a> <a
+                        class="dropdown-item" th:href="@{/stock}"
+                        th:text="#{menu.label.stocks}">Stock</a><a
+                        class="dropdown-item" th:href="@{/printingUnit}"
+                        th:text="#{menu.label.printing_units}">Printing Units</a>
+                        <a
+                        class="dropdown-item" th:href="@{/numberBases}"
+                        th:text="#{menu.label.number_bases}">Bases</a>
+                </div>
+            </li>
 
-			<li class="nav-item"><a class="nav-link text-light" th:href="@{/login}" th:text="#{menu.label.sign_in}" >Sign
-					in</a></li>
+            <!-- <sec:authorize access="hasAuthority('ROLE_ADMIN')"> th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"-->
+            <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')"><a
+                    class="nav-link dropdown-toggle text-light" href="#" id="navbardrop"
+                    data-toggle="dropdown" th:text="#{menu.label.administration}">
+                Administration </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" th:href="@{/admin}">Admin</a> <a
+                        class="dropdown-item" th:href="@{/users}"
+                        th:text="#{menu.label.users}">Users</a>
+                    <!-- <a class="dropdown-item" href="#">Link 3</a> -->
+                </div>
+            </li>
+            <!-- </sec:authorize> -->
 
-		</ul>
-		<ul class="navbar-nav" sec:authorize="isAuthenticated()">
-			<li class="nav-item"><a class="nav-link text-light" th:href="@{/user/view}"><i
-					class="fa fa-user"></i> <span th:text="#{label.user}">User</span> "<span sec:authentication="name"></span>"</a></li>
-			<li class="nav-item"><a class="nav-link text-light" th:href="@{/logout}" th:text="#{menu.label.sign_out}">Logout</a></li>
+            <!-- <li class="nav-item"></li> sec:authorize="hasRole('ROLE_USER')"
 
-		</ul>
-	</div>
+            th:text="${#authorization.expression('hasAuthority('ROLE_ADMIN')')}"-->
+            <!-- th:if="${#request.userPrincipal != null}"  hasRole('ADMIN') or hasRole('DBA') -->
+        </ul>
+
+        <ul class="navbar-nav" sec:authorize="isAnonymous()">
+
+            <li class="nav-item"><a class="nav-link text-light" th:href="@{/login}" th:text="#{menu.label.sign_in}">Sign
+                in</a></li>
+
+        </ul>
+        <ul class="navbar-nav" sec:authorize="isAuthenticated()">
+            <li class="nav-item"><a class="nav-link text-light" th:href="@{/user/view}"><i
+                    class="fa fa-user"></i> <span th:text="#{label.user}">User</span> "<span
+                    sec:authentication="name"></span>"</a></li>
+            <li class="nav-item"><a class="nav-link text-light" th:href="@{/logout}" th:text="#{menu.label.sign_out}">Logout</a>
+            </li>
+
+        </ul>
+    </div>
 </nav>
