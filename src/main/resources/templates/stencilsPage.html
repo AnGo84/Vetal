@@ -7,15 +7,18 @@
 
     <title th:utext="${title}"></title>
 
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-select.min.css">
-    <link rel="stylesheet" href="css/vetal.css">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-select.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-datepicker.standalone.min.css}">
+    <link rel="stylesheet" th:href="@{/css/vetal.css}">
 
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/bootstrap-select.min.js"></script>
-
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/bootstrap-select.min.js}"></script>
+    <script th:src="@{/js/bootstrap-datepicker.min.js}"></script>
+    <script th:src="@{/js/locales/bootstrap-datepicker.ru.js}"></script>
+    <script th:src="@{/js/vetal.js}"></script>
 
 </head>
 
@@ -73,18 +76,30 @@
                 </select>
                 </div>
 
-                <div class="form-group">
+                <!--<div class="form-group">
                     <label for="filterDateBeginFrom"><span th:text="#{label.date_from}">Date From</span>:</label> <input
                         id="filterDateBeginFrom" type="date"
                         class="form-control form-control-sm" th:field="*{dateBeginFrom}"/>
-                    <!-- th:field="*{dateBeginFrom}"  -->
-                </div>
+                    &lt;!&ndash; th:field="*{dateBeginFrom}"  &ndash;&gt;
+                </div>-->
 
                 <div class="form-group">
+                    <label for="filterDateBeginFrom"><span th:text="#{label.date_from}">Date From</span>:</label> <input
+                        id="filterDateBeginFrom" type="text" th:placeholder="dd.mm.yyyy"
+                        class="form-control form-control-sm" th:field="*{dateBeginFrom}"/>
+                </div>
+
+                <!--<div class="form-group">
                     <label for="filterDateBeginTill"><span th:text="#{label.date_till}">Date Till</span>:</label> <input
                         id="filterDateBeginTill" type="date"
                         class="form-control form-control-sm" th:field="*{dateBeginTill}"/>
-                    <!-- th:field="*{dateBeginTill}"  -->
+                    &lt;!&ndash; th:field="*{dateBeginTill}"  &ndash;&gt;
+                </div>-->
+
+                <div class="form-group">
+                    <label for="filterDateBeginTill"><span th:text="#{label.date_till}">Date Till</span>:</label> <input
+                        id="filterDateBeginTill" type="text" th:placeholder="dd.mm.yyyy"
+                        class="form-control form-control-sm" th:field="*{dateBeginTill}"/>
                 </div>
 
                 <hr class="d-sm-none">
@@ -130,7 +145,7 @@
                         <th th:text="#{label.order_name}">Order name</th>
                         <th th:text="#{label.client}">Client</th>
                         <th th:text="#{label.manager}">Manager</th>
-                        <th width="100" th:text="#{label.amount}">Amount</th>
+                        <!--<th width="100" th:text="#{label.amount}">Amount</th>-->
                         <th width="100" th:text="#{label.stencil_date}">Date Begin</th>
 
                         <th width="80">PDF</th>
@@ -150,11 +165,11 @@
                         <td th:text="${stencil.orderName}"></td>
                         <td th:text="${stencil.client.name}"></td>
                         <td th:text="${stencil.manager.fullName}"></td>
-                        <td class="text-right"
-                            th:text="${#numbers.formatDecimal(stencil.amount,0, 'COMMA', 2, 'POINT')}"></td>
+                        <!--<td class="text-right"
+                            th:text="${#numbers.formatDecimal(stencil.amount,0, 'COMMA', 2, 'POINT')}"></td>-->
                         <!-- th:text="${stencil.amount}"  -->
                         <td class="text-center"
-                            th:text="${#dates.format(stencil.dateBegin, 'dd-MM-yyyy')}"></td>
+                            th:text="${#dates.format(stencil.dateBegin, 'dd.MM.yyyy')}"></td>
 
                         <td class="text-center align-self-center"><a
                                 th:href="@{'/stencils/pdfReport-' + ${stencil.id}}"
@@ -186,7 +201,8 @@
                 </table>
             </div>
             <div th:if="${stencilsList == null or #lists.isEmpty(stencilsList)}">
-                <div>"No stencils were found, please create some first"</div>
+                <div><span th:text="#{message.table_empty_data}">"No stencils were found, please create some first"</span>
+                </div>
             </div>
             <!-- !Table PART -->
         </div>
@@ -211,6 +227,11 @@
 
 <!-- Include _deleteConfirmDialog.html -->
 <th:block th:include="/_deleteConfirmDialog.html"></th:block>
+
+<script>
+    initDatePicker('#filterDateBeginFrom');
+    initDatePicker('#filterDateBeginTill');
+</script>
 
 </body>
 </html>

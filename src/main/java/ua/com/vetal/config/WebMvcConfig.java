@@ -1,15 +1,25 @@
 package ua.com.vetal.config;
 
-import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
+import org.springframework.format.datetime.DateFormatter;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
-//@Configuration
+@Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addFormatter(new DateFormatter());
+    }
 
+/*    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("classpath:/resources/**")
+                .addResourceLocations("classpath:/resources/");
+    }*/
+
+    /*
 	// @Bean(name = "viewMessageSource")
 	@Bean
 	public MessageSource messageSource() {
@@ -32,6 +42,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		localeInterceptor.setParamName("lang");
 
 		registry.addInterceptor(localeInterceptor).addPathPatterns("/*");
-	}
+	}*/
 
 }

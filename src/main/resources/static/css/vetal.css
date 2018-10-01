@@ -1,0 +1,12 @@
+.bootstrap-select{
+  /*background-color: white !important;*/
+  /*font-size: 15px !important;*/
+}
+.bootstrap-select .btn-light{
+  background-color: white !important;
+  border-color: #ced4da;
+}
+
+.vresize {
+	resize: vertical; 
+}

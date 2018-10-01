@@ -7,17 +7,20 @@
     <!-- <title th:utext="${title}">Edit user</title> -->
     <title>Task</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/bootstrap-select.min.css">
-    <link rel="stylesheet" href="../css/font-awesome.min.css">
-    <link rel="stylesheet" href="../css/vetal.css">
-    <!-- <link rel="stylesheet" href="/css/bootstrap-datepicker.min.css"> -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-select.min.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-datepicker.standalone.min.css}">
+    <link rel="stylesheet" th:href="@{/css/vetal.css}">
 
-    <script src="../js/jquery-3.3.1.min.js"></script>
-    <script src="../js/popper.min.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/bootstrap-select.min.js}"></script>
 
-    <script src="../js/bootstrap-select.min.js"></script>
+    <script th:src="@{/js/bootstrap-datepicker.min.js}"></script>
+    <script th:src="@{/js/locales/bootstrap-datepicker.ru.js}"></script>
+    <script th:src="@{/js/vetal.js}"></script>
     <!-- <script src="/js/bootstrap.bundle.min.js"></script> -->
     <!-- <script src="/js/defaults-*.min.js"></script> -->
     <!-- <script src="/js/bootstrap-datepicker.min.js"></script> -->
@@ -288,10 +291,12 @@
                                class="col-sm-3 col-form-label col-form-label-sm"><span
                                 th:text="#{label.task_date}">Date begin</span>: </label>
                         <div class="col-sm-9">
-                            <input id="taskDateBegin" type="date" th:disabled="${readOnly}"
+                            <!--<input id="taskDateBegin" type="date" th:disabled="${readOnly}"
                                    class="form-control form-control-sm" th:field="*{dateBegin}"
-                                   th:value="${#dates.format(task.dateBegin, 'yyyy-MM-dd')}"/>
+                                   th:value="${#dates.format(task.dateBegin, 'yyyy-MM-dd')}"/>-->
                             <!-- th:value="${{task.dateBegin}}"  -->
+                            <input id="taskDateBegin" type="text" th:placeholder="dd.mm.yyyy" th:disabled="${readOnly}"
+                                   class="form-control form-control-sm" th:field="*{dateBegin}"/>
                         </div>
 
                     </div>
@@ -311,10 +316,12 @@
                                class="col-sm-3 col-form-label col-form-label-sm"><span
                                 th:text="#{label.completion_date}">Date end</span>: </label>
                         <div class="col-sm-9">
-                            <input id="taskDateEnd" type="date" th:disabled="${readOnly}"
+                            <!--<input id="taskDateEnd" type="date" th:disabled="${readOnly}"
                                    class="form-control form-control-sm" th:field="${task.dateEnd}"
-                                   th:value="${{task.dateEnd}}"/>
+                                   th:value="${{task.dateEnd}}"/>-->
                             <!-- th:value="${#dates.format(task.dateEnd, 'yyyy-MM-dd')}" *{dateEnd}-->
+                            <input id="taskDateEnd" type="text" th:placeholder="dd.mm.yyyy" th:disabled="${readOnly}"
+                                   class="form-control form-control-sm" th:field="*{dateEnd}"/>
                         </div>
                     </div>
                     <div class="alert alert-danger"
@@ -714,6 +721,11 @@
         <br/>
     </div>
 </div>
+
+<script>
+    initDatePicker('#taskDateBegin');
+    initDatePicker('#taskDateEnd');
+</script>
 
 </body>
 </html>

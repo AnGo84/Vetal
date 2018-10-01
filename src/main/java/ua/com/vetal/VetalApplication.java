@@ -8,6 +8,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootApplication
 // @EnableAutoConfiguration
@@ -49,4 +50,9 @@ public class VetalApplication extends SpringBootServletInitializer {
 		return application.sources(VetalApplication.class);
 	}
 
+
+	@Override
+	protected WebApplicationContext run(SpringApplication application) {
+		return super.run(application);
+	}
 }

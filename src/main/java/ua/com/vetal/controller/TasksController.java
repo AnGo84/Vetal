@@ -11,7 +11,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import ua.com.vetal.entity.*;
@@ -19,12 +18,10 @@ import ua.com.vetal.service.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.*;
-import java.util.List;
 
 @Controller
 @RequestMapping("/tasks")
@@ -87,7 +84,7 @@ public class TasksController {
     public String showAddTaskPage(Model model) {
         logger.info("Add new " + title + " record");
         Task task = new Task();
-        task.setNumber((int) (taskService.getMaxID()+1));
+        task.setNumber((int) (taskService.getMaxID() + 1));
 
         // model.addAttribute("edit", false);
         model.addAttribute("readOnly", false);
@@ -122,7 +119,7 @@ public class TasksController {
         logger.info("Copy " + title + " with ID= " + id);
 
         Task task = (taskService.findById(id)).getCopy();
-        task.setNumber((int) (taskService.getMaxID()+1));
+        task.setNumber((int) (taskService.getMaxID() + 1));
         logger.info("Copy task:" + task.toString());
 
         model.addAttribute("readOnly", false);
@@ -170,14 +167,14 @@ public class TasksController {
             return "taskPage";
         }
 
-        if (taskService.isAccountValueExist(task)) {
+        /*if (taskService.isAccountValueExist(task)) {
 
             FieldError fieldError = new FieldError("task", "account", messageSource.getMessage("non.unique.field",
                     new String[]{"Счёт", task.getAccount().toString()}, new Locale("ru")));
             // Locale.getDefault()
             bindingResult.addError(fieldError);
             return "taskPage";
-        }
+        }*/
 
         taskService.saveObject(task);
 

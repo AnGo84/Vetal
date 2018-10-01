@@ -7,14 +7,19 @@
 
     <title th:utext="${title}"></title>
 
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-select.min.css">
-    <link rel="stylesheet" href="css/vetal.css">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-select.min.css}">
+    <!--<link rel="stylesheet" href="css/bootstrap-datepicker.min.css">-->
+    <link rel="stylesheet" th:href="@{/css/bootstrap-datepicker.standalone.min.css}">
+    <link rel="stylesheet" th:href="@{/css/vetal.css}">
 
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/bootstrap-select.min.js"></script>
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/bootstrap-select.min.js}"></script>
+    <script th:src="@{/js/bootstrap-datepicker.min.js}"></script>
+    <script th:src="@{/js/locales/bootstrap-datepicker.ru.js}"></script>
+    <script th:src="@{/js/vetal.js}"></script>
 
 </head>
 
@@ -84,18 +89,27 @@
                 </select>
                 </div>
 
+                <!--<div class="form-group">
+                    <label for="filterDateBeginFrom"><span th:text="#{label.date_from}">Date From</span>:</label>
+                    <inputid="filterDateBeginFrom" type="date" class="form-control form-control-sm" th:field="*{dateBeginFrom}"/>
+                </div>-->
                 <div class="form-group">
                     <label for="filterDateBeginFrom"><span th:text="#{label.date_from}">Date From</span>:</label> <input
-                        id="filterDateBeginFrom" type="date"
+                        id="filterDateBeginFrom" type="text" th:placeholder="dd.mm.yyyy"
                         class="form-control form-control-sm" th:field="*{dateBeginFrom}"/>
-                    <!-- th:field="*{dateBeginFrom}"  -->
                 </div>
 
-                <div class="form-group">
+                <!--<div class="form-group">
                     <label for="filterDateBeginTill"><span th:text="#{label.date_till}">Date Till</span>:</label> <input
                         id="filterDateBeginTill" type="date"
                         class="form-control form-control-sm" th:field="*{dateBeginTill}"/>
-                    <!-- th:field="*{dateBeginTill}"  -->
+                    &lt;!&ndash; th:field="*{dateBeginTill}"  &ndash;&gt;
+                </div>-->
+
+                <div class="form-group">
+                    <label for="filterDateBeginTill"><span th:text="#{label.date_till}">Date Till</span>:</label> <input
+                        id="filterDateBeginTill" type="text" th:placeholder="dd.mm.yyyy"
+                        class="form-control form-control-sm" th:field="*{dateBeginTill}"/>
                 </div>
 
                 <hr class="d-sm-none">
@@ -167,7 +181,7 @@
                             th:text="${#numbers.formatDecimal(task.amount,0, 'COMMA', 2, 'POINT')}"></td>
                         <!-- th:text="${task.amount}"  -->
                         <td class="text-center"
-                            th:text="${#dates.format(task.dateBegin, 'dd-MM-yyyy')}"></td>
+                            th:text="${#dates.format(task.dateBegin, 'dd.MM.yyyy')}"></td>
 
                         <td class="text-center align-self-center"><a
                                 th:href="@{'/tasks/pdfReport-' + ${task.id}}"
@@ -199,7 +213,8 @@
                 </table>
             </div>
             <div th:if="${tasksList == null or #lists.isEmpty(tasksList)}">
-                <div>"No Tasks were found, please create some first"</div>
+}                <div><span th:text="#{message.table_empty_data}">"No Tasks were found, please create some first"</span>
+                </div>
             </div>
             <!-- !Table PART -->
         </div>
@@ -224,6 +239,26 @@
 
 <!-- Include _deleteConfirmDialog.html -->
 <th:block th:include="/_deleteConfirmDialog.html"></th:block>
+
+<!--<script>
+    $( function() {
+        $('#filterDateBeginFrom').focusin(function () {
+            $("#filterDateBeginFrom").datepicker();
+        });
+    });
+</script>-->
+<!--<script>
+    $('#filterDateBeginFrom').datepicker({
+        format: "dd.mm.yyyy",
+        autoclose: true,
+        todayHighlight: true
+    });
+
+</script>-->
+<script>
+    initDatePicker('#filterDateBeginFrom');
+    initDatePicker('#filterDateBeginTill');
+</script>
 
 </body>
 </html>

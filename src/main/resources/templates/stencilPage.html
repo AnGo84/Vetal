@@ -7,22 +7,23 @@
     <!-- <title th:utext="${title}">Edit user</title> -->
     <title>stencil</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/bootstrap-select.min.css">
-    <!--<link rel="stylesheet" href="../css/bootstrap-select.css">-->
-    <link rel="stylesheet" href="../css/font-awesome.min.css">
-    <link rel="stylesheet" href="../css/vetal.css">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-select.min.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-datepicker.standalone.min.css}">
+    <link rel="stylesheet" th:href="@{/css/vetal.css}">
     <!-- <link rel="stylesheet" href="/css/bootstrap-datepicker.min.css"> -->
 
-    <script src="../js/jquery-3.3.1.min.js"></script>
-    <script src="../js/popper.min.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
-    <script src="../js/bootstrap-select.min.js"></script>
-    <!--<script src="../js/bootstrap-select.js"></script>-->
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/bootstrap-select.min.js}"></script>
+
+    <script th:src="@{/js/bootstrap-datepicker.min.js}"></script>
+    <script th:src="@{/js/locales/bootstrap-datepicker.ru.js}"></script>
+    <script th:src="@{/js/vetal.js}"></script>
+
     <!-- <script src="/js/bootstrap.bundle.min.js"></script> -->
-    <!-- <script src="/js/bootstrap-select.min.js"></script> -->
-    <!-- <script src="/js/defaults-*.min.js"></script> -->
-    <!-- <script src="/js/bootstrap-datepicker.min.js"></script> -->
 
 
 </head>
@@ -227,10 +228,13 @@
                                class="col-sm-3 col-form-label col-form-label-sm"><span
                                 th:text="#{label.stencil_date}">Date begin</span>:</label>
                         <div class="col-sm-9">
-                            <input id="stencilDateBegin" type="date" th:disabled="${readOnly}"
+                            <!--<input id="stencilDateBegin" type="date" th:disabled="${readOnly}"
                                    class="form-control form-control-sm" th:field="*{dateBegin}"
-                                   th:value="${#dates.format(stencil.dateBegin, 'yyyy-MM-dd')}"/>
+                                   th:value="${#dates.format(stencil.dateBegin, 'yyyy-MM-dd')}"/>-->
                             <!-- th:value="${{stencil.dateBegin}}"  -->
+                            <input id="stencilDateBegin" type="text" th:placeholder="dd.mm.yyyy"
+                                   th:disabled="${readOnly}"
+                                   class="form-control form-control-sm" th:field="*{dateBegin}"/>
                         </div>
 
                     </div>
@@ -250,10 +254,12 @@
                                class="col-sm-3 col-form-label col-form-label-sm"><span
                                 th:text="#{label.completion_date}">Date end</span>:</label>
                         <div class="col-sm-9">
-                            <input id="stencilDateEnd" type="date" th:disabled="${readOnly}"
+                            <!--<input id="stencilDateEnd" type="date" th:disabled="${readOnly}"
                                    class="form-control form-control-sm" th:field="${stencil.dateEnd}"
-                                   th:value="${{stencil.dateEnd}}"/>
+                                   th:value="${{stencil.dateEnd}}"/>-->
                             <!-- th:value="${#dates.format(stencil.dateEnd, 'yyyy-MM-dd')}" *{dateEnd}-->
+                            <input id="stencilDateEnd" type="text" th:placeholder="dd.mm.yyyy" th:disabled="${readOnly}"
+                                   class="form-control form-control-sm" th:field="*{dateEnd}"/>
                         </div>
                     </div>
                     <div class="alert alert-danger"
@@ -517,10 +523,13 @@
                                class="col-sm-3 col-form-label col-form-label-sm"><span
                                 th:text="#{label.printing_date}">Printing Date begin</span>:</label>
                         <div class="col-sm-9">
-                            <input id="stencilPrintingDateBegin" type="date" th:disabled="${readOnly}"
+                            <!--<input id="stencilPrintingDateBegin" type="date" th:disabled="${readOnly}"
                                    class="form-control form-control-sm" th:field="*{datePrintBegin}"
-                                   th:value="${#dates.format(stencil.datePrintBegin, 'yyyy-MM-dd')}"/>
+                                   th:value="${#dates.format(stencil.datePrintBegin, 'yyyy-MM-dd')}"/>-->
                             <!-- th:value="${{stencil.dateBegin}}"  -->
+                            <input id="stencilPrintingDateBegin" type="text" th:placeholder="dd.mm.yyyy"
+                                   th:disabled="${readOnly}"
+                                   class="form-control form-control-sm" th:field="*{datePrintBegin}"/>
                         </div>
 
                     </div>
@@ -705,7 +714,7 @@
                 </div>
             </div>
 
-            <!-- Numeration & Numeration from -->
+            <!-- Numeration & Numeration from  & Sticker -->
             <div class="row">
                 <div class="col-sm-6">
 
@@ -738,6 +747,16 @@
 
                 <div class="col-sm-6">
 
+                    <div class="form-group row">
+                        <label for="stencilSticker"
+                               class="col-sm-4 col-form-label col-form-label-sm"><span
+                                th:text="#{label.glue_sticker}">Glue Sticker</span>: </label>
+                        <div class="col-sm-3 align-self-center">
+                            <input type="checkbox" id="stencilSticker" th:field="*{sticker}"
+                                   th:disabled="${readOnly}"/>
+                        </div>
+                    </div>
+
                     <!--<div class="form-group row">
 
                         <label for="numerationFrom"
@@ -758,43 +777,29 @@
             </div>
 
 
-            <!-- Amount & Sticker -->
-            <div class="row">
-                <div class="col-sm-6">
+            <!-- Amount -->
+            <!--            <div class="row">
+                            <div class="col-sm-6">
 
-                    <div class="form-group row">
+                                <div class="form-group row">
 
-                        <label for="stencilAmount"
-                               class="col-sm-3 col-form-label col-form-label-sm"><span
-                                th:text="#{label.amount}">Amount</span>: </label>
-                        <div class="col-sm-9">
-                            <input id="stencilAmount" type="number" min="0.00" step="0.01"
-                                   class="form-control form-control-sm" th:field="*{amount}"
-                                   th:disabled="${readOnly}"
-                                   onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"/>
-                        </div>
-                    </div>
-                    <div class="alert alert-danger"
-                         th:if="${#fields.hasErrors('amount')}">
-                        <p th:text="${#fields.errors('amount')}"
-                           style="margin-bottom: 0rem"></p>
-                    </div>
-
-                </div>
-
-                <div class="col-sm-6">
-                    <div class="form-group row">
-                        <label for="stencilSticker"
-                               class="col-sm-4 col-form-label col-form-label-sm"><span
-                                th:text="#{label.glue_sticker}">Glue Sticker</span>: </label>
-                        <div class="col-sm-3 align-self-center">
-                            <input type="checkbox" id="stencilSticker" th:field="*{sticker}"
-                                   th:disabled="${readOnly}"/>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+                                    <label for="stencilAmount"
+                                           class="col-sm-3 col-form-label col-form-label-sm"><span
+                                            th:text="#{label.amount}">Amount</span>: </label>
+                                    <div class="col-sm-9">
+                                        <input id="stencilAmount" type="number" min="0.00" step="0.01"
+                                               class="form-control form-control-sm" th:field="*{amount}"
+                                               th:disabled="${readOnly}"
+                                               onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"/>
+                                    </div>
+                                </div>
+                                <div class="alert alert-danger"
+                                     th:if="${#fields.hasErrors('amount')}">
+                                    <p th:text="${#fields.errors('amount')}"
+                                       style="margin-bottom: 0rem"></p>
+                                </div>
+                            </div>
+                        </div>-->
 
 
             <!-- Buttons -->
@@ -827,6 +832,13 @@
         <br/>
     </div>
 </div>
+
+
+<script>
+    initDatePicker('#stencilDateBegin');
+    initDatePicker('#stencilDateEnd');
+    initDatePicker('#stencilPrintingDateBegin');
+</script>
 
 </body>
 </html>
