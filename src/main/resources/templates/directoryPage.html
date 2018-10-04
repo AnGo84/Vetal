@@ -8,9 +8,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/dataTables.bootstrap4.min.css}">
+
     <script th:src="@{js/jquery-3.3.1.min.js}"></script>
     <script th:src="@{js/popper.min.js}"></script>
     <script th:src="@{js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/jquery.dataTables.min.js}"></script>
+    <script th:src="@{/js/dataTables.bootstrap4.min.js}"></script>
+
+    <script th:src="@{/js/vetal.js}"></script>
+
 </head>
 <body>
 <!-- Include _menu.html -->
@@ -33,14 +40,15 @@
         </div>
     </div>
     <div th:if="${directoryList !=null and not #lists.isEmpty(directoryList)}">
-        <table class="table table-sm table-bordered table-hover">
+        <div class="table-responsive">
+            <table id="directoryTable" class="table table-sm table-bordered table-hover display compact">
             <thead>
             <tr class="text-center">
                 <th width="100"><span th:text="#{label.id}"></span></th>
                 <th><span th:text="#{label.name}"></span></th>
-                <th width="100"
+                <th class="no-sort" width="100"
                     sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
-                <th width="100"
+                <th class="no-sort" width="100"
                     sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
             </tr>
             </thead>
@@ -79,6 +87,7 @@
             </tr>
             </tbody>
         </table>
+        </div>
     </div>
     <div th:if="${directoryList == null or #lists.isEmpty(directoryList)}">
         <div><span th:text="#{table.no_record_found}">"No Managers were found, please create some first"</span></div>
@@ -88,6 +97,9 @@
 <!-- Include _deleteConfirmDialog.html -->
 <th:block th:include="/_deleteConfirmDialog.html"></th:block>
 
+<script>
+    $(document).ready(initTable('#directoryTable'));
+</script>
 
 </body>
 </html>

@@ -5,6 +5,33 @@ function initDatePicker(datePicker) {
         format: "dd.mm.yyyy",
         autoclose: true,
         todayHighlight: true,
-        language: "ru"
+        language: "ru",
+        weekStart: 1
     });
 };
+
+function initTable(tableName) {
+    //from
+    //https://datatables.net/examples/basic_init/table_sorting.html
+    $(tableName).DataTable( {
+        "language": {
+            "lengthMenu": "Показать _MENU_ записей на странице",
+            "zeroRecords": "Ничего не найдено",
+            "info": "Показана страница _PAGE_ из _PAGES_",
+            "infoEmpty": "Нет доступных записей",
+            "infoFiltered": "(отфильтровано из _MAX_ записей)",
+            "search": "Быстрый поиск",
+            "paginate": {
+            "first": "Первая",
+            "last": "Последняя",
+            "next": "Следующая",
+            "previous": "Предыдущая"}
+        },
+        "pagingType": "full_numbers",
+        "lengthMenu": [[10, 15, 20, 25, 50, -1], [10, 15, 20, 25, 50, "Все"]],
+        "iDisplayLength": 15,
+        "aoColumnDefs": [
+            { 'bSortable': false, 'aTargets': ['no-sort'] }
+        ]
+    } );
+} ;

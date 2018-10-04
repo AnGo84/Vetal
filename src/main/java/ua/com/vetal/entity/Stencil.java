@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.text.DecimalFormat;
 import java.util.Date;
 
 @Entity
@@ -88,9 +89,9 @@ public class Stencil {
 	@JoinColumn(name = "Printing_unit_id", nullable = false)
 	private PrintingUnitDirectory printingUnit;
 
-	@NotNull
+	//@NotNull
 	@Column(name = "Adjustment")
-	private int adjustment;
+	private String adjustment;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "Paper_ID")
@@ -161,6 +162,10 @@ public class Stencil {
 	@Type(type = "org.hibernate.type.NumericBooleanType")
 	private boolean packPellicle;
 
+	@Column(name = "PackPaper", nullable = false)
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	private boolean packPaper;
+
 	@Column(name = "PackPackage", nullable = false)
 	@Type(type = "org.hibernate.type.NumericBooleanType")
 	private boolean packPackage;
@@ -226,6 +231,7 @@ public class Stencil {
 
 		task.packBox = this.packBox;
 		task.packPellicle = this.packPellicle;
+		task.packPaper = this.packPaper;
 		task.packPackage = this.packPackage;
 		task.packNP = this.packNP;
 
@@ -269,6 +275,10 @@ public class Stencil {
 
 	public void setNumberSuffix(int numberSuffix) {
 		this.numberSuffix = numberSuffix;
+	}
+
+	public String getNumberBaseWithSuffix() {
+		return numberBase.name +" " +numberSuffix;
 	}
 
 	public String getFullNumber() {
@@ -359,11 +369,15 @@ public class Stencil {
 		this.printingUnit = printingUnit;
 	}
 
-	public int getAdjustment() {
+	public String getPrintingWithUnit() {
+		return printing + " " + printingUnit.name;
+	}
+
+	public String getAdjustment() {
 		return adjustment;
 	}
 
-	public void setAdjustment(int adjustment) {
+	public void setAdjustment(String adjustment) {
 		this.adjustment = adjustment;
 	}
 
@@ -460,7 +474,7 @@ public class Stencil {
 	}
 
 	public void setStamping(boolean stamping) {
-		stamping = stamping;
+		this.stamping = stamping;
 	}
 
 	public boolean isEmbossing() {
@@ -468,7 +482,7 @@ public class Stencil {
 	}
 
 	public void setEmbossing(boolean embossing) {
-		embossing = embossing;
+		this.embossing = embossing;
 	}
 
 	public boolean isBending() {
@@ -501,6 +515,14 @@ public class Stencil {
 
 	public void setPackPellicle(boolean packPellicle) {
 		this.packPellicle = packPellicle;
+	}
+
+	public boolean isPackPaper() {
+		return packPaper;
+	}
+
+	public void setPackPaper(boolean packPaper) {
+		this.packPaper = packPaper;
 	}
 
 	public boolean isPackPackage() {
@@ -551,6 +573,10 @@ public class Stencil {
 		this.amount = amount;
 	}
 
+	public String getStringAmount() {
+		return new DecimalFormat("#,##0.00").format(amount/100)+ " грн";
+	}
+
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder("Stencil{");
@@ -587,6 +613,7 @@ public class Stencil {
 		sb.append(", plotter=").append(plotter);
 		sb.append(", packBox=").append(packBox);
 		sb.append(", packPellicle=").append(packPellicle);
+		sb.append(", packPaper=").append(packPaper);
 		sb.append(", packPackage=").append(packPackage);
 		sb.append(", packNP=").append(packNP);
 		sb.append(", numeration=").append(numeration);

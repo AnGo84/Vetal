@@ -1,5 +1,6 @@
 package ua.com.vetal.entity;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -156,7 +157,7 @@ public class Task {
 
 	public Task getCopy() {
 
-		System.out.println("Copy From task:" + this);
+		//System.out.println("Copy From task:" + this);
 		Task task = new Task();
 
 		task.manager = this.manager;
@@ -220,6 +221,10 @@ public class Task {
 
 	public void setNumberSuffix(int numberSuffix) {
 		this.numberSuffix = numberSuffix;
+	}
+
+	public String getNumberBaseWithSuffix() {
+		return numberBase.name +" " +numberSuffix;
 	}
 
 	public String getFullNumber() {
@@ -318,6 +323,10 @@ public class Task {
 		return printingUnit;
 	}
 
+	public String getPrintingWithUnit() {
+		return printing + " " + printingUnit.name;
+	}
+
 	public void setPrintingUnit(PrintingUnitDirectory printingUnit) {
 		this.printingUnit = printingUnit;
 	}
@@ -403,11 +412,15 @@ public class Task {
 	}
 
 	public double getAmount() {
-		return amount;
+		return amount/100;
 	}
 
 	public void setAmount(double amount) {
-		this.amount = amount;
+		this.amount = amount*100;
+	}
+
+	public String getStringAmount() {
+		return new DecimalFormat("#,##0.00").format(amount/100)+ " грн";
 	}
 
 	@Override

@@ -31,9 +31,12 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<!--<version>1.9.3</version>-->
+		<!--<jasperreports.version>6.7.0</jasperreports.version>-->
+		<jasperreports.version>6.7.0</jasperreports.version>
+		<!--<apache.poi.version>4.0.0</apache.poi.version>-->
+		<apache.poi.version>3.15</apache.poi.version>
 
-		<!-- <springframework.version>4.1.6.RELEASE</springframework.version> <springsecurity.version>4.0.1.RELEASE</springsecurity.version> 
+		<!-- <springframework.version>4.1.6.RELEASE</springframework.version> <springsecurity.version>4.0.1.RELEASE</springsecurity.version>
 			<hibernate.version>4.3.6.Final</hibernate.version> <mysql.version>5.1.31</mysql.version> -->
         <start-class>ua.com.vetal.VetalApplication</start-class>
 	</properties>
@@ -63,11 +66,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency> -->
-        <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-			<version>1.9.3</version>
-        </dependency>
+
 
 		<!-- <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -98,23 +97,66 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-support</artifactId>
+			<version>2.0.8</version>
+		</dependency>
+		<!--duplicate
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+		</dependency>-->
 
-<!-- 		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>2.10</version>
-		</dependency> -->
+		<!-- Jasper Report Specific Jars START -->
+
+
+		<!--<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.9.3</version>
+		</dependency>-->
+		<!-- https://mvnrepository.com/artifact/commons-digester/commons-digester -->
+		<!--<dependency>
+			<groupId>commons-digester</groupId>
+			<artifactId>commons-digester</artifactId>
+			<version>2.1</version>
+		</dependency>-->
+
 
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
-			<version>6.7.0</version>
+			<version>${jasperreports.version}</version>
 		</dependency>
 
+		<!--<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.10</version>
+		</dependency>-->
+
+		<!-- for report in xls format -->
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>${apache.poi.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-beanutils</groupId>
+					<artifactId>commons-beanutils</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/xml-apis/xml-apis -->
+		<dependency>
+			<groupId>xml-apis</groupId>
+			<artifactId>xml-apis</artifactId>
+			<version>2.0.2</version>
+		</dependency>
+
+		<!-- Jasper Report Specific Jars END -->
+
 
 	</dependencies>
 

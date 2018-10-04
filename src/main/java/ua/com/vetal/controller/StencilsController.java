@@ -1,9 +1,14 @@
 package ua.com.vetal.controller;
 
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,30 +16,35 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import ua.com.vetal.entity.*;
 import ua.com.vetal.service.*;
+import ua.com.vetal.utils.DateUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.*;
 
 @Controller
 @RequestMapping("/stencils")
 // @SessionAttributes({ "managersList", "pageName" })
-@SessionAttributes({"filterData"})
+// @SessionAttributes({"stencilFilterData"})
 
+@PropertySource(ignoreResourceNotFound = true, value = "classpath:vetal.properties")
 public class StencilsController {
     static final Logger logger = LoggerFactory.getLogger(ManagerController.class);
-
-    // private Collator collator = Collator.getInstance(Locale.);
     @Autowired
     MessageSource messageSource;
+    // private Collator collator = Collator.getInstance(Locale.);
+    @Value("${image.logo}")
+    private String imageLogo;
     private String title = "Stencils";
     private String personName = "Stencils";
     private String pageName = "/stencils";
     @Autowired
     private StencilServiceImpl stencilService;
 
-    private FilterData filterData = new FilterData();
+    private FilterData filterData;
     private List<Stencil> stencilList;
 
     @Autowired
@@ -60,6 +70,7 @@ public class StencilsController {
     public String stencilList(Model model) {
 
         model.addAttribute("title", title);
+        //model.addAttribute("stencilsList", getStencilsListData());
         // model.addAttribute("stencilList", stencilService.findAllObjects());
 
         return "stencilsPage";
@@ -159,12 +170,52 @@ public class StencilsController {
     }
 
     @RequestMapping(value = "/filter", method = RequestMethod.GET)
-    public String updateStencil(@ModelAttribute("filterData") FilterData filterData, BindingResult bindingResult,
+    public String updateStencil(@ModelAttribute("stencilFilterData") FilterData filterData, BindingResult bindingResult,
                                 Model model) {
         // logger.info("FilterData: " + filterData);
         this.filterData = filterData;
 
         return "redirect:/stencils";
+    }
+
+    @RequestMapping(value = "/clearFilter", method = RequestMethod.GET)
+    //public String clearFilterTask(WebRequest request) {
+    public String clearFilterTask() {
+        this.filterData = new FilterData();
+        //request.removeAttribute("taskFilterData", WebRequest.SCOPE_SESSION);
+        return "redirect:/stencils";
+    }
+
+    @RequestMapping(value = {"/pdfReport-{id}"}, method = RequestMethod.GET)
+    @ResponseBody
+    public void pdfReportStencil(@PathVariable Long id, HttpServletResponse response) throws JRException, IOException {
+        logger.info("Get PDF for " + title + " with ID= " + id);
+        InputStream jasperStream = this.getClass().getResourceAsStream("/jasperReport/StencilReport.jasper");
+        InputStream logoTopIS = this.getClass().getResourceAsStream(imageLogo);
+        InputStream logoBottomIS = this.getClass().getResourceAsStream(imageLogo);
+        //URL logoURL = this.getClass().getResource(imageLogo);
+
+        Map<String, Object> parameters = new HashMap<>();
+        //parameters.put("paramID", id);
+        //parameters.put("paramLOGO_IS", logoIS);
+        //logger.info("URL to LOGO: " + logoURL.getFile().);
+        parameters.put("paramLOGO_Top_IS", logoTopIS);
+        parameters.put("paramLOGO_Bottom_IS", logoBottomIS);
+
+        JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
+
+        List<Stencil> stencils = new ArrayList<>();
+        stencils.add(stencilService.findById(id));
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(stencils);
+
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+
+        response.setContentType("application/x-pdf");
+        response.setHeader("Content-disposition", "inline; filename=" + title + "_" + id + ".pdf");
+        //jasperViewer.setFont(new Font("AnGo_Times_New_Roman", 0, 0));
+
+        final OutputStream outStream = response.getOutputStream();
+        JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
     }
 
     /**
@@ -304,11 +355,20 @@ public class StencilsController {
     }
 
 
-    @ModelAttribute("filterData")
+    @ModelAttribute("stencilFilterData")
     public FilterData getFilterData() {
+        if (filterData == null) {
+            filterData = new FilterData();
+            filterData.setDateBeginFrom(DateUtils.firstDayOfMonth(new Date()));
+        }
         return filterData;
     }
 
+    @ModelAttribute("hasFilterData")
+    public boolean hasFilterData() {
+        //logger.info("Get Filter: " + filterData);
+        return getFilterData().hasData();
+    }
     @ModelAttribute("stencilsList")
     public List<Stencil> getStencilsListData() {
         /*

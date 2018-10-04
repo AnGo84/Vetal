@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
+import ua.com.vetal.utils.DateUtils;
 
 @Component
 @ConfigurationPropertiesBinding
@@ -23,9 +24,9 @@ public class DateConverter implements Converter<String, Date> {
 		if (source == null || source.isEmpty()) {
 			return null;
 		}
-
-		DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
-		//DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		//DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+		DateFormat df = DateUtils.SIMPLE_DATE_FORMAT;
+		//DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
 
 		try {
 			return df.parse(source);

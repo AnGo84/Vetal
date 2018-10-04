@@ -668,7 +668,7 @@
                         <label for="plotter"
                                class="ml-sm mb-2 mr-sm-2 col-form-label col-form-label-sm"><span
                                 th:text="#{label.plotter}">Plotter</span>: </label>
-                        <input type="checkbox" id="plotter" class="ml-sm mr-sm-5" th:field="*{plotter}"
+                        <input type="checkbox" id="plotter" class="ml-sm mb-2 mr-sm-5" th:field="*{plotter}"
                                th:disabled="${readOnly}"/>
                     </div>
                 </div>
@@ -696,6 +696,13 @@
                                 th:text="#{label.packPellicle}">Pellicle</span>: </label>
                         <input type="checkbox" id="packPellicle" class="ml-sm mb-2 mr-sm-5"
                                th:field="*{packPellicle}"
+                               th:disabled="${readOnly}"/>
+
+                        <label for="packPaper"
+                               class="ml-sm mb-2 mr-sm-2 col-form-label col-form-label-sm"><span
+                                th:text="#{label.packPaper}">Paper</span>: </label>
+                        <input type="checkbox" id="packPaper" class="ml-sm mb-2 mr-sm-5"
+                               th:field="*{packPaper}"
                                th:disabled="${readOnly}"/>
 
                         <label for="packPackage"
@@ -810,6 +817,11 @@
                         <a th:href="@{/stencils}" style="width: 100px;"
                            class="btn btn-info btn-sm btn-info" role="button"
                            th:text="#{label.back}">Back</a>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <a th:href="@{'/stencils/pdfReport-' + ${stencil.id}}" style="width: 80px;"
+                           class="btn btn-warning btn-sm custom-width float-right" role="button">PDF</a>
                     </div>
                 </div>
             </div>

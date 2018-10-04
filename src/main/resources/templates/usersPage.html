@@ -6,11 +6,19 @@
     <meta charset="UTF-8">
     <title>Users</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
-    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
-    <script th:src="@{/js/popper.min.js}"></script>
-    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/dataTables.bootstrap4.min.css}">
+
+    <script th:src="@{js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{js/popper.min.js}"></script>
+    <script th:src="@{js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/jquery.dataTables.min.js}"></script>
+    <script th:src="@{/js/dataTables.bootstrap4.min.js}"></script>
+
+    <script th:src="@{/js/vetal.js}"></script>
+
 </head>
 <body>
 <!-- Include _menu.html -->
@@ -32,15 +40,16 @@
     </div>
 
     <div th:if="${users != null and not #lists.isEmpty(users)}">
-        <table class="table table-sm table-bordered table-hover">
+        <div class="table-responsive">
+            <table id="usersTable" class="table table-sm table-bordered table-hover display compact">
             <thead>
             <tr class="text-center">
                 <th width="100" th:text="#{label.id}">Id</th>
                 <th th:text="#{label.login}">Login</th>
                 <th th:text="#{label.roles}">Roles</th>
-                <th width="150" th:text="#{label.active}">Active</th>
-                <th width="100"></th>
-                <th width="100"></th>
+                <th class="no-sort" width="150" th:text="#{label.active}">Active</th>
+                <th class="no-sort" width="100"></th>
+                <th class="no-sort" width="100"></th>
             </tr>
             </thead>
             <tbody>
@@ -85,7 +94,9 @@
                         <button class="btn btn-sm btn-danger custom-width" type="button"
                                 style="width: 100px;" data-toggle="modal"
                                 data-target="#confirmDelete" data-title="Delete User"
-                                data-message="Are you sure you want to delete this user ?" th:text="#{label.delete}">
+                                data-message="Are you sure you want to delete this user ?"
+                                th:attr="data-title=#{label.delete_record},data-message=#{message.delete_confirm_message}"
+                                th:text="#{label.delete}">
                             <i class="glyphicon glyphicon-trash"></i> Delete
                         </button>
                     </form>
@@ -96,6 +107,7 @@
             </tr>
             </tbody>
         </table>
+        </div>
     </div>
     <div th:if="${users == null or #lists.isEmpty(users)}">
         <div><span th:text="#{table.no_record_found}">"No Managers were found, please create some first"</span></div>
@@ -105,6 +117,10 @@
 <!-- Include _deleteConfirmDialog.html -->
 <th:block th:include="/_deleteConfirmDialog.html"></th:block>
 
+
+<script>
+    $(document).ready(initTable('#usersTable'));
+</script>
 
 </body>
 </html>

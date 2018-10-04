@@ -2,12 +2,17 @@ package ua.com.vetal.controller;
 
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.export.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +20,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import ua.com.vetal.entity.*;
 import ua.com.vetal.service.*;
+import ua.com.vetal.utils.DateUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -26,14 +32,16 @@ import java.util.*;
 @Controller
 @RequestMapping("/tasks")
 // @SessionAttributes({ "managersList", "pageName" })
-@SessionAttributes({"filterData"})
+//@SessionAttributes({"taskFilterData"})
 
+@PropertySource(ignoreResourceNotFound = true, value = "classpath:vetal.properties")
 public class TasksController {
     static final Logger logger = LoggerFactory.getLogger(ManagerController.class);
-
-    // private Collator collator = Collator.getInstance(Locale.);
     @Autowired
     MessageSource messageSource;
+    // private Collator collator = Collator.getInstance(Locale.);
+    @Value("${image.logo}")
+    private String imageLogo;
     @Autowired
     private ApplicationContext appContext;
     private String title = "Tasks";
@@ -42,7 +50,7 @@ public class TasksController {
     @Autowired
     private TaskServiceImpl taskService;
 
-    private FilterData filterData = new FilterData();
+    private FilterData filterData;
     private List<Task> tasksList;
 
     @Autowired
@@ -70,12 +78,11 @@ public class TasksController {
     @Autowired
     private PrintingUnitDirectoryServiceImpl printingUnitService;
 
-
     @RequestMapping(value = {""}, method = RequestMethod.GET)
     public String taskList(Model model) {
-
+        //logger.info("Get Filter: " + filterData);
         model.addAttribute("title", title);
-        // model.addAttribute("tasksList", taskService.findAllObjects());
+        //model.addAttribute("tasksList", taskService.findByFilterData(filterData));
 
         return "tasksPage";
     }
@@ -196,57 +203,132 @@ public class TasksController {
     //spring boot jasper reports set connection
     //http://zetcode.com/articles/jasperspringbootweb/
     //https://cashmisa.wordpress.com/2017/12/11/jasper-report-for-spring-boot-project/
+
     @RequestMapping(value = {"/pdfReport-{id}"}, method = RequestMethod.GET)
     @ResponseBody
     public void pdfReportTask(@PathVariable Long id, HttpServletResponse response) throws JRException, IOException {
         logger.info("Get PDF for " + title + " with ID= " + id);
-        InputStream jasperStream = this.getClass().getResourceAsStream("/jasperReport/Task_Report.jasper");
+        InputStream jasperStream = this.getClass().getResourceAsStream("/jasperReport/TaskReport.jasper");
+
+        InputStream logoIS = this.getClass().getResourceAsStream(imageLogo);
+
         Map<String, Object> parameters = new HashMap<>();
 
-        parameters.put("paramID", id);
+        //parameters.put("paramID", id);
+        parameters.put("paramLOGO", logoIS);
 
         JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
 
         List<Task> tasks = new ArrayList<>();
         tasks.add(taskService.findById(id));
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(tasks);
-        //JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 
         response.setContentType("application/x-pdf");
-        response.setHeader("Content-disposition", "inline; filename=task_" + id + ".pdf");
+        response.setHeader("Content-disposition", "inline; filename=" + title + "_" + id + ".pdf");
         //jasperViewer.setFont(new Font("AnGo_Times_New_Roman", 0, 0));
 
         final OutputStream outStream = response.getOutputStream();
         JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
+
     }
-/*    @RequestMapping(value = {"/pdfReport-{id}"}, method = RequestMethod.GET)
+
+    @RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView pdfReportTask(@PathVariable Long id, HttpServletResponse response) throws JRException, IOException {
-        logger.info("Get PDF for " + title + " with ID= " + id);
+    public void exporToExcelReportTask(HttpServletResponse response) throws JRException, IOException {
+        logger.info("Export " + title + " to Excel");
+        InputStream jasperStream = this.getClass().getResourceAsStream("/jasperReport/TaskTableReport.jasper");
+        InputStream logoIS = this.getClass().getResourceAsStream(imageLogo);
+        Map<String, Object> parameters = new HashMap<>();
+
+        parameters.put("paramLOGO", logoIS);
 
 
-        JasperReportsPdfView view = new JasperReportsPdfView();
-        view.setUrl("classpath:jasperReport/Task_Report.jrxml");
-        view.setApplicationContext(appContext);
-        List<Task> tasks = new ArrayList<>();
-        tasks.add(taskService.findById(id));
-        //JRBeanCollectionDataSource jrds = new JRBeanCollectionDataSource(tasks);
-        //return new ModelAndView(view, "productData", jrds);
+        JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("spring.datasource", tasks);
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(getTasksListData());
 
-        return new ModelAndView(view, params);
+        parameters.put("tasks", dataSource);
 
-    }*/
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+        //JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters);
+
+        response.setContentType("application/x-pdf");
+        response.setHeader("Content-disposition", "inline; filename=tasks.pdf");
+        //jasperViewer.setFont(new Font("AnGo_Times_New_Roman", 0, 0));
+
+        final OutputStream outStream = response.getOutputStream();
+        JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
+
+    }
+    //@RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
+    //@ResponseBody
+    public void pdfReportTask(HttpServletResponse response) throws JRException, IOException {
+        logger.info("Export " + title + " to Excel");
+        InputStream jasperStream = this.getClass().getResourceAsStream("/jasperReport/TaskTableReport.jasper");
+        InputStream logoIS = this.getClass().getResourceAsStream(imageLogo);
+        Map<String, Object> parameters = new HashMap<>();
+        //parameters.put("paramID", id);
+        parameters.put("paramLOGO", logoIS);
+
+        JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
+
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(getTasksListData());
+
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+
+        //response.setContentType("application/vnd.ms-excel");
+        //response.setHeader("Content-disposition", "inline; filename=tasks.xlsx");
+        //jasperViewer.setFont(new Font("AnGo_Times_New_Roman", 0, 0));
+
+        response.setHeader("Content-Disposition", "attachment;filename=tasks.xls");
+        response.setContentType("application/octet-stream");
+        response.setContentLength(4096);
+
+        final OutputStream outStream = response.getOutputStream();
+        //JasperExportManager.export(jasperPrint, outStream);
+
+        //JRXlsxExporter exporter = new JRXlsxExporter();
+        JRXlsExporter exporter = new JRXlsExporter();
+
+        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput("TasksTable.xls"));
+
+        //SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
+
+        SimpleXlsReportConfiguration configuration = new SimpleXlsReportConfiguration();
+
+        configuration.setOnePagePerSheet(true);
+        configuration.setDetectCellType(true);
+        configuration.setCollapseRowSpan(false);
+
+        exporter.setConfiguration(configuration);
+        exporter.exportReport();
+
+        /*SimpleXlsReportConfiguration configuration = new SimpleXlsReportConfiguration();
+        configuration.setOnePagePerSheet(true);
+        configuration.setDetectCellType(true);
+        configuration.setCollapseRowSpan(false);
+        xlsExporter.setConfiguration(configuration);
+        xlsExporter.exportReport();*/
+    }
+
 
     @RequestMapping(value = "/filter", method = RequestMethod.GET)
-    public String updateTask(@ModelAttribute("filterData") FilterData filterData, BindingResult bindingResult,
+    public String filterTask(@ModelAttribute("taskFilterData") FilterData filterData, BindingResult bindingResult,
                              Model model) {
         // logger.info("FilterData: " + filterData);
         this.filterData = filterData;
 
+        return "redirect:/tasks";
+    }
+
+    @RequestMapping(value = "/clearFilter", method = RequestMethod.GET)
+    //public String clearFilterTask(WebRequest request) {
+    public String clearFilterTask() {
+        this.filterData = new FilterData();
+        //request.removeAttribute("taskFilterData", WebRequest.SCOPE_SESSION);
         return "redirect:/tasks";
     }
 
@@ -425,10 +507,22 @@ public class TasksController {
         return resultList;
     }
 
-    @ModelAttribute("filterData")
+    @ModelAttribute("taskFilterData")
     public FilterData getFilterData() {
+        //logger.info("Get Filter: " + filterData);
+        if (filterData == null) {
+            filterData = new FilterData();
+            filterData.setDateBeginFrom(DateUtils.firstDayOfMonth(new Date()));
+        }
         return filterData;
     }
+
+    @ModelAttribute("hasFilterData")
+    public boolean hasFilterData() {
+        //logger.info("Get Filter: " + filterData);
+        return getFilterData().hasData();
+    }
+
 
     @ModelAttribute("tasksList")
     public List<Task> getTasksListData() {
@@ -437,6 +531,7 @@ public class TasksController {
          * taskService.findAllObjects(); }
          */
         // tasksList = taskService.findAllObjects();
+        logger.info("Get Filter: " + filterData);
         tasksList = taskService.findByFilterData(filterData);
         // logger.info("Get TaskList : " + tasksList.size());
 
