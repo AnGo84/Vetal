@@ -90,12 +90,12 @@ public class Task {
 
 	@NotNull
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "Client_ID")
+	@JoinColumn(name = "Client_ID", nullable = false)
 	private ClientDirectory client;
 
 	@NotNull
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "Stock_ID")
+	@JoinColumn(name = "Stock_ID", nullable = false)
 	private StockDirectory stock;
 
 	@NotNull
@@ -109,12 +109,12 @@ public class Task {
 
 	@NotNull
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "Chromaticity_ID")
+	@JoinColumn(name = "Chromaticity_ID", nullable = false)
 	private ChromaticityDirectory chromaticity;
 
 	@NotNull
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "Format_ID")
+	@JoinColumn(name = "Format_ID", nullable = false)
 	private FormatDirectory format;
 
 	@ManyToOne(optional = false)

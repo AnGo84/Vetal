@@ -227,16 +227,14 @@
 
         <!-- Right PART -->
         <div class="col-sm-2 bg-light">
-            <!-- <h3>Some Links</h3>
+            <h2><span th:text="#{label.reports}">Reports</span>:</h2>
+            <div class="form-group text-center align-self-center">
+                <a th:href="@{'/stencils/excelExport'}" style="width: 80px;"
+                   class="btn btn-success btn-sm custom-width" role="button"
+                   th:text="#{label.excelExport}">Excel</a>
+            </div>
 
-            <ul class="nav nav-pills flex-column">
-                <li class="nav-item"><a class="nav-link" target="_blank"
-                    th:href="@{/openFolder}">Папка with Docs</a></li>
-                <li class="nav-item"><a class="nav-link"
-                    href="file:///home/mbrunarskiy/Desktop">Папка null</a></li>
-
-            </ul>
-            <hr class="d-sm-none"> -->
+            <hr class="d-sm-none">
         </div>
 
     </div>

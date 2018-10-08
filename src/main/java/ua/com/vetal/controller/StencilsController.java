@@ -2,7 +2,11 @@ package ua.com.vetal.controller;
 
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +24,7 @@ import ua.com.vetal.utils.DateUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -35,9 +40,7 @@ public class StencilsController {
     static final Logger logger = LoggerFactory.getLogger(ManagerController.class);
     @Autowired
     MessageSource messageSource;
-    // private Collator collator = Collator.getInstance(Locale.);
-    @Value("${image.logo}")
-    private String imageLogo;
+
     private String title = "Stencils";
     private String personName = "Stencils";
     private String pageName = "/stencils";
@@ -65,6 +68,9 @@ public class StencilsController {
     private PaperDirectoryServiceImpl paperService;
     @Autowired
     private PrintingUnitDirectoryServiceImpl printingUnitService;
+
+    @Autowired
+    private JasperService jasperService;
 
     @RequestMapping(value = {""}, method = RequestMethod.GET)
     public String stencilList(Model model) {
@@ -190,25 +196,8 @@ public class StencilsController {
     @ResponseBody
     public void pdfReportStencil(@PathVariable Long id, HttpServletResponse response) throws JRException, IOException {
         logger.info("Get PDF for " + title + " with ID= " + id);
-        InputStream jasperStream = this.getClass().getResourceAsStream("/jasperReport/StencilReport.jasper");
-        InputStream logoTopIS = this.getClass().getResourceAsStream(imageLogo);
-        InputStream logoBottomIS = this.getClass().getResourceAsStream(imageLogo);
-        //URL logoURL = this.getClass().getResource(imageLogo);
 
-        Map<String, Object> parameters = new HashMap<>();
-        //parameters.put("paramID", id);
-        //parameters.put("paramLOGO_IS", logoIS);
-        //logger.info("URL to LOGO: " + logoURL.getFile().);
-        parameters.put("paramLOGO_Top_IS", logoTopIS);
-        parameters.put("paramLOGO_Bottom_IS", logoBottomIS);
-
-        JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
-
-        List<Stencil> stencils = new ArrayList<>();
-        stencils.add(stencilService.findById(id));
-        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(stencils);
-
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+        JasperPrint jasperPrint = jasperService.stencilReport(id);
 
         response.setContentType("application/x-pdf");
         response.setHeader("Content-disposition", "inline; filename=" + title + "_" + id + ".pdf");
@@ -217,6 +206,39 @@ public class StencilsController {
         final OutputStream outStream = response.getOutputStream();
         JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
     }
+
+
+    @RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
+    @ResponseBody
+    public void exportToExcelReportTask(HttpServletResponse response) throws JRException, IOException {
+        logger.info("Export " + title + " to Excel");
+        File pdfFile = File.createTempFile("my-invoice", ".pdf");
+
+        JasperPrint jasperPrint = jasperService.stencilsTable(filterData);
+
+        /*response.setContentType("application/x-pdf");
+        response.setHeader("Content-disposition", "inline; filename=Stencils.pdf");
+
+        final OutputStream outStream = response.getOutputStream();
+        JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);*/
+
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-disposition", "inline; filename=" + title + ".xlsx");
+
+        final OutputStream outputStream = response.getOutputStream();
+        JRXlsxExporter exporter = new JRXlsxExporter();
+
+        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outputStream));
+        SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
+        configuration.setOnePagePerSheet(true);
+        configuration.setDetectCellType(true);
+        configuration.setCollapseRowSpan(false);
+        exporter.setConfiguration(configuration);
+
+        exporter.exportReport();
+    }
+
 
     /**
      * This methods will provide lists and fields to views
@@ -354,13 +376,13 @@ public class StencilsController {
         return resultList;
     }
 
-
     @ModelAttribute("stencilFilterData")
     public FilterData getFilterData() {
         if (filterData == null) {
             filterData = new FilterData();
             filterData.setDateBeginFrom(DateUtils.firstDayOfMonth(new Date()));
         }
+        logger.info("Get FilterDate: " + filterData);
         return filterData;
     }
 
@@ -376,7 +398,7 @@ public class StencilsController {
          * stencilService.findAllObjects(); }
          */
         // stencilList = stencilService.findAllObjects();
-        stencilList = stencilService.findByFilterData(filterData);
+        stencilList = stencilService.findByFilterData(getFilterData());
         // logger.info("Get TaskList : " + stencilList.size());
 
         return stencilList;

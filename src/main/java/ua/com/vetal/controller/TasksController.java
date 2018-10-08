@@ -5,11 +5,13 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.export.*;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimpleXlsReportConfiguration;
+import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.PropertySource;
@@ -24,6 +26,7 @@ import ua.com.vetal.utils.DateUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -40,8 +43,7 @@ public class TasksController {
     @Autowired
     MessageSource messageSource;
     // private Collator collator = Collator.getInstance(Locale.);
-    @Value("${image.logo}")
-    private String imageLogo;
+
     @Autowired
     private ApplicationContext appContext;
     private String title = "Tasks";
@@ -77,6 +79,9 @@ public class TasksController {
     private NumberBaseDirectoryServiceImpl numberBaseService;
     @Autowired
     private PrintingUnitDirectoryServiceImpl printingUnitService;
+
+    @Autowired
+    private JasperService jasperService;
 
     @RequestMapping(value = {""}, method = RequestMethod.GET)
     public String taskList(Model model) {
@@ -195,123 +200,54 @@ public class TasksController {
         return "redirect:/tasks";
     }
 
-    //https://stackoverflow.com/questions/27532446/how-to-use-jasperreports-with-spring-mvc
-    //https://www.baeldung.com/spring-jasper
-    //jasperreport pdf view into controller set connection to database
-    //https://www.logicbig.com/tutorials/spring-framework/spring-web-mvc/jasper-report-view.html
-    //https://stackoverflow.com/questions/7735288/how-to-pass-the-db-connection-information-and-query-parameters-from-controller-t
-    //spring boot jasper reports set connection
-    //http://zetcode.com/articles/jasperspringbootweb/
-    //https://cashmisa.wordpress.com/2017/12/11/jasper-report-for-spring-boot-project/
-
     @RequestMapping(value = {"/pdfReport-{id}"}, method = RequestMethod.GET)
     @ResponseBody
     public void pdfReportTask(@PathVariable Long id, HttpServletResponse response) throws JRException, IOException {
         logger.info("Get PDF for " + title + " with ID= " + id);
-        InputStream jasperStream = this.getClass().getResourceAsStream("/jasperReport/TaskReport.jasper");
-
-        InputStream logoIS = this.getClass().getResourceAsStream(imageLogo);
-
-        Map<String, Object> parameters = new HashMap<>();
-
-        //parameters.put("paramID", id);
-        parameters.put("paramLOGO", logoIS);
-
-        JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
-
-        List<Task> tasks = new ArrayList<>();
-        tasks.add(taskService.findById(id));
-        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(tasks);
-
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-
+        //JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
         response.setContentType("application/x-pdf");
         response.setHeader("Content-disposition", "inline; filename=" + title + "_" + id + ".pdf");
         //jasperViewer.setFont(new Font("AnGo_Times_New_Roman", 0, 0));
-
         final OutputStream outStream = response.getOutputStream();
-        JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
-
+        JasperExportManager.exportReportToPdfStream(jasperService.taskReport(id), outStream);
     }
 
     @RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
     @ResponseBody
-    public void exporToExcelReportTask(HttpServletResponse response) throws JRException, IOException {
+    public void exportToExcelReportTask(HttpServletResponse response) throws JRException, IOException {
         logger.info("Export " + title + " to Excel");
-        InputStream jasperStream = this.getClass().getResourceAsStream("/jasperReport/TaskTableReport.jasper");
-        InputStream logoIS = this.getClass().getResourceAsStream(imageLogo);
-        Map<String, Object> parameters = new HashMap<>();
+        File pdfFile = File.createTempFile("my-invoice", ".pdf");
 
-        parameters.put("paramLOGO", logoIS);
+        JasperPrint jasperPrint = jasperService.tasksTable(filterData);
+
+        //response.setContentType("application/x-pdf");
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-disposition", "inline; filename=" + title + ".xlsx");
+
+        //response.setHeader("Content-Disposition", "attachment;filenameTasks.xlsx");
+        //response.setContentType("application/octet-stream");
+
+        final OutputStream outputStream = response.getOutputStream();
+        //JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
 
 
-        JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
+        //response.setContentLength(4096);//too small
+        //outputStream = response.getOutputStream();
+        JRXlsxExporter exporter = new JRXlsxExporter();
+        //exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+        //exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outputStream);
+        //exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, "Tasks.xlsx");
 
-        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(getTasksListData());
-
-        parameters.put("tasks", dataSource);
-
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-        //JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters);
-
-        response.setContentType("application/x-pdf");
-        response.setHeader("Content-disposition", "inline; filename=tasks.pdf");
-        //jasperViewer.setFont(new Font("AnGo_Times_New_Roman", 0, 0));
-
-        final OutputStream outStream = response.getOutputStream();
-        JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
-
-    }
-    //@RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
-    //@ResponseBody
-    public void pdfReportTask(HttpServletResponse response) throws JRException, IOException {
-        logger.info("Export " + title + " to Excel");
-        InputStream jasperStream = this.getClass().getResourceAsStream("/jasperReport/TaskTableReport.jasper");
-        InputStream logoIS = this.getClass().getResourceAsStream(imageLogo);
-        Map<String, Object> parameters = new HashMap<>();
-        //parameters.put("paramID", id);
-        parameters.put("paramLOGO", logoIS);
-
-        JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
-
-        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(getTasksListData());
-
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-
-        //response.setContentType("application/vnd.ms-excel");
-        //response.setHeader("Content-disposition", "inline; filename=tasks.xlsx");
-        //jasperViewer.setFont(new Font("AnGo_Times_New_Roman", 0, 0));
-
-        response.setHeader("Content-Disposition", "attachment;filename=tasks.xls");
-        response.setContentType("application/octet-stream");
-        response.setContentLength(4096);
-
-        final OutputStream outStream = response.getOutputStream();
-        //JasperExportManager.export(jasperPrint, outStream);
-
-        //JRXlsxExporter exporter = new JRXlsxExporter();
-        JRXlsExporter exporter = new JRXlsExporter();
 
         exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput("TasksTable.xls"));
-
-        //SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
-
-        SimpleXlsReportConfiguration configuration = new SimpleXlsReportConfiguration();
-
+        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outputStream));
+        SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
         configuration.setOnePagePerSheet(true);
         configuration.setDetectCellType(true);
         configuration.setCollapseRowSpan(false);
-
         exporter.setConfiguration(configuration);
-        exporter.exportReport();
 
-        /*SimpleXlsReportConfiguration configuration = new SimpleXlsReportConfiguration();
-        configuration.setOnePagePerSheet(true);
-        configuration.setDetectCellType(true);
-        configuration.setCollapseRowSpan(false);
-        xlsExporter.setConfiguration(configuration);
-        xlsExporter.exportReport();*/
+        exporter.exportReport();
     }
 
 
@@ -532,7 +468,7 @@ public class TasksController {
          */
         // tasksList = taskService.findAllObjects();
         logger.info("Get Filter: " + filterData);
-        tasksList = taskService.findByFilterData(filterData);
+        tasksList = taskService.findByFilterData(getFilterData());
         // logger.info("Get TaskList : " + tasksList.size());
 
         return tasksList;

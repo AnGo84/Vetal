@@ -99,7 +99,7 @@ public class MainController {
                 FileUtils.openDirectory(url);
             } else {
                 url = "D:";
-                logger.info("Try open folder " + url + " for OS: " + PlatformUtils.osName());
+                //logger.info("Try open folder " + url + " for OS: " + PlatformUtils.osName());
                 FileUtils.openDirectory(url);
             }
         } catch (IOException e) {
