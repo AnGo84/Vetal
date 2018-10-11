@@ -1,14 +1,6 @@
 package ua.com.vetal.controller;
 
-import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
-import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
-import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-import net.sf.jasperreports.export.SimpleXlsReportConfiguration;
-import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
+import net.sf.jasperreports.engine.JRException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,20 +14,21 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import ua.com.vetal.entity.*;
 import ua.com.vetal.service.*;
+import ua.com.vetal.service.mail.MailServiceImp;
+import ua.com.vetal.service.reports.ExporterService;
+import ua.com.vetal.service.reports.JasperService;
 import ua.com.vetal.utils.DateUtils;
 
+import javax.activation.DataSource;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.*;
 
 @Controller
 @RequestMapping("/tasks")
 // @SessionAttributes({ "managersList", "pageName" })
-//@SessionAttributes({"taskFilterData"})
+// @SessionAttributes({"taskFilterData"})
 
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:vetal.properties")
 public class TasksController {
@@ -82,6 +75,10 @@ public class TasksController {
 
     @Autowired
     private JasperService jasperService;
+    @Autowired
+    private ExporterService exporterService;
+    @Autowired
+    private MailServiceImp mailServiceImp;
 
     @RequestMapping(value = {""}, method = RequestMethod.GET)
     public String taskList(Model model) {
@@ -144,7 +141,7 @@ public class TasksController {
         logger.info("View " + title + " with ID= " + id);
 
         Task task = taskService.findById(id);
-        logger.info(task.toString());
+        //logger.info(task.toString());
 
         // model.addAttribute("title", "Edit user");
         // model.addAttribute("userRolesList",
@@ -203,19 +200,22 @@ public class TasksController {
     @RequestMapping(value = {"/pdfReport-{id}"}, method = RequestMethod.GET)
     @ResponseBody
     public void pdfReportTask(@PathVariable Long id, HttpServletResponse response) throws JRException, IOException {
-        logger.info("Get PDF for " + title + " with ID= " + id);
+        //logger.info("Get PDF for " + title + " with ID= " + id);
         //JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-        response.setContentType("application/x-pdf");
-        response.setHeader("Content-disposition", "inline; filename=" + title + "_" + id + ".pdf");
-        //jasperViewer.setFont(new Font("AnGo_Times_New_Roman", 0, 0));
-        final OutputStream outStream = response.getOutputStream();
-        JasperExportManager.exportReportToPdfStream(jasperService.taskReport(id), outStream);
+
+        //response.setContentType("application/x-pdf");
+        //response.setHeader("Content-disposition", "inline; filename=" + title + "_" + id + ".pdf");
+
+        //final OutputStream outStream = response.getOutputStream();
+        //JasperExportManager.exportReportToPdfStream(jasperService.taskReport(id), outStream);
+        //exporterService.export(ReportType.PDF, jasperService.taskReport(id),title + "_" + id,response,outStream);
+        exporterService.export(ReportType.PDF, jasperService.taskReport(id), title + "_" + id, response);
     }
 
     @RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
     @ResponseBody
     public void exportToExcelReportTask(HttpServletResponse response) throws JRException, IOException {
-        logger.info("Export " + title + " to Excel");
+        /*logger.info("Export " + title + " to Excel");
         File pdfFile = File.createTempFile("my-invoice", ".pdf");
 
         JasperPrint jasperPrint = jasperService.tasksTable(filterData);
@@ -224,8 +224,6 @@ public class TasksController {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", "inline; filename=" + title + ".xlsx");
 
-        //response.setHeader("Content-Disposition", "attachment;filenameTasks.xlsx");
-        //response.setContentType("application/octet-stream");
 
         final OutputStream outputStream = response.getOutputStream();
         //JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
@@ -248,8 +246,58 @@ public class TasksController {
         exporter.setConfiguration(configuration);
 
         exporter.exportReport();
+        */
+        exporterService.export(ReportType.XLSX, jasperService.tasksTable(filterData), title, response);
+
     }
 
+    @RequestMapping(value = {"/sendEmail-{id}"}, method = RequestMethod.GET)
+    public String sendEmail(Model model, @PathVariable Long id, HttpServletResponse response) throws JRException, IOException {
+        logger.info("Send " + title + " with ID= " + id);
+
+        model.addAttribute("title", "email");
+        boolean result = false;
+        String message = "";
+
+        Task task = taskService.findById(id);
+
+        //logger.info(task.toString());
+        if (task != null) {
+            message = taskService.checkTaskForMailing(task);
+            if (message.equals("")) {
+                try {
+                    //mailServiceImp.sendEmail(mailFrom, mailTo, "Test letter", "Test letter");
+                    DataSource attachment = exporterService.getDataSource(jasperService.taskReport(task.getId()));
+                    //mailServiceImp.sendEmail(mailFrom, mailTo, "Test letter", "Test letter");
+                    String subject = messageSource.getMessage("email.task", null, new Locale("ru"));
+                    String text = messageSource.getMessage("email.new_task", null, new Locale("ru"));
+                    mailServiceImp.sendMessageWithAttachment(
+                            task.getManager().getEmail(),task.getContractor().getEmail(), subject + task.getNumber(),
+                            text, attachment);
+                    result = true;
+
+                    message = messageSource.getMessage("message.email.sent_to",
+                            new String[]{task.getContractor().getFullName(), task.getContractor().getEmail()}, new Locale("ru"));
+                } catch (Exception e) {
+                    // handle your exception when it fails to send email
+                    logger.info(e.getMessage());
+                    //e.printStackTrace();
+                    message = messageSource.getMessage("message.email.service_error",
+                            null, new Locale("ru")) + ": " + e.getMessage();
+                }
+            }
+        } else {
+            message = messageSource.getMessage("message.email.miss_task_by_id",
+                    new String[]{String.valueOf(id)}, new Locale("ru"));
+
+        }
+        //return "redirect:/tasks";
+
+        model.addAttribute("resultSuccess", result);
+        model.addAttribute("message", message);
+
+        return "emailResultPage";
+    }
 
     @RequestMapping(value = "/filter", method = RequestMethod.GET)
     public String filterTask(@ModelAttribute("taskFilterData") FilterData filterData, BindingResult bindingResult,
@@ -462,66 +510,11 @@ public class TasksController {
 
     @ModelAttribute("tasksList")
     public List<Task> getTasksListData() {
-        /*
-         * if (tasksList == null || tasksList.isEmpty()) { tasksList =
-         * taskService.findAllObjects(); }
-         */
-        // tasksList = taskService.findAllObjects();
-        logger.info("Get Filter: " + filterData);
+        //logger.info("Get Filter: " + filterData);
         tasksList = taskService.findByFilterData(getFilterData());
         // logger.info("Get TaskList : " + tasksList.size());
 
         return tasksList;
     }
-/*
-    @ModelAttribute("clientFilterList")
-    public List<ClientDirectory> getClientsFilterList() {
-        List<ClientDirectory> resultList = clientService.findAllObjects();
 
-        final ClientDirectory client = new ClientDirectory();
-        client.setName("");
-
-        resultList.add(0, client);
-
-        Collections.sort(resultList, new Comparator<ClientDirectory>() {
-            @Override
-            public int compare(ClientDirectory m1, ClientDirectory m2) {
-                return m1.getName().compareTo(m2.getName());
-            }
-        });
-
-        return resultList;
-    }
-
-    @ModelAttribute("managerFilterList")
-    public List<Manager> getManagersFilterList() {
-        List<Manager> resultList = managerService.findAllObjects();
-
-        final Manager manager = new Manager();
-        resultList.add(0, manager);
-
-        Collections.sort(resultList, new Comparator<Manager>() {
-            @Override
-            public int compare(Manager m1, Manager m2) {
-                return m1.getFullName().compareTo(m2.getFullName());
-            }
-        });
-
-        return resultList;
-    }
-
-    @ModelAttribute("contractorFilterList")
-    public List<Contractor> getContractorsFilterList() {
-        List<Contractor> resultList = contractorService.findAllObjects();
-        final Contractor contractor = new Contractor();
-        resultList.add(0, contractor);
-        Collections.sort(resultList, new Comparator<Contractor>() {
-            @Override
-            public int compare(Contractor m1, Contractor m2) {
-                return m1.getFullName().compareTo(m2.getFullName());
-            }
-        });
-
-        return resultList;
-    }*/
 }

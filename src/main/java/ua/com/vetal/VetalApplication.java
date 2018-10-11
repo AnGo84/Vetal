@@ -14,45 +14,45 @@ import org.springframework.web.context.WebApplicationContext;
 // @EnableAutoConfiguration
 public class VetalApplication extends SpringBootServletInitializer {
 
-	@Bean
-	public MessageSource messageSource() {
-		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-		messageSource.setBasenames("classpath:/messages/validation/messages", "classpath:/messages/i18n/messages");
-		// messageSource.setBasename();
+    public static void main(String[] args) {
+        SpringApplication.run(VetalApplication.class, args);
+    }
 
-		// messageSource.setUseCodeAsDefaultMessage(true);
-		messageSource.setDefaultEncoding("UTF-8");
-		return messageSource;
-	}
+    @Bean
+    public MessageSource messageSource() {
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasenames("classpath:/messages/validation/messages", "classpath:/messages/i18n/messages");
+        // messageSource.setBasename();
 
-	@Bean
-	public LocalValidatorFactoryBean validator() {
-		LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
-		bean.setValidationMessageSource(messageSource());
+        // messageSource.setUseCodeAsDefaultMessage(true);
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
+    }
 
-		return bean;
-	}
+    /*
+     * @Bean(name = "localeResolver") public LocaleResolver getLocaleResolver()
+     * { CookieLocaleResolver resolver = new CookieLocaleResolver();
+     * resolver.setCookieDomain("vetalAppLocaleCookie");
+     * resolver.setDefaultLocale(new Locale("ru")); // 60 minutes
+     * resolver.setCookieMaxAge(60 * 60); return resolver; }
+     */
 
-	/*
-	 * @Bean(name = "localeResolver") public LocaleResolver getLocaleResolver()
-	 * { CookieLocaleResolver resolver = new CookieLocaleResolver();
-	 * resolver.setCookieDomain("vetalAppLocaleCookie");
-	 * resolver.setDefaultLocale(new Locale("ru")); // 60 minutes
-	 * resolver.setCookieMaxAge(60 * 60); return resolver; }
-	 */
+    @Bean
+    public LocalValidatorFactoryBean validator() {
+        LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
+        bean.setValidationMessageSource(messageSource());
 
-	public static void main(String[] args) {
-		SpringApplication.run(VetalApplication.class, args);
-	}
+        return bean;
+    }
 
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(VetalApplication.class);
-	}
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(VetalApplication.class);
+    }
 
 
-	@Override
-	protected WebApplicationContext run(SpringApplication application) {
-		return super.run(application);
-	}
+    @Override
+    protected WebApplicationContext run(SpringApplication application) {
+        return super.run(application);
+    }
 }

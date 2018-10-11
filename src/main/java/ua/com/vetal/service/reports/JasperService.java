@@ -1,4 +1,4 @@
-package ua.com.vetal.service;
+package ua.com.vetal.service.reports;
 
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.entity.FilterData;
 import ua.com.vetal.entity.Stencil;
 import ua.com.vetal.entity.Task;
+import ua.com.vetal.service.StencilServiceImpl;
+import ua.com.vetal.service.TaskServiceImpl;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,7 +76,7 @@ public class JasperService {
         Map<String, Object> parameters = new HashMap<>();
 
         //parameters.put("paramID", id);
-        parameters.put("paramLOGO", logoIS);
+        parameters.put("paramLOGO_Top_IS", logoIS);
 
         JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
 

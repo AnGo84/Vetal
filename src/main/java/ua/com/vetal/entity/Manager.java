@@ -39,4 +39,9 @@ public class Manager extends AbstractPerson {
 		return middleName;
 	}
 
+	@Size(max = 100)
+	@Column(name = "Email", length = 100, nullable = true)
+	public String getEmail(){
+		return email;
+	}
 }

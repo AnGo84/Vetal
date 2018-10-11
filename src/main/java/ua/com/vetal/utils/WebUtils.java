@@ -1,9 +1,14 @@
 package ua.com.vetal.utils;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+
+import javax.servlet.http.HttpServletResponse;
 
 public class WebUtils {
 
@@ -29,4 +34,9 @@ public class WebUtils {
 		return sb.toString();
 	}
 
+	public static void setTextToResponse(String text, HttpServletResponse response) throws IOException {
+		OutputStream outputStream = response.getOutputStream();
+		outputStream.write(text.getBytes(Charset.forName("UTF-8")));
+		outputStream.close();
+	}
 }

@@ -52,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/user/**",
                         "/manager", "/client", "/contractor", "/production", "/printer", "/worker",
                         "/paper", "/chromaticity", "/laminate", "/cringle", "/format", "/stock", "/tasks/view**",
-                        "/tasks")
+                        "/tasks","/stencils","/stencils/view**", "/folder**","/file**")
                 .permitAll();
 
         // /userInfo page requires login as ROLE_USER or ROLE_ADMIN.
@@ -69,7 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/cringle/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/format/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/stock/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
-        http.authorizeRequests().antMatchers("/tasks/add", "/tasks/update", "/tasks/edit**", "/tasks/delete**")
+        http.authorizeRequests().antMatchers("/tasks/add", "/tasks/update", "/tasks/edit**", "/tasks/delete**", "/tasks/sendEmail**")
                 .access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/stencils/add", "/stencils/update", "/stencils/edit**", "/stencils/delete**")
                 .access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
@@ -78,6 +78,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/admin").access("hasRole('ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/users").access("hasRole('ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/users/**").access("hasRole('ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/links").access("hasRole('ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/links/**").access("hasRole('ROLE_ADMIN')");
 
         // When the user has logged in as XX.
         // But access a page that requires role YY,

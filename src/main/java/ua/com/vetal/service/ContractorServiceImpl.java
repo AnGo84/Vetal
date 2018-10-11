@@ -34,6 +34,10 @@ public class ContractorServiceImpl implements SimpleService<Contractor> {
 		return null;
 	}
 
+	public Contractor findByEmail(String email) {
+		return personRepository.findByEmail(email);
+	}
+
 	@Override
 	public void saveObject(Contractor person) {
 		personRepository.save(person);
@@ -59,5 +63,6 @@ public class ContractorServiceImpl implements SimpleService<Contractor> {
 		// return findByName(manager.getName()) != null;
 		return false;
 	}
+
 
 }

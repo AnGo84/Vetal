@@ -47,6 +47,7 @@
                 <th width="100" th:text="#{label.id}">Id</th>
                 <th th:text="#{label.login}">Login</th>
                 <th th:text="#{label.roles}">Roles</th>
+                <th th:text="#{label.email}">Email</th>
                 <th class="no-sort" width="150" th:text="#{label.active}">Active</th>
                 <th class="no-sort" width="100"></th>
                 <th class="no-sort" width="100"></th>
@@ -71,6 +72,7 @@
                     </span>
 
                 </td>
+                <td th:text="${user.email}"></td>
                 <td class="text-center">
                     <input type="checkbox" th:disabled="true"
                            th:value="*{user.enabled}" th:checked="${user.enabled}"/></td>

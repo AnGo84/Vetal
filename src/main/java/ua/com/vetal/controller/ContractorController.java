@@ -11,6 +11,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +40,7 @@ public class ContractorController {
 	@RequestMapping(value = { "", "list" }, method = RequestMethod.GET)
 	public String personList(Model model) {
 		model.addAttribute("personList", personService.findAllObjects());
-		return "personsPage";
+		return "contractorsPage";
 	}
 
 	@RequestMapping(value = { "/add" }, method = RequestMethod.GET)
@@ -49,7 +50,7 @@ public class ContractorController {
 
 		model.addAttribute("edit", false);
 		model.addAttribute("person", person);
-		return "personRecordPage";
+		return "contractorRecordPage";
 
 	}
 
@@ -68,7 +69,7 @@ public class ContractorController {
 		// userRoleService.findAllObjects());
 		model.addAttribute("edit", true);
 		model.addAttribute("person", personService.findById(id));
-		return "personRecordPage";
+		return "contractorRecordPage";
 	}
 
 	/*
@@ -84,16 +85,16 @@ public class ContractorController {
 		if (bindingResult.hasErrors()) {
 			// model.addAttribute("title", title);
 			// logger.info("BINDING RESULT ERROR");
-			return "personRecordPage";
+			return "contractorRecordPage";
 		}
 
-		/*
-		 * if (personService.isObjectExist(person)) { FieldError fieldError =
-		 * new FieldError("person", "name",
-		 * messageSource.getMessage("non.unique.name", new String[] {
-		 * person.getName() }, Locale.getDefault()));
-		 * bindingResult.addError(fieldError); return "personRecordPage"; }
-		 */
+
+		  if (person!=null && (person.getFullName()==null||person.getFullName().equals(""))) {
+			FieldError fieldError =
+		  new FieldError("person", "corpName",
+		  messageSource.getMessage("NotEmpty.field", new String[] {messageSource.getMessage("label.corpName", null,Locale.getDefault())}, Locale.getDefault()));
+		  bindingResult.addError(fieldError); return "contractorRecordPage"; }
+
 
 		personService.saveObject(person);
 		return "redirect:" + pageName;

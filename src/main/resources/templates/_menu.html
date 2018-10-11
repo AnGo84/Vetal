@@ -95,8 +95,9 @@
                     data-toggle="dropdown" th:text="#{menu.label.administration}">
                 Administration </a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" th:href="@{/admin}">Admin</a> <a
-                        class="dropdown-item" th:href="@{/users}"
+                    <!--<a class="dropdown-item" th:href="@{/admin}">Admin</a>-->
+                    <a class="dropdown-item" th:href="@{/links}" th:text="#{menu.label.links}">Links</a>
+                    <a class="dropdown-item" th:href="@{/users}"
                         th:text="#{menu.label.users}">Users</a>
                     <!-- <a class="dropdown-item" href="#">Link 3</a> -->
                 </div>

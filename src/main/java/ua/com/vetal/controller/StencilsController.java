@@ -1,16 +1,13 @@
 package ua.com.vetal.controller;
 
 import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
-import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
@@ -20,21 +17,22 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import ua.com.vetal.entity.*;
 import ua.com.vetal.service.*;
+import ua.com.vetal.service.reports.ExporterService;
+import ua.com.vetal.service.reports.JasperService;
 import ua.com.vetal.utils.DateUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.*;
 
 @Controller
 @RequestMapping("/stencils")
 // @SessionAttributes({ "managersList", "pageName" })
-// @SessionAttributes({"stencilFilterData"})
 
+// @SessionAttributes({"stencilFilterData"})
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:vetal.properties")
 public class StencilsController {
     static final Logger logger = LoggerFactory.getLogger(ManagerController.class);
@@ -71,6 +69,8 @@ public class StencilsController {
 
     @Autowired
     private JasperService jasperService;
+    @Autowired
+    private ExporterService exporterService;
 
     @RequestMapping(value = {""}, method = RequestMethod.GET)
     public String stencilList(Model model) {
@@ -195,50 +195,17 @@ public class StencilsController {
     @RequestMapping(value = {"/pdfReport-{id}"}, method = RequestMethod.GET)
     @ResponseBody
     public void pdfReportStencil(@PathVariable Long id, HttpServletResponse response) throws JRException, IOException {
-        logger.info("Get PDF for " + title + " with ID= " + id);
-
-        JasperPrint jasperPrint = jasperService.stencilReport(id);
-
-        response.setContentType("application/x-pdf");
-        response.setHeader("Content-disposition", "inline; filename=" + title + "_" + id + ".pdf");
-        //jasperViewer.setFont(new Font("AnGo_Times_New_Roman", 0, 0));
-
-        final OutputStream outStream = response.getOutputStream();
-        JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
+        //logger.info("Get PDF for " + title + " with ID= " + id);
+        exporterService.export(ReportType.PDF, jasperService.stencilReport(id),title + "_" + id,response);
     }
 
 
     @RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
     @ResponseBody
     public void exportToExcelReportTask(HttpServletResponse response) throws JRException, IOException {
-        logger.info("Export " + title + " to Excel");
-        File pdfFile = File.createTempFile("my-invoice", ".pdf");
-
-        JasperPrint jasperPrint = jasperService.stencilsTable(filterData);
-
-        /*response.setContentType("application/x-pdf");
-        response.setHeader("Content-disposition", "inline; filename=Stencils.pdf");
-
-        final OutputStream outStream = response.getOutputStream();
-        JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);*/
-
-        response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Content-disposition", "inline; filename=" + title + ".xlsx");
-
-        final OutputStream outputStream = response.getOutputStream();
-        JRXlsxExporter exporter = new JRXlsxExporter();
-
-        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outputStream));
-        SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
-        configuration.setOnePagePerSheet(true);
-        configuration.setDetectCellType(true);
-        configuration.setCollapseRowSpan(false);
-        exporter.setConfiguration(configuration);
-
-        exporter.exportReport();
+        //logger.info("Export " + title + " to Excel");
+        exporterService.export(ReportType.XLSX, jasperService.stencilsTable(filterData),title,response);
     }
-
 
     /**
      * This methods will provide lists and fields to views

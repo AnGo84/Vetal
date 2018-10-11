@@ -45,6 +45,10 @@ public class User implements Serializable {
 			@JoinColumn(name = "ROLE_ID") })
 	private Set<UserRole> userRoles = new HashSet<>();
 
+	@Size(max = 100)
+	@Column(name = "Email", length = 100)
+	private String email;
+
 	public Long getId() {
 		return id;
 	}
@@ -85,6 +89,14 @@ public class User implements Serializable {
 		this.userRoles = userRoles;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder("User{");
@@ -92,6 +104,7 @@ public class User implements Serializable {
 		sb.append(", name='").append(name).append('\'');
 		sb.append(", enabled=").append(enabled);
 		sb.append(", userRoles=").append(userRoles);
+		sb.append(", email=").append(email);
 		sb.append('}');
 		return sb.toString();
 	}

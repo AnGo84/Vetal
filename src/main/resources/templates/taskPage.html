@@ -701,8 +701,14 @@
                            th:text="#{label.back}">Back</a>
                     </div>
                     <div class="col-sm-6">
-                        <a th:href="@{'/tasks/pdfReport-' + ${task.id}}" style="width: 80px;"
-                           class="btn btn-warning btn-sm custom-width float-right" role="button">PDF</a>
+
+                            <a th:href="@{'/tasks/pdfReport-' + ${task.id}}" style="width: 80px;"
+                               class="ml-sm btn btn-warning btn-sm custom-width float-right" role="button">PDF</a>
+
+
+                            <a th:href="@{'/tasks/sendEmail-' + ${task.id}}" style="width: 80px;"
+                               class="mr-sm-2 btn btn-info btn-sm custom-width float-right" role="button">Email</a>
+
                     </div>
                 </div>
             </div>

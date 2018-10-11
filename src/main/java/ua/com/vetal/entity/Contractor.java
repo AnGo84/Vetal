@@ -21,6 +21,13 @@ public class Contractor extends AbstractPerson {
 	}
 
 	@NotNull
+	@Size(min = 0, max = 250)
+	@Column(name = "CorpName", length = 250, nullable = false)
+	public String getCorpName() {
+		return corpName;
+	}
+
+
 	@Size(min = 0, max = 50)
 	@Column(name = "LastName", length = 50, nullable = false)
 	public String getLastName() {
@@ -37,6 +44,12 @@ public class Contractor extends AbstractPerson {
 	@Column(name = "MiddleName", length = 50, nullable = true)
 	public String getMiddleName() {
 		return middleName;
+	}
+
+	@Size(min = 0, max = 100)
+	@Column(name = "email", length = 50, nullable = true)
+	public String getEmail() {
+		return email;
 	}
 
 }

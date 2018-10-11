@@ -11,23 +11,27 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
+import ua.com.vetal.entity.Link;
+import ua.com.vetal.service.LinkServiceImpl;
 import ua.com.vetal.service.UserServiceImpl;
 import ua.com.vetal.utils.FileUtils;
 import ua.com.vetal.utils.PlatformUtils;
 import ua.com.vetal.utils.WebUtils;
 
-import java.io.File;
-import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.security.Principal;
+import java.util.List;
 import java.util.Locale;
 
 //import org.springframework.security.core.userdetails.User;
 
 @Controller
-@SessionAttributes({"managersFilterList", "clientFilterList", "contractorFilterList"})
+// @SessionAttributes({"managersFilterList", "clientFilterList", "contractorFilterList"})
 public class MainController {
     static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
@@ -36,6 +40,8 @@ public class MainController {
 
     @Autowired
     private UserServiceImpl userService;
+    @Autowired
+    private LinkServiceImpl linkService;
 
     @RequestMapping(value = {"/", "/main"}, method = RequestMethod.GET)
     public String mainPage(Model model) {
@@ -85,11 +91,10 @@ public class MainController {
 
         return "userInfoPage";
     }
-
+/*
     @RequestMapping(value = "/openFolder", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public void openFolder(Model model, Principal principal) {
-        //TODO
         // logger.info("Try open folder");
         String url = "/home/mbrunarskiy/Desktop";
         logger.info("Try open folder " + url + " for OS: " + PlatformUtils.osName());
@@ -107,6 +112,86 @@ public class MainController {
             e.printStackTrace();
         }
         // return "redirect/main";
+    }*/
+
+    @RequestMapping(value = "/folder-{id}", method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+    public void openFolder(HttpServletResponse response, @PathVariable Long id) throws IOException {
+        Link link = linkService.findById(id);
+        if (link == null) {
+            return;
+        }
+        String url = link.getPath();
+        logger.info("Try open folder '" + url + "' for OS: " + PlatformUtils.osName() + "(isWindows: " + PlatformUtils.isWindows() + ")");
+        try {
+            if (PlatformUtils.isWindows()) {
+                String command = "explorer.exe " + url;
+                logger.info("Called command: " + command);
+                Runtime.getRuntime().exec(command);
+            }
+            //FileUtils.openDirectory(url);
+            /*File file = new File(url);
+            if (file.exists()) {
+                FileUtils.openDirectory(url);
+            } else {
+                return;
+            }*/
+        } catch (IOException e) {
+            logger.info("Error on open: " + url);
+            e.printStackTrace();
+            String errorMessage = "Error on open URL '"+url+"': " + e.getMessage();
+            /*OutputStream outputStream = response.getOutputStream();
+            outputStream.write(errorMessage.getBytes(Charset.forName("UTF-8")));
+            outputStream.close();*/
+            WebUtils.setTextToResponse(errorMessage, response);
+            return;
+        }
+    }
+
+    //http://websystique.com/springmvc/spring-mvc-4-file-download-example/
+    @RequestMapping(value = "/file-{id}", method = RequestMethod.GET)
+    public void downloadFile(HttpServletResponse response, @PathVariable Long id) throws IOException {
+        Link link = linkService.findById(id);
+        if (link == null) {
+            String errorMessage = messageSource.getMessage("message.file.file_not_found",
+                    new String[]{String.valueOf(link)}, new Locale("ru"));
+            WebUtils.setTextToResponse(errorMessage, response);
+            return;
+        }
+        logger.info("Try download link " + link);
+
+        File file = new File(link.getPath());
+
+        if (!file.exists()) {
+            String errorMessage = messageSource.getMessage("message.file.file_not_found",
+                    new String[]{String.valueOf(link)}, new Locale("ru"));
+            //logger.info(errorMessage);
+            WebUtils.setTextToResponse(errorMessage, response);
+            return;
+        }
+        /*
+        String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+        if (mimeType == null) {
+            //logger.info("mimetype is not detectable, will take default");
+            mimeType = "application/octet-stream";
+        }
+        //System.out.println("mimetype : "+mimeType);
+        */
+
+        response.setContentType(FileUtils.getMimeType(file));
+
+        /* "Content-Disposition : inline" will show viewable types [like images/text/pdf/anything viewable by browser] right on browser
+            while others(zip e.g) will be directly downloaded [may provide save as popup, based on your browser setting.]*/
+        response.setHeader("Content-Disposition", String.format("inline; filename=\"" + file.getName() + "\""));
+
+        /* "Content-Disposition : attachment" will be directly download, may provide save as popup, based on your browser setting*/
+        //response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getName()));
+
+        response.setContentLength((int) file.length());
+        InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+
+        //Copy bytes from source to destination(outputstream in this example), closes both streams.
+        FileCopyUtils.copy(inputStream, response.getOutputStream());
     }
 
     @RequestMapping(value = "/403", method = RequestMethod.GET)
@@ -126,6 +211,21 @@ public class MainController {
         }
 
         return "403Page";
+    }
+
+    @ModelAttribute("linksList")
+    public List<Link> initializeLinks() {
+        return linkService.findByLinkTypeId((long) 1);
+    }
+
+    @ModelAttribute("filesList")
+    public List<Link> initializeFiles() {
+        return linkService.findByLinkTypeId((long) 2);
+    }
+
+    @ModelAttribute("foldersList")
+    public List<Link> initializeFolders() {
+        return linkService.findByLinkTypeId((long) 3);
     }
 
     private String getPrincipal() {

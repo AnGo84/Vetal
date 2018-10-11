@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLConnection;
 
 /**
  * Created by AnGo on 30.05.2017.
@@ -148,18 +149,31 @@ public class FileUtils {
 
 	public static void openDirectory(String path) throws IOException {
 		File file = new File(path);
-		if (file.exists()) {
-			if (!file.isDirectory()) {
-				file = getDirectory(file);
+		System.out.println("Absolute path: " + file.getAbsolutePath());
+		if (file.isAbsolute()) {
+			if (file.exists()) {
+				if (!file.isDirectory()) {
+					file = getDirectory(file);
+				}
+				// Runtime.getRuntime().exec("explorer.exe /select," +
+				// file.getPath());
+				String command = "";
+				if (PlatformUtils.isWindows()) {
+					command = "explorer.exe " + file.getPath();
+					//Runtime.getRuntime().exec(command);
+				}
+				if (PlatformUtils.isLinux()) {
+					command = "gnome-open " + file.getPath();
+					//Runtime.getRuntime().exec("gnome-open " + file.getPath());
+				}
+				System.out.println("Open command: " + command);
+				Runtime.getRuntime().exec(command);
+			} else {
+				throw new IOException("File not exists by URL: " + path);
 			}
-			// Runtime.getRuntime().exec("explorer.exe /select," +
-			// file.getPath());
-			if (PlatformUtils.isWindows()) {
-				Runtime.getRuntime().exec("explorer.exe " + file.getPath());
-			}
-			if (PlatformUtils.isLinux()) {
-				Runtime.getRuntime().exec("gnome-open " + file.getPath());
-			}
+		}
+		else{
+			throw new IOException("Not absolute path: " + file.getPath());
 		}
 	}
 
@@ -168,4 +182,15 @@ public class FileUtils {
 		return directoryName + File.separator + fileName;
 	}
 
+	public static String getMimeType(File file) {
+		if (file!=null) {
+			String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+			if (mimeType == null) {
+				//logger.info("mimetype is not detectable, will take default");
+				mimeType = "application/octet-stream";
+			}
+			return mimeType;
+		}
+		return null;
+	}
 }

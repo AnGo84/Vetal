@@ -1,12 +1,5 @@
 package ua.com.vetal.controller;
 
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
-
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,24 +10,20 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
-
-import ua.com.vetal.entity.PasswordResetToken;
+import org.springframework.web.bind.annotation.*;
 import ua.com.vetal.entity.User;
 import ua.com.vetal.entity.UserRole;
-import ua.com.vetal.handler.PasswordResetTokenHandler;
 import ua.com.vetal.repositories.PasswordResetTokenRepository;
 import ua.com.vetal.service.UserRoleServiceImpl;
 import ua.com.vetal.service.UserServiceImpl;
 import ua.com.vetal.utils.EncrytedPasswordUtils;
+
+import javax.validation.Valid;
+import java.util.List;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/users")
@@ -146,7 +135,7 @@ public class UserController {
             FieldError ssoError = new FieldError("user", "name", messageSource.getMessage("non.unique.field",
                     new String[]{"Login", user.getName()}, new Locale("ru")));
             bindingResult.addError(ssoError);
-            model.addAttribute("edit", (user.getId()!=null));
+            model.addAttribute("edit", (user.getId() != null));
             return "userPage";
         }
 

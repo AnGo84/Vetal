@@ -174,6 +174,8 @@
                                 sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
                             <th class="no-sort" width="80"
                                 sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
+                            <th class="no-sort" width="80"
+                                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -198,6 +200,12 @@
                                     th:href="@{'/tasks/pdfReport-' + ${task.id}}"
                                     style="width: 80px;"
                                     class="btn btn-warning btn-sm custom-width" role="button">PDF</a></td>
+
+                            <td class="text-center align-self-center" style="vertical-align: middle;"
+                                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"><a
+                                    th:href="@{'/tasks/sendEmail-' + ${task.id}}" style="width: 80px;"
+                                    class="btn btn-info btn-sm custom-width" role="button">Email</a>
+                            </td>
 
                             <td class="text-center align-self-center" style="vertical-align: middle;"
                                 sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">
