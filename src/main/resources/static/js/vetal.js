@@ -10,7 +10,7 @@ function initDatePicker(datePicker) {
     });
 };
 
-function initTable(tableName) {
+function initTable(tableName, ordering) {
     //from
     //https://datatables.net/examples/basic_init/table_sorting.html
     $(tableName).DataTable( {
@@ -27,6 +27,7 @@ function initTable(tableName) {
             "next": "Следующая",
             "previous": "Предыдущая"}
         },
+        "order": [ordering],
         "pagingType": "full_numbers",
         "lengthMenu": [[10, 15, 20, 25, 50, -1], [10, 15, 20, 25, 50, "Все"]],
         "iDisplayLength": 15,
@@ -35,3 +36,10 @@ function initTable(tableName) {
         ]
     } );
 } ;
+
+/*function setTableOrdering(tableName, ordering) {
+    $(tableName).DataTable( {
+
+    });
+
+} ;*/

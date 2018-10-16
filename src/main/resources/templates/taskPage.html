@@ -707,7 +707,10 @@
 
 
                             <a th:href="@{'/tasks/sendEmail-' + ${task.id}}" style="width: 80px;"
+                               sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"
                                class="mr-sm-2 btn btn-info btn-sm custom-width float-right" role="button">Email</a>
+                        <!-- data-toggle="modal" data-target="#waitModalDialog"
+                        data-backdrop="static" data-keyboard="false" -->
 
                     </div>
                 </div>
@@ -731,6 +734,8 @@
         <br/>
     </div>
 </div>
+
+<!-- <th:block th:include="/_waitDialog.html"></th:block> -->
 
 <script>
     initDatePicker('#taskDateBegin');

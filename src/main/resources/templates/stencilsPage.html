@@ -157,6 +157,7 @@
                         <tr class="text-center">
                             <th width="50" th:text="#{label.id}">Id</th>
                             <!--<th width="100" th:text="#{label.account}">Account</th>-->
+                            <th width="50">№</th>
                             <th width="100" th:text="#{label.number}">Number</th>
                             <th th:text="#{label.order_name}">Order name</th>
                             <th th:text="#{label.client}">Client</th>
@@ -176,7 +177,8 @@
 
 
                         <tr th:each="stencil : ${stencilsList}">
-                            <td th:text="${stencil.id}"></td>
+                            <td class="text-center" th:text="${stencil.id}"></td>
+                            <td class="text-center" th:text="${stencil.number}"></td>
                             <td><a th:href="@{'/stencils/view-' + ${stencil.id}}"
                                    th:text="${stencil.fullNumber}"></a></td>
                             <td th:text="${stencil.orderName}"></td>
@@ -249,7 +251,7 @@
     initDatePicker('#filterDateBeginFrom');
     initDatePicker('#filterDateBeginTill');
 
-    $(document).ready(initTable('#stencilsTable'));
+    $(document).ready(initTable('#stencilsTable',[ 1, "desc" ]));
 
 </script>
 
