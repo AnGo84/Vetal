@@ -2,30 +2,34 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 
-<meta charset="UTF-8">
-<title th:utext="${title}"></title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-<link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
-<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
-<script th:src="@{js/popper.min.js}"></script>
-<script th:src="@{js/bootstrap.min.js}"></script>
+    <meta charset="UTF-8">
+    <title th:utext="${title}"></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="shortcut icon" th:href="@{/image/logo.ico}" type="image/x-icon">
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{js/popper.min.js}"></script>
+    <script th:src="@{js/bootstrap.min.js}"></script>
 
 </head>
 <body>
-	<!-- Include _menu.html -->
-	<th:block th:include="/_menu"></th:block>
+<!-- Include _menu.html -->
+<th:block th:include="/_menu"></th:block>
 
-	<h2>Admin Page</h2>
-	<h3>
-		Welcome : <span th:utext="${#request.userPrincipal.name}"></span>
-	</h3>
-	<b>This is protected page!</b>
+<h2>Admin Page</h2>
+<h3>
+    Welcome : <span th:utext="${#request.userPrincipal.name}"></span>
+</h3>
+<b>This is protected page!</b>
 
-	<br />
-	<br />
+<br/>
+<br/>
 
-	<div th:if="${userInfo != null}" th:utext="${userInfo}"></div>
+<div th:if="${userInfo != null}" th:utext="${userInfo}"></div>
 
 </body>
 
