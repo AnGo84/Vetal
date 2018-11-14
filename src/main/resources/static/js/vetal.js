@@ -10,7 +10,16 @@ function initDatePicker(datePicker) {
     });
 };
 
-function initTable(tableName, ordering) {
+function initTable(tableName, ordering, sortAsData) {
+    if(sortAsData !== undefined && sortAsData !== null){
+        //https://datatables.net/blog/2014-12-18
+        //https://datatables.net/plug-ins/sorting/
+        $.fn.dataTable.moment( 'DD.MM.YYYY' );
+    }
+
+    if (ordering === undefined || ordering === null) {
+        ordering=[ 0, "asc" ];
+    }
     //from
     //https://datatables.net/examples/basic_init/table_sorting.html
     $(tableName).DataTable( {

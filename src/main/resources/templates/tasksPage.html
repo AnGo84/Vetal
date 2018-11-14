@@ -24,8 +24,11 @@
     <script th:src="@{/js/locales/bootstrap-datepicker.ru.js}"></script>
     <script th:src="@{/js/jquery.dataTables.min.js}"></script>
     <script th:src="@{/js/dataTables.bootstrap4.min.js}"></script>
+    <script th:src="@{/js/moment.min.js}"></script>
+    <script th:src="@{/js/sorting/datetime-moment.js}"></script>
 
     <script th:src="@{/js/vetal.js}"></script>
+
 
 </head>
 
@@ -273,7 +276,8 @@
     initDatePicker('#filterDateBeginFrom');
     initDatePicker('#filterDateBeginTill');
 
-    $(document).ready(initTable('#tasksTable',[ 1, "desc" ]));
+    $(document).ready(
+        initTable('#tasksTable', [1, "desc"], " "));
     //$(document).ready(setTableOrdering('#tasksTable',[ 7, "desc" ]));
 </script>
 
