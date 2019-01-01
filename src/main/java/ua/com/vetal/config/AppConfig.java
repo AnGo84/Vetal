@@ -1,14 +1,23 @@
 package ua.com.vetal.config;
 
-import javax.sql.DataSource;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import ua.com.vetal.entity.FilterData;
 
-//@Configuration
+@Configuration
 public class AppConfig {
-/*    @Bean
-    @Primary
-    @ConfigurationProperties(prefix = "spring.datasource")
-    public DataSource primaryDataSource() {
-        return DataSourceBuilder.create().build();
-    }*/
+    /*    @Bean
+        @Primary
+        @ConfigurationProperties(prefix = "spring.datasource")
+        public DataSource primaryDataSource() {
+            return DataSourceBuilder.create().build();
+        }*/
 
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public FilterData filterDataBean() {
+        return new FilterData();
+    }
 }

@@ -45,6 +45,7 @@ public class StencilsController {
     @Autowired
     private StencilServiceImpl stencilService;
 
+    @Autowired
     private FilterData filterData;
     private List<Stencil> stencilList;
 

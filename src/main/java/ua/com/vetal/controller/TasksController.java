@@ -45,7 +45,9 @@ public class TasksController {
     @Autowired
     private TaskServiceImpl taskService;
 
+    @Autowired
     private FilterData filterData;
+
     private List<Task> tasksList;
 
     @Autowired
