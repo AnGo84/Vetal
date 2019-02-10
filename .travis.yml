@@ -3,6 +3,10 @@ language: java
 jdk: oraclejdk8
 
 # Improve Build Speed https://dzone.com/articles/travis-ci-tutorial-java-projects
+
+install: true
+script: ./mvnw clean install
+
 cache:
   directories:
     - $HOME/.m2

@@ -10,7 +10,7 @@
     <packaging>${artifact-packaging}</packaging>
 
     <name>${project.artifactId}</name>
-    <description>Project for Vetal com with Spring Boot</description>
+    <description>Project for Vetal.com with Spring Boot</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -19,19 +19,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <!--
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.4.3.RELEASE</version>
-    </parent>
-    -->
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <!--<jasperreports.version>6.7.0</jasperreports.version>-->
         <jasperreports.version>6.7.0</jasperreports.version>
         <!--<apache.poi.version>4.0.0</apache.poi.version>-->
         <apache.poi.version>3.15</apache.poi.version>
@@ -95,27 +86,6 @@
             <artifactId>spring-support</artifactId>
             <version>2.0.8</version>
         </dependency>
-        <!--duplicate
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-        </dependency>-->
-
-        <!-- Jasper Report Specific Jars START -->
-
-
-        <!--<dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-            <version>1.9.3</version>
-        </dependency>-->
-        <!-- https://mvnrepository.com/artifact/commons-digester/commons-digester -->
-        <!--<dependency>
-            <groupId>commons-digester</groupId>
-            <artifactId>commons-digester</artifactId>
-            <version>2.1</version>
-        </dependency>-->
-
 
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
@@ -150,11 +120,11 @@
 
         <!-- Jasper Report Specific Jars END -->
 
-
     </dependencies>
 
     <build>
-        <!--<plugins>
+        <!--
+        <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
