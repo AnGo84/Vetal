@@ -1,7 +1,5 @@
 package ua.com.vetal.config;
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +10,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-
 import ua.com.vetal.service.AppUserDetailsServiceImpl;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
@@ -52,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/user/**",
                         "/manager", "/client", "/contractor", "/production", "/printer", "/worker",
                         "/paper", "/chromaticity", "/laminate", "/cringle", "/format", "/stock", "/tasks/view**",
-                        "/tasks","/stencils","/stencils/view**", "/folder**","/file**")
+                        "/tasks", "/stencils", "/stencils/view**", "/folder**", "/file**")
                 .permitAll();
 
         // /userInfo page requires login as ROLE_USER or ROLE_ADMIN.

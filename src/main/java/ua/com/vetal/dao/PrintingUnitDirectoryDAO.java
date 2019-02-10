@@ -10,18 +10,18 @@ import javax.persistence.EntityManager;
 @Transactional
 public class PrintingUnitDirectoryDAO {
 
-	@Autowired
-	private EntityManager entityManager;
+    @Autowired
+    private EntityManager entityManager;
 
-	/*
-	 * public User findUserAccount(String name) { try { String sql =
-	 * "Select e from " + LaminateDirectory.class.getName() + " e " // +
-	 * " Where e.name = :name "; // System.out.println(sql); Query query =
-	 * entityManager.createQuery(sql, LaminateDirectory.class);
-	 * query.setParameter("name", name);
-	 * 
-	 * return (User) query.getSingleResult(); } catch (NoResultException e) {
-	 * return null; } }
-	 */
+    /*
+     * public User findUserAccount(String name) { try { String sql =
+     * "Select e from " + LaminateDirectory.class.getName() + " e " // +
+     * " Where e.name = :name "; // System.out.println(sql); Query query =
+     * entityManager.createQuery(sql, LaminateDirectory.class);
+     * query.setParameter("name", name);
+     *
+     * return (User) query.getSingleResult(); } catch (NoResultException e) {
+     * return null; } }
+     */
 
 }

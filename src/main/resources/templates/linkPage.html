@@ -34,12 +34,13 @@
 
             <div class="form-group row">
                 <div class="col-6">
-                    <label for="recordName"><span th:text="#{label.name}"></span>: </label> <input class="form-control form-control-sm"
-                                                                                                   type="text"
-                                                                                                   id="recordName"
-                                                                                                   th:field="*{fullName}"
-                                                                                                   autofocus="autofocus"
-                                                                                                   placeholder="Enter your Name"/>
+                    <label for="recordName"><span th:text="#{label.name}"></span>: </label> <input
+                        class="form-control form-control-sm"
+                        type="text"
+                        id="recordName"
+                        th:field="*{fullName}"
+                        autofocus="autofocus"
+                        placeholder="Enter your Name"/>
                 </div>
 
                 <div class="alert alert-danger" th:if="${#fields.hasErrors('fullName')}">
@@ -50,9 +51,9 @@
 
             <div class="form-group row">
                 <div class="col-6">
-                <label for="linkTypeList"
-                       class="col-form-label col-form-label-sm"><span
-                        th:text="#{label.link_type}">Link type</span>:</label>
+                    <label for="linkTypeList"
+                           class="col-form-label col-form-label-sm"><span
+                            th:text="#{label.link_type}">Link type</span>:</label>
 
                     <select id="linkTypeList" th:field="*{linkType}"
                             class="form-control form-control-sm selectpicker"

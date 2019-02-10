@@ -11,18 +11,18 @@ function initDatePicker(datePicker) {
 };
 
 function initTable(tableName, ordering, sortAsData) {
-    if(sortAsData !== undefined && sortAsData !== null){
+    if (sortAsData !== undefined && sortAsData !== null) {
         //https://datatables.net/blog/2014-12-18
         //https://datatables.net/plug-ins/sorting/
-        $.fn.dataTable.moment( 'DD.MM.YYYY' );
+        $.fn.dataTable.moment('DD.MM.YYYY');
     }
 
     if (ordering === undefined || ordering === null) {
-        ordering=[ 0, "asc" ];
+        ordering = [0, "asc"];
     }
     //from
     //https://datatables.net/examples/basic_init/table_sorting.html
-    $(tableName).DataTable( {
+    $(tableName).DataTable({
         "language": {
             "lengthMenu": "Показать _MENU_ записей на странице",
             "zeroRecords": "Ничего не найдено",
@@ -31,21 +31,22 @@ function initTable(tableName, ordering, sortAsData) {
             "infoFiltered": "(отфильтровано из _MAX_ записей)",
             "search": "Быстрый поиск",
             "paginate": {
-            "first": "Первая",
-            "last": "Последняя",
-            "next": "Следующая",
-            "previous": "Предыдущая"}
+                "first": "Первая",
+                "last": "Последняя",
+                "next": "Следующая",
+                "previous": "Предыдущая"
+            }
         },
         "order": [ordering],
         "pagingType": "full_numbers",
         "lengthMenu": [[10, 15, 20, 25, 50, -1], [10, 15, 20, 25, 50, "Все"]],
         "iDisplayLength": 15,
         "aoColumnDefs": [
-            { 'bSortable': false, 'aTargets': ['no-sort'] }
+            {'bSortable': false, 'aTargets': ['no-sort']}
         ],
         responsive: true
-    } );
-} ;
+    });
+};
 
 /*function setTableOrdering(tableName, ordering) {
     $(tableName).DataTable( {

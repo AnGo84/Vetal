@@ -44,52 +44,53 @@
     <div th:if="${personList != null and not #lists.isEmpty(personList)}">
         <div class="table-responsive">
             <table id="personsTable" class="table table-sm table-bordered table-hover display compact">
-            <thead>
-            <tr class="text-center">
-                <th width="100" th:text="#{label.id}">Id</th>
-                <th th:text="#{label.lastname}">LastName</th>
-                <th th:text="#{label.firstname}">FirstName</th>
-                <th th:text="#{label.middlename}">MiddleName</th>
-                <th th:text="#{label.email}">Email</th>
-                <th class="no-sort" width="100"
-                    sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
-                <th class="no-sort" width="100"
-                    sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- align-items-center -->
-            <tr th:each="person : ${personList}">
-                <td th:text="${person.id}"></td>
-                <td th:text="${person.lastName}"></td>
-                <td th:text="${person.firstName}"></td>
-                <td th:text="${person.middleName}"></td>
-                <td th:text="${person.email}"></td>
+                <thead>
+                <tr class="text-center">
+                    <th width="100" th:text="#{label.id}">Id</th>
+                    <th th:text="#{label.lastname}">LastName</th>
+                    <th th:text="#{label.firstname}">FirstName</th>
+                    <th th:text="#{label.middlename}">MiddleName</th>
+                    <th th:text="#{label.email}">Email</th>
+                    <th class="no-sort" width="100"
+                        sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
+                    <th class="no-sort" width="100"
+                        sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- align-items-center -->
+                <tr th:each="person : ${personList}">
+                    <td th:text="${person.id}"></td>
+                    <td th:text="${person.lastName}"></td>
+                    <td th:text="${person.firstName}"></td>
+                    <td th:text="${person.middleName}"></td>
+                    <td th:text="${person.email}"></td>
 
-                <td class="text-center align-self-center"
-                    sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"><a
-                        th:href="@{${pageName}+'/edit-' + ${person.id}}"
-                        style="width: 100px;" class="btn btn-success btn-sm custom-width"
-                        role="button" th:text="#{label.edit}">Edit</a></td>
-                <td class="text-center align-self-center"
-                    sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">
+                    <td class="text-center align-self-center"
+                        sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"><a
+                            th:href="@{${pageName}+'/edit-' + ${person.id}}"
+                            style="width: 100px;" class="btn btn-success btn-sm custom-width"
+                            role="button" th:text="#{label.edit}">Edit</a></td>
+                    <td class="text-center align-self-center"
+                        sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">
 
-                    <form method="GET" action="#"
-                          th:action="@{${pageName}+'/delete-' + ${person.id}}"
-                          accept-charset="UTF-8" style="display: inline">
-                        <button class="btn btn-sm btn-danger custom-width" type="button"
-                                style="width: 100px;" data-toggle="modal"
-                                data-target="#confirmDelete" th:attr="data-title=#{label.delete_record},data-message=#{message.delete_confirm_message}"
-                                th:text="#{label.delete}">
-                            <i class="glyphicon glyphicon-trash"></i> Delete
-                        </button>
-                    </form>
+                        <form method="GET" action="#"
+                              th:action="@{${pageName}+'/delete-' + ${person.id}}"
+                              accept-charset="UTF-8" style="display: inline">
+                            <button class="btn btn-sm btn-danger custom-width" type="button"
+                                    style="width: 100px;" data-toggle="modal"
+                                    data-target="#confirmDelete"
+                                    th:attr="data-title=#{label.delete_record},data-message=#{message.delete_confirm_message}"
+                                    th:text="#{label.delete}">
+                                <i class="glyphicon glyphicon-trash"></i> Delete
+                            </button>
+                        </form>
 
-                </td>
-                <!-- <td><button type="button" class="btn btn-danger custom-width">Remove</button></td> -->
-            </tr>
-            </tbody>
-        </table>
+                    </td>
+                    <!-- <td><button type="button" class="btn btn-danger custom-width">Remove</button></td> -->
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
     <div th:if="${personList == null or #lists.isEmpty(personList)}">

@@ -1,9 +1,8 @@
 package ua.com.vetal.service.reports;
 
-import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
-import net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.export.SimpleExporterInput;
@@ -23,20 +22,19 @@ import java.io.OutputStream;
 
 @Service
 public class ExporterService {
-    static final Logger logger = LoggerFactory.getLogger(ExporterService.class);
-
     public static final String MEDIA_TYPE_EXCEL = "application/vnd.ms-excel";
     public static final String MEDIA_TYPE_PDF = "application/pdf";
     public static final String MEDIA_TYPE_X_PDF = "application/x-pdf";
+    static final Logger logger = LoggerFactory.getLogger(ExporterService.class);
 
     //https://www.baeldung.com/spring-jasper
 
     //public HttpServletResponse export
     public void export(ReportType type,
-                                      JasperPrint jasperPrint,
-                                      String name,
-                                      HttpServletResponse response) throws JRException, IOException {
-        response.setHeader("Content-Disposition", "inline; filename=" + name +"."+ type.name().toLowerCase());
+                       JasperPrint jasperPrint,
+                       String name,
+                       HttpServletResponse response) throws JRException, IOException {
+        response.setHeader("Content-Disposition", "inline; filename=" + name + "." + type.name().toLowerCase());
         //final OutputStream outputStream = response.getOutputStream();
         logger.info("Export to " + type);
         if (type.equals(ReportType.XLSX)) {
@@ -50,9 +48,7 @@ public class ExporterService {
             final OutputStream outputStream = response.getOutputStream();
             exportXlsx(jasperPrint, outputStream);
             //return response;
-        }
-
-        else if (type.equals(ReportType.XLS)) {
+        } else if (type.equals(ReportType.XLS)) {
             logger.info("XLS!");
             // Export to output stream
             //exportXls(jasperPrint, outputStream);
@@ -66,9 +62,7 @@ public class ExporterService {
             // Export to output stream
             exportXls(jasperPrint, response.getOutputStream());
             //return response;
-        }
-
-        else if (type.equals(ReportType.PDF)) {
+        } else if (type.equals(ReportType.PDF)) {
             logger.info("PDF!");
             // Export to output stream
             //exportPdf(jasperPrint, outputStream);
@@ -85,25 +79,32 @@ public class ExporterService {
             exportPdf(jasperPrint, outputStream);
             //return response;
 
-        }
-        else {
+        } else {
             throw new RuntimeException("No report set for type " + type);
         }
     }
 
-    public void exportXls(JasperPrint jp, OutputStream baos) {
+    public void exportXls(JasperPrint jasperPrint, OutputStream outputStream) {
         // Create a JRXlsExporter instance
         JRXlsExporter exporter = new JRXlsExporter();
         // for deprecated use same as for xlsx
 
         // Here we assign the parameters jp and baos to the exporter
-        exporter.setParameter(JRExporterParameter.JASPER_PRINT, jp);
-        exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, baos);
+        /*exporter.setParameter(JRExporterParameter.JASPER_PRINT, jp);
+        exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, baos);*/
 
         // Excel specific parameters
-        exporter.setParameter(JRXlsAbstractExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+        /*exporter.setParameter(JRXlsAbstractExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
         exporter.setParameter(JRXlsAbstractExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
-        exporter.setParameter(JRXlsAbstractExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
+        exporter.setParameter(JRXlsAbstractExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);*/
+
+        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outputStream));
+        SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
+        configuration.setOnePagePerSheet(true);
+        configuration.setDetectCellType(true);
+        configuration.setCollapseRowSpan(false);
+        exporter.setConfiguration(configuration);
 
         try {
             exporter.exportReport();
@@ -112,6 +113,7 @@ public class ExporterService {
             throw new RuntimeException(e);
         }
     }
+
     public void exportXlsx(JasperPrint jasperPrint, OutputStream outputStream) {
         // Create a JRXlsxExporter instance
         JRXlsxExporter exporter = new JRXlsxExporter();
@@ -136,7 +138,7 @@ public class ExporterService {
 
         //JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
 
-            JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
+        JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
 
     }
 
@@ -144,7 +146,7 @@ public class ExporterService {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         JasperExportManager.exportReportToPdfStream(jasperPrint, baos);
-        DataSource aAttachment =  new ByteArrayDataSource(baos.toByteArray(), "application/pdf");
+        DataSource aAttachment = new ByteArrayDataSource(baos.toByteArray(), "application/pdf");
         return aAttachment;
     }
 

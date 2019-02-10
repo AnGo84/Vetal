@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+>
 
 <head>
     <meta charset="UTF-8">
@@ -44,73 +44,74 @@
     <div th:if="${users != null and not #lists.isEmpty(users)}">
         <div class="table-responsive">
             <table id="usersTable" class="table table-sm table-bordered table-hover display compact">
-            <thead>
-            <tr class="text-center">
-                <th width="100" th:text="#{label.id}">Id</th>
-                <th th:text="#{label.login}">Login</th>
-                <th th:text="#{label.roles}">Roles</th>
-                <th th:text="#{label.email}">Email</th>
-                <th class="no-sort" width="150" th:text="#{label.active}">Active</th>
-                <th class="no-sort" width="100"></th>
-                <th class="no-sort" width="100"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- align-items-center -->
-            <tr th:each="user : ${users}">
-                <td th:text="${user.id}"></td>
-                <td th:text="${user.name}"></td>
-                <td>
-                    <!--
-                    <table>
-                        <tr th:each="role :${user.roles}">
-                            <td th:text="${role.name}"></td>
-                        </tr>
-                    </table>
-                    -->
-                    <span th:each="role,iterStat : ${user.userRoles}"> <span
-                            th:text="${role.name}"/> <th:block th:if="${!iterStat.last}">,
+                <thead>
+                <tr class="text-center">
+                    <th width="100" th:text="#{label.id}">Id</th>
+                    <th th:text="#{label.login}">Login</th>
+                    <th th:text="#{label.roles}">Roles</th>
+                    <th th:text="#{label.email}">Email</th>
+                    <th class="no-sort" width="150" th:text="#{label.active}">Active</th>
+                    <th class="no-sort" width="100"></th>
+                    <th class="no-sort" width="100"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- align-items-center -->
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.name}"></td>
+                    <td>
+                        <!--
+                        <table>
+                            <tr th:each="role :${user.roles}">
+                                <td th:text="${role.name}"></td>
+                            </tr>
+                        </table>
+                        -->
+                        <span th:each="role,iterStat : ${user.userRoles}"> <span
+                                th:text="${role.name}"/> <th:block th:if="${!iterStat.last}">,
         						</th:block>
                     </span>
 
-                </td>
-                <td th:text="${user.email}"></td>
-                <td class="text-center">
-                    <input type="checkbox" th:disabled="true"
-                           th:value="*{user.enabled}" th:checked="${user.enabled}"/></td>
+                    </td>
+                    <td th:text="${user.email}"></td>
+                    <td class="text-center">
+                        <input type="checkbox" th:disabled="true"
+                               th:value="*{user.enabled}" th:checked="${user.enabled}"/></td>
 
-                </td>
-                <!-- "@{'/users/edit-' + ${user.id}}"
-                "@{/users/edit-(id=${user.id})}" -->
-                <td class="text-center align-self-center"><a
-                        th:href="@{'/users/edit-' + ${user.id}}" style="width: 100px;"
-                        class="btn btn-success btn-sm custom-width" role="button" th:text="#{label.edit}">Edit</a></td>
-                <td class="text-center align-self-center">
-                    <!--
-                <a
-                    th:href="@{/users/delete-' + ${user.id}}" style="width: 100px;"
-                    class="btn btn-danger btn-sm custom-width" role="button">Delete
-                </a>
-                 -->
-                    <form method="GET" action="#"
-                          th:action="@{'/users/delete-' + ${user.id}}"
-                          accept-charset="UTF-8" style="display: inline">
-                        <button class="btn btn-sm btn-danger custom-width" type="button"
-                                style="width: 100px;" data-toggle="modal"
-                                data-target="#confirmDelete" data-title="Delete User"
-                                data-message="Are you sure you want to delete this user ?"
-                                th:attr="data-title=#{label.delete_record},data-message=#{message.delete_confirm_message}"
-                                th:text="#{label.delete}">
-                            <i class="glyphicon glyphicon-trash"></i> Delete
-                        </button>
-                    </form>
+                    </td>
+                    <!-- "@{'/users/edit-' + ${user.id}}"
+                    "@{/users/edit-(id=${user.id})}" -->
+                    <td class="text-center align-self-center"><a
+                            th:href="@{'/users/edit-' + ${user.id}}" style="width: 100px;"
+                            class="btn btn-success btn-sm custom-width" role="button" th:text="#{label.edit}">Edit</a>
+                    </td>
+                    <td class="text-center align-self-center">
+                        <!--
+                    <a
+                        th:href="@{/users/delete-' + ${user.id}}" style="width: 100px;"
+                        class="btn btn-danger btn-sm custom-width" role="button">Delete
+                    </a>
+                     -->
+                        <form method="GET" action="#"
+                              th:action="@{'/users/delete-' + ${user.id}}"
+                              accept-charset="UTF-8" style="display: inline">
+                            <button class="btn btn-sm btn-danger custom-width" type="button"
+                                    style="width: 100px;" data-toggle="modal"
+                                    data-target="#confirmDelete" data-title="Delete User"
+                                    data-message="Are you sure you want to delete this user ?"
+                                    th:attr="data-title=#{label.delete_record},data-message=#{message.delete_confirm_message}"
+                                    th:text="#{label.delete}">
+                                <i class="glyphicon glyphicon-trash"></i> Delete
+                            </button>
+                        </form>
 
 
-                </td>
-                <!-- <td><button type="button" class="btn btn-danger custom-width">Remove</button></td> -->
-            </tr>
-            </tbody>
-        </table>
+                    </td>
+                    <!-- <td><button type="button" class="btn btn-danger custom-width">Remove</button></td> -->
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
     <div th:if="${users == null or #lists.isEmpty(users)}">
