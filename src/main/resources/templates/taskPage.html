@@ -653,7 +653,7 @@
 
             </div>
 
-            <!-- Amount -->
+            <!-- Amount & State-->
             <div class="row">
                 <div class="col-sm-6">
 
@@ -680,6 +680,39 @@
                            style="margin-bottom: 0rem"></p>
                     </div>
 
+                </div>
+
+                <div class="col-6">
+
+                    <div class="form-group row">
+
+                        <label for="stencilState"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.state}">State</span>:</label>
+                        <div class="col-sm-9">
+                            <select id="stencilState" th:field="*{state}" th:disabled="${readOnly}"
+                                    class="form-control form-control-sm selectpicker"
+                                    data-live-search="false">
+
+                                <!--<option value="" th:text="#{label.select_choose}"> Please Select</option>-->
+                                <option th:each="dropDownItem : ${stateList}"
+                                        th:value="${dropDownItem.id}"
+                                        th:text="${dropDownItem.altName}"
+                                        th:attr="data-tokens=${dropDownItem.altName}"
+                                />
+
+                            </select>
+                        </div>
+                        <div class="col-sm-9"
+                             th:if="${stateList == null or #lists.isEmpty(stateList)}">
+                            <div>"No Workers were found, please create some first"</div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('state')}">
+                        <p th:text="${#fields.errors('state')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
                 </div>
             </div>
 

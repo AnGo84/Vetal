@@ -50,11 +50,15 @@ public class StencilsController {
     private List<Stencil> stencilList;
 
     @Autowired
+    private PaymentServiceImpl paymentService;
+    @Autowired
     private ManagerServiceImpl managerService;
     @Autowired
     private NumberBaseDirectoryServiceImpl numberBaseService;
     @Autowired
     private PrinterServiceImpl printerService;
+    @Autowired
+    private StateServiceImpl stateService;
     @Autowired
     private WorkerServiceImpl workerService;
     @Autowired
@@ -236,6 +240,31 @@ public class StencilsController {
             }
         });
 
+        return resultList;
+    }
+
+    @ModelAttribute("stateList")
+    public List<State> getStatesList() {
+        List<State> resultList = stateService.findAllObjects();
+        /*Collections.sort(resultList, new Comparator<Worker>() {
+            @Override
+            public int compare(Worker m1, Worker m2) {
+                return m1.getFullName().compareTo(m2.getFullName());
+            }
+        });*/
+
+        return resultList;
+    }
+
+    @ModelAttribute("paymentList")
+    public List<Payment> getPaymentsList() {
+        List<Payment> resultList = paymentService.findAllObjects();
+        /*Collections.sort(resultList, new Comparator<Worker>() {
+            @Override
+            public int compare(Worker m1, Worker m2) {
+                return m1.getFullName().compareTo(m2.getFullName());
+            }
+        });*/
         return resultList;
     }
 

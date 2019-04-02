@@ -51,6 +51,8 @@ public class TasksController {
     private List<Task> tasksList;
 
     @Autowired
+    private StateServiceImpl stateService;
+    @Autowired
     private ManagerServiceImpl managerService;
     @Autowired
     private ContractorServiceImpl contractorService;
@@ -334,6 +336,20 @@ public class TasksController {
     @ModelAttribute("pageName")
     public String initializePageName() {
         return this.pageName;
+    }
+
+
+    @ModelAttribute("stateList")
+    public List<State> getStatesList() {
+        List<State> resultList = stateService.findAllObjects();
+        /*Collections.sort(resultList, new Comparator<Worker>() {
+            @Override
+            public int compare(Worker m1, Worker m2) {
+                return m1.getFullName().compareTo(m2.getFullName());
+            }
+        });*/
+
+        return resultList;
     }
 
     @ModelAttribute("managerList")

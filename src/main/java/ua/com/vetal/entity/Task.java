@@ -154,6 +154,9 @@ public class Task {
 	@Column(name = "Amount", nullable = false)
 	private double amount;
 
+	@ManyToOne(optional = true)
+	@JoinColumn(name = "State_ID")
+	private State state;
 
 	public Task getCopy() {
 
@@ -419,6 +422,14 @@ public class Task {
 		this.amount = amount*100;
 	}
 
+	public State getState() {
+		return state;
+	}
+
+	public void setState(State state) {
+		this.state = state;
+	}
+
 	public String getStringAmount() {
 		return new DecimalFormat("#,##0.00").format(amount/100)+ " грн";
 	}
@@ -454,6 +465,7 @@ public class Task {
 		sb.append(", cutting=").append(cutting);
 		sb.append(", note='").append(note).append('\'');
 		sb.append(", amount=").append(amount);
+		sb.append(", state=").append(state);
 		sb.append('}');
 		return sb.toString();
 	}
