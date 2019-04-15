@@ -187,9 +187,12 @@
 
 
                         <tr th:each="stencil : ${stencilsList}"
-                            th:class="${stencil.payment.id==1} ? 'table-warning':
-                                    (${stencil.state.id == 3} ? 'table-success' :
-                                        (${stencil.state.id == 2} ? 'table-danger': ''))"
+                            th:class="${stencil.payment.id==1} ? 'table-danger':
+                                    (${stencil.state.id == 1} ? 'table-warning' :
+                                     (${stencil.state.id == 2} ? 'table-active' :
+                                      (${stencil.state.id == 3} ? 'table-info':
+                                       (${stencil.state.id == 4} ? 'table-success':
+                                        ''))))"
                         >
                             <!--th:style="${stencil.state.id == 3} ? 'color: green;' : (${stencil.state.id == 2} ? 'color: red;': 'color: yellow;')"-->
                             <td class="text-center" th:text="${stencil.id}"></td>

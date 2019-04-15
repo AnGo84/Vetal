@@ -194,8 +194,14 @@
                         <tbody>
                         <!-- align-items-center -->
 
+                        <!--th:class="${task.state.id == 3} ? 'table-success' : (${task.state.id == 2} ? 'table-danger': 'table-warning')"-->
                         <tr th:each="task : ${tasksList}"
-                            th:class="${task.state.id == 3} ? 'table-success' : (${task.state.id == 2} ? 'table-danger': 'table-warning')"
+                            th:class="${task.payment.id==1} ? 'table-danger':
+                                    (${task.state.id == 1} ? 'table-warning' :
+                                     (${task.state.id == 2} ? 'table-active' :
+                                      (${task.state.id == 3} ? 'table-info':
+                                       (${task.state.id == 4} ? 'table-success':
+                                        ''))))"
                         >
                             <td class="text-center" th:text="${task.id}"></td>
                             <!--<td><a th:href="@{'/tasks/view-' + ${task.id}}"

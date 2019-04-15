@@ -102,9 +102,11 @@
             <ul class="nav nav-pills flex-column" th:each="link : ${filesList}">
                 <li class="nav-item" target="_blank">
                     <!--<a class="nav-link" target="_blank" th:text="${link.fullName}"
-                       th:href="@{'file:///' + ${link.path}}">File</a>-->
+                       th:href="@{'file:///' + ${link.path}}">File</a>
+                       good: th:href="@{'/file-' + ${link.id}}"-->
                     <a class="nav-link" target="_blank" th:text="${link.fullName}"
-                       th:href="@{'/file-' + ${link.id}}">File</a>
+                       th:href="@{'http://file:' + ${link.id}}">File</a>
+
                 </li>
             </ul>
 

@@ -53,6 +53,8 @@ public class TasksController {
     @Autowired
     private StateServiceImpl stateService;
     @Autowired
+    private PaymentServiceImpl paymentService;
+    @Autowired
     private ManagerServiceImpl managerService;
     @Autowired
     private ContractorServiceImpl contractorService;
@@ -349,6 +351,18 @@ public class TasksController {
             }
         });*/
 
+        return resultList;
+    }
+
+    @ModelAttribute("paymentList")
+    public List<Payment> getPaymentsList() {
+        List<Payment> resultList = paymentService.findAllObjects();
+        /*Collections.sort(resultList, new Comparator<Worker>() {
+            @Override
+            public int compare(Worker m1, Worker m2) {
+                return m1.getFullName().compareTo(m2.getFullName());
+            }
+        });*/
         return resultList;
     }
 

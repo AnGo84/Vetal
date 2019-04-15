@@ -733,7 +733,7 @@
 
                         <label for="numeration"
                                class="ml-sm mb-2 mr-sm-2 col-form-label col-form-label-sm"><span
-                                th:text="#{label.numeration}">Bending</span>: </label>
+                                th:text="#{label.numeration}">Numeration</span>: </label>
                         <!--<div class="form-check mb-2 mr-sm-2">
                             <label class="form-check-label">
                                 <input class="form-check-input "type="checkbox"> Remember me
@@ -755,7 +755,7 @@
 
                 </div>
 
-                <div class="col-sm-6">
+                <div class="col-sm-5">
 
                     <!--<div class="form-group">-->
                     <div class="form-inline">
@@ -779,16 +779,23 @@
 
                 </div>
 
-                <div class="col-sm-2">
+                <div class="col-sm-3">
 
                     <div class="form-group row">
-                        <label for="stencilSticker"
+                        <!--<label for="stencilSticker"
                                class="col-sm-9 col-form-label col-form-label-sm"><span
                                 th:text="#{label.glue_sticker}">Glue Sticker</span>: </label>
                         <div class="col-sm-3 align-self-center">
                             <input type="checkbox" id="stencilSticker" th:field="*{sticker}"
                                    th:disabled="${readOnly}"/>
-                        </div>
+                        </div>-->
+
+                        <label for="stencilSticker"
+                               class="ml-sm mb-2 mr-sm-2 col-form-label col-form-label-sm"><span
+                                th:text="#{label.glue_sticker}">Glue Sticker</span>: </label>
+                        <input type="checkbox" id="stencilSticker" class="ml-sm mt-2 mr-sm-5"
+                               th:field="*{sticker}" th:disabled="${readOnly}"/>
+
                     </div>
 
                     <!--<div class="form-group row">
