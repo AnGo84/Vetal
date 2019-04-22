@@ -3,15 +3,20 @@ package ua.com.vetal.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.annotation.SessionScope;
 import ua.com.vetal.entity.Link;
 import ua.com.vetal.entity.LinkType;
+import ua.com.vetal.entity.file.LocalFile;
 import ua.com.vetal.service.LinkServiceImpl;
 import ua.com.vetal.service.LinkTypeServiceImpl;
+import ua.com.vetal.utils.ListFilesUtils;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -19,6 +24,7 @@ import java.util.List;
 @RequestMapping("/links")
 @Controller
 //@SessionAttributes({"managersFilterList", "clientFilterList", "contractorFilterList"})
+
 public class LinksController {
     static final Logger logger = LoggerFactory.getLogger(LinksController.class);
 
@@ -85,6 +91,7 @@ public class LinksController {
         linkService.deleteById(id);
         return "redirect:/links";
     }
+
     /**
      * This method will provide LinkType list to views
      */

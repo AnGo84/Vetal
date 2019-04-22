@@ -278,10 +278,10 @@ public class TasksController {
                     String subject = messageSource.getMessage("email.task", null, new Locale("ru"));
                     String text = messageSource.getMessage("email.new_task", null, new Locale("ru"));
                     mailServiceImp.sendMessageWithAttachment(
-                            task.getManager().getEmail(),task.getContractor().getEmail(), subject + task.getNumber(),
+                            task.getManager().getEmail(), task.getContractor().getEmail(), subject + task.getNumber(),
                             text, attachment);
                     result = true;
-
+                    logger.info("Sent " + title + " with ID= " + id + " from " + task.getManager().getEmail() + " to " + task.getContractor().getEmail());
                     message = messageSource.getMessage("message.email.sent_to",
                             new String[]{task.getContractor().getFullName(), task.getContractor().getEmail()}, new Locale("ru"));
                 } catch (Exception e) {

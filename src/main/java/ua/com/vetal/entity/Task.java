@@ -69,6 +69,17 @@ public class Task {
     @JoinColumn(name = "Contractor_ID")
     private Contractor contractor;
 
+    @Column(name = "Contractor_number")
+    private String contractorNumber;
+
+    @Digits(integer = 8, fraction = 2)
+    @Column(name = "Amount_for_Contractor", nullable = true)
+    private double amountForContractor;
+
+    @Digits(integer = 8, fraction = 2)
+    @Column(name = "Contractor_Amount", nullable = true)
+    private double contractorAmount;
+
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "Production_ID")
@@ -640,6 +651,30 @@ public class Task {
         this.debtAmount = debtAmount;
     }
 
+    public String getContractorNumber() {
+        return contractorNumber;
+    }
+
+    public void setContractorNumber(String contractorNumber) {
+        this.contractorNumber = contractorNumber;
+    }
+
+    public double getAmountForContractor() {
+        return amountForContractor;
+    }
+
+    public void setAmountForContractor(double amountForContractor) {
+        this.amountForContractor = amountForContractor;
+    }
+
+    public double getContractorAmount() {
+        return contractorAmount;
+    }
+
+    public void setContractorAmount(double contractorAmount) {
+        this.contractorAmount = contractorAmount;
+    }
+
     public String getStringAmount() {
         return new DecimalFormat("#,##0.00").format(amount / 100) + " грн";
     }
@@ -657,6 +692,9 @@ public class Task {
         sb.append(", workName='").append(workName).append('\'');
         sb.append(", fileName='").append(fileName).append('\'');
         sb.append(", contractor=").append(contractor);
+        sb.append(", contractorNumber='").append(contractorNumber).append('\'');
+        sb.append(", amountForContractor=").append(amountForContractor);
+        sb.append(", сontractorAmount=").append(contractorAmount);
         sb.append(", production=").append(production);
         sb.append(", dateBegin=").append(dateBegin);
         sb.append(", dateEnd=").append(dateEnd);

@@ -175,7 +175,8 @@
                             <th th:text="#{label.work}">Work name</th>
                             <th th:text="#{label.client}">Client</th>
                             <th th:text="#{label.manager}">Manager</th>
-                            <th width="100" th:text="#{label.amount}">Amount</th>
+                            <th th:text="#{label.contractor}">Contractor</th>
+                            <!--<th width="100" th:text="#{label.amount}">Amount</th>-->
                             <th width="100" th:text="#{label.task_date}">Date Begin</th>
 
                             <th width="100" th:text="#{label.state}">State</th>
@@ -212,8 +213,9 @@
                             <td th:text="${task.workName}"></td>
                             <td th:text="${task.client.name}"></td>
                             <td th:text="${task.manager.fullName}"></td>
-                            <td class="text-right" style="vertical-align: middle;"
-                                th:text="${#numbers.formatDecimal(task.amount, 1, 'COMMA', 2, 'POINT')}"></td>
+                            <td th:text="${task.contractor.fullName}"></td>
+                            <!--<td class="text-right" style="vertical-align: middle;"
+                                th:text="${#numbers.formatDecimal(task.amount, 1, 'COMMA', 2, 'POINT')}"></td>-->
                             <!-- th:text="${task.amount}"  -->
                             <td class="text-center" style="vertical-align: middle;"
                                 th:text="${#dates.format(task.dateBegin, 'dd.MM.yyyy')}"></td>

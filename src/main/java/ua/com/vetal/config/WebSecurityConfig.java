@@ -51,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/user/**",
                         "/manager", "/client", "/contractor", "/production", "/printer", "/worker",
                         "/paper", "/chromaticity", "/laminate", "/cringle", "/format", "/stock", "/tasks/view**",
-                        "/tasks", "/stencils", "/stencils/view**", "/folder**", "/file**")
+                        "/tasks", "/stencils", "/stencils/view**", "/folder**", "/file**", "/catalog**")
                 .permitAll();
 
         // /userInfo page requires login as ROLE_USER or ROLE_ADMIN.
