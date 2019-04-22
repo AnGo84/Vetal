@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+>
 
 <head>
     <meta charset="UTF-8">
@@ -13,13 +13,13 @@
     <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
     <link rel="stylesheet" th:href="@{/css/dataTables.bootstrap4.min.css}">
 
-    <script th:src="@{js/jquery-3.3.1.min.js}"></script>
-    <script th:src="@{js/popper.min.js}"></script>
-    <script th:src="@{js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
     <script th:src="@{/js/jquery.dataTables.min.js}"></script>
     <script th:src="@{/js/dataTables.bootstrap4.min.js}"></script>
 
-    <script th:src="@{/js/vetal.js}"></script>
+    <script th:src="@{js/vetal.js}"></script>
 
 </head>
 <body>
@@ -30,10 +30,26 @@
 
     <div class="row">
 
-        <div class="col-sm-5">
+        <div class="col-sm-2">
             <h2><span th:text="#{label.catalog}"></span></h2>
         </div>
-        <div class="col-sm-6"></div>
+        <div class="col-sm-10">
+            <span th:text="${currentPath}"></span>
+        </div>
+
+    </div>
+    <div class="row">
+
+        <div class="col-sm-2">
+            <h5><span th:text="#{label.back}">:</span></h5>
+        </div>
+        <div class="col-sm-10">
+            <a th:href="@{'/catalog/' + ${parentPath.getName()}}" th:text="${parentPath.absolutePath}"></a>
+
+            <!--<a th:href="@{'/catalog?path=' + ${parentPath.getName()}}"th:text="${parentPath.absolutePath}"></a>-->
+
+            <!--<a th:href="@{'/catalog/' + ${parentPath.getName()}}" th:text="${parentPath.absolutePath}"></a>-->
+        </div>
 
     </div>
     <div th:if="${localFiles !=null and not #lists.isEmpty(localFiles)}">
@@ -51,17 +67,27 @@
                 <!-- align-items-center -->
                 <tr th:each="link : ${localFiles}">
                     <td>
-                        <a th:href="@{'/catalog/?path=' + ${link.file.absolutePath}}"
+                        <!--<a th:href="@{'/catalog?path=' + ${link.displayName}}"
+                           th:text="${link.displayName}"></a>-->
+                        <a th:if="${link.isFolder() == true}"
+                           th:href="@{'/catalog/' + ${link.displayName}}"
                            th:text="${link.displayName}"></a>
+                        <span th:if="${link.isFolder() == false}"
+                              th:href="@{'/catalog/' + ${link.displayName}}"
+                              th:text="${link.displayName}"></span>
 
                     </td>
                     <!--<td th:text="${link.file.absolutePath}"></td>-->
 
                     <td class="text-center align-self-center">
                         <a th:if="${link.isFolder() == false}" target="_blank"
+                           th:href="@{'/catalog/download/' + ${link.displayName}}"
+                           style="width: 100px;" class="btn btn-success btn-sm custom-width"
+                           role="button" th:text="#{label.download}">DownLoad</a></td>
+                    <!--<a th:if="${link.isFolder() == false}" target="_blank"
                            th:href="@{'http://file:' + ${link.file.absolutePath}}"
-                            style="width: 100px;" class="btn btn-success btn-sm custom-width"
-                            role="button" th:text="#{label.download}">DownLoad</a></td>
+                           style="width: 100px;" class="btn btn-success btn-sm custom-width"
+                           role="button" th:text="#{label.download}">DownLoad</a></td>-->
 
                     <!-- <td><button type="button" class="btn btn-danger custom-width">Remove</button></td> -->
                 </tr>
@@ -76,12 +102,12 @@
 
 <script>
     //$(document).ready(initTable('#linkTable'));
-    $(document).ready(function() {
-        $('#linkTable').DataTable( {
+    $(document).ready(function () {
+        $('#linkTable').DataTable({
             "ordering": false,
             "pageLength": 25
-        } );
-    } );
+        });
+    });
 </script>
 
 </body>
