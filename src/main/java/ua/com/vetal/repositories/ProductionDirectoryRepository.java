@@ -8,6 +8,6 @@ import ua.com.vetal.entity.ProductionDirectory;
 @Repository
 public interface ProductionDirectoryRepository extends JpaRepository<ProductionDirectory, Long> {
 
-	ProductionDirectory findByName(String name);
+	ProductionDirectory findByFullName(String name);
 
 }

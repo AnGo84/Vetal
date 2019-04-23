@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <title th:utext="${title}">Directory</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="shortcut icon" th:href="@{/image/logo.ico}" type="image/x-icon">
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-select.min.css}">
+    <link rel="stylesheet" th:href="@{/css/vetal.css}">
+
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/bootstrap-select.min.js}"></script>
+
+</head>
+<body>
+<div class="container bg-light" style="margin-top: 30px">
+    <div class="well">
+        <h2>
+            <span th:text="#{label.link}"></span>
+        </h2>
+
+        <form action="#" th:action="@{/productions/update}"
+              th:object="${production}" method="POST">
+
+            <input type="hidden" id="recordId" th:field="*{id}"/>
+
+            <div class="form-group row">
+                <div class="col-6">
+                    <label for="recordName"><span th:text="#{label.name}"></span>: </label> <input
+                        class="form-control form-control-sm"
+                        type="text"
+                        id="recordName"
+                        th:field="*{fullName}"
+                        autofocus="autofocus"
+                        placeholder="Enter your Name"/>
+                </div>
+
+                <div class="alert alert-danger" th:if="${#fields.hasErrors('fullName')}">
+                    <p th:text="${#fields.errors('fullName')}"></p>
+                    <!-- th:text="${#fields.errors('name')}" -->
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-6">
+                    <label for="productionTypeList"
+                           class="col-form-label col-form-label-sm"><span
+                            th:text="#{label.productionType}">Production type</span>:</label>
+
+                    <select id="productionTypeList" th:field="*{productionType}"
+                            class="form-control form-control-sm selectpicker"
+                            data-live-search="true">
+                        <option th:each="dropDownItem : ${productionTypesList}"
+                                th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
+                                th:attr="data-tokens=${dropDownItem.name}"/>
+                    </select>
+                </div>
+
+                <div class="alert alert-danger" th:if="${#fields.hasErrors('productionType')}">
+                    <p th:text="${#fields.errors('productionType')}"></p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <input type="submit" style="width: 100px;"
+                                   class="btn btn-info btn-sm" value="OK"/>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <a th:href="@{/productions}" style="width: 100px;"
+                               class="btn btn-info btn-outline-danger btn-sm float-right"
+                               role="button" th:text="#{label.cancel}">Cancel</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+</body>
+</html>

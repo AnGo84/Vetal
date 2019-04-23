@@ -30,7 +30,7 @@ public class ProductionDirectoryServiceImpl implements SimpleService<ProductionD
 
 	@Override
 	public ProductionDirectory findByName(String name) {
-		return productionDirectoryRepository.findByName(name);
+		return productionDirectoryRepository.findByFullName(name);
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class ProductionDirectoryServiceImpl implements SimpleService<ProductionD
 
 	@Override
 	public boolean isObjectExist(ProductionDirectory productionDirectory) {
-		return findByName(productionDirectory.getName()) != null;
+		return findByName(productionDirectory.getFullName()) != null;
 	}
 
 }

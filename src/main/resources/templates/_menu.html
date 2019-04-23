@@ -66,10 +66,12 @@
                     data-toggle="dropdown" th:text="#{menu.label.directories}">
                 Directories </a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" th:href="@{/production}"
-                       th:text="#{menu.label.productions}">Production</a> <a
-                        class="dropdown-item" th:href="@{/paper}"
-                        th:text="#{menu.label.papers}">Paper</a>
+                    <a class="dropdown-item" th:href="@{/productions}"
+                       th:text="#{menu.label.productions}">Production</a>
+                    <a class="dropdown-item" th:href="@{/productionType}"
+                       th:text="#{menu.label.productionTypes}">Production types</a>
+                    <a class="dropdown-item" th:href="@{/paper}"
+                            th:text="#{menu.label.papers}">Paper</a>
                     <a class="dropdown-item" th:href="@{/chromaticity}"
                        th:text="#{menu.label.chromaticities}">Chromaticity</a>
                     <a class="dropdown-item" th:href="@{/laminate}"

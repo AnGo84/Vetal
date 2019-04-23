@@ -313,7 +313,7 @@ public class StencilsController {
         Collections.sort(resultList, new Comparator<ProductionDirectory>() {
             @Override
             public int compare(ProductionDirectory m1, ProductionDirectory m2) {
-                return m1.getName().compareTo(m2.getName());
+                return m1.getFullName().compareTo(m2.getFullName());
             }
         });
 
