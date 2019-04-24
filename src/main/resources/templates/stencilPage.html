@@ -320,8 +320,8 @@
                                     th:disabled="${readOnly}" class="form-control form-control-sm selectpicker"
                                     data-live-search="true">
                                 <option th:each="dropDownItem : ${productionList}"
-                                        th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
-                                        th:attr="data-tokens=${dropDownItem.name}"/>
+                                        th:value="${dropDownItem.id}" th:text="${dropDownItem.fullName}"
+                                        th:attr="data-tokens=${dropDownItem.fullName}"/>
                             </select>
                         </div>
                         <div class="col-sm-9"

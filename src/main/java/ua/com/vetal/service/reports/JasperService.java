@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import ua.com.vetal.entity.FilterData;
+import ua.com.vetal.entity.ProductionTypeDirectory;
 import ua.com.vetal.entity.Stencil;
 import ua.com.vetal.entity.Task;
 import ua.com.vetal.service.StencilServiceImpl;
@@ -49,7 +50,9 @@ public class JasperService {
 
     public JasperPrint taskReport(Long id) throws JRException {
         logger.info("Get PDF for Task with ID= " + id);
-        InputStream jasperStream = this.getClass().getResourceAsStream("/jasperReport/TaskReport.jasper");
+        Task task = taskService.findById(id);
+        //InputStream jasperStream = this.getClass().getResourceAsStream("/jasperReport/TaskReport.jasper");
+        InputStream jasperStream = this.getClass().getResourceAsStream(reportNameForProductType(task.getProduction().getProductionType()));
 
         InputStream logoIS = this.getClass().getResourceAsStream(imageLogo);
 
@@ -61,7 +64,8 @@ public class JasperService {
         JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
 
         List<Task> tasks = new ArrayList<>();
-        tasks.add(taskService.findById(id));
+        //tasks.add(taskService.findById(id));
+        tasks.add(task);
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(tasks);
 
         return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
@@ -120,5 +124,19 @@ public class JasperService {
         parameters.put("stencils", dataSource);
 
         return JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+    }
+
+    public String reportNameForProductType(ProductionTypeDirectory productionType) {
+        String reportName = "/jasperReport/TaskReport.jasper";
+        if (productionType != null) {
+            if (productionType.getId() == 2) {
+                // широкоформатная
+                reportName = "/jasperReport/Task_Large_Format_Printing_Report.jasper";
+            } else if (productionType.getId() == 3 || productionType.getId() == 4) {
+                // широкоформатная
+                reportName = "/jasperReport/Task_Souvenir_Report.jasper";
+            }
+        }
+        return reportName;
     }
 }
