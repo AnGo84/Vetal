@@ -7,13 +7,14 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import ua.com.vetal.entity.file.FileDataSource;
 import ua.com.vetal.service.EmailService;
 
 import javax.activation.DataSource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
-import java.util.Locale;
+import java.util.List;
 
 @Service
 public class MailServiceImp implements EmailService {
@@ -33,7 +34,7 @@ public class MailServiceImp implements EmailService {
     }
 
     public void sendMessageWithAttachment(
-            String from,String to, String subject, String text, String pathToAttachment) throws MessagingException {
+            String from, String to, String subject, String text, String pathToAttachment) throws MessagingException {
 
         MimeMessage message = javaMailSender.createMimeMessage();
 
@@ -52,8 +53,11 @@ public class MailServiceImp implements EmailService {
 
     }
 
+    /*byte[] data;
+    DataSource source = new ByteArrayDataSource(data, "application/octet-stream");*/
+
     public void sendMessageWithAttachment(
-            String from,String to, String subject, String text, DataSource attachment) throws MessagingException {
+            String from, String to, String subject, String text, DataSource attachment) throws MessagingException {
 
         MimeMessage message = javaMailSender.createMimeMessage();
 
@@ -65,6 +69,27 @@ public class MailServiceImp implements EmailService {
         helper.setText(text);
 
         helper.addAttachment("Task.pdf", attachment);
+
+        javaMailSender.send(message);
+
+    }
+
+    public void sendMessageWithAttachment(
+            String from, String to, String subject, String text, List<FileDataSource> attachments) throws MessagingException {
+
+        MimeMessage message = javaMailSender.createMimeMessage();
+
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+        helper.setFrom(from);
+        helper.setTo(to);
+        helper.setSubject(subject);
+        helper.setText(text);
+        if (attachments != null && !attachments.isEmpty()) {
+            for (FileDataSource attachment : attachments) {
+                helper.addAttachment(attachment.getSourceName(), attachment.getDataSource());
+            }
+        }
 
         javaMailSender.send(message);
 

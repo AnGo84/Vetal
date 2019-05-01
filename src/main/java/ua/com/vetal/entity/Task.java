@@ -1,24 +1,14 @@
 package ua.com.vetal.entity;
 
-import java.text.DecimalFormat;
-import java.util.Date;
+import org.hibernate.annotations.Type;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import org.hibernate.annotations.Type;
-import org.springframework.format.annotation.DateTimeFormat;
+import java.text.DecimalFormat;
+import java.util.Date;
 
 @Entity
 @Table(name = "tasks")
@@ -61,9 +51,14 @@ public class Task {
     @Column(name = "Work_Name", nullable = false)
     private String workName;
 
-    @NotNull
+    //@NotNull
     @Column(name = "File_Name", nullable = false)
     private String fileName;
+
+    @OneToOne
+    @JoinColumn(name = "file_id")
+    private DBFile dbFile;
+
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "Contractor_ID")
@@ -355,8 +350,23 @@ public class Task {
         return fileName;
     }
 
+    /*public String getFileName() {
+        if(dbFile==null){
+            return "";
+        }
+        return dbFile.getFileName();
+    }
+*/
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public DBFile getDbFile() {
+        return dbFile;
+    }
+
+    public void setDbFile(DBFile dbFile) {
+        this.dbFile = dbFile;
     }
 
     public Contractor getContractor() {
@@ -679,6 +689,15 @@ public class Task {
         return new DecimalFormat("#,##0.00").format(amount / 100) + " грн";
     }
 
+    public String getDBFileName() {
+        if (dbFile == null) {
+            return "";
+        }
+        //return dbFile.toShortString();
+        //return dbFile.getFullFileName();
+        return dbFile.getFileName();
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Task{");
@@ -690,6 +709,8 @@ public class Task {
         sb.append(", account='").append(account).append('\'');
         sb.append(", manager=").append(manager);
         sb.append(", workName='").append(workName).append('\'');
+        //sb.append(", dbFile='").append(dbFile.toShortString()).append('\'');
+        sb.append(", dbFile='").append(getDBFileName()).append('\'');
         sb.append(", fileName='").append(fileName).append('\'');
         sb.append(", contractor=").append(contractor);
         sb.append(", contractorNumber='").append(contractorNumber).append('\'');

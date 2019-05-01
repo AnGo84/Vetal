@@ -33,7 +33,7 @@
 <div class="container bg-light" style="margin-top: 30px">
     <div class="well">
 
-        <form action="#" th:action="@{'/tasks/update'}" th:object="${task}"
+        <form action="#" th:action="@{'/tasks/update'}" th:object="${task}" enctype="multipart/form-data"
               method="POST">
             <!-- ID -->
             <div class="row">
@@ -183,7 +183,7 @@
 
                         <label for="taskContractorNumber"
                                class="col-sm-7 col-form-label col-form-label-sm"><span
-                                th:text="#{label.contractor_number}">Contractor number</span> : </label>
+                                th:text="#{label.contractor_number}+':'">Contractor number</span></label>
                         <div class="col-sm-5">
                             <input class="form-control form-control-sm" type="text"
                                    id="taskContractorNumber" th:field="*{contractorNumber}"
@@ -198,7 +198,7 @@
                     <div class="form-group row">
                         <label for="taskAmountForContractor"
                                class="col-sm-7 col-form-label col-form-label-sm"><span
-                                th:text="#{label.amount_for_contractor}">Amount For Contractor</span>: </label>
+                                th:text="#{label.amount_for_contractor}+':'">Amount For Contractor</span></label>
                         <div class="col-sm-5">
                             <input id="taskAmountForContractor" type="number" min="0.00" step="0.01"
                                    class="form-control form-control-sm" placeholder="Enter Amount For Contractor"
@@ -214,7 +214,7 @@
                     <div class="form-group row">
                         <label for="taskContractorAmount"
                                class="col-sm-6 col-form-label col-form-label-sm"><span
-                                th:text="#{label.contractor_amount}">Contractor amount</span>: </label>
+                                th:text="#{label.contractor_amount}+':'">Contractor amount</span></label>
                         <div class="col-sm-6">
                             <input id="taskContractorAmount" type="number" min="0.00" step="0.01"
                                    class="form-control form-control-sm" placeholder="Enter Contractor Amount"
@@ -235,7 +235,7 @@
 
                         <label for="taskWorkName"
                                class="col-sm-3 col-form-label col-form-label-sm"><span
-                                th:text="#{label.work}">Work name</span> : </label>
+                                th:text="#{label.work}+':'">Work name</span></label>
                         <div class="col-sm-9">
                             <input class="form-control form-control-sm" type="text"
                                    id="taskWorkName" th:field="*{workName}"
@@ -257,9 +257,9 @@
                                class="col-sm-3 col-form-label col-form-label-sm"><span
                                 th:text="#{label.filename}">File name</span>: </label>
                         <div class="col-sm-9">
-                            <input class="form-control form-control-sm" type="text"
-                                   id="taskFileName" th:field="*{fileName}"
-                                   th:disabled="${readOnly}" placeholder="Enter File Name"/>
+                            <input id="taskFileName" class="form-control form-control-sm" type="text"
+                                   th:field="*{fileName}" th:disabled="${readOnly}"/>
+                                <!--th:disabled="${readOnly}" placeholder="Enter File Name"-->
                         </div>
                     </div>
 
@@ -270,7 +270,38 @@
                     </div>
                 </div>
             </div>
+            <!-- File upload-->
+            <input type="hidden" id="dbFile" th:field="*{dbFile}"/>
 
+            <div th:if="!${readOnly}" class="row">
+                <div class="col-12">
+
+                    <!--<div class="form-group row">
+                        <input id="singleFileUploadInput" type="file" name="file" class="file-input"/>
+                    </div>-->
+
+                    <div class="form-group row">
+                        <!--<div class="input-group-prepend">
+                            <span class="input-group-text" id="uploadFileAddon01" th:text="#{label.download}">Upload</span>
+                        </div>-->
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="uploadFile" th:name="uploadFile" aria-describedby="inputGroupFileAddon01">
+                            <label class="custom-file-label" for="uploadFile" th:text="#{label.choose}">Choose file</label>
+                        </div>
+                    </div>
+
+                    <!--<div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                        </div>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+                            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                        </div>
+                    </div>-->
+
+                </div>
+            </div>
 
             <!-- Contractors & Production -->
             <div class="row">
@@ -1040,12 +1071,15 @@
 
             <div th:if="${readOnly}">
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-2">
                         <a th:href="@{/tasks}" style="width: 100px;"
                            class="btn btn-info btn-sm btn-info" role="button"
                            th:text="#{label.back}">Back</a>
                     </div>
                     <div class="col-sm-6">
+
+                    </div>
+                    <div class="col-sm-4">
 
                         <a th:href="@{'/tasks/pdfReport-' + ${task.id}}" style="width: 80px;"
                            class="ml-sm btn btn-warning btn-sm custom-width float-right" role="button">PDF</a>
@@ -1085,6 +1119,11 @@
 <script>
     initDatePicker('#taskDateBegin');
     initDatePicker('#taskDateEnd');
+    // Add the following code if you want the name of the file appear on select
+    $(".custom-file-input").on("change", function() {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
 </script>
 
 </body>

@@ -1,6 +1,7 @@
 package ua.com.vetal.controller;
 
 import net.sf.jasperreports.engine.JRException;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ua.com.vetal.entity.*;
+import ua.com.vetal.entity.file.FileDataSource;
 import ua.com.vetal.service.*;
 import ua.com.vetal.service.mail.MailServiceImp;
 import ua.com.vetal.service.reports.ExporterService;
@@ -20,6 +23,7 @@ import ua.com.vetal.service.reports.JasperService;
 import ua.com.vetal.utils.DateUtils;
 
 import javax.activation.DataSource;
+import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -80,6 +84,9 @@ public class TasksController {
     private PrintingUnitDirectoryServiceImpl printingUnitService;
 
     @Autowired
+    private DBFileStorageService dbFileStorageService;
+
+    @Autowired
     private JasperService jasperService;
     @Autowired
     private ExporterService exporterService;
@@ -125,6 +132,7 @@ public class TasksController {
         // model.addAttribute("title", "Edit user");
         // model.addAttribute("edit", true);
         model.addAttribute("readOnly", false);
+        task.setFileName(task.getDBFileName());
         model.addAttribute("task", task);
         return "taskPage";
     }
@@ -154,7 +162,8 @@ public class TasksController {
         // userRoleService.findAllObjects());
         // model.addAttribute("edit", true);
         model.addAttribute("readOnly", true);
-        model.addAttribute("task", taskService.findById(id));
+        task.setFileName(task.getDBFileName());
+        model.addAttribute("task", task);
         return "taskPage";
     }
 
@@ -165,7 +174,9 @@ public class TasksController {
      */
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String updateTask(@Valid @ModelAttribute("task") Task task, BindingResult bindingResult, Model model) {
+    public String updateTask(@Valid @ModelAttribute("task") Task task,
+                             @RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile,
+                             BindingResult bindingResult, Model model) {
         logger.info("Update " + title + ": " + task);
         if (bindingResult.hasErrors()) {
             // model.addAttribute("title", title);
@@ -190,8 +201,35 @@ public class TasksController {
             bindingResult.addError(fieldError);
             return "taskPage";
         }*/
+        Long fileId = null;
+        if (uploadFile != null && !uploadFile.isEmpty()) {
+            logger.info("uploadFile is not NULL");
+            try {
+                DBFile dbFile = dbFileStorageService.storeFile(uploadFile);
+                logger.info("Saved dbFile: " + dbFile);
 
+                if (task.getDbFile() != null) {
+                    dbFileStorageService.deleteFile(task.getDbFile().getId());
+                }
+                task.setDbFile(dbFile);
+            } catch (FileUploadException e) {
+                logger.info(e.getMessage());
+                return "taskPage";
+            }
+        } else {
+            logger.info("uploadFile is NULL");
+            //logger.info("Is DBFile null: " + task.getDbFile() ) ;
+            //logger.info("Is FILENAME null: " + (task.getFileName() == null || task.getFileName().equals(""))) ;
+            if (task.getDbFile() != null && (task.getFileName() == null || task.getFileName().equals(""))) {
+                logger.info("Delete dbFile by ID= " + task.getDbFile().getId());
+                fileId= task.getDbFile().getId();
+                task.setDbFile(null);
+            }
+        }
         taskService.saveObject(task);
+        if (fileId!=null){
+            dbFileStorageService.deleteFile(fileId);
+        }
 
         return "redirect:/tasks";
     }
@@ -277,9 +315,26 @@ public class TasksController {
                     //mailServiceImp.sendEmail(mailFrom, mailTo, "Test letter", "Test letter");
                     String subject = messageSource.getMessage("email.task", null, new Locale("ru"));
                     String text = messageSource.getMessage("email.new_task", null, new Locale("ru"));
+
+                    List<FileDataSource> attachments = new ArrayList<>();
+
+                    if (attachment != null) {
+                        attachments.add(new FileDataSource("Task.pdf", attachment));
+                    }
+                    if (task.getDbFile() != null) {
+                        //DataSource source = new ByteArrayDataSource(task.getDbFile().getData(), "application/octet-stream");
+                        DataSource source = new ByteArrayDataSource(task.getDbFile().getData(), task.getDbFile().getFileType());
+                        attachments.add(new FileDataSource(task.getDbFile().getFileName(), source));
+                    }
+
+                    /*mailServiceImp.sendMessageWithAttachment(
+                            task.getManager().getEmail(), task.getContractor().getEmail(), subject + task.getNumber(),
+                            text, attachment);*/
                     mailServiceImp.sendMessageWithAttachment(
                             task.getManager().getEmail(), task.getContractor().getEmail(), subject + task.getNumber(),
-                            text, attachment);
+                            text, attachments);
+
+
                     result = true;
                     logger.info("Sent " + title + " with ID= " + id + " from " + task.getManager().getEmail() + " to " + task.getContractor().getEmail());
                     message = messageSource.getMessage("message.email.sent_to",
