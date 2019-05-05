@@ -8,6 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -222,12 +227,12 @@ public class TasksController {
             //logger.info("Is FILENAME null: " + (task.getFileName() == null || task.getFileName().equals(""))) ;
             if (task.getDbFile() != null && (task.getFileName() == null || task.getFileName().equals(""))) {
                 logger.info("Delete dbFile by ID= " + task.getDbFile().getId());
-                fileId= task.getDbFile().getId();
+                fileId = task.getDbFile().getId();
                 task.setDbFile(null);
             }
         }
         taskService.saveObject(task);
-        if (fileId!=null){
+        if (fileId != null) {
             dbFileStorageService.deleteFile(fileId);
         }
 
@@ -359,6 +364,21 @@ public class TasksController {
 
         return "emailResultPage";
     }
+
+    @GetMapping("/downloadFile-{taskId}")
+    //https://www.callicoder.com/spring-boot-file-upload-download-jpa-hibernate-mysql-database-example/
+    public ResponseEntity<Resource> downloadFile(@PathVariable Long taskId) {
+        // Load file from database
+        Task task = taskService.findById(taskId);
+        DBFile dbFile = task.getDbFile();
+        //if (dbFile!=null && dbFile.getData()!=null) {
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(dbFile.getFileType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + dbFile.getFileName() + "\"")
+                .body(new ByteArrayResource(dbFile.getData()));
+        //}
+    }
+
 
     @RequestMapping(value = "/filter", method = RequestMethod.GET)
     public String filterTask(@ModelAttribute("taskFilterData") FilterData filterData, BindingResult bindingResult,

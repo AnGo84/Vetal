@@ -250,7 +250,7 @@
                     </div>
                 </div>
 
-                <div class="col-6">
+                <div th:class="*{dbFile != null} ? 'col-5' : 'col-6'">
 
                     <div class="form-group row">
                         <label for="taskFileName"
@@ -259,7 +259,7 @@
                         <div class="col-sm-9">
                             <input id="taskFileName" class="form-control form-control-sm" type="text"
                                    th:field="*{fileName}" th:disabled="${readOnly}"/>
-                                <!--th:disabled="${readOnly}" placeholder="Enter File Name"-->
+                            <!--th:disabled="${readOnly}" placeholder="Enter File Name"-->
                         </div>
                     </div>
 
@@ -269,6 +269,15 @@
                            style="margin-bottom: 0rem"></p>
                     </div>
                 </div>
+
+                <div class="col-1" th:if="*{dbFile != null}">
+                    <a th:href="@{'/tasks/downloadFile-' + ${task.id}}"
+                       class="btn btn-primary btn-sm custom-width float-right "
+                       style="width: 100px;" role="button"
+                       sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"
+                       th:text="#{label.download}">Download</a>
+                </div>
+
             </div>
             <!-- File upload-->
             <input type="hidden" id="dbFile" th:field="*{dbFile}"/>
@@ -282,11 +291,13 @@
 
                     <div class="form-group row">
                         <!--<div class="input-group-prepend">
-                            <span class="input-group-text" id="uploadFileAddon01" th:text="#{label.download}">Upload</span>
+                            <span class="input-group-text" id="uploadFileAddon01" th:text="#{label.upload}">Upload</span>
                         </div>-->
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="uploadFile" th:name="uploadFile" aria-describedby="inputGroupFileAddon01">
-                            <label class="custom-file-label" for="uploadFile" th:text="#{label.choose}">Choose file</label>
+                            <input type="file" class="custom-file-input" id="uploadFile" th:name="uploadFile"
+                                   aria-describedby="inputGroupFileAddon01">
+                            <label class="custom-file-label" for="uploadFile" th:text="#{label.choose}">Choose
+                                file</label>
                         </div>
                     </div>
 
@@ -1120,7 +1131,7 @@
     initDatePicker('#taskDateBegin');
     initDatePicker('#taskDateEnd');
     // Add the following code if you want the name of the file appear on select
-    $(".custom-file-input").on("change", function() {
+    $(".custom-file-input").on("change", function () {
         var fileName = $(this).val().split("\\").pop();
         $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });
