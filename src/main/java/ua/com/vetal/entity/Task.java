@@ -81,6 +81,11 @@ public class Task {
     private ProductionDirectory production;
 
     @NotNull
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "Production_Type_ID")
+    private ProductionTypeDirectory productionType;
+
+    @NotNull
     @Column(name = "Date_BEGIN", nullable = false)
     @Temporal(TemporalType.DATE)
     // @DateTimeFormat(pattern = "dd-MM-yyyy")
@@ -118,10 +123,14 @@ public class Task {
     @JoinColumn(name = "Chromaticity_ID", nullable = false)
     private ChromaticityDirectory chromaticity;
 
-    @NotNull
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "Format_ID", nullable = false)
+    //@NotNull
+    @ManyToOne()
+    @JoinColumn(name = "Format_ID")
     private FormatDirectory format;
+
+    @NotNull
+    @Column(name = "Printing_format")
+    private String printingFormat;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "Laminate_ID")
@@ -236,6 +245,7 @@ public class Task {
         task.fileName = this.fileName;
         task.contractor = this.contractor;
         task.production = this.production;
+        task.productionType = this.productionType;
         task.dateBegin = this.dateBegin;
         task.dateEnd = this.dateEnd;
         task.client = this.client;
@@ -244,6 +254,7 @@ public class Task {
         task.printingUnit = this.printingUnit;
         task.chromaticity = this.chromaticity;
         task.format = this.format;
+        task.printingFormat = this.printingFormat;
         task.laminate = this.laminate;
         task.paper = this.paper;
         task.wares = this.wares;
@@ -385,6 +396,14 @@ public class Task {
         this.production = production;
     }
 
+    public ProductionTypeDirectory getProductionType() {
+        return productionType;
+    }
+
+    public void setProductionType(ProductionTypeDirectory productionType) {
+        this.productionType = productionType;
+    }
+
     public Date getDateBegin() {
         return dateBegin;
     }
@@ -451,6 +470,14 @@ public class Task {
 
     public void setFormat(FormatDirectory format) {
         this.format = format;
+    }
+
+    public String getPrintingFormat() {
+        return printingFormat;
+    }
+
+    public void setPrintingFormat(String printingFormat) {
+        this.printingFormat = printingFormat;
     }
 
     public LaminateDirectory getLaminate() {
@@ -690,7 +717,7 @@ public class Task {
     }
 
     public String getDBFileName() {
-        if (dbFile == null) {
+        if (dbFile == null || dbFile.getFileName() == null) {
             return "";
         }
         //return dbFile.toShortString();
@@ -717,6 +744,7 @@ public class Task {
         sb.append(", amountForContractor=").append(amountForContractor);
         sb.append(", сontractorAmount=").append(contractorAmount);
         sb.append(", production=").append(production);
+        sb.append(", productionType=").append(productionType);
         sb.append(", dateBegin=").append(dateBegin);
         sb.append(", dateEnd=").append(dateEnd);
         sb.append(", client=").append(client);
@@ -725,6 +753,7 @@ public class Task {
         sb.append(", printingUnit=").append(printingUnit);
         sb.append(", chromaticity=").append(chromaticity);
         sb.append(", format=").append(format);
+        sb.append(", printingFormat=").append(printingFormat);
         sb.append(", laminate=").append(laminate);
         sb.append(", paper=").append(paper);
         sb.append(", wares='").append(wares).append('\'');

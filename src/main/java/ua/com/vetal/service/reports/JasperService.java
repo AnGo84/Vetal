@@ -52,7 +52,7 @@ public class JasperService {
         logger.info("Get PDF for Task with ID= " + id);
         Task task = taskService.findById(id);
         //InputStream jasperStream = this.getClass().getResourceAsStream("/jasperReport/TaskReport.jasper");
-        InputStream jasperStream = this.getClass().getResourceAsStream(reportNameForProductType(task.getProduction().getProductionType()));
+        InputStream jasperStream = this.getClass().getResourceAsStream(reportNameForProductType(task.getProductionType()));
 
         InputStream logoIS = this.getClass().getResourceAsStream(imageLogo);
 

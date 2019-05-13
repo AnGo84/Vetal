@@ -70,6 +70,8 @@ public class TasksController {
     @Autowired
     private ProductionDirectoryServiceImpl productionService;
     @Autowired
+    private ProductionTypeDirectoryServiceImpl productionTypeService;
+    @Autowired
     private ClientDirectoryServiceImpl clientService;
     @Autowired
     private StockDirectoryServiceImpl stockService;
@@ -478,6 +480,11 @@ public class TasksController {
         });
 
         return resultList;
+    }
+
+    @ModelAttribute("productionTypesList")
+    public List<ProductionTypeDirectory> initializeProductionTypes() {
+        return productionTypeService.findAllObjects();
     }
 
     @ModelAttribute("clientList")
