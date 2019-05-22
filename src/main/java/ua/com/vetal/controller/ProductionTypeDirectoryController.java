@@ -121,7 +121,7 @@ public class ProductionTypeDirectoryController {
 
 	@ModelAttribute("directoryName")
 	public String initializeDirectoryName() {
-		String name = messageSource.getMessage("label.productionType", null, new Locale("ru"));
+		String name = messageSource.getMessage("label.printingMethods", null, new Locale("ru"));
 		if (name == null || name.equals("")) {
 			return directoryName;
 		}

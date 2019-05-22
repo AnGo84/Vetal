@@ -119,7 +119,6 @@ public class TasksController {
         model.addAttribute("readOnly", false);
         model.addAttribute("task", task);
         return "taskPage";
-
     }
 
     /*
@@ -181,9 +180,8 @@ public class TasksController {
      */
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String updateTask(@Valid @ModelAttribute("task") Task task,
-                             @RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile,
-                             BindingResult bindingResult, Model model) {
+    public String updateTask(@Valid @ModelAttribute("task") Task task, BindingResult bindingResult,
+                             @RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile) {
         logger.info("Update " + title + ": " + task);
         if (bindingResult.hasErrors()) {
             // model.addAttribute("title", title);

@@ -136,6 +136,7 @@ public class Task {
     @JoinColumn(name = "Laminate_ID")
     private LaminateDirectory laminate;
 
+    @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "Paper_ID")
     private PaperDirectory paper;

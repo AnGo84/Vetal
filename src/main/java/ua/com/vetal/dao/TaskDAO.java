@@ -38,6 +38,9 @@ public class TaskDAO {
             //System.out.println(sql);
             Query query = entityManager.createQuery(sql);
             Long nom = (Long) query.getSingleResult();
+            if (nom==null){
+                nom=0L;
+            }
             return nom;
         } catch (NoResultException e) {
             return 0L;

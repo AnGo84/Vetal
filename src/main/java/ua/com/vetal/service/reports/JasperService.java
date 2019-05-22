@@ -135,6 +135,9 @@ public class JasperService {
             } else if (productionType.getId() == 3 || productionType.getId() == 4) {
                 // широкоформатная
                 reportName = "/jasperReport/Task_Souvenir_Report.jasper";
+            } else if (productionType.getId() == 5 || productionType.getId() == 6) {
+                // широкоформатная
+                reportName = "/jasperReport/Task_Offset_and_Digital_Report.jasper";
             }
         }
         return reportName;

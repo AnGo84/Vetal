@@ -697,7 +697,8 @@
                             <select id="taskPaper" th:field="*{paper}"
                                     th:disabled="${readOnly}" class="form-control form-control-sm selectpicker"
                                     data-live-search="true">
-                                <option value="" th:text="#{label.select_choose}"> Please Select</option>
+                                <!--<option value="" th:text="#{label.select_choose}"> Please Select</option>-->
+                                <option th:value="NULL" th:text="#{label.select_choose}">Please Select</option>
                                 <option th:each="dropDownItem : ${paperList}"
                                         th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
                                         th:attr="data-tokens=${dropDownItem.name}"/>

@@ -116,7 +116,7 @@ public class WorkerController {
 
 	@ModelAttribute("personName")
 	public String initializepersonName() {
-		String name = messageSource.getMessage("label.printer", null, new Locale("ru"));
+		String name = messageSource.getMessage("menu.label.employees", null, new Locale("ru"));
 		if (name == null || name.equals("")) {
 			return personName;
 		}

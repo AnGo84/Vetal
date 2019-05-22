@@ -125,6 +125,12 @@ public class TaskServiceImpl implements SimpleService<Task> {
         if (filterData.getManager() != null && filterData.getManager().getId() != 0) {
             predicate = builder.and(predicate, builder.equal(root.get("manager"), filterData.getManager()));
         }
+        if (filterData.getPaper() != null && filterData.getPaper().getId() != 0) {
+            predicate = builder.and(predicate, builder.equal(root.get("paper"), filterData.getPaper()));
+        }
+        if (filterData.getProduction() != null && filterData.getProduction().getId() != 0) {
+            predicate = builder.and(predicate, builder.equal(root.get("production"), filterData.getProduction()));
+        }
 
         if (filterData.getDateBeginFrom() != null) {
             predicate = builder.and(predicate,

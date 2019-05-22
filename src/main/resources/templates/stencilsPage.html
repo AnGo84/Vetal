@@ -98,6 +98,30 @@
                 </div>
 
                 <!--<div class="form-group">
+                    <label for="filterMaterial"><span th:text="#{label.paper}">Paper</span>:</label>
+                    <select
+                            id="filterMaterial" class="form-control form-control-sm selectpicker"
+                            data-live-search="true" th:field="*{paper}">
+                        <option value="" th:text="#{label.select_choose}">Please Select</option>
+                        <option th:each="dropDownItem : ${paperList}"
+                                th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
+                                th:attr="data-tokens=${dropDownItem.name}"/>
+                    </select>
+                </div>-->
+
+                <div class="form-group">
+                    <label for="filterProduction"><span th:text="#{label.production}">Production</span>:</label>
+                    <select
+                            id="filterProduction" class="form-control form-control-sm selectpicker"
+                            data-live-search="true" th:field="*{production}">
+                        <option value="" th:text="#{label.select_choose}">Please Select</option>
+                        <option th:each="dropDownItem : ${productionList}"
+                                th:value="${dropDownItem.id}" th:text="${dropDownItem.fullName}"
+                                th:attr="data-tokens=${dropDownItem.fullName}"/>
+                    </select>
+                </div>
+
+                <!--<div class="form-group">
                     <label for="filterDateBeginFrom"><span th:text="#{label.date_from}">Date From</span>:</label> <input
                         id="filterDateBeginFrom" type="date"
                         class="form-control form-control-sm" th:field="*{dateBeginFrom}"/>

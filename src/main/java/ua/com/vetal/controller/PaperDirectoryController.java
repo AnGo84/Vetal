@@ -116,7 +116,7 @@ public class PaperDirectoryController {
 
 	@ModelAttribute("directoryName")
 	public String initializeDirectoryName() {
-		String name = messageSource.getMessage("label.paper", null, new Locale("ru"));
+		String name = messageSource.getMessage("label.material", null, new Locale("ru"));
 		if (name == null || name.equals("")) {
 			return directoryName;
 		}

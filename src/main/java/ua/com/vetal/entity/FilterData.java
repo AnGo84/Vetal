@@ -256,6 +256,10 @@ public class FilterData {
             return true;
         } else if (manager != null) {
             return true;
+        } else if (paper != null) {
+            return true;
+        } else if (production != null) {
+            return true;
         } else if (client != null) {
             return true;
         } else if (printer != null) {

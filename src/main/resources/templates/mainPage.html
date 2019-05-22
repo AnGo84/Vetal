@@ -95,22 +95,25 @@
             <hr class="d-sm-none">
             -->
 
-            <h3>
+            <!--<h3>
                 <span th:text="#{label.files}">Files</span>
             </h3>
 
             <ul class="nav nav-pills flex-column" th:each="link : ${filesList}">
-                <li class="nav-item" target="_blank">
+                <li class="nav-item" target="_blank">-->
+
                     <!--<a class="nav-link" target="_blank" th:text="${link.fullName}"
                        th:href="@{'file:///' + ${link.path}}">File</a>
                        good: th:href="@{'/file-' + ${link.id}}"-->
+
+           <!--
                     <a class="nav-link" target="_blank" th:text="${link.fullName}"
                        th:href="@{'http://file:' + ${link.id}}">File</a>
 
                 </li>
             </ul>
 
-            <hr class="d-sm-none">
+            <hr class="d-sm-none">-->
         </div>
 
     </div>
