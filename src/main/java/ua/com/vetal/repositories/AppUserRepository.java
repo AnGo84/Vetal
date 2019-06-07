@@ -8,6 +8,6 @@ import ua.com.vetal.entity.AppUser;
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
-	AppUser findByUserName(String name);
+    AppUser findByUserName(String name);
 
 }

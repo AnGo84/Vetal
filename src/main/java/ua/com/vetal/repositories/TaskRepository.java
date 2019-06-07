@@ -10,10 +10,10 @@ import java.util.List;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
-	// Manager findByName(String name);
-	Task findByAccount(String account);
+    // Manager findByName(String name);
+    Task findByAccount(String account);
 
-	// List<Task> findByFilterData(FilterData filterData);
-	//List<Task> findAllByOrderByDateBeginDesc();
+    // List<Task> findByFilterData(FilterData filterData);
+    //List<Task> findAllByOrderByDateBeginDesc();
 
 }

@@ -1,7 +1,6 @@
 package ua.com.vetal.entity.dto;
 
 
-
 import javax.validation.constraints.NotNull;
 
 public class PasswordForgotDto {

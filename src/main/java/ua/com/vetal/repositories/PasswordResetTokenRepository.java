@@ -8,6 +8,6 @@ import ua.com.vetal.entity.PasswordResetToken;
 @Repository
 public interface PasswordResetTokenRepository extends JpaRepository<PasswordResetToken, Long> {
 
-	PasswordResetToken findByToken(String token);
+    PasswordResetToken findByToken(String token);
 
 }

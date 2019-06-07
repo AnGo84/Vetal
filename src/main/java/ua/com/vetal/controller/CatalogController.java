@@ -11,7 +11,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.annotation.SessionScope;
 import ua.com.vetal.entity.file.LocalFile;
 import ua.com.vetal.utils.ListFilesUtils;
@@ -73,8 +76,7 @@ public class CatalogController {
     @RequestMapping(value = {"/{path}"}, method = RequestMethod.GET)
     public String readFolder(Model model, @PathVariable String path)
     /*@RequestMapping(value = {"/"}, method = RequestMethod.GET)
-    public String readFolder(Model model, @RequestParam("path") String path)*/
-    {
+    public String readFolder(Model model, @RequestParam("path") String path)*/ {
         logger.info("Read folder: " + path);
 
         if (path == null || path.isEmpty() || path.equals("..")) {
@@ -84,8 +86,8 @@ public class CatalogController {
             LocalFile localFile = ListFilesUtils.findLocalFileByName(localFileList, path);
             if (localFile == null) {
                 logger.info("LocalFile is null. Parent name: " + parentPath.getName());
-                if (parentPath.getName().equals(path)){
-                    logger.info("Parent name: " + parentPath.getName() +" equal to " + path);
+                if (parentPath.getName().equals(path)) {
+                    logger.info("Parent name: " + parentPath.getName() + " equal to " + path);
 
                     currentParentPath = parentPath.getAbsolutePath();
                     parentPath = parentPath.getParentFile();

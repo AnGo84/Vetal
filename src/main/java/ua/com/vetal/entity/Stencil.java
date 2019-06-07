@@ -46,7 +46,7 @@ public class Stencil {
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "Client_ID")
-    private ClientDirectory client;
+    private Client client;
 
     @NotNull
     @Column(name = "Order_Name", nullable = false)
@@ -212,6 +212,20 @@ public class Stencil {
     @Column(name = "Debt_amount", nullable = true)
     private double debtAmount;
 
+    @Column(name = "kraskoottisk")
+    private int kraskoottisk;
+
+    @Digits(integer = 8, fraction = 2)
+    @Column(name = "cost_of_materials", nullable = true)
+    private double costOfMaterials;
+
+    @Digits(integer = 8, fraction = 2)
+    @Column(name = "other_expenses", nullable = true)
+    private double otherExpenses;
+
+    @Digits(integer = 8, fraction = 2)
+    @Column(name = "cost_of_printing", nullable = true)
+    private double costOfPrinting;
 
     public Stencil getCopy() {
 
@@ -265,6 +279,8 @@ public class Stencil {
         task.sticker = this.sticker;
 
         task.amount = this.amount;
+
+        task.kraskoottisk = this.kraskoottisk;
         //System.out.println("Copy Return task:" + task);
         return task;
     }
@@ -321,11 +337,11 @@ public class Stencil {
         this.account = account;
     }
 
-    public ClientDirectory getClient() {
+    public Client getClient() {
         return client;
     }
 
-    public void setClient(ClientDirectory client) {
+    public void setClient(Client client) {
         this.client = client;
     }
 
@@ -637,6 +653,38 @@ public class Stencil {
         this.debtAmount = debtAmount;
     }
 
+    public int getKraskoottisk() {
+        return kraskoottisk;
+    }
+
+    public void setKraskoottisk(int kraskoottisk) {
+        this.kraskoottisk = kraskoottisk;
+    }
+
+    public double getCostOfMaterials() {
+        return costOfMaterials;
+    }
+
+    public void setCostOfMaterials(double costOfMaterials) {
+        this.costOfMaterials = costOfMaterials;
+    }
+
+    public double getOtherExpenses() {
+        return otherExpenses;
+    }
+
+    public void setOtherExpenses(double otherExpenses) {
+        this.otherExpenses = otherExpenses;
+    }
+
+    public double getCostOfPrinting() {
+        return costOfPrinting;
+    }
+
+    public void setCostOfPrinting(double costOfPrinting) {
+        this.costOfPrinting = costOfPrinting;
+    }
+
     public String getStringAmount() {
         return new DecimalFormat("#,##0.00").format(amount / 100) + " грн";
     }
@@ -689,6 +737,10 @@ public class Stencil {
         sb.append(", state=").append(state);
         sb.append(", payment=").append(payment);
         sb.append(", debtAmount=").append(debtAmount);
+        sb.append(", kraskoottisk=").append(kraskoottisk);
+        sb.append(", costOfMaterials=").append(costOfMaterials);
+        sb.append(", otherExpenses=").append(otherExpenses);
+        sb.append(", costOfPrinting=").append(costOfPrinting);
         sb.append('}');
         return sb.toString();
     }

@@ -10,7 +10,8 @@ import java.util.List;
 @Repository
 public interface LinkRepository extends JpaRepository<Link, Long> {
 
-	Link findByFullName(String name);
-	List<Link> findByLinkType_Id(Long typeID);
+    Link findByFullName(String name);
+
+    List<Link> findByLinkType_Id(Long typeID);
 
 }

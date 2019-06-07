@@ -8,6 +8,6 @@ import ua.com.vetal.entity.Worker;
 @Repository
 public interface WorkerRepository extends JpaRepository<Worker, Long> {
 
-	// Manager findByName(String name);
+    // Manager findByName(String name);
 
 }

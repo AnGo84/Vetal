@@ -8,6 +8,6 @@ import ua.com.vetal.entity.StockDirectory;
 @Repository
 public interface StockDirectoryRepository extends JpaRepository<StockDirectory, Long> {
 
-	StockDirectory findByName(String name);
+    StockDirectory findByName(String name);
 
 }

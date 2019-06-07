@@ -4,17 +4,17 @@ import java.util.List;
 
 public interface SimpleService<T> {
 
-	T findById(Long id);
+    T findById(Long id);
 
-	T findByName(String name);
+    T findByName(String name);
 
-	void saveObject(T object);
+    void saveObject(T object);
 
-	void updateObject(T object);
+    void updateObject(T object);
 
-	void deleteById(Long id);
+    void deleteById(Long id);
 
-	List<T> findAllObjects();
+    List<T> findAllObjects();
 
-	boolean isObjectExist(T object);
+    boolean isObjectExist(T object);
 }

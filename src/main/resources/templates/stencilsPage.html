@@ -70,8 +70,8 @@
                             data-live-search="true" th:field="*{client}">
                         <option value="" th:text="#{label.select_choose}">Please Select</option>
                         <option th:each="dropDownItem : ${clientList}"
-                                th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
-                                th:attr="data-tokens=${dropDownItem.name}"/>
+                                th:value="${dropDownItem.id}" th:text="${dropDownItem.fullName}"
+                                th:attr="data-tokens=${dropDownItem.fullName}"/>
                     </select>
                 </div>
 
@@ -211,7 +211,7 @@
 
 
                         <tr th:each="stencil : ${stencilsList}"
-                            th:class="${stencil.payment.id==1} ? 'table-danger':
+                            th:class="${stencil.payment.id==1 or stencil.debtAmount!=0} ? 'table-danger':
                                     (${stencil.state.id == 1} ? 'table-warning' :
                                      (${stencil.state.id == 2} ? 'table-active' :
                                       (${stencil.state.id == 3} ? 'table-info':
@@ -224,7 +224,7 @@
                             <td><a th:href="@{'/stencils/view-' + ${stencil.id}}"
                                    th:text="${stencil.fullNumber}"></a></td>
                             <td th:text="${stencil.orderName}"></td>
-                            <td th:text="${stencil.client.name}"></td>
+                            <td th:text="${stencil.client.fullName}"></td>
                             <td th:text="${stencil.manager.fullName}"></td>
                             <!--<td class="text-right"
                                 th:text="${#numbers.formatDecimal(stencil.amount, 1, 'COMMA', 2, 'POINT')}"></td>-->
@@ -281,6 +281,36 @@
 
         <!-- Right PART -->
         <div class="col-sm-2 bg-light">
+            <h2><span th:text="#{label.loading_in_days}">Loading in days</span>:</h2>
+            <!-- <form action="#" th:object="${kraskoottiskAmount}" method="GET">
+
+                 <div class="form-group">
+                     &lt;!&ndash;<label for="filterNumber"><span th:text="#{label.number}">Number</span>:</label>&ndash;&gt;
+                     <input type="number" class="form-control form-control-sm" id="kraskoottiskAmount"
+                            th:field="${kraskoottiskAmount}">
+                 </div>
+             </form>-->
+
+            <input id="loadingInDays" type="text" disabled="true"
+                   class="form-control form-control-sm"
+                   th:value="${#numbers.formatDecimal(kraskoottiskAmount/1800, 1, 'COMMA', 2, 'POINT')}">
+
+
+            <!--th:value="${#numbers.formatDecimal(kraskoottiskAmount/1800, 0, 'COMMA', 2, 'POINT')}"
+                   th:value="${kraskoottiskAmount/1800}"
+            -->
+
+            <hr class="d-sm-none">
+
+            <h2><span th:text="#{label.kraskoottisk_amount}">Kraskoottisk amount</span>:</h2>
+            <input id="kraskoottiskAmount" type="text" disabled="true"
+                   class="form-control form-control-sm"
+                   th:value="${#numbers.formatDecimal(kraskoottiskAmount, 0, 0)}">
+            <!--th:value="${kraskoottiskAmount}"-->
+
+            <hr class="d-sm-none">
+            <hr>
+
             <h2><span th:text="#{label.reports}">Reports</span>:</h2>
             <div class="form-group text-center align-self-center">
                 <a th:href="@{'/stencils/excelExport'}" style="width: 80px;"
@@ -289,6 +319,8 @@
             </div>
 
             <hr class="d-sm-none">
+
+
         </div>
 
     </div>

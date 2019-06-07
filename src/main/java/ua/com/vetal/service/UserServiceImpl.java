@@ -1,13 +1,12 @@
 package ua.com.vetal.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import ua.com.vetal.entity.User;
 import ua.com.vetal.repositories.UserRepository;
+
+import java.util.List;
 
 @Service("userService")
 @Transactional

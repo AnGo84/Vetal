@@ -8,6 +8,6 @@ import ua.com.vetal.entity.LaminateDirectory;
 @Repository
 public interface LaminateDirectoryRepository extends JpaRepository<LaminateDirectory, Long> {
 
-	LaminateDirectory findByName(String name);
+    LaminateDirectory findByName(String name);
 
 }

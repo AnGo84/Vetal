@@ -8,6 +8,6 @@ import ua.com.vetal.entity.UserRole;
 @Repository
 public interface LinkTypeRepository extends JpaRepository<LinkType, Long> {
 
-	LinkType findByName(String name);
+    LinkType findByName(String name);
 
 }

@@ -1,9 +1,13 @@
 package ua.com.vetal.entity;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Component
+@Scope("prototype")
 public class FilterData {
 
     private Long id;
@@ -25,7 +29,7 @@ public class FilterData {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateBeginTill;
 
-    private ClientDirectory client;
+    private Client client;
 
     private StockDirectory stock;
 
@@ -137,11 +141,11 @@ public class FilterData {
         this.dateBeginTill = dateBeginTill;
     }
 
-    public ClientDirectory getClient() {
+    public Client getClient() {
         return client;
     }
 
-    public void setClient(ClientDirectory client) {
+    public void setClient(Client client) {
         this.client = client;
     }
 

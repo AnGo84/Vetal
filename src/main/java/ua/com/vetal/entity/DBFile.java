@@ -73,6 +73,7 @@ public class DBFile {
         sb.append('}');
         return sb.toString();
     }
+
     public String toShortString() {
         final StringBuilder sb = new StringBuilder("DBFile{");
         sb.append("id='").append(id).append('\'');
@@ -81,6 +82,7 @@ public class DBFile {
         sb.append('}');
         return sb.toString();
     }
+
     public String getFullFileName() {
         final StringBuilder sb = new StringBuilder(fileName);
         sb.append("(").append(id).append(fileType).append(")");

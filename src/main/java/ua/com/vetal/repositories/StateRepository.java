@@ -8,6 +8,6 @@ import ua.com.vetal.entity.UserRole;
 @Repository
 public interface StateRepository extends JpaRepository<State, Long> {
 
-	State findByName(String name);
+    State findByName(String name);
 
 }

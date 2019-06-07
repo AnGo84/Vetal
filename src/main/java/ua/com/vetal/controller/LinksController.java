@@ -3,20 +3,18 @@ package ua.com.vetal.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.annotation.SessionScope;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import ua.com.vetal.entity.Link;
 import ua.com.vetal.entity.LinkType;
-import ua.com.vetal.entity.file.LocalFile;
 import ua.com.vetal.service.LinkServiceImpl;
 import ua.com.vetal.service.LinkTypeServiceImpl;
-import ua.com.vetal.utils.ListFilesUtils;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -44,7 +42,7 @@ public class LinksController {
     }
 
 
-    @RequestMapping(value = { "/add" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/add"}, method = RequestMethod.GET)
     public String showAddPersonPage(Model model) {
         logger.info("Add new link record");
         Link link = new Link();
@@ -85,7 +83,7 @@ public class LinksController {
         return "redirect:/links";
     }
 
-    @RequestMapping(value = { "/delete-{id}" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/delete-{id}"}, method = RequestMethod.GET)
     public String deletePerson(@PathVariable Long id) {
         logger.info("Delete link with ID= " + id);
         linkService.deleteById(id);

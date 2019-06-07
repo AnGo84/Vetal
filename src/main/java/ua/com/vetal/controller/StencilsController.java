@@ -1,10 +1,6 @@
 package ua.com.vetal.controller;
 
-import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
+import net.sf.jasperreports.engine.JRException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +16,16 @@ import ua.com.vetal.service.*;
 import ua.com.vetal.service.reports.ExporterService;
 import ua.com.vetal.service.reports.JasperService;
 import ua.com.vetal.utils.DateUtils;
+import ua.com.vetal.utils.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/stencils")
@@ -35,129 +34,131 @@ import java.util.*;
 // @SessionAttributes({"stencilFilterData"})
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:vetal.properties")
 public class StencilsController {
-    static final Logger logger = LoggerFactory.getLogger(ManagerController.class);
-    @Autowired
-    MessageSource messageSource;
+	static final Logger logger = LoggerFactory.getLogger(ManagerController.class);
+	@Autowired
+	MessageSource messageSource;
 
-    private String title = "Stencils";
-    private String personName = "Stencils";
-    private String pageName = "/stencils";
-    @Autowired
-    private StencilServiceImpl stencilService;
+	private String title = "Stencils";
+	private String personName = "Stencils";
+	private String pageName = "/stencils";
+	@Autowired
+	private StencilServiceImpl stencilService;
 
-    @Autowired
-    private FilterData filterData;
-    private List<Stencil> stencilList;
+	@Autowired
+	private FilterData filterData;
+	private List<Stencil> stencilList;
 
-    @Autowired
-    private PaymentServiceImpl paymentService;
-    @Autowired
-    private ManagerServiceImpl managerService;
-    @Autowired
-    private NumberBaseDirectoryServiceImpl numberBaseService;
-    @Autowired
-    private PrinterServiceImpl printerService;
-    @Autowired
-    private StateServiceImpl stateService;
-    @Autowired
-    private WorkerServiceImpl workerService;
-    @Autowired
-    private ProductionDirectoryServiceImpl productionService;
-    @Autowired
-    private ClientDirectoryServiceImpl clientService;
-    @Autowired
-    private StockDirectoryServiceImpl stockService;
-    @Autowired
-    private PaperDirectoryServiceImpl paperService;
-    @Autowired
-    private PrintingUnitDirectoryServiceImpl printingUnitService;
+	@Autowired
+	private PaymentServiceImpl paymentService;
+	@Autowired
+	private ManagerServiceImpl managerService;
+	@Autowired
+	private NumberBaseDirectoryServiceImpl numberBaseService;
+	@Autowired
+	private PrinterServiceImpl printerService;
+	@Autowired
+	private StateServiceImpl stateService;
+	@Autowired
+	private WorkerServiceImpl workerService;
+	@Autowired
+	private ProductionDirectoryServiceImpl productionService;
+	@Autowired
+	private ClientServiceImpl clientService;
+	@Autowired
+	private StockDirectoryServiceImpl stockService;
+	@Autowired
+	private PaperDirectoryServiceImpl paperService;
+	@Autowired
+	private PrintingUnitDirectoryServiceImpl printingUnitService;
 
-    @Autowired
-    private JasperService jasperService;
-    @Autowired
-    private ExporterService exporterService;
+	@Autowired
+	private JasperService jasperService;
+	@Autowired
+	private ExporterService exporterService;
+	@Autowired
+	private KraskoottiskService kraskoottiskService;
 
-    @RequestMapping(value = {""}, method = RequestMethod.GET)
-    public String stencilList(Model model) {
+	@RequestMapping(value = {""}, method = RequestMethod.GET)
+	public String stencilList(Model model) {
 
-        model.addAttribute("title", title);
-        //model.addAttribute("stencilsList", getStencilsListData());
-        // model.addAttribute("stencilList", stencilService.findAllObjects());
+		model.addAttribute("title", title);
+		//model.addAttribute("stencilsList", getStencilsListData());
+		// model.addAttribute("stencilList", stencilService.findAllObjects());
 
-        return "stencilsPage";
-    }
+		return "stencilsPage";
+	}
 
-    @RequestMapping(value = {"/add"}, method = RequestMethod.GET)
-    public String showAddStencilPage(Model model) {
-        logger.info("Add new " + title + " record");
-        Stencil stencil = new Stencil();
+	@RequestMapping(value = {"/add"}, method = RequestMethod.GET)
+	public String showAddStencilPage(Model model) {
+		logger.info("Add new " + title + " record");
+		Stencil stencil = new Stencil();
 
-        //stencil.setAccount(String.valueOf(stencilDAO.getMaxID()+1));
-        stencil.setNumber((int) (stencilService.getMaxID() + 1));
+		//stencil.setAccount(String.valueOf(stencilDAO.getMaxID()+1));
+		stencil.setNumber((int) (stencilService.getMaxID() + 1));
 
-        // model.addAttribute("edit", false);
-        model.addAttribute("readOnly", false);
-        model.addAttribute("stencil", stencil);
-        return "stencilPage";
+		// model.addAttribute("edit", false);
+		model.addAttribute("readOnly", false);
+		model.addAttribute("stencil", stencil);
+		return "stencilPage";
 
-    }
-
-
-    @RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
-    public String editStencil(@PathVariable Long id, Model model) {
-        logger.info("Edit " + title + " with ID= " + id);
-
-        Stencil stencil = stencilService.findById(id);
-        // logger.info(task.toString());
-
-        // model.addAttribute("title", "Edit user");
-        // model.addAttribute("edit", true);
-        model.addAttribute("readOnly", false);
-        model.addAttribute("stencil", stencil);
-        return "stencilPage";
-    }
-
-    @RequestMapping(value = "/copy-{id}", method = RequestMethod.GET)
-    public String copyStencil(@PathVariable Long id, Model model) {
-        logger.info("Copy " + title + " with ID= " + id);
-
-        Stencil stencil = (stencilService.findById(id)).getCopy();
-        //stencil.setAccount(String.valueOf(stencilDAO.getMaxID()+1));
-        stencil.setNumber((int) (stencilService.getMaxID() + 1));
-
-        logger.info("Copy stencil:" + stencil.toString());
-
-        model.addAttribute("readOnly", false);
-        model.addAttribute("stencil", stencil);
-        return "stencilPage";
-    }
-
-    @RequestMapping(value = "/view-{id}", method = RequestMethod.GET)
-    public String viewStencil(@PathVariable Long id, Model model) {
-        logger.info("View " + title + " with ID= " + id);
-
-        Stencil stencil = stencilService.findById(id);
-        logger.info(stencil.toString());
-
-        // model.addAttribute("title", "Edit user");
-        // model.addAttribute("userRolesList",
-        // userRoleService.findAllObjects());
-        // model.addAttribute("edit", true);
-        model.addAttribute("readOnly", true);
-        model.addAttribute("stencil", stencilService.findById(id));
-        return "stencilPage";
-    }
+	}
 
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String updateStencil(@Valid @ModelAttribute("stencil") Stencil stencil, BindingResult bindingResult, Model model) {
-        logger.info("Update " + title + ": " + stencil);
-        if (bindingResult.hasErrors()) {
-            for (ObjectError error : bindingResult.getAllErrors()) {
-                logger.info(error.getDefaultMessage());
-            }
-            return "stencilPage";
-        }
+	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
+	public String editStencil(@PathVariable Long id, Model model) {
+		logger.info("Edit " + title + " with ID= " + id);
+
+		Stencil stencil = stencilService.findById(id);
+		// logger.info(task.toString());
+
+		// model.addAttribute("title", "Edit user");
+		// model.addAttribute("edit", true);
+		model.addAttribute("readOnly", false);
+		model.addAttribute("stencil", stencil);
+		return "stencilPage";
+	}
+
+	@RequestMapping(value = "/copy-{id}", method = RequestMethod.GET)
+	public String copyStencil(@PathVariable Long id, Model model) {
+		logger.info("Copy " + title + " with ID= " + id);
+
+		Stencil stencil = (stencilService.findById(id)).getCopy();
+		//stencil.setAccount(String.valueOf(stencilDAO.getMaxID()+1));
+		stencil.setNumber((int) (stencilService.getMaxID() + 1));
+
+		logger.info("Copy stencil:" + stencil.toString());
+
+		model.addAttribute("readOnly", false);
+		model.addAttribute("stencil", stencil);
+		return "stencilPage";
+	}
+
+	@RequestMapping(value = "/view-{id}", method = RequestMethod.GET)
+	public String viewStencil(@PathVariable Long id, Model model) {
+		logger.info("View " + title + " with ID= " + id);
+
+		Stencil stencil = stencilService.findById(id);
+		logger.info(stencil.toString());
+
+		// model.addAttribute("title", "Edit user");
+		// model.addAttribute("userRolesList",
+		// userRoleService.findAllObjects());
+		// model.addAttribute("edit", true);
+		model.addAttribute("readOnly", true);
+		model.addAttribute("stencil", stencilService.findById(id));
+		return "stencilPage";
+	}
+
+
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public String updateStencil(@Valid @ModelAttribute("stencil") Stencil stencil, BindingResult bindingResult, Model model) {
+		logger.info("Update " + title + ": " + stencil);
+		if (bindingResult.hasErrors()) {
+			for (ObjectError error : bindingResult.getAllErrors()) {
+				logger.info(error.getDefaultMessage());
+			}
+			return "stencilPage";
+		}
 
 		/*if (stencilService.isAccountValueExist(stencil)) {
 
@@ -168,84 +169,84 @@ public class StencilsController {
 			return "stencilPage";
 		}
 */
-        stencilService.saveObject(stencil);
+		stencilService.saveObject(stencil);
 
-        return "redirect:/stencils";
-    }
+		return "redirect:/stencils";
+	}
 
-    @RequestMapping(value = {"/delete-{id}"}, method = RequestMethod.GET)
-    public String deleteStencil(@PathVariable Long id) {
-        logger.info("Delete " + title + " with ID= " + id);
-        stencilService.deleteById(id);
-        return "redirect:/stencils";
-    }
+	@RequestMapping(value = {"/delete-{id}"}, method = RequestMethod.GET)
+	public String deleteStencil(@PathVariable Long id) {
+		logger.info("Delete " + title + " with ID= " + id);
+		stencilService.deleteById(id);
+		return "redirect:/stencils";
+	}
 
-    @RequestMapping(value = "/filter", method = RequestMethod.GET)
-    public String updateStencil(@ModelAttribute("stencilFilterData") FilterData filterData, BindingResult bindingResult,
-                                Model model) {
-        // logger.info("FilterData: " + filterData);
-        this.filterData = filterData;
+	@RequestMapping(value = "/filter", method = RequestMethod.GET)
+	public String updateStencil(@ModelAttribute("stencilFilterData") FilterData filterData, BindingResult bindingResult,
+								Model model) {
+		// logger.info("FilterData: " + filterData);
+		this.filterData = filterData;
 
-        return "redirect:/stencils";
-    }
+		return "redirect:/stencils";
+	}
 
-    @RequestMapping(value = "/clearFilter", method = RequestMethod.GET)
-    //public String clearFilterTask(WebRequest request) {
-    public String clearFilterTask() {
-        this.filterData = new FilterData();
-        //request.removeAttribute("taskFilterData", WebRequest.SCOPE_SESSION);
-        return "redirect:/stencils";
-    }
+	@RequestMapping(value = "/clearFilter", method = RequestMethod.GET)
+	//public String clearFilterTask(WebRequest request) {
+	public String clearFilterTask() {
+		this.filterData = new FilterData();
+		//request.removeAttribute("taskFilterData", WebRequest.SCOPE_SESSION);
+		return "redirect:/stencils";
+	}
 
-    @RequestMapping(value = {"/pdfReport-{id}"}, method = RequestMethod.GET)
-    @ResponseBody
-    public void pdfReportStencil(@PathVariable Long id, HttpServletResponse response) throws JRException, IOException {
-        //logger.info("Get PDF for " + title + " with ID= " + id);
-        exporterService.export(ReportType.PDF, jasperService.stencilReport(id),title + "_" + id,response);
-    }
+	@RequestMapping(value = {"/pdfReport-{id}"}, method = RequestMethod.GET)
+	@ResponseBody
+	public void pdfReportStencil(@PathVariable Long id, HttpServletResponse response) throws JRException, IOException {
+		//logger.info("Get PDF for " + title + " with ID= " + id);
+		exporterService.export(ReportType.PDF, jasperService.stencilReport(id), title + "_" + id, response);
+	}
 
 
-    @RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
-    @ResponseBody
-    public void exportToExcelReportTask(HttpServletResponse response) throws JRException, IOException {
-        //logger.info("Export " + title + " to Excel");
-        exporterService.export(ReportType.XLSX, jasperService.stencilsTable(filterData),title,response);
-    }
+	@RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
+	@ResponseBody
+	public void exportToExcelReportTask(HttpServletResponse response) throws JRException, IOException {
+		//logger.info("Export " + title + " to Excel");
+		exporterService.export(ReportType.XLSX, jasperService.stencilsTable(filterData), title, response);
+	}
 
-    /**
-     * This methods will provide lists and fields to views
-     */
-    @ModelAttribute("title")
-    public String initializeTitle() {
-        return this.title;
-    }
+	/**
+	 * This methods will provide lists and fields to views
+	 */
+	@ModelAttribute("title")
+	public String initializeTitle() {
+		return this.title;
+	}
 
-    @ModelAttribute("personName")
-    public String initializepersonName() {
-        return this.personName;
-    }
+	@ModelAttribute("personName")
+	public String initializepersonName() {
+		return this.personName;
+	}
 
-    @ModelAttribute("pageName")
-    public String initializePageName() {
-        return this.pageName;
-    }
+	@ModelAttribute("pageName")
+	public String initializePageName() {
+		return this.pageName;
+	}
 
-    @ModelAttribute("numberBaseList")
-    public List<NumberBaseDirectory> getNumberBaseList() {
-        List<NumberBaseDirectory> resultList = numberBaseService.findAllObjects();
-        Collections.sort(resultList, new Comparator<NumberBaseDirectory>() {
-            @Override
-            public int compare(NumberBaseDirectory m1, NumberBaseDirectory m2) {
-                return m1.getName().compareTo(m2.getName());
-            }
-        });
+	@ModelAttribute("numberBaseList")
+	public List<NumberBaseDirectory> getNumberBaseList() {
+		List<NumberBaseDirectory> resultList = numberBaseService.findAllObjects();
+		Collections.sort(resultList, new Comparator<NumberBaseDirectory>() {
+			@Override
+			public int compare(NumberBaseDirectory m1, NumberBaseDirectory m2) {
+				return m1.getName().compareTo(m2.getName());
+			}
+		});
 
-        return resultList;
-    }
+		return resultList;
+	}
 
-    @ModelAttribute("stateList")
-    public List<State> getStatesList() {
-        List<State> resultList = stateService.findAllObjects();
+	@ModelAttribute("stateList")
+	public List<State> getStatesList() {
+		List<State> resultList = stateService.findAllObjects();
         /*Collections.sort(resultList, new Comparator<Worker>() {
             @Override
             public int compare(Worker m1, Worker m2) {
@@ -253,153 +254,176 @@ public class StencilsController {
             }
         });*/
 
-        return resultList;
-    }
+		return resultList;
+	}
 
-    @ModelAttribute("paymentList")
-    public List<Payment> getPaymentsList() {
-        List<Payment> resultList = paymentService.findAllObjects();
+	@ModelAttribute("paymentList")
+	public List<Payment> getPaymentsList() {
+		List<Payment> resultList = paymentService.findAllObjects();
         /*Collections.sort(resultList, new Comparator<Worker>() {
             @Override
             public int compare(Worker m1, Worker m2) {
                 return m1.getFullName().compareTo(m2.getFullName());
             }
         });*/
-        return resultList;
-    }
+		return resultList;
+	}
 
-    @ModelAttribute("managerList")
-    public List<Manager> getManagersList() {
-        List<Manager> resultList = managerService.findAllObjects();
-        Collections.sort(resultList, new Comparator<Manager>() {
-            @Override
-            public int compare(Manager m1, Manager m2) {
-                return m1.getFullName().compareTo(m2.getFullName());
-            }
-        });
+	@ModelAttribute("managerList")
+	public List<Manager> getManagersList() {
+		List<Manager> resultList = managerService.findAllObjects();
+		Collections.sort(resultList, new Comparator<Manager>() {
+			@Override
+			public int compare(Manager m1, Manager m2) {
+				return m1.getFullName().compareTo(m2.getFullName());
+			}
+		});
 
-        return resultList;
-    }
+		return resultList;
+	}
 
-    @ModelAttribute("printerList")
-    public List<Printer> getPrintersList() {
-        List<Printer> resultList = printerService.findAllObjects();
-        Collections.sort(resultList, new Comparator<Printer>() {
-            @Override
-            public int compare(Printer m1, Printer m2) {
-                return m1.getFullName().compareTo(m2.getFullName());
-            }
-        });
+	@ModelAttribute("printerList")
+	public List<Printer> getPrintersList() {
+		List<Printer> resultList = printerService.findAllObjects();
+		Collections.sort(resultList, new Comparator<Printer>() {
+			@Override
+			public int compare(Printer m1, Printer m2) {
+				return m1.getFullName().compareTo(m2.getFullName());
+			}
+		});
 
-        return resultList;
-    }
+		return resultList;
+	}
 
-    @ModelAttribute("workerList")
-    public List<Worker> getWorkersList() {
-        List<Worker> resultList = workerService.findAllObjects();
-        Collections.sort(resultList, new Comparator<Worker>() {
-            @Override
-            public int compare(Worker m1, Worker m2) {
-                return m1.getFullName().compareTo(m2.getFullName());
-            }
-        });
+	@ModelAttribute("workerList")
+	public List<Worker> getWorkersList() {
+		List<Worker> resultList = workerService.findAllObjects();
+		Collections.sort(resultList, new Comparator<Worker>() {
+			@Override
+			public int compare(Worker m1, Worker m2) {
+				return m1.getFullName().compareTo(m2.getFullName());
+			}
+		});
 
-        return resultList;
-    }
+		return resultList;
+	}
 
-    @ModelAttribute("productionList")
-    public List<ProductionDirectory> getProductionsList() {
-        List<ProductionDirectory> resultList = productionService.findAllObjects();
-        Collections.sort(resultList, new Comparator<ProductionDirectory>() {
-            @Override
-            public int compare(ProductionDirectory m1, ProductionDirectory m2) {
-                return m1.getFullName().compareTo(m2.getFullName());
-            }
-        });
+	@ModelAttribute("productionList")
+	public List<ProductionDirectory> getProductionsList() {
+		List<ProductionDirectory> resultList = productionService.findAllObjects();
+		Collections.sort(resultList, new Comparator<ProductionDirectory>() {
+			@Override
+			public int compare(ProductionDirectory m1, ProductionDirectory m2) {
+				return m1.getFullName().compareTo(m2.getFullName());
+			}
+		});
 
-        return resultList;
-    }
+		return resultList;
+	}
 
-    @ModelAttribute("clientList")
-    public List<ClientDirectory> getClientsList() {
-        List<ClientDirectory> resultList = clientService.findAllObjects();
-        Collections.sort(resultList, new Comparator<ClientDirectory>() {
-            @Override
-            public int compare(ClientDirectory m1, ClientDirectory m2) {
-                return m1.getName().compareTo(m2.getName());
-            }
-        });
+	@ModelAttribute("clientList")
+	public List<Client> getClientsList() {
+		List<Client> resultList = clientService.findAllObjects();
 
-        return resultList;
-    }
+		List<Client> result = resultList.stream()           // convert list to stream
+				/*.filter(client -> !StringUtils.isEmpty(client.getFullName())
+						&& client.getManager() != null && !StringUtils.isEmpty(client.getLastName())
+						&& !StringUtils.isEmpty(client.getFirstName()) && !StringUtils.isEmpty(client.getEmail())
+						&& !StringUtils.isEmpty(client.getPhone())
+				)*/
+				.sorted(Comparator.comparing(Client::getFullName))
+				.collect(Collectors.toList());
 
-    @ModelAttribute("stockList")
-    public List<StockDirectory> getStocksList() {
-        List<StockDirectory> resultList = stockService.findAllObjects();
-        Collections.sort(resultList, new Comparator<StockDirectory>() {
-            @Override
-            public int compare(StockDirectory m1, StockDirectory m2) {
-                return m1.getName().compareTo(m2.getName());
-            }
-        });
+		/*Collections.sort(resultList, new Comparator<Client>() {
+			@Override
+			public int compare(Client m1, Client m2) {
+				return m1.getFullName().compareTo(m2.getFullName());
+			}
+		});
+		return resultList;
+		*/
+		return result;
+	}
 
-        return resultList;
-    }
+	@ModelAttribute("stockList")
+	public List<StockDirectory> getStocksList() {
+		List<StockDirectory> resultList = stockService.findAllObjects();
+		Collections.sort(resultList, new Comparator<StockDirectory>() {
+			@Override
+			public int compare(StockDirectory m1, StockDirectory m2) {
+				return m1.getName().compareTo(m2.getName());
+			}
+		});
+
+		return resultList;
+	}
 
 
-    @ModelAttribute("paperList")
-    public List<PaperDirectory> getPapersList() {
-        List<PaperDirectory> resultList = paperService.findAllObjects();
-        Collections.sort(resultList, new Comparator<PaperDirectory>() {
-            @Override
-            public int compare(PaperDirectory m1, PaperDirectory m2) {
-                return m1.getName().compareTo(m2.getName());
-            }
-        });
+	@ModelAttribute("paperList")
+	public List<PaperDirectory> getPapersList() {
+		List<PaperDirectory> resultList = paperService.findAllObjects();
+		Collections.sort(resultList, new Comparator<PaperDirectory>() {
+			@Override
+			public int compare(PaperDirectory m1, PaperDirectory m2) {
+				return m1.getName().compareTo(m2.getName());
+			}
+		});
 
-        return resultList;
-    }
+		return resultList;
+	}
 
-    @ModelAttribute("printingUnitList")
-    public List<PrintingUnitDirectory> getPrintingUnitList() {
-        List<PrintingUnitDirectory> resultList = printingUnitService.findAllObjects();
-        Collections.sort(resultList, new Comparator<PrintingUnitDirectory>() {
-            @Override
-            public int compare(PrintingUnitDirectory m1, PrintingUnitDirectory m2) {
-                return m1.getName().compareTo(m2.getName());
-            }
-        });
+	@ModelAttribute("printingUnitList")
+	public List<PrintingUnitDirectory> getPrintingUnitList() {
+		List<PrintingUnitDirectory> resultList = printingUnitService.findAllObjects();
+		Collections.sort(resultList, new Comparator<PrintingUnitDirectory>() {
+			@Override
+			public int compare(PrintingUnitDirectory m1, PrintingUnitDirectory m2) {
+				return m1.getName().compareTo(m2.getName());
+			}
+		});
 
-        return resultList;
-    }
+		return resultList;
+	}
 
-    @ModelAttribute("stencilFilterData")
-    public FilterData getFilterData() {
-        if (filterData == null) {
-            filterData = new FilterData();
-            filterData.setDateBeginFrom(DateUtils.firstDayOfMonth(new Date()));
-        }
-        logger.info("Get FilterDate: " + filterData);
-        return filterData;
-    }
+	@ModelAttribute("stencilFilterData")
+	public FilterData getFilterData() {
+		if (filterData == null) {
+			filterData = new FilterData();
+			filterData.setDateBeginFrom(DateUtils.firstDayOfMonth(new Date()));
+		}
+		logger.info("Get FilterDate: " + filterData);
+		return filterData;
+	}
 
-    @ModelAttribute("hasFilterData")
-    public boolean hasFilterData() {
-        //logger.info("Get Filter: " + filterData);
-        return getFilterData().hasData();
-    }
-    @ModelAttribute("stencilsList")
-    public List<Stencil> getStencilsListData() {
-        /*
-         * if (stencilList == null || stencilList.isEmpty()) { stencilList =
-         * stencilService.findAllObjects(); }
-         */
-        // stencilList = stencilService.findAllObjects();
-        stencilList = stencilService.findByFilterData(getFilterData());
-        // logger.info("Get TaskList : " + stencilList.size());
+	@ModelAttribute("hasFilterData")
+	public boolean hasFilterData() {
+		//logger.info("Get Filter: " + filterData);
+		return getFilterData().hasData();
+	}
 
-        return stencilList;
-    }
+	@ModelAttribute("stencilsList")
+	public List<Stencil> getStencilsListData() {
+		/*
+		 * if (stencilList == null || stencilList.isEmpty()) { stencilList =
+		 * stencilService.findAllObjects(); }
+		 */
+		// stencilList = stencilService.findAllObjects();
+		stencilList = stencilService.findByFilterData(getFilterData());
+		// logger.info("Get TaskList : " + stencilList.size());
+
+		return stencilList;
+	}
+
+	@ModelAttribute("kraskoottiskAmount")
+	public double getKraskoottiskAmount() {
+		List<Kraskoottisk> list = kraskoottiskService.findAllObjects();
+		double amount = 0;
+		if (list != null && !list.isEmpty()) {
+			amount = list.get(0).getAmount();
+		}
+		logger.info("Kraskoottisk amount: " + amount);
+		return amount;
+	}
 /*
 	@ModelAttribute("clientFilterList")
 	public List<ClientDirectory> getClientsFilterList() {

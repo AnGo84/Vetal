@@ -8,6 +8,6 @@ import ua.com.vetal.entity.Printer;
 @Repository
 public interface PrinterRepository extends JpaRepository<Printer, Long> {
 
-	// Manager findByName(String name);
+    // Manager findByName(String name);
 
 }

@@ -8,6 +8,6 @@ import ua.com.vetal.entity.ClientDirectory;
 @Repository
 public interface ClientDirectoryRepository extends JpaRepository<ClientDirectory, Long> {
 
-	ClientDirectory findByName(String name);
+    ClientDirectory findByName(String name);
 
 }

@@ -8,6 +8,6 @@ import ua.com.vetal.entity.PaperDirectory;
 @Repository
 public interface PaperDirectoryRepository extends JpaRepository<PaperDirectory, Long> {
 
-	PaperDirectory findByName(String name);
+    PaperDirectory findByName(String name);
 
 }

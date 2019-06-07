@@ -8,10 +8,10 @@ import ua.com.vetal.entity.Task;
 @Repository
 public interface StencilRepository extends JpaRepository<Stencil, Long> {
 
-	// Manager findByName(String name);
-	Stencil findByAccount(String account);
+    // Manager findByName(String name);
+    Stencil findByAccount(String account);
 
-	// List<Task> findByFilterData(FilterData filterData);
-	//List<Task> findAllByOrderByDateBeginDesc();
+    // List<Task> findByFilterData(FilterData filterData);
+    //List<Task> findAllByOrderByDateBeginDesc();
 
 }

@@ -21,7 +21,7 @@ import ua.com.vetal.entity.ClientDirectory;
 import ua.com.vetal.service.ClientDirectoryServiceImpl;
 
 @Controller
-@RequestMapping("/client")
+@RequestMapping("/clientDirectory")
 // @SessionAttributes({ "title", "directoryName", "pageName" })
 
 public class ClientDirectoryController {

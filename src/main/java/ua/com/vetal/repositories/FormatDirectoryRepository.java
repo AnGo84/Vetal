@@ -8,6 +8,6 @@ import ua.com.vetal.entity.FormatDirectory;
 @Repository
 public interface FormatDirectoryRepository extends JpaRepository<FormatDirectory, Long> {
 
-	FormatDirectory findByName(String name);
+    FormatDirectory findByName(String name);
 
 }

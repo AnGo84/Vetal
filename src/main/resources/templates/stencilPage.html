@@ -152,8 +152,8 @@
                                     th:disabled="${readOnly}" class="form-control form-control-sm selectpicker"
                                     data-live-search="true">
                                 <option th:each="dropDownItem : ${clientList}"
-                                        th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
-                                        th:attr="data-tokens=${dropDownItem.name}"/>
+                                        th:value="${dropDownItem.id}" th:text="${dropDownItem.fullName}"
+                                        th:attr="data-tokens=${dropDownItem.fullName}"/>
                             </select>
                         </div>
                         <div class="col-sm-9"
@@ -169,6 +169,89 @@
 
                 </div>
 
+            </div>
+            <!-- Amount & Cost Of Materials & Other expenses & Cost Of Printing-->
+            <div class="row">
+                <div class="col-sm-3">
+
+                    <div class="form-group row">
+
+                        <label for="stencilAmount"
+                               class="col-sm-4 col-form-label col-form-label-sm"><span
+                                th:text="#{label.order_amount}">Order amount</span>: </label>
+                        <div class="col-sm-8">
+                            <input id="stencilAmount" type="number" min="0.00" step="0.01"
+                                   class="form-control form-control-sm" th:field="*{amount}"
+                                   th:disabled="${readOnly}"
+                                   onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"/>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('amount')}">
+                        <p th:text="${#fields.errors('amount')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+
+                    <div class="form-group row">
+
+                        <label for="stencilCostOfMaterials"
+                               class="col-sm-4 col-form-label col-form-label-sm"><span
+                                th:text="#{label.cost_of_materials}">Cost Of Materials</span>: </label>
+                        <div class="col-sm-8">
+                            <input id="stencilCostOfMaterials" type="number" min="0.00" step="0.01"
+                                   class="form-control form-control-sm" th:field="*{costOfMaterials}"
+                                   th:disabled="${readOnly}"
+                                   onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"/>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('costOfMaterials')}">
+                        <p th:text="${#fields.errors('costOfMaterials')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+
+                    <div class="form-group row">
+
+                        <label for="stencilOtherExpenses"
+                               class="col-sm-4 col-form-label col-form-label-sm"><span
+                                th:text="#{label.other_expenses}">Other expenses</span>: </label>
+                        <div class="col-sm-8">
+                            <input id="stencilOtherExpenses" type="number" min="0.00" step="0.01"
+                                   class="form-control form-control-sm" th:field="*{otherExpenses}"
+                                   th:disabled="${readOnly}"
+                                   onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"/>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('otherExpenses')}">
+                        <p th:text="${#fields.errors('otherExpenses')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+
+                    <div class="form-group row">
+
+                        <label for="stencilCostOfPrinting"
+                               class="col-sm-4 col-form-label col-form-label-sm"><span
+                                th:text="#{label.cost_of_printing}">Cost Of Printing</span>: </label>
+                        <div class="col-sm-8">
+                            <input id="stencilCostOfPrinting" type="number" min="0.00" step="0.01"
+                                   class="form-control form-control-sm" th:field="*{costOfPrinting}"
+                                   th:disabled="${readOnly}"
+                                   onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"/>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('costOfPrinting')}">
+                        <p th:text="${#fields.errors('costOfPrinting')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+                </div>
             </div>
 
             <!-- Order name & Manager -->
@@ -380,8 +463,23 @@
 
                 </div>
                 <div class="col-sm-6">
-
                     <div class="form-group row">
+
+                        <label for="stencilKraskoottisk"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.kraskoottisk}">Kraskoottisk</span>:</label>
+                        <div class="col-sm-9">
+                            <input class="form-control form-control-sm" type="number"
+                                   id="stencilKraskoottisk" th:field="*{kraskoottisk}"
+                                   th:disabled="${readOnly}" placeholder="Enter kraskoottisk amount"/>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('sheetNumber')}">
+                        <p th:text="${#fields.errors('sheetNumber')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+                    <!--<div class="form-group row">
 
                         <label for="stencilAdjustment"
                                class="col-sm-3 col-form-label col-form-label-sm"><span
@@ -396,7 +494,7 @@
                          th:if="${#fields.hasErrors('adjustment')}">
                         <p th:text="${#fields.errors('adjustment')}"
                            style="margin-bottom: 0rem"></p>
-                    </div>
+                    </div>-->
 
                 </div>
 
@@ -455,6 +553,17 @@
                     </div>
                 </div>
 
+            </div>
+
+            <!-- Printing Note -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="stencilPrintingNote"><span th:text="#{label.note}">Note</span>:</label>
+                        <textarea class="form-control" rows="2" id="stencilPrintingNote"
+                                  th:disabled="${readOnly}" maxlength="1000" th:field="*{printingNote}"></textarea>
+                    </div>
+                </div>
             </div>
 
             <!-- Sheets Numbers -->
@@ -540,17 +649,6 @@
                          th:if="${#fields.hasErrors('datePrintBegin')}">
                         <p th:text="${#fields.errors('datePrintBegin')}"
                            style="margin-bottom: 0rem"></p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Printing Note -->
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <label for="stencilPrintingNote"><span th:text="#{label.note}">Note</span>:</label>
-                        <textarea class="form-control" rows="2" id="stencilPrintingNote"
-                                  th:disabled="${readOnly}" maxlength="1000" th:field="*{printingNote}"></textarea>
                     </div>
                 </div>
             </div>
@@ -942,31 +1040,6 @@
                     </div>
                 </div>-->
             </div>
-
-            <!-- Amount -->
-            <!--            <div class="row">
-                            <div class="col-sm-6">
-
-                                <div class="form-group row">
-
-                                    <label for="stencilAmount"
-                                           class="col-sm-3 col-form-label col-form-label-sm"><span
-                                            th:text="#{label.amount}">Amount</span>: </label>
-                                    <div class="col-sm-9">
-                                        <input id="stencilAmount" type="number" min="0.00" step="0.01"
-                                               class="form-control form-control-sm" th:field="*{amount}"
-                                               th:disabled="${readOnly}"
-                                               onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"/>
-                                    </div>
-                                </div>
-                                <div class="alert alert-danger"
-                                     th:if="${#fields.hasErrors('amount')}">
-                                    <p th:text="${#fields.errors('amount')}"
-                                       style="margin-bottom: 0rem"></p>
-                                </div>
-                            </div>
-                        </div>-->
-
 
             <!-- Buttons -->
 

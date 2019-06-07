@@ -8,6 +8,6 @@ import ua.com.vetal.entity.PrintingUnitDirectory;
 @Repository
 public interface PrintingUnitDirectoryRepository extends JpaRepository<PrintingUnitDirectory, Long> {
 
-	PrintingUnitDirectory findByName(String name);
+    PrintingUnitDirectory findByName(String name);
 
 }

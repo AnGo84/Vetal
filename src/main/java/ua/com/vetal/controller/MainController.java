@@ -22,8 +22,6 @@ import ua.com.vetal.utils.WebUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.net.URLConnection;
-import java.nio.charset.Charset;
 import java.security.Principal;
 import java.util.List;
 import java.util.Locale;
@@ -139,7 +137,7 @@ public class MainController {
         } catch (IOException e) {
             logger.info("Error on open: " + url);
             e.printStackTrace();
-            String errorMessage = "Error on open URL '"+url+"': " + e.getMessage();
+            String errorMessage = "Error on open URL '" + url + "': " + e.getMessage();
             /*OutputStream outputStream = response.getOutputStream();
             outputStream.write(errorMessage.getBytes(Charset.forName("UTF-8")));
             outputStream.close();*/

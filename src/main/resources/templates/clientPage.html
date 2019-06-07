@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <!-- <title th:utext="${title}">Edit user</title> -->
+    <title>Client record</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" th:href="@{/image/logo.ico}" type="image/x-icon">
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+
+</head>
+<body>
+<div class="container bg-light" style="margin-top: 30px">
+    <div class="well">
+        <div class="row">
+            <div class="col-sm-2">
+                <h3><span th:text="#{label.client}">Client Registration Form</span></h3>
+            </div>
+        </div>
+
+        <form action="#" th:action="@{/clients/update}"
+              th:object="${client}" method="POST">
+
+            <input type="hidden" id="recordId" th:field="*{id}"/>
+
+            <div class="form-group row">
+                <div class="col-6">
+                    <label for="recordCorpName" th:text="#{label.corpName}">Corp name: </label> <input
+                        class="form-control"
+                        type="text" id="recordCorpName" th:field="*{fullName}"
+                        autofocus="autofocus" placeholder="Enter Full Name"/>
+                </div>
+
+            </div>
+
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('fullName')}">
+                <p th:text="${#fields.errors('fullName')}"></p>
+                <!-- th:text="${#fields.errors('name')}" -->
+            </div>
+
+            <!-- Manager data-->
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="taskManager" th:text="#{label.manager}">Manager: </label>
+                    <select id="taskManager" th:field="*{manager}"
+                            class="form-control form-control-sm selectpicker"
+                            data-live-search="true">
+                        <option th:each="dropDownItem : ${managerList}"
+                                th:value="${dropDownItem.id}"
+                                th:text="${dropDownItem.fullName}"
+                                th:attr="data-tokens=${dropDownItem.fullName}"/>
+
+                    </select>
+                </div>
+
+                <!--<div class="col-sm-6"
+                     th:if="${managerList != null and not #lists.isEmpty(managerList)}">
+
+                </div>-->
+                <div class="col-sm-6"
+                     th:if="${managerList == null or #lists.isEmpty(managerList)}">
+                    <div>"No Managers were found, please create some first"</div>
+                </div>
+            </div>
+
+            <div class="alert alert-danger"
+                 th:if="${#fields.hasErrors('manager')}">
+                <!-- <p th:text="${#fields.errors('manager')}" style ="margin-bottom: 0rem"></p> -->
+                <h6>[[${#fields.errors('manager')}]]</h6>
+            </div>
+            <!-- !Manager Data-->
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4><span th:text="#{label.contact_person}">Contact person</span></h4>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-6">
+                    <label for="recordLastName" th:text="#{label.lastname}">Last name: </label>
+                    <input class="form-control" type="text" id="recordLastName" th:field="*{lastName}"
+                        autofocus="autofocus" placeholder="Enter Last Name"/>
+                </div>
+
+            </div>
+
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('lastName')}">
+                <p th:text="${#fields.errors('lastName')}"></p>
+                <!-- th:text="${#fields.errors('name')}" -->
+            </div>
+
+            <div class="form-group row">
+                <div class="col-6">
+                    <label for="recordFirstName" th:text="#{label.firstname}">First name: </label> <input
+                        class="form-control"
+                        type="text" id="recordFirstName" th:field="*{firstName}" placeholder="Enter First Name"/>
+                </div>
+
+            </div>
+
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('firstName')}">
+                <p th:text="${#fields.errors('firstName')}"></p>
+                <!-- th:text="${#fields.errors('name')}" -->
+            </div>
+
+            <div class="form-group row">
+                <div class="col-6">
+                    <label for="recordMiddleName" th:text="#{label.middlename}">Middle name: </label>
+                    <input class="form-control"
+                           type="text" id="recordMiddleName" th:field="*{middleName}" placeholder="Enter Middle Name"/>
+                </div>
+
+            </div>
+
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('middleName')}">
+                <p th:text="${#fields.errors('middleName')}"></p>
+                <!-- th:text="${#fields.errors('name')}" -->
+            </div>
+
+            <div class="form-group row">
+                <div class="col-6">
+                    <label for="recordEmail" th:text="#{label.email}">Email: </label>
+                    <input class="form-control"
+                           type="email"
+                           id="recordEmail"
+                           th:field="*{email}"
+                           placeholder="Enter email"/>
+                </div>
+
+            </div>
+
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('email')}">
+                <p th:text="${#fields.errors('email')}"></p>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-6">
+                    <label for="recordPhone" th:text="#{label.phone}">Phone: </label>
+                    <input class="form-control" type="text" id="recordPhone" th:field="*{phone}"
+                           placeholder="Enter phone number"/>
+                </div>
+
+            </div>
+
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('phone')}">
+                <p th:text="${#fields.errors('phone')}"></p>
+            </div>
+
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <input type="submit" style="width: 100px;"
+                           class="btn btn-info btn-sm" value="OK"/>
+                </div>
+
+                <div class="col-sm-6">
+                    <a th:href="@{/clients}" style="width: 100px;"
+                       class="btn btn-info btn-outline-danger btn-sm float-right"
+                       role="button" th:text="#{label.cancel}">Cancel</a>
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+</body>
+</html>

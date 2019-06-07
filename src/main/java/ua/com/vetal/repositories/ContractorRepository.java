@@ -8,7 +8,7 @@ import ua.com.vetal.entity.Contractor;
 @Repository
 public interface ContractorRepository extends JpaRepository<Contractor, Long> {
 
-	// Manager findByName(String name);
+    // Manager findByName(String name);
     Contractor findByEmail(String email);
 
 }

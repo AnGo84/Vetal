@@ -8,6 +8,6 @@ import ua.com.vetal.entity.NumberBaseDirectory;
 @Repository
 public interface NumberBaseDirectoryRepository extends JpaRepository<NumberBaseDirectory, Long> {
 
-	NumberBaseDirectory findByName(String name);
+    NumberBaseDirectory findByName(String name);
 
 }

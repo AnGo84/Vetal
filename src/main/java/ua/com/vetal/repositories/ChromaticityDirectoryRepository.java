@@ -8,6 +8,6 @@ import ua.com.vetal.entity.ChromaticityDirectory;
 @Repository
 public interface ChromaticityDirectoryRepository extends JpaRepository<ChromaticityDirectory, Long> {
 
-	ChromaticityDirectory findByName(String name);
+    ChromaticityDirectory findByName(String name);
 
 }

@@ -80,8 +80,8 @@
                         data-live-search="true" th:field="*{client}">
                     <option value="" th:text="#{label.select_choose}">Please Select</option>
                     <option th:each="dropDownItem : ${clientList}"
-                            th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
-                            th:attr="data-tokens=${dropDownItem.name}"/>
+                            th:value="${dropDownItem.id}" th:text="${dropDownItem.fullName}"
+                            th:attr="data-tokens=${dropDownItem.fullName}"/>
                 </select>
                 </div>
 
@@ -220,7 +220,7 @@
 
                         <!--th:class="${task.state.id == 3} ? 'table-success' : (${task.state.id == 2} ? 'table-danger': 'table-warning')"-->
                         <tr th:each="task : ${tasksList}"
-                            th:class="${task.payment.id==1} ? 'table-danger':
+                            th:class="${task.payment.id==1 or task.debtAmount!=0} ? 'table-danger':
                                     (${task.state.id == 1} ? 'table-warning' :
                                      (${task.state.id == 2} ? 'table-active' :
                                       (${task.state.id == 3} ? 'table-info':
@@ -234,7 +234,7 @@
                             <td><a th:href="@{'/tasks/view-' + ${task.id}}"
                                    th:text="${task.fullNumber}"></a></td>
                             <td th:text="${task.workName}"></td>
-                            <td th:text="${task.client.name}"></td>
+                            <td th:text="${task.client.fullName}"></td>
                             <td th:text="${task.manager.fullName}"></td>
                             <td th:text="${task.contractor.fullName}"></td>
                             <!--<td class="text-right" style="vertical-align: middle;"

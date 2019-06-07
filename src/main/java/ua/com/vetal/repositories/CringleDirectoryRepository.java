@@ -8,6 +8,6 @@ import ua.com.vetal.entity.CringleDirectory;
 @Repository
 public interface CringleDirectoryRepository extends JpaRepository<CringleDirectory, Long> {
 
-	CringleDirectory findByName(String name);
+    CringleDirectory findByName(String name);
 
 }

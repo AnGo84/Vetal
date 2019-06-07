@@ -8,6 +8,6 @@ import ua.com.vetal.entity.UserRole;
 @Repository
 public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
 
-	UserRole findByName(String name);
+    UserRole findByName(String name);
 
 }

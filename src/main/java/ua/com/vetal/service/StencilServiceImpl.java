@@ -24,15 +24,12 @@ import java.util.List;
 public class StencilServiceImpl implements SimpleService<Stencil> {
 
     private static final Logger logger = LoggerFactory.getLogger(StencilServiceImpl.class);
-
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    @Autowired
-    private StencilRepository stencilRepository;
-
     @Autowired
     StencilDAO stencilDAO;
+    @PersistenceContext
+    private EntityManager entityManager;
+    @Autowired
+    private StencilRepository stencilRepository;
 
     @Override
     public Stencil findById(Long id) {
@@ -91,12 +88,12 @@ public class StencilServiceImpl implements SimpleService<Stencil> {
         Predicate predicate = builder.conjunction();
 
 
-		if (filterData.getAccount() != null && !filterData.getAccount().equals("")) {
+        if (filterData.getAccount() != null && !filterData.getAccount().equals("")) {
 //			predicate = builder.and(predicate, builder.equal(root.get("account"), filterData.getAccount()));
-			predicate = builder.and(predicate, builder.like(builder.lower(root.get("account")),
-					("%" + filterData.getAccount() + "%").toLowerCase()));
+            predicate = builder.and(predicate, builder.like(builder.lower(root.get("account")),
+                    ("%" + filterData.getAccount() + "%").toLowerCase()));
 
-		}
+        }
 
         if (filterData.getNumber() != null && !filterData.getNumber().equals("")) {
             predicate = builder.and(predicate, builder.like(builder.lower(root.get("fullNumber")),
@@ -170,9 +167,10 @@ public class StencilServiceImpl implements SimpleService<Stencil> {
         // return findByAccount(task.getAccount()) != null;
     }
 
-    public Long getMaxID(){
+    public Long getMaxID() {
         return stencilDAO.getMaxID();
     }
+
     private Sort sortByDateBeginDesc() {
         return new Sort(Sort.Direction.DESC, "dateBegin");
     }

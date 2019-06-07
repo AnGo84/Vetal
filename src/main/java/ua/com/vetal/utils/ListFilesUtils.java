@@ -20,22 +20,7 @@ public class ListFilesUtils {
         List<LocalFile> list = listFilesUtil.listFilesAndFoldersWithParent(directoryWindows);
         for (LocalFile localFile : list) {
             System.out.println(localFile);
-            System.out.println(localFile.getFile().getAbsolutePath().replace(directory.getAbsolutePath(),""));
-        }
-    }
-
-    /**
-     * List all the files and folders from a directory
-     *
-     * @param directoryName to be listed
-     */
-    public void listFilesAndFolders(String directoryName) {
-        File directory = new File(directoryName);
-        //get all the files from a directory
-        File[] fList = directory.listFiles();
-
-        for (File file : fList) {
-            System.out.println(file.getName() + " : " + file.getParent());
+            System.out.println(localFile.getFile().getAbsolutePath().replace(directory.getAbsolutePath(), ""));
         }
     }
 
@@ -77,6 +62,34 @@ public class ListFilesUtils {
         resultList.addAll(resultDirectoriesList);
         resultList.addAll(resultFilesList);
         return resultList;
+    }
+
+    public static LocalFile findLocalFileByName(List<LocalFile> localFiles, String name) {
+        if (localFiles == null || localFiles.isEmpty() || name == null || name.equals("")) {
+            return null;
+        }
+        //LocalFile findFile= null;
+        for (LocalFile file : localFiles) {
+            if (file.getDisplayName().equals(name)) {
+                return file;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * List all the files and folders from a directory
+     *
+     * @param directoryName to be listed
+     */
+    public void listFilesAndFolders(String directoryName) {
+        File directory = new File(directoryName);
+        //get all the files from a directory
+        File[] fList = directory.listFiles();
+
+        for (File file : fList) {
+            System.out.println(file.getName() + " : " + file.getParent());
+        }
     }
 
     /**
@@ -127,18 +140,5 @@ public class ListFilesUtils {
                 listFilesAndFilesSubDirectories(file.getAbsolutePath());
             }
         }
-    }
-
-    public static LocalFile findLocalFileByName(List<LocalFile> localFiles, String name){
-        if (localFiles==null || localFiles.isEmpty() || name==null || name.equals("")){
-            return null;
-        }
-        //LocalFile findFile= null;
-        for (LocalFile file: localFiles) {
-            if (file.getDisplayName().equals(name)){
-                return file;
-            }
-        }
-        return null;
     }
 }

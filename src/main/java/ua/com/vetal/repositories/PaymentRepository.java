@@ -8,6 +8,6 @@ import ua.com.vetal.entity.State;
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
-	Payment findByName(String name);
+    Payment findByName(String name);
 
 }
