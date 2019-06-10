@@ -71,8 +71,10 @@ public class ClientController {
             return "clientPage";
         }
 
-        if (clientService.isObjectExist(client)) {
-            FieldError fieldError = new FieldError("client", "fullName", messageSource.getMessage("non.unique.name",
+        //if (client.getId()!=null && clientService.findByName(client.getFullName()) clientService.isObjectExist(client)) {
+        Client checkClient= clientService.findByName(client.getFullName());
+        if (client.getId()!=null && checkClient.getId()!=null && client.getId()!=checkClient.getId()) {
+            FieldError fieldError = new FieldError("client", "fullName", messageSource.getMessage("non.unique.field",
                     new String[]{"Название", client.getFullName()}, new Locale("ru")));
 
             bindingResult.addError(fieldError);
@@ -80,7 +82,7 @@ public class ClientController {
         }
 
         clientService.saveObject(client);
-        return "redirect: /clients";
+        return "redirect:/clients";
     }
 
     @RequestMapping(value = {"/delete-{id}"}, method = RequestMethod.GET)

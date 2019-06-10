@@ -56,5 +56,8 @@ public class ClientServiceImpl implements SimpleService<Client> {
     public boolean isObjectExist(Client directory) {
         return findById(directory.getId()) != null;
     }
+    public boolean isFullNameExist(Client directory) {
+        return findByName(directory.getFullName()) != null;
+    }
 
 }
