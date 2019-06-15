@@ -28,81 +28,81 @@ import java.util.Locale;
 // @SessionAttributes({ "title", "directoryName", "pageName" })
 
 public class ClientController {
-    static final Logger logger = LoggerFactory.getLogger(ClientController.class);
-    @Autowired
-    MessageSource messageSource;
+	static final Logger logger = LoggerFactory.getLogger(ClientController.class);
+	@Autowired
+	MessageSource messageSource;
 
-    @Autowired
-    private ManagerServiceImpl managerService;
+	@Autowired
+	private ManagerServiceImpl managerService;
 
-    @Autowired
-    private ClientServiceImpl clientService;
+	@Autowired
+	private ClientServiceImpl clientService;
 
-    @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
-    public String clientsList(Model model) {
-        model.addAttribute("clientsList", clientService.findAllObjects());
-        return "clientsPage";
-    }
+	@RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
+	public String clientsList(Model model) {
+		model.addAttribute("clientsList", clientService.findAllObjects());
+		return "clientsPage";
+	}
 
-    @RequestMapping(value = {"/add"}, method = RequestMethod.GET)
-    public String showAddClientPage(Model model) {
-        logger.info("Add new client record");
-        Client client = new Client();
+	@RequestMapping(value = {"/add"}, method = RequestMethod.GET)
+	public String showAddClientPage(Model model) {
+		logger.info("Add new client record");
+		Client client = new Client();
 
-        model.addAttribute("edit", false);
-        model.addAttribute("client", client);
-        return "clientPage";
+		model.addAttribute("edit", false);
+		model.addAttribute("client", client);
+		return "clientPage";
 
-    }
+	}
 
-    @RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
-    public String editClient(@PathVariable Long id, Model model) {
-        logger.info("Edit Client with ID= " + id);
-        model.addAttribute("edit", true);
-        model.addAttribute("client", clientService.findById(id));
-        return "clientPage";
-    }
+	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
+	public String editClient(@PathVariable Long id, Model model) {
+		logger.info("Edit Client with ID= " + id);
+		model.addAttribute("edit", true);
+		model.addAttribute("client", clientService.findById(id));
+		return "clientPage";
+	}
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String updateClient(@Valid @ModelAttribute("client") Client client,
-                               BindingResult bindingResult, Model model) {
-        logger.info("Update Client: " + client);
-        if (bindingResult.hasErrors()) {
-            return "clientPage";
-        }
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public String updateClient(@Valid @ModelAttribute("client") Client client,
+							   BindingResult bindingResult, Model model) {
+		logger.info("Update Client: " + client);
+		if (bindingResult.hasErrors()) {
+			return "clientPage";
+		}
 
-        //if (client.getId()!=null && clientService.findByName(client.getFullName()) clientService.isObjectExist(client)) {
-        Client checkClient= clientService.findByName(client.getFullName());
-        if (client.getId()!=null && checkClient.getId()!=null && client.getId()!=checkClient.getId()) {
-            FieldError fieldError = new FieldError("client", "fullName", messageSource.getMessage("non.unique.field",
-                    new String[]{"Название", client.getFullName()}, new Locale("ru")));
+		//if (client.getId()!=null && clientService.findByName(client.getFullName()) clientService.isObjectExist(client)) {
+		Client checkClient = clientService.findByName(client.getFullName());
+		if (client.getId() == null || (client.getId() != null && checkClient.getId() != null && client.getId() != checkClient.getId())) {
+			FieldError fieldError = new FieldError("client", "fullName", messageSource.getMessage("non.unique.field",
+					new String[]{"Название", client.getFullName()}, new Locale("ru")));
 
-            bindingResult.addError(fieldError);
-            return "clientPage";
-        }
+			bindingResult.addError(fieldError);
+			return "clientPage";
+		}
 
-        clientService.saveObject(client);
-        return "redirect:/clients";
-    }
+		clientService.saveObject(client);
+		return "redirect:/clients";
+	}
 
-    @RequestMapping(value = {"/delete-{id}"}, method = RequestMethod.GET)
-    public String deletePerson(@PathVariable Long id) {
-        logger.info("Delete Client with ID= " + id);
-        clientService.deleteById(id);
-        return "redirect:/clients";
-    }
+	@RequestMapping(value = {"/delete-{id}"}, method = RequestMethod.GET)
+	public String deletePerson(@PathVariable Long id) {
+		logger.info("Delete Client with ID= " + id);
+		clientService.deleteById(id);
+		return "redirect:/clients";
+	}
 
-    @ModelAttribute("managerList")
-    public List<Manager> getManagersList() {
-        List<Manager> resultList = managerService.findAllObjects();
-        Collections.sort(resultList, new Comparator<Manager>() {
-            @Override
-            public int compare(Manager m1, Manager m2) {
-                return m1.getFullName().compareTo(m2.getFullName());
-            }
-        });
+	@ModelAttribute("managerList")
+	public List<Manager> getManagersList() {
+		List<Manager> resultList = managerService.findAllObjects();
+		Collections.sort(resultList, new Comparator<Manager>() {
+			@Override
+			public int compare(Manager m1, Manager m2) {
+				return m1.getFullName().compareTo(m2.getFullName());
+			}
+		});
 
-        return resultList;
-    }
+		return resultList;
+	}
 
 }

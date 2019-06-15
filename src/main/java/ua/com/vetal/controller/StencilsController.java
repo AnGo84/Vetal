@@ -326,11 +326,11 @@ public class StencilsController {
 		List<Client> resultList = clientService.findAllObjects();
 
 		List<Client> result = resultList.stream()           // convert list to stream
-				/*.filter(client -> !StringUtils.isEmpty(client.getFullName())
+				.filter(client -> !StringUtils.isEmpty(client.getFullName())
 						&& client.getManager() != null && !StringUtils.isEmpty(client.getLastName())
 						&& !StringUtils.isEmpty(client.getFirstName()) && !StringUtils.isEmpty(client.getEmail())
 						&& !StringUtils.isEmpty(client.getPhone())
-				)*/
+				)
 				.sorted(Comparator.comparing(Client::getFullName))
 				.collect(Collectors.toList());
 

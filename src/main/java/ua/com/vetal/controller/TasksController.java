@@ -26,6 +26,7 @@ import ua.com.vetal.service.mail.MailServiceImp;
 import ua.com.vetal.service.reports.ExporterService;
 import ua.com.vetal.service.reports.JasperService;
 import ua.com.vetal.utils.DateUtils;
+import ua.com.vetal.utils.StringUtils;
 
 import javax.activation.DataSource;
 import javax.mail.util.ByteArrayDataSource;
@@ -492,11 +493,11 @@ public class TasksController {
 		List<Client> resultList = clientService.findAllObjects();
 
 		List<Client> result = resultList.stream()           // convert list to stream
-				/*.filter(client -> !StringUtils.isEmpty(client.getFullName())
+				.filter(client -> !StringUtils.isEmpty(client.getFullName())
 						&& client.getManager() != null && !StringUtils.isEmpty(client.getLastName())
 						&& !StringUtils.isEmpty(client.getFirstName()) && !StringUtils.isEmpty(client.getEmail())
 						&& !StringUtils.isEmpty(client.getPhone())
-				)*/
+				)
 				.sorted(Comparator.comparing(Client::getFullName))
 				.collect(Collectors.toList());
 

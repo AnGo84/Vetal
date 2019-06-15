@@ -1,6 +1,7 @@
 package ua.com.vetal.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -13,7 +14,8 @@ public class Client {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @NotNull
+    //@NotNull
+    @NotEmpty
     @Size(min = 0, max = 250)
     @Column(name = "FullName", length = 250, nullable = false)
     private String fullName;
@@ -22,25 +24,32 @@ public class Client {
     @JoinColumn(name = "manager_id")
     private Manager manager;
 
-    @NotNull
-    @Size(min = 0, max = 50)
+    //@NotNull
+    @NotEmpty
+    @Size(max = 45)
     @Column(name = "LastName", length = 50, nullable = false)
     private String lastName;
 
-    @Size(min = 0, max = 50)
-    @Column(name = "FirstName", length = 50, nullable = true)
+    //@NotNull
+    @NotEmpty
+    @Size( max = 45)
+    @Column(name = "FirstName", length = 50, nullable = false)
     private String firstName;
 
-    @Size(min = 0, max = 50)
+    @Size(min = 0, max = 45)
     @Column(name = "MiddleName", length = 50, nullable = true)
     private String middleName;
 
-    @Size(max = 100)
-    @Column(name = "email", length = 100, nullable = true)
+    //@NotNull
+    @NotEmpty
+    @Size(max = 255)
+    @Column(name = "email", length = 255, nullable = false)
     private String email;
 
-    @Size(max = 45)
-    @Column(name = "phone", length = 45, nullable = true)
+    //@NotNull
+    @NotEmpty
+    @Size(max = 255)
+    @Column(name = "phone", length = 255, nullable = false)
     private String phone;
 
     public Long getId() {
