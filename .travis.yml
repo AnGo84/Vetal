@@ -3,6 +3,12 @@ language: java
 jdk:
   - oraclejdk8
 
+
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
+
 # Improve Build Speed https://dzone.com/articles/travis-ci-tutorial-java-projects
 
 env:
@@ -11,7 +17,12 @@ env:
 install:
     - "mvn -N io.takari:maven:wrapper -Dmaven=${MAVEN_VERSION}"
     - "./mvnw --show-version --errors --batch-mode test-compile dependency:go-offline"
-script: "./mvnw --show-version --errors --batch-mode -Prun-its clean verify"
+
+    - "mvn install -Dmaven.compiler.target=1.8 -Dmaven.compiler.source=1.8 -DskipTests=true"
+
+script:
+  - "./mvnw --show-version --errors --batch-mode -Prun-its clean verify"
+  - "mvn test -Dmaven.compiler.target=1.8 -Dmaven.compiler.source=1.8"
 
 cache:
   directories:
