@@ -1,9 +1,16 @@
 # https://docs.travis-ci.com/user/languages/java/
-language: java
-jdk:
-  - oraclejdk8
+#language: java
+#jdk:   - oraclejdk8
 
+addons:
+  # language
+  language: java
 
+  # version numbers
+  jdk:
+    - oraclejdk8
+
+# Use JDK 8u45. The above line just causes the use of a minor version of Java 8.
 addons:
   apt:
     packages:
@@ -18,11 +25,8 @@ install:
     - "mvn -N io.takari:maven:wrapper -Dmaven=${MAVEN_VERSION}"
     - "./mvnw --show-version --errors --batch-mode test-compile dependency:go-offline"
 
-    - "mvn install -Dmaven.compiler.target=1.8 -Dmaven.compiler.source=1.8 -DskipTests=true"
-
 script:
   - "./mvnw --show-version --errors --batch-mode -Prun-its clean verify"
-  - "mvn test -Dmaven.compiler.target=1.8 -Dmaven.compiler.source=1.8"
 
 cache:
   directories:
