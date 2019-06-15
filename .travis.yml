@@ -1,6 +1,7 @@
 # https://docs.travis-ci.com/user/languages/java/
 language: java
-# jdk: oraclejdk8
+jdk:
+  - oraclejdk8
 
 # Improve Build Speed https://dzone.com/articles/travis-ci-tutorial-java-projects
 
