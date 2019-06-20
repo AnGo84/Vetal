@@ -29,8 +29,8 @@ public class ContractorServiceImpl implements SimpleService<Contractor> {
 
     @Override
     public Contractor findByName(String name) {
-        // return directoryRepository.findByName(name);
-        return null;
+        return personRepository.findByCorpName(name);
+        //return null;
     }
 
     public Contractor findByEmail(String email) {

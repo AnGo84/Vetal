@@ -460,14 +460,25 @@ public class TasksController {
 	@ModelAttribute("contractorList")
 	public List<Contractor> getContractorsList() {
 		List<Contractor> resultList = contractorService.findAllObjects();
-		Collections.sort(resultList, new Comparator<Contractor>() {
+		/*Collections.sort(resultList, new Comparator<Contractor>() {
 			@Override
 			public int compare(Contractor m1, Contractor m2) {
 				return m1.getFullName().compareTo(m2.getFullName());
 			}
 		});
-
 		return resultList;
+		*/
+
+		List<Contractor> result = resultList.stream()           // convert list to stream
+				.filter(contractor -> !StringUtils.isEmpty(contractor.getCorpName())
+						&& contractor.getManager() != null && !StringUtils.isEmpty(contractor.getLastName())
+						&& !StringUtils.isEmpty(contractor.getFirstName()) && !StringUtils.isEmpty(contractor.getEmail())
+						&& !StringUtils.isEmpty(contractor.getPhone())
+				)
+				.sorted(Comparator.comparing(Contractor::getFullName))
+				.collect(Collectors.toList());
+
+		return result;
 	}
 
 	@ModelAttribute("productionList")

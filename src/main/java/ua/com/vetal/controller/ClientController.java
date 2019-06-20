@@ -70,18 +70,24 @@ public class ClientController {
 		if (bindingResult.hasErrors()) {
 			return "clientPage";
 		}
-
+		//client.setFullName(client.getFullName().trim());
 		//if (client.getId()!=null && clientService.findByName(client.getFullName()) clientService.isObjectExist(client)) {
 		Client checkClient = clientService.findByName(client.getFullName());
-		if (client.getId() == null || (client.getId() != null && checkClient.getId() != null && client.getId() != checkClient.getId())) {
+		logger.info("Checked client: " + checkClient);
+		//if ((client.getId() == null && checkClient != null) || (client.getId() != null && checkClient.getId() != null && client.getId() != checkClient.getId())) {
+		if(checkClient!=null && (client.getId()==null || !checkClient.getId().equals(client.getId()))){
 			FieldError fieldError = new FieldError("client", "fullName", messageSource.getMessage("non.unique.field",
 					new String[]{"Название", client.getFullName()}, new Locale("ru")));
 
 			bindingResult.addError(fieldError);
 			return "clientPage";
 		}
-
 		clientService.saveObject(client);
+		/*try {
+			clientService.saveObject(client);
+		}
+		catch (Exception e){
+		}*/
 		return "redirect:/clients";
 	}
 

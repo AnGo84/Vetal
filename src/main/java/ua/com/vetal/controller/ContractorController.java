@@ -1,5 +1,8 @@
 package ua.com.vetal.controller;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 
 import javax.validation.Valid;
@@ -18,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import ua.com.vetal.entity.Contractor;
+import ua.com.vetal.entity.Manager;
 import ua.com.vetal.service.ContractorServiceImpl;
+import ua.com.vetal.service.ManagerServiceImpl;
 
 @Controller
 @RequestMapping("/contractor")
@@ -26,24 +31,24 @@ import ua.com.vetal.service.ContractorServiceImpl;
 
 public class ContractorController {
 	static final Logger logger = LoggerFactory.getLogger(ContractorController.class);
-
+	@Autowired
+	MessageSource messageSource;
 	private String title = "Contractor";
 	private String personName = "Contractor";
 	private String pageName = "/contractor";
-
 	@Autowired
-	MessageSource messageSource;
+	private ManagerServiceImpl managerService;
 
 	@Autowired
 	private ContractorServiceImpl personService;
 
-	@RequestMapping(value = { "", "list" }, method = RequestMethod.GET)
+	@RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
 	public String personList(Model model) {
 		model.addAttribute("personList", personService.findAllObjects());
 		return "contractorsPage";
 	}
 
-	@RequestMapping(value = { "/add" }, method = RequestMethod.GET)
+	@RequestMapping(value = {"/add"}, method = RequestMethod.GET)
 	public String showAddPersonPage(Model model) {
 		logger.info("Add new " + title + " record");
 		Contractor person = new Contractor();
@@ -57,7 +62,7 @@ public class ContractorController {
 	/*
 	 * @RequestMapping(value = "/add", method = RequestMethod.POST) public
 	 * String saveNewUser(Model model, @ModelAttribute("user") User user) {
-	 * 
+	 *
 	 * userService.saveObject(user); return "redirect:/usersPage"; }
 	 */
 
@@ -80,7 +85,7 @@ public class ContractorController {
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String updatePerson(@Valid @ModelAttribute("person") Contractor person, BindingResult bindingResult,
-			Model model) {
+							   Model model) {
 		logger.info("Update " + title + ": " + person);
 		if (bindingResult.hasErrors()) {
 			// model.addAttribute("title", title);
@@ -89,18 +94,30 @@ public class ContractorController {
 		}
 
 
-		  if (person!=null && (person.getFullName()==null||person.getFullName().equals(""))) {
+		/*if (person != null && (person.getFullName() == null || person.getFullName().equals(""))) {
 			FieldError fieldError =
-		  new FieldError("person", "corpName",
-		  messageSource.getMessage("NotEmpty.field", new String[] {messageSource.getMessage("label.corpName", null,Locale.getDefault())}, Locale.getDefault()));
-		  bindingResult.addError(fieldError); return "contractorRecordPage"; }
+					new FieldError("person", "corpName",
+							messageSource.getMessage("NotEmpty.field", new String[]{messageSource.getMessage("label.corpName", null, Locale.getDefault())}, Locale.getDefault()));
+			bindingResult.addError(fieldError);
+			return "contractorRecordPage";
+		}*/
 
+		Contractor checkContractor = personService.findByName(person.getCorpName());
+		logger.info("Checked contractor: " + checkContractor);
+		//if ((client.getId() == null && checkContractor != null) || (client.getId() != null && checkContractor.getId() != null && client.getId() != checkContractor.getId())) {
+		if(checkContractor!=null && (person.getId()==null || !checkContractor.getId().equals(person.getId()))){
+			FieldError fieldError = new FieldError("person", "corpName", messageSource.getMessage("non.unique.field",
+					new String[]{"Название", person.getFullName()}, new Locale("ru")));
+
+			bindingResult.addError(fieldError);
+			return "contractorRecordPage";
+		}
 
 		personService.saveObject(person);
 		return "redirect:" + pageName;
 	}
 
-	@RequestMapping(value = { "/delete-{id}" }, method = RequestMethod.GET)
+	@RequestMapping(value = {"/delete-{id}"}, method = RequestMethod.GET)
 	public String deletePerson(@PathVariable Long id) {
 		logger.info("Delete " + title + " with ID= " + id);
 		personService.deleteById(id);
@@ -128,5 +145,19 @@ public class ContractorController {
 	@ModelAttribute("pageName")
 	public String initializePageName() {
 		return this.pageName;
+	}
+
+
+	@ModelAttribute("managerList")
+	public List<Manager> getManagersList() {
+		List<Manager> resultList = managerService.findAllObjects();
+		Collections.sort(resultList, new Comparator<Manager>() {
+			@Override
+			public int compare(Manager m1, Manager m2) {
+				return m1.getFullName().compareTo(m2.getFullName());
+			}
+		});
+
+		return resultList;
 	}
 }

@@ -10,5 +10,6 @@ public interface ContractorRepository extends JpaRepository<Contractor, Long> {
 
     // Manager findByName(String name);
     Contractor findByEmail(String email);
+    Contractor findByCorpName(String corpName);
 
 }

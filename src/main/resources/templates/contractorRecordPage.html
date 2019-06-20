@@ -43,6 +43,46 @@
                 <!-- th:text="${#fields.errors('name')}" -->
             </div>
 
+
+
+            <!-- Manager data-->
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="taskManager" th:text="#{label.manager}">Manager: </label>
+                    <select id="taskManager" th:field="*{manager}"
+                            class="form-control form-control-sm selectpicker"
+                            data-live-search="true">
+                        <option th:each="dropDownItem : ${managerList}"
+                                th:value="${dropDownItem.id}"
+                                th:text="${dropDownItem.fullName}"
+                                th:attr="data-tokens=${dropDownItem.fullName}"/>
+
+                    </select>
+                </div>
+
+                <!--<div class="col-sm-6"
+                     th:if="${managerList != null and not #lists.isEmpty(managerList)}">
+
+                </div>-->
+                <div class="col-sm-6"
+                     th:if="${managerList == null or #lists.isEmpty(managerList)}">
+                    <div>"No Managers were found, please create some first"</div>
+                </div>
+            </div>
+
+            <div class="alert alert-danger"
+                 th:if="${#fields.hasErrors('manager')}">
+                <!-- <p th:text="${#fields.errors('manager')}" style ="margin-bottom: 0rem"></p> -->
+                <h6>[[${#fields.errors('manager')}]]</h6>
+            </div>
+            <!-- !Manager Data-->
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4><span th:text="#{label.contact_person}">Contact person</span></h4>
+                </div>
+            </div>
+
             <div class="form-group row">
                 <div class="col-6">
                     <label for="recordLastName" th:text="#{label.lastname}">Last name: </label> <input
@@ -87,11 +127,12 @@
             </div>
             <div class="form-group row">
                 <div class="col-6">
-                    <label for="recordEmail" th:text="#{label.email}">Email: </label> <input class="form-control"
-                                                                                             type="email"
-                                                                                             id="recordEmail"
-                                                                                             th:field="*{email}"
-                                                                                             placeholder="Enter email"/>
+                    <label for="recordEmail" th:text="#{label.email}">Email: </label>
+                    <input id="recordEmail" class="form-control"
+                           type="text" th:field="*{email}"
+                           placeholder="Enter email"/>
+                    <!--<input class="form-control" type="email" id="recordEmail" th:field="*{email}"
+                           placeholder="Enter email"/>-->
                 </div>
 
             </div>
@@ -99,6 +140,34 @@
             <div class="alert alert-danger" th:if="${#fields.hasErrors('email')}">
                 <p th:text="${#fields.errors('email')}"></p>
             </div>
+
+            <div class="form-group row">
+                <div class="col-6">
+                    <label for="recordPhone" th:text="#{label.phone}">Phone: </label>
+                    <input class="form-control" type="text" id="recordPhone" th:field="*{phone}"
+                           placeholder="Enter phone number"/>
+                </div>
+
+            </div>
+
+
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('phone')}">
+                <p th:text="${#fields.errors('phone')}"></p>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-6">
+                    <label for="recordSiteURL" th:text="#{label.site}">Site: </label>
+                    <input class="form-control" type="text" id="recordSiteURL" th:field="*{siteURL}"
+                           placeholder="Enter site URL"/>
+                </div>
+
+            </div>
+
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('siteURL')}">
+                <p th:text="${#fields.errors('siteURL')}"></p>
+            </div>
+
 
             <div class="row">
 

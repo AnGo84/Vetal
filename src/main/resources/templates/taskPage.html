@@ -136,7 +136,9 @@
                     </div>-->
 
                 </div>
-                <div class="col-sm-6">
+
+
+                <div class="col-sm-6" th:if="!${readOnly}">
 
                     <div class="form-group row">
 
@@ -170,6 +172,19 @@
                          th:if="${#fields.hasErrors('manager')}">
                         <!-- <p th:text="${#fields.errors('manager')}" style ="margin-bottom: 0rem"></p> -->
                         <h6>[[${#fields.errors('manager')}]]</h6>
+                    </div>
+                </div>
+
+                <div class="col-sm-6" th:if="${readOnly}">
+                    <div class="form-group row">
+                        <label for="taskManager_readOnly"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.manager}">Manager</span>: </label>
+                        <div class="col-sm-9">
+                            <input class="form-control form-control-sm" type="text"
+                                   id="taskManager_readOnly" th:field="*{manager.fullName}"
+                                   th:disabled="${readOnly}"/>
+                        </div>
                     </div>
                 </div>
 
@@ -231,7 +246,7 @@
 
             <!-- Contractors & Contractor amount -->
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-6" th:if="!${readOnly}">
 
                     <div class="form-group row">
 
@@ -260,6 +275,19 @@
                            style="margin-bottom: 0rem"></p>
                     </div>
 
+                </div>
+
+                <div class="col-sm-6" th:if="${readOnly}">
+                    <div class="form-group row">
+                        <label for="taskContractor_readOnly"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.contractor}">Contractor</span>: </label>
+                        <div class="col-sm-9">
+                            <input class="form-control form-control-sm" type="text"
+                                   id="taskContractor_readOnly" th:field="*{contractor.fullName}"
+                                   th:disabled="${readOnly}"/>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="col-6">
@@ -521,7 +549,7 @@
 
             <!-- Client & Stock -->
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-6" th:if="!${readOnly}">
 
                     <div class="form-group row">
 
@@ -550,6 +578,21 @@
                     </div>
 
                 </div>
+
+                <div class="col-sm-6" th:if="${readOnly}">
+                    <div class="form-group row">
+                        <label for="taskClient_readOnly"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.client}">Client</span>:</label>
+                        <div class="col-sm-9">
+                            <input class="form-control form-control-sm" type="text"
+                                   id="taskClient_readOnly" th:field="*{client.fullName}"
+                                   th:disabled="${readOnly}"/>
+                        </div>
+                    </div>
+                </div>
+                <!--   /Client-->
+
                 <div class="col-sm-6">
 
                     <div class="form-group row">

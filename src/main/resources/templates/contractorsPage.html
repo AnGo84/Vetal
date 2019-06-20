@@ -48,10 +48,12 @@
                 <tr class="text-center">
                     <th width="100" th:text="#{label.id}">Id</th>
                     <th th:text="#{label.corpName}">CorpName</th>
+                    <th th:text="#{label.manager}">Manager</th>
                     <th th:text="#{label.lastname}">LastName</th>
                     <th th:text="#{label.firstname}">FirstName</th>
                     <th th:text="#{label.middlename}">MiddleName</th>
                     <th th:text="#{label.email}">Email</th>
+                    <th th:text="#{label.phone}">Phone</th>
                     <th class="no-sort" width="100"
                         sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
                     <th class="no-sort" width="100"
@@ -62,11 +64,13 @@
                 <!-- align-items-center -->
                 <tr th:each="person : ${personList}">
                     <td th:text="${person.id}"></td>
-                    <td th:text="${person.corpName}"></td>
+                    <td th:text="${person.fullName}"></td>
+                    <td th:text="${person?.manager?.fullName}"></td>
                     <td th:text="${person.lastName}"></td>
                     <td th:text="${person.firstName}"></td>
                     <td th:text="${person.middleName}"></td>
                     <td th:text="${person.email}"></td>
+                    <td th:text="${person.phone}"></td>
 
                     <td class="text-center align-self-center"
                         sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"><a
