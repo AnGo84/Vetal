@@ -44,7 +44,6 @@
             </div>
 
 
-
             <!-- Manager data-->
             <div class="form-group row">
                 <div class="col-sm-6">
@@ -157,10 +156,31 @@
 
             <div class="form-group row">
                 <div class="col-6">
+                    <label for="recordAddress" th:text="#{label.address}">Address: </label>
+                    <input class="form-control" type="text" id="recordAddress" th:field="*{address}"
+                           placeholder="Enter address"/>
+                </div>
+
+            </div>
+
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('address')}">
+                <p th:text="${#fields.errors('address')}"></p>
+            </div>
+
+
+            <div class="form-group row">
+                <div class="col-6">
                     <label for="recordSiteURL" th:text="#{label.site}">Site: </label>
                     <input class="form-control" type="text" id="recordSiteURL" th:field="*{siteURL}"
                            placeholder="Enter site URL"/>
                 </div>
+
+                <!--<div class="col-6">
+                    </br>
+                    <a role="button" class="btn btn-outline-primary" target="_blank" th:text="#{label.visit}"
+                       th:href="@{${person.siteURL}}">Link</a>
+
+                </div>-->
 
             </div>
 

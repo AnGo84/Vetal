@@ -12,6 +12,8 @@ public class Contractor extends AbstractPerson {
 
     private Manager manager;
 
+    private String address;
+
     private String siteURL;
 
     @ManyToOne
@@ -22,6 +24,17 @@ public class Contractor extends AbstractPerson {
 
     public void setManager(Manager manager) {
         this.manager = manager;
+    }
+
+    @NotEmpty
+    @Size(max = 250)
+    @Column(name = "address", length = 250, nullable = false)
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     //@NotEmpty
@@ -86,17 +99,17 @@ public class Contractor extends AbstractPerson {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Contractor{");
-
         sb.append("id=").append(id);
+        sb.append(", manager=").append(manager);
+        sb.append(", address='").append(address).append('\'');
+        sb.append(", siteURL='").append(siteURL).append('\'');
         sb.append(", corpName='").append(corpName).append('\'');
         sb.append(", shortName='").append(shortName).append('\'');
-        sb.append(", manager=").append(manager);
         sb.append(", lastName='").append(lastName).append('\'');
         sb.append(", firstName='").append(firstName).append('\'');
         sb.append(", middleName='").append(middleName).append('\'');
         sb.append(", email='").append(email).append('\'');
         sb.append(", phone='").append(phone).append('\'');
-        sb.append(", siteURL='").append(siteURL).append('\'');
         sb.append('}');
         return sb.toString();
     }

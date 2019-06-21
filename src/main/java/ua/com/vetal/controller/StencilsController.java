@@ -329,7 +329,7 @@ public class StencilsController {
 				.filter(client -> !StringUtils.isEmpty(client.getFullName())
 						&& client.getManager() != null && !StringUtils.isEmpty(client.getLastName())
 						&& !StringUtils.isEmpty(client.getFirstName()) && !StringUtils.isEmpty(client.getEmail())
-						&& !StringUtils.isEmpty(client.getPhone())
+						&& !StringUtils.isEmpty(client.getPhone()) && !StringUtils.isEmpty(client.getAddress())
 				)
 				.sorted(Comparator.comparing(Client::getFullName))
 				.collect(Collectors.toList());

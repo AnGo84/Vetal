@@ -52,6 +52,11 @@ public class Client {
     @Column(name = "phone", length = 255, nullable = false)
     private String phone;
 
+    @NotEmpty
+    @Size(max = 255)
+    @Column(name = "address", length = 255, nullable = false)
+    private String address;
+
     public Long getId() {
         return id;
     }
@@ -116,6 +121,14 @@ public class Client {
         this.phone = phone;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -130,7 +143,8 @@ public class Client {
         if (firstName != null ? !firstName.equals(client.firstName) : client.firstName != null) return false;
         if (middleName != null ? !middleName.equals(client.middleName) : client.middleName != null) return false;
         if (email != null ? !email.equals(client.email) : client.email != null) return false;
-        return phone != null ? phone.equals(client.phone) : client.phone == null;
+        if (phone != null ? !phone.equals(client.phone) : client.phone != null) return false;
+        return address != null ? address.equals(client.address) : client.address == null;
     }
 
     @Override
@@ -143,6 +157,7 @@ public class Client {
         result = 31 * result + (middleName != null ? middleName.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
         return result;
     }
 
@@ -157,6 +172,7 @@ public class Client {
         sb.append(", middleName='").append(middleName).append('\'');
         sb.append(", email='").append(email).append('\'');
         sb.append(", phone='").append(phone).append('\'');
+        sb.append(", address='").append(address).append('\'');
         sb.append('}');
         return sb.toString();
     }

@@ -473,7 +473,7 @@ public class TasksController {
 				.filter(contractor -> !StringUtils.isEmpty(contractor.getCorpName())
 						&& contractor.getManager() != null && !StringUtils.isEmpty(contractor.getLastName())
 						&& !StringUtils.isEmpty(contractor.getFirstName()) && !StringUtils.isEmpty(contractor.getEmail())
-						&& !StringUtils.isEmpty(contractor.getPhone())
+						&& !StringUtils.isEmpty(contractor.getPhone()) && !StringUtils.isEmpty(contractor.getAddress())
 				)
 				.sorted(Comparator.comparing(Contractor::getFullName))
 				.collect(Collectors.toList());
@@ -507,7 +507,7 @@ public class TasksController {
 				.filter(client -> !StringUtils.isEmpty(client.getFullName())
 						&& client.getManager() != null && !StringUtils.isEmpty(client.getLastName())
 						&& !StringUtils.isEmpty(client.getFirstName()) && !StringUtils.isEmpty(client.getEmail())
-						&& !StringUtils.isEmpty(client.getPhone())
+						&& !StringUtils.isEmpty(client.getPhone()) && !StringUtils.isEmpty(client.getAddress())
 				)
 				.sorted(Comparator.comparing(Client::getFullName))
 				.collect(Collectors.toList());
