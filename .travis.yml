@@ -2,6 +2,10 @@
 # language
 language: java
 
+#To fix "Expected feature release number in range of 9 to 14, but got: 8"
+# https://travis-ci.community/t/error-installing-oraclejdk8-expected-feature-release-number-in-range-of-9-to-14-but-got-8/3766/6
+dist: trusty
+
 # version numbers
 jdk:
     - oraclejdk8
