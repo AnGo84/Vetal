@@ -14,7 +14,8 @@ jdk:
 # obviously this only works for maven builds right now...
 install:
     - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-
+script:
+- mvn test
 #env:
 #    - MAVEN_VERSION=3.3.9
 #install:
