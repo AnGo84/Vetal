@@ -10,7 +10,10 @@ dist: trusty
 jdk:
     - oraclejdk8
 
-# Improve Build Speed https://dzone.com/articles/travis-ci-tutorial-java-projects
+# would just use default install/script but the ./mvnw script errors on travis
+# obviously this only works for maven builds right now...
+install:
+    - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
 #env:
 #    - MAVEN_VERSION=3.3.9
@@ -22,6 +25,9 @@ jdk:
 #script:
 #  - "./mvnw --show-version --errors --batch-mode -Prun-its clean verify"
   #- "mvn test -Dmaven.compiler.target=1.8 -Dmaven.compiler.source=1.8"
+
+
+# Improve Build Speed https://dzone.com/articles/travis-ci-tutorial-java-projects
 cache:
   directories:
     - $HOME/.m2
