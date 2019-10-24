@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import ua.com.vetal.acpect.LogExecutionTime;
 import ua.com.vetal.entity.*;
 import ua.com.vetal.service.*;
 import ua.com.vetal.service.reports.ExporterService;
@@ -78,6 +79,7 @@ public class StencilsController {
 	@Autowired
 	private KraskoottiskService kraskoottiskService;
 
+	@LogExecutionTime
 	@RequestMapping(value = {""}, method = RequestMethod.GET)
 	public String stencilList(Model model) {
 
@@ -88,6 +90,7 @@ public class StencilsController {
 		return "stencilsPage";
 	}
 
+	@LogExecutionTime
 	@RequestMapping(value = {"/add"}, method = RequestMethod.GET)
 	public String showAddStencilPage(Model model) {
 		logger.info("Add new " + title + " record");
@@ -103,7 +106,7 @@ public class StencilsController {
 
 	}
 
-
+	@LogExecutionTime
 	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
 	public String editStencil(@PathVariable Long id, Model model) {
 		logger.info("Edit " + title + " with ID= " + id);
@@ -118,6 +121,7 @@ public class StencilsController {
 		return "stencilPage";
 	}
 
+	@LogExecutionTime
 	@RequestMapping(value = "/copy-{id}", method = RequestMethod.GET)
 	public String copyStencil(@PathVariable Long id, Model model) {
 		logger.info("Copy " + title + " with ID= " + id);
@@ -133,6 +137,7 @@ public class StencilsController {
 		return "stencilPage";
 	}
 
+	@LogExecutionTime
 	@RequestMapping(value = "/view-{id}", method = RequestMethod.GET)
 	public String viewStencil(@PathVariable Long id, Model model) {
 		logger.info("View " + title + " with ID= " + id);
@@ -149,7 +154,7 @@ public class StencilsController {
 		return "stencilPage";
 	}
 
-
+	@LogExecutionTime
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String updateStencil(@Valid @ModelAttribute("stencil") Stencil stencil, BindingResult bindingResult, Model model) {
 		logger.info("Update " + title + ": " + stencil);
@@ -174,6 +179,7 @@ public class StencilsController {
 		return "redirect:/stencils";
 	}
 
+	@LogExecutionTime
 	@RequestMapping(value = {"/delete-{id}"}, method = RequestMethod.GET)
 	public String deleteStencil(@PathVariable Long id) {
 		logger.info("Delete " + title + " with ID= " + id);

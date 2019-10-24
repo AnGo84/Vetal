@@ -19,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ua.com.vetal.acpect.LogExecutionTime;
 import ua.com.vetal.entity.*;
 import ua.com.vetal.entity.file.FileDataSource;
 import ua.com.vetal.service.*;
@@ -102,6 +103,7 @@ public class TasksController {
 	@Autowired
 	private MailServiceImp mailServiceImp;
 
+	@LogExecutionTime
 	@RequestMapping(value = {""}, method = RequestMethod.GET)
 	public String taskList(Model model) {
 		//logger.info("Get Filter: " + filterData);
@@ -111,6 +113,7 @@ public class TasksController {
 		return "tasksPage";
 	}
 
+	@LogExecutionTime
 	@RequestMapping(value = {"/add"}, method = RequestMethod.GET)
 	public String showAddTaskPage(Model model) {
 		logger.info("Add new " + title + " record");
@@ -130,6 +133,7 @@ public class TasksController {
 	 * userService.saveObject(user); return "redirect:/usersPage"; }
 	 */
 
+	@LogExecutionTime
 	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
 	public String editTask(@PathVariable Long id, Model model) {
 		logger.info("Edit " + title + " with ID= " + id);
@@ -158,6 +162,7 @@ public class TasksController {
 		return "taskPage";
 	}
 
+	@LogExecutionTime
 	@RequestMapping(value = "/view-{id}", method = RequestMethod.GET)
 	public String viewTask(@PathVariable Long id, Model model) {
 		logger.info("View " + title + " with ID= " + id);
@@ -181,6 +186,7 @@ public class TasksController {
 	 * userService.saveObject(user); return "redirect:/usersPage"; }
 	 */
 
+	@LogExecutionTime
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String updateTask(@Valid @ModelAttribute("task") Task task, BindingResult bindingResult,
 							 @RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile) {
@@ -242,6 +248,7 @@ public class TasksController {
 		return "redirect:/tasks";
 	}
 
+	@LogExecutionTime
 	@RequestMapping(value = {"/delete-{id}"}, method = RequestMethod.GET)
 	public String deleteTask(@PathVariable Long id) {
 		logger.info("Delete " + title + " with ID= " + id);
