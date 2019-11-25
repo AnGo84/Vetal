@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 // @SessionAttributes({"stencilFilterData"})
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:vetal.properties")
 public class StencilsController {
-	static final Logger logger = LoggerFactory.getLogger(ManagerController.class);
+	static final Logger logger = LoggerFactory.getLogger(StencilsController.class);
 	@Autowired
 	MessageSource messageSource;
 

@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:vetal.properties")
 public class TasksController {
-	static final Logger logger = LoggerFactory.getLogger(ManagerController.class);
+	static final Logger logger = LoggerFactory.getLogger(TasksController.class);
 	@Autowired
 	MessageSource messageSource;
 	// private Collator collator = Collator.getInstance(Locale.);
@@ -106,7 +106,7 @@ public class TasksController {
 	@LogExecutionTime
 	@RequestMapping(value = {""}, method = RequestMethod.GET)
 	public String taskList(Model model) {
-		//logger.info("Get Filter: " + filterData);
+		logger.info("Get Filter: " + filterData);
 		model.addAttribute("title", title);
 		//model.addAttribute("tasksList", taskService.findByFilterData(filterData));
 

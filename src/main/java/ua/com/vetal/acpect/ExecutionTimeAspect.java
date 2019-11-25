@@ -6,12 +6,11 @@ import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import ua.com.vetal.controller.CatalogController;
 
 @Aspect
 @Component
 public class ExecutionTimeAspect {
-	static final Logger logger = LoggerFactory.getLogger(CatalogController.class);
+	static final Logger logger = LoggerFactory.getLogger(ExecutionTimeAspect.class);
 
 	@Around("@annotation(LogExecutionTime)")
 	public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
