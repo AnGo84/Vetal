@@ -133,10 +133,10 @@ public class JasperService {
                 // широкоформатная
                 reportName = "/jasperReport/Task_Large_Format_Printing_Report.jasper";
             } else if (productionType.getId() == 3 || productionType.getId() == 4) {
-                // широкоформатная
+                // На сувенирах и на ткани
                 reportName = "/jasperReport/Task_Souvenir_Report.jasper";
             } else if (productionType.getId() == 5 || productionType.getId() == 6) {
-                // широкоформатная
+                // Оффсетная и Цифровая
                 reportName = "/jasperReport/Task_Offset_and_Digital_Report.jasper";
             }
         }

@@ -56,11 +56,14 @@ public class TasksController {
 	private String pageName = "/tasks";
 	@Autowired
 	private TaskServiceImpl taskService;
+	@Autowired
+	private ViewTaskServiceImpl viewTaskService;
 
 	@Autowired
 	private FilterData filterData;
 
-	private List<Task> tasksList;
+	//private List<Task> tasksList;
+	private List<ViewTask> tasksList;
 
 	@Autowired
 	private StateServiceImpl stateService;
@@ -651,11 +654,21 @@ public class TasksController {
 		return getFilterData().hasData();
 	}
 
-
+	/*
 	@ModelAttribute("tasksList")
 	public List<Task> getTasksListData() {
 		//logger.info("Get Filter: " + filterData);
 		tasksList = taskService.findByFilterData(getFilterData());
+		// logger.info("Get TaskList : " + tasksList.size());
+
+		return tasksList;
+	}
+	*/
+
+	@ModelAttribute("tasksList")
+	public List<ViewTask> getViewTasksListData() {
+		//logger.info("Get Filter: " + filterData);
+		tasksList = viewTaskService.findByFilterData(getFilterData());
 		// logger.info("Get TaskList : " + tasksList.size());
 
 		return tasksList;
