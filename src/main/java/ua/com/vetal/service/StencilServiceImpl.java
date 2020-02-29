@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.dao.StencilDAO;
-import ua.com.vetal.entity.FilterData;
+import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.entity.Stencil;
 import ua.com.vetal.repositories.StencilRepository;
 
@@ -75,7 +75,7 @@ public class StencilServiceImpl implements SimpleService<Stencil> {
     }
 
     public List<Stencil> findByFilterData(FilterData filterData) {
-        List<Stencil> tasks = null;
+        List<Stencil> list = null;
 
         if (filterData == null) {
             return findAllObjects();
@@ -138,11 +138,11 @@ public class StencilServiceImpl implements SimpleService<Stencil> {
         query.where(predicate);
         query.orderBy(builder.desc(root.get("dateBegin")));
 
-        tasks = entityManager.createQuery(query).getResultList();
+        list = entityManager.createQuery(query).getResultList();
 
         // https://www.baeldung.com/rest-search-language-spring-jpa-criteria
         // http://qaru.site/questions/293915/spring-data-jpa-query-by-example
-        return tasks;
+        return list;
     }
 
     @Override

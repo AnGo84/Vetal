@@ -1,12 +1,12 @@
 package ua.com.vetal.controller;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
+import java.io.IOException;
+import java.util.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import net.sf.jasperreports.engine.JRException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +15,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import ua.com.vetal.entity.Contractor;
 import ua.com.vetal.entity.Manager;
+import ua.com.vetal.entity.ReportType;
+import ua.com.vetal.entity.filter.PersonFilter;
 import ua.com.vetal.service.ContractorServiceImpl;
 import ua.com.vetal.service.ManagerServiceImpl;
+import ua.com.vetal.service.reports.ExporterService;
+import ua.com.vetal.service.reports.JasperService;
 
 @Controller
 @RequestMapping("/contractor")
@@ -36,15 +37,25 @@ public class ContractorController {
 	private String title = "Contractor";
 	private String personName = "Contractor";
 	private String pageName = "/contractor";
+
+	private List<Contractor> contractorList;
 	@Autowired
 	private ManagerServiceImpl managerService;
 
 	@Autowired
 	private ContractorServiceImpl personService;
 
+	@Autowired
+	private ExporterService exporterService;
+	@Autowired
+	private JasperService jasperService;
+
+	@Autowired
+	private PersonFilter personFilter;
+
 	@RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
 	public String personList(Model model) {
-		model.addAttribute("personList", personService.findAllObjects());
+		//model.addAttribute("personList", personService.findAllObjects());
 		return "contractorsPage";
 	}
 
@@ -148,6 +159,20 @@ public class ContractorController {
 	}
 
 
+	@RequestMapping(value = "/filter", method = RequestMethod.GET)
+	public String filterTask(@ModelAttribute("personFilterData") PersonFilter filterData, BindingResult bindingResult,
+							 Model model) {
+		logger.info("Filter: " + filterData);
+		this.personFilter = filterData;
+		return "redirect:/contractor";
+	}
+
+	@RequestMapping(value = "/clearFilter", method = RequestMethod.GET)
+	public String clearFilterTask() {
+		this.personFilter = new PersonFilter();
+		return "redirect:/contractor";
+	}
+
 	@ModelAttribute("managerList")
 	public List<Manager> getManagersList() {
 		List<Manager> resultList = managerService.findAllObjects();
@@ -160,4 +185,38 @@ public class ContractorController {
 
 		return resultList;
 	}
+
+	@RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
+	@ResponseBody
+	public void exportToExcelReportTask(HttpServletResponse response) throws JRException, IOException {
+
+		exporterService.export(ReportType.XLSX, jasperService.contractorsTable(personFilter), title, response);
+
+	}
+
+
+	@ModelAttribute("personFilterData")
+	public PersonFilter getFilterData() {
+		//logger.info("Get Filter: " + filterData);
+		if (personFilter == null) {
+			personFilter = new PersonFilter();
+		}
+		return personFilter;
+	}
+
+	@ModelAttribute("hasFilterData")
+	public boolean hasFilterData() {
+		//logger.info("Get Filter: " + filterData);
+		return getFilterData().hasData();
+	}
+
+	@ModelAttribute("personList")
+	public List<Contractor> getViewTasksListData() {
+		//logger.info("Get Filter: " + filterData);
+		contractorList = personService.findByFilterData(getFilterData());
+		// logger.info("Get TaskList : " + tasksList.size());
+
+		return contractorList;
+	}
+
 }

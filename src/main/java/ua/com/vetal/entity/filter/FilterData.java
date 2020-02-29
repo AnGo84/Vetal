@@ -1,8 +1,9 @@
-package ua.com.vetal.entity;
+package ua.com.vetal.entity.filter;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
+import ua.com.vetal.entity.*;
 
 import java.util.Date;
 

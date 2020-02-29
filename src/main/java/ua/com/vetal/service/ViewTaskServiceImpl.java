@@ -7,11 +7,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.com.vetal.dao.TaskDAO;
-import ua.com.vetal.entity.FilterData;
-import ua.com.vetal.entity.Task;
+import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.entity.ViewTask;
-import ua.com.vetal.repositories.TaskRepository;
 import ua.com.vetal.repositories.ViewTaskRepository;
 
 import javax.persistence.EntityManager;
@@ -21,7 +18,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
-import java.util.Locale;
 
 @Service("viewTaskService")
 @Transactional

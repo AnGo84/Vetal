@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ua.com.vetal.acpect.LogExecutionTime;
 import ua.com.vetal.entity.*;
 import ua.com.vetal.entity.file.FileDataSource;
+import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.service.*;
 import ua.com.vetal.service.mail.MailServiceImp;
 import ua.com.vetal.service.reports.ExporterService;

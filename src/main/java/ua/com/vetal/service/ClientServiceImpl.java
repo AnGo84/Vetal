@@ -1,11 +1,21 @@
 package ua.com.vetal.service;
 
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.entity.Client;
+import ua.com.vetal.entity.Contractor;
+import ua.com.vetal.entity.filter.ClientFilter;
+import ua.com.vetal.entity.filter.PersonFilter;
 import ua.com.vetal.repositories.ClientRepository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Service("clientService")
@@ -14,6 +24,9 @@ public class ClientServiceImpl implements SimpleService<Client> {
 
     // private static final Logger logger =
     // LoggerFactory.getLogger(UserServiceImpl.class);
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     private ClientRepository directoryRepository;
@@ -58,6 +71,40 @@ public class ClientServiceImpl implements SimpleService<Client> {
     }
     public boolean isFullNameExist(Client directory) {
         return findByName(directory.getFullName()) != null;
+    }
+
+    public List<Client> findByFilterData(ClientFilter filterData) {
+        List<Client> list = null;
+
+        if (filterData == null) {
+            return findAllObjects();
+        }
+
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Client> query = builder.createQuery(Client.class);
+        Root<Client> root = query.from(Client.class);
+
+        Predicate predicate = builder.conjunction();
+
+
+        if (!Strings.isBlank(filterData.getFullName())) {
+//			predicate = builder.and(predicate, builder.equal(root.get("account"), filterData.getAccount()));
+            predicate = builder.and(predicate, builder.like(builder.lower(root.get("fullName")),
+                    ("%" + filterData.getFullName() + "%").toLowerCase()));
+        }
+
+        if (filterData.getManager() != null && filterData.getManager().getId() != 0) {
+            predicate = builder.and(predicate, builder.equal(root.get("manager"), filterData.getManager()));
+        }
+
+        query.where(predicate);
+        //query.orderBy(builder.desc(root.get("fullName")));
+
+        list = entityManager.createQuery(query).getResultList();
+
+        // https://www.baeldung.com/rest-search-language-spring-jpa-criteria
+        // http://qaru.site/questions/293915/spring-data-jpa-query-by-example
+        return list;
     }
 
 }

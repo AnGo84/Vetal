@@ -9,10 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
-import ua.com.vetal.entity.FilterData;
+import ua.com.vetal.entity.filter.ClientFilter;
+import ua.com.vetal.entity.filter.PersonFilter;
+import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.entity.ProductionTypeDirectory;
 import ua.com.vetal.entity.Stencil;
 import ua.com.vetal.entity.Task;
+import ua.com.vetal.service.ClientServiceImpl;
+import ua.com.vetal.service.ContractorServiceImpl;
 import ua.com.vetal.service.StencilServiceImpl;
 import ua.com.vetal.service.TaskServiceImpl;
 
@@ -34,6 +38,11 @@ public class JasperService {
     private TaskServiceImpl taskService;
     @Autowired
     private StencilServiceImpl stencilService;
+    @Autowired
+    private ContractorServiceImpl contractorService;
+    @Autowired
+    private ClientServiceImpl clientService;
+
 
     // find
     //https://stackoverflow.com/questions/27532446/how-to-use-jasperreports-with-spring-mvc
@@ -125,6 +134,43 @@ public class JasperService {
 
         return JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
     }
+
+
+    public JasperPrint contractorsTable(PersonFilter filterData) throws JRException {
+        logger.info("Export Contractors to table");
+        InputStream jasperStream = this.getClass().getResourceAsStream("/jasperReport/ContractorsTableReport.jasper");
+        InputStream logoIS = this.getClass().getResourceAsStream(imageLogo);
+        Map<String, Object> parameters = new HashMap<>();
+
+        parameters.put("paramLOGO", logoIS);
+
+        JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
+
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(contractorService.findByFilterData(filterData));
+
+        parameters.put("contractors", dataSource);
+
+        return JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+    }
+
+    public JasperPrint clientsTable(ClientFilter filterData) throws JRException {
+        logger.info("Export Clients to table");
+        InputStream jasperStream = this.getClass().getResourceAsStream("/jasperReport/ClientsTableReport.jasper");
+        logger.info("JasperStream is null: " + (jasperStream==null));
+        InputStream logoIS = this.getClass().getResourceAsStream(imageLogo);
+        Map<String, Object> parameters = new HashMap<>();
+
+        parameters.put("paramLOGO", logoIS);
+
+        JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
+
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(clientService.findByFilterData(filterData));
+
+        parameters.put("clients", dataSource);
+
+        return JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+    }
+
 
     public String reportNameForProductType(ProductionTypeDirectory productionType) {
         String reportName = "/jasperReport/TaskReport.jasper";

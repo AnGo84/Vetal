@@ -4,7 +4,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-import ua.com.vetal.entity.FilterData;
+import ua.com.vetal.entity.filter.FilterData;
 
 @Configuration
 public class AppConfig {

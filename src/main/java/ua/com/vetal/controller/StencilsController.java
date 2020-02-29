@@ -13,6 +13,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import ua.com.vetal.acpect.LogExecutionTime;
 import ua.com.vetal.entity.*;
+import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.service.*;
 import ua.com.vetal.service.reports.ExporterService;
 import ua.com.vetal.service.reports.JasperService;

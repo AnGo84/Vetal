@@ -8,7 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.dao.TaskDAO;
-import ua.com.vetal.entity.FilterData;
+import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.entity.Task;
 import ua.com.vetal.repositories.TaskRepository;
 

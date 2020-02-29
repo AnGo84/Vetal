@@ -1,5 +1,6 @@
 package ua.com.vetal.controller;
 
+import net.sf.jasperreports.engine.JRException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,16 +9,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import ua.com.vetal.entity.Client;
 import ua.com.vetal.entity.Manager;
+import ua.com.vetal.entity.ReportType;
+import ua.com.vetal.entity.filter.ClientFilter;
+import ua.com.vetal.entity.filter.PersonFilter;
 import ua.com.vetal.service.ClientServiceImpl;
 import ua.com.vetal.service.ManagerServiceImpl;
+import ua.com.vetal.service.reports.ExporterService;
+import ua.com.vetal.service.reports.JasperService;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -29,6 +34,10 @@ import java.util.Locale;
 
 public class ClientController {
 	static final Logger logger = LoggerFactory.getLogger(ClientController.class);
+	private String title = "Clients";
+
+	private List<Client> clientList;
+
 	@Autowired
 	MessageSource messageSource;
 
@@ -38,9 +47,17 @@ public class ClientController {
 	@Autowired
 	private ClientServiceImpl clientService;
 
+	@Autowired
+	private ExporterService exporterService;
+	@Autowired
+	private JasperService jasperService;
+
+	@Autowired
+	private ClientFilter clientFilter;
+
 	@RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
 	public String clientsList(Model model) {
-		model.addAttribute("clientsList", clientService.findAllObjects());
+		//model.addAttribute("clientsList", clientService.findAllObjects());
 		return "clientsPage";
 	}
 
@@ -111,4 +128,51 @@ public class ClientController {
 		return resultList;
 	}
 
+	//Filter
+	@RequestMapping(value = "/filter", method = RequestMethod.GET)
+	public String filterTask(@ModelAttribute("clientFilterData") ClientFilter filterData, BindingResult bindingResult,
+							 Model model) {
+		logger.info("Filter: " + filterData);
+		this.clientFilter = filterData;
+		return "redirect:/clients";
+	}
+
+	@RequestMapping(value = "/clearFilter", method = RequestMethod.GET)
+	public String clearFilterTask() {
+		this.clientFilter = new ClientFilter();
+		return "redirect:/clients";
+	}
+
+	@RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
+	@ResponseBody
+	public void exportToExcelReportTask(HttpServletResponse response) throws JRException, IOException {
+
+		exporterService.export(ReportType.XLSX, jasperService.clientsTable(clientFilter), title, response);
+
+	}
+
+
+	@ModelAttribute("clientFilterData")
+	public ClientFilter getFilterData() {
+		//logger.info("Get Filter: " + filterData);
+		if (clientFilter == null) {
+			clientFilter = new ClientFilter();
+		}
+		return clientFilter;
+	}
+
+	@ModelAttribute("hasFilterData")
+	public boolean hasFilterData() {
+		//logger.info("Get Filter: " + filterData);
+		return getFilterData().hasData();
+	}
+
+	@ModelAttribute("clientsList")
+	public List<Client> getViewTasksListData() {
+		//logger.info("Get Filter: " + filterData);
+		clientList = clientService.findByFilterData(getFilterData());
+		// logger.info("Get TaskList : " + tasksList.size());
+
+		return clientList;
+	}
 }
