@@ -50,8 +50,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/main", "/login", "/logout", "/forgotPassword", "/resetPassword",
                         "/user/**",
                         "/manager", "/clients", "/contractor", "/production", "/printer", "/worker",
-                        "/paper", "/chromaticity", "/laminate", "/cringle", "/format", "/stock", "/tasks/view**",
-                        "/tasks", "/stencils", "/stencils/view**", "/folder**", "/file**", "/catalog**")
+                        "/paper", "/chromaticity", "/laminate", "/cringle", "/format", "/stock",
+                        "/tasks/view**", "/tasks/clearFilter", "/tasks/Filter", "/tasks",
+                        "/stencils/clearFilter", "/stencils/Filter", "/stencils", "/stencils/view**",
+                        "/statistic/clearFilter", "/statistic/Filter", "/statistic",
+                        "/folder**", "/file**", "/catalog**")
                 .permitAll();
 
         // /userInfo page requires login as ROLE_USER or ROLE_ADMIN.

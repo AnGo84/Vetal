@@ -43,8 +43,9 @@ function initTable(tableName, ordering, sortAsData) {
         "iDisplayLength": 15,
         "aoColumnDefs": [
             {'bSortable': false, 'aTargets': ['no-sort']}
-        ],
-        responsive: true
+        ]
+        /*,
+        responsive: true*/
     });
 };
 
