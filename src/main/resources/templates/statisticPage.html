@@ -61,30 +61,24 @@
                         class="form-control form-control-sm" id="filterAccount"
                         th:field="*{account}">
                 </div>-->
-                <div class="form-group">
+                <!--<div class="form-group">
                     <label for="filterNumber"><span th:text="#{label.number}">Number</span>:</label>
                     <input class="form-control form-control-sm" id="filterNumber" th:field="*{number}"
                            type="text">
                 </div>
-
+                -->
                 <div class="form-group">
-                    <label for="filterFileName"><span th:text="#{label.filename}">File Name</span>:</label> <input
-                        class="form-control form-control-sm"
-                        id="filterFileName" th:field="*{fileName}"
-                        type="text">
-                </div>
-
-                <!--<div class="form-group">
                     <label for="filterClient"><span th:text="#{label.client}">Client</span>:</label> <select
-                        id="filterClient" class="form-control form-control-sm selectpicker"
-                        data-live-search="true" th:field="*{client}">
-                    <option value="" th:text="#{label.select_choose}">Please Select</option>
-                    <option th:each="dropDownItem : ${clientList}"
-                            th:value="${dropDownItem.id}" th:text="${dropDownItem.fullName}"
-                            th:attr="data-tokens=${dropDownItem.fullName}"/>
+                        class="form-control form-control-sm selectpicker" data-live-search="true"
+                        id="filterClient" th:field="*{client}">
+                    <option th:text="#{label.select_choose}" value="">Please Select</option>
+                    <option th:attr="data-tokens=${dropDownItem.fullName}"
+                            th:each="dropDownItem : ${clientList}" th:text="${dropDownItem.fullName}"
+                            th:value="${dropDownItem.id}"/>
                 </select>
                 </div>
 
+                <!--
                 <div class="form-group">
                     <label for="filterContractor"><span th:text="#{label.contractor}">Contractor</span>:</label> <select
                         id="filterContractor" class="form-control form-control-sm selectpicker"
@@ -94,18 +88,18 @@
                             th:value="${dropDownItem.id}" th:text="${dropDownItem.fullName}"
                             th:attr="data-tokens=${dropDownItem.fullName}"/>
                 </select>
-                </div>
+                </div>-->
 
                 <div class="form-group">
                     <label for="filterManager"><span th:text="#{label.manager}">Manager</span>:</label> <select
-                        id="filterManager" class="form-control form-control-sm selectpicker"
-                        data-live-search="true" th:field="*{manager}">
-                    <option value="" th:text="#{label.select_choose}">Please Select</option>
-                    <option th:each="dropDownItem : ${managerList}"
-                            th:value="${dropDownItem.id}" th:text="${dropDownItem.fullName}"
-                            th:attr="data-tokens=${dropDownItem.fullName}"/>
+                        class="form-control form-control-sm selectpicker" data-live-search="true"
+                        id="filterManager" th:field="*{manager}">
+                    <option th:text="#{label.select_choose}" value="">Please Select</option>
+                    <option th:attr="data-tokens=${dropDownItem.fullName}"
+                            th:each="dropDownItem : ${managerList}" th:text="${dropDownItem.fullName}"
+                            th:value="${dropDownItem.id}"/>
                 </select>
-                </div>-->
+                </div>
 
                 <!--<div class="form-group">
                     <label for="filterMaterial"><span th:text="#{label.material}">Material</span>:</label>
@@ -118,17 +112,44 @@
                                 th:attr="data-tokens=${dropDownItem.name}"/>
                     </select>
                 </div>-->
-                <!-- <div class="form-group">
-                     <label for="filterProduction"><span th:text="#{label.production}">Production</span>:</label>
-                     <select
-                             id="filterProduction" class="form-control form-control-sm selectpicker"
-                             data-live-search="true" th:field="*{production}">
-                         <option value="" th:text="#{label.select_choose}">Please Select</option>
-                         <option th:each="dropDownItem : ${productionList}"
-                                 th:value="${dropDownItem.id}" th:text="${dropDownItem.fullName}"
-                                 th:attr="data-tokens=${dropDownItem.fullName}"/>
-                     </select>
-                 </div>-->
+                <div class="form-group">
+                    <label for="filterProduction"><span th:text="#{label.production}">Production</span>:</label>
+                    <select
+                            class="form-control form-control-sm selectpicker" data-live-search="true"
+                            id="filterProduction" th:field="*{production}">
+                        <option th:text="#{label.select_choose}" value="">Please Select</option>
+                        <option th:attr="data-tokens=${dropDownItem.fullName}"
+                                th:each="dropDownItem : ${productionList}" th:text="${dropDownItem.fullName}"
+                                th:value="${dropDownItem.id}"/>
+                    </select>
+                </div>
+                <!-- Debt Amount-->
+                <div class="form-group">
+                    <label><span th:text="#{label.debt}">Debt</span>:</label>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label col-form-label-sm"
+                           for="filterDebtAmountFrom"><span
+                            th:text="#{label.from}">from</span>: </label>
+                    <div class="col-sm-6">
+                        <input class="form-control form-control-sm" id="filterDebtAmountFrom" min="0.00"
+                               onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"
+                               step="0.01" th:field="*{debtAmountFrom}"
+                               type="number"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label col-form-label-sm"
+                           for="filterDebtAmountTill"><span
+                            th:text="#{label.till}">Till</span>: </label>
+                    <div class="col-sm-6">
+                        <input class="form-control form-control-sm" id="filterDebtAmountTill" min="0.00"
+                               onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"
+                               step="0.01" th:field="*{debtAmountTill}"
+                               type="number"/>
+                    </div>
+                </div>
+                <!-- /Debt Amount-->
 
                 <!--<div class="form-group">
                     <label for="filterDateBeginFrom"><span th:text="#{label.date_from}">Date From</span>:</label>
@@ -188,18 +209,19 @@
             <!-- Table PART -->
             <div th:if="${not #lists.isEmpty(ordersList)}">
                 <div class="table-responsive">
-                    <table class="table table-sm table-bordered table-hover display compact" id="tasksTable">
+                    <table class="table table-sm table-bordered table-hover display compact" id="ordersTable">
                         <thead>
                         <tr class="text-center">
                             <th th:text="#{label.id}" width="50">Id</th>
-                            <th th:text="#{label.number}" width="100">Number</th>
-                            <th th:text="#{label.type}" width="100">Type</th>
+                            <th th:text="#{label.number}" width="80">Number</th>
+                            <th th:text="#{label.type}" width="80">Type</th>
                             <th th:text="#{label.manager}">Manager</th>
                             <th th:text="#{label.client}">Client</th>
                             <th th:text="#{label.production}">Production</th>
                             <th th:text="#{label.task_date}" width="100">Date Begin</th>
-                            <th class="no-sort" width="50">PDF</th>
-                            <th class="no-sort" width="50">PDF</th>
+                            <th th:text="#{label.amount}" width="100">Amount</th>
+                            <th th:text="#{label.debt}" width="100">Debt</th>
+                            <th class="no-sort" width="50"></th>
 
                         </tr>
                         </thead>
@@ -216,11 +238,17 @@
                             <td class="text-center" style="vertical-align: middle;"
                                 th:text="${#dates.format(order.dateBegin, 'dd.MM.yyyy')}"></td>
 
-                            <td class="text-center align-self-center" style="vertical-align: middle;"><a
+                            <td class="text-right" style="vertical-align: middle;"
+                                th:text="${#numbers.formatDecimal(order.amount, 1, 'COMMA', 2, 'POINT')}"></td>
+                            <td class="text-right" style="vertical-align: middle;"
+                                th:text="${#numbers.formatDecimal(order.debtAmount, 1, 'COMMA', 2, 'POINT')}"></td>
+                            <!-- th:text="${task.amount}"  -->
+
+                            <!--<td class="text-center align-self-center" style="vertical-align: middle;"><a
                                     class="btn btn-warning btn-sm custom-width"
                                     role="button"
                                     style="width: 50px;" th:href="@{${order.linkPrefix} + '/pdfReport-' + ${order.id}}">PDF</a>
-                            </td>
+                            </td>-->
                             <td class="text-center align-self-center" style="vertical-align: middle;">
                                 <a class="btn btn-warning btn-sm mx-sm-1"
                                    role="button" th:href="@{${order.linkPrefix} + '/pdfReport-' + ${order.id}}"
@@ -245,8 +273,8 @@
             <h2><span th:text="#{label.reports}">Reports</span>:</h2>
             <div class="form-group text-center align-self-center">
                 <a class="btn btn-success btn-sm custom-width" role="button"
-                   style="width: 80px;" th:href="@{'/tasks/excelExport'}"
-                   th:text="#{label.excelExport}">Excel</a>
+                   style="width: 150px;" th:href="@{'/statistic/crossReport'}"
+                   th:text="#{label.report.pivot_table}">Pivot table</a>
             </div>
 
             <hr class="d-sm-none">
@@ -265,8 +293,8 @@
     initDatePicker('#filterDateBeginTill');
 
     $(document).ready(
-        initTable('#tasksTable', [0, "desc"], " "));
-    //$(document).ready(setTableOrdering('#tasksTable',[ 7, "desc" ]));
+        initTable('#ordersTable', null, " "));
+    //initTable('#ordersTable', [0, "desc"], " "));
 </script>
 
 </body>

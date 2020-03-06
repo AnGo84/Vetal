@@ -1,6 +1,7 @@
 package ua.com.vetal.entity;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import ua.com.vetal.entity.indificators.OrderKey;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
@@ -9,11 +10,12 @@ import java.util.Date;
 
 @Entity
 @Table(name = "vorders")
+@IdClass(OrderKey.class)
 public class Order {
 	@Id
 	@Column(name = "order_id")
 	private Long id;
-
+	@Id
 	@Column(name = "order_type")
 	private String orderType;
 

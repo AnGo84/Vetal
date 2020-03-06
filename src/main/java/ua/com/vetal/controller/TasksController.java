@@ -172,7 +172,7 @@ public class TasksController {
 		logger.info("View " + title + " with ID= " + id);
 
 		Task task = taskService.findById(id);
-		//logger.info(task.toString());
+		logger.info(task.toString());
 
 		// model.addAttribute("title", "Edit user");
 		// model.addAttribute("userRolesList",

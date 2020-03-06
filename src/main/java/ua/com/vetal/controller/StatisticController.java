@@ -1,5 +1,6 @@
 package ua.com.vetal.controller;
 
+import net.sf.jasperreports.engine.JRException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import ua.com.vetal.acpect.LogExecutionTime;
-import ua.com.vetal.entity.Order;
+import ua.com.vetal.entity.*;
 import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.service.ClientServiceImpl;
 import ua.com.vetal.service.ManagerServiceImpl;
@@ -22,9 +24,15 @@ import ua.com.vetal.service.mail.MailServiceImp;
 import ua.com.vetal.service.reports.ExporterService;
 import ua.com.vetal.service.reports.JasperService;
 import ua.com.vetal.utils.DateUtils;
+import ua.com.vetal.utils.StringUtils;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/statistic")
@@ -98,6 +106,13 @@ public class StatisticController {
 		return getFilterData().hasData();
 	}
 
+	@RequestMapping(value = {"/crossReport"}, method = RequestMethod.GET)
+	@ResponseBody
+	public void exportToExcelCrossReport(HttpServletResponse response) throws JRException, IOException {
+		//logger.info("Export " + title + " to Excel");
+		exporterService.export(ReportType.XLSX, jasperService.ordersCrossTable(filterData), title, response);
+	}
+
 	/**
 	 * This methods will provide lists and fields to views
 	 */
@@ -110,5 +125,45 @@ public class StatisticController {
 		return orderList;
 	}
 
+	@ModelAttribute("managerList")
+	public List<Manager> getManagersList() {
+		List<Manager> resultList = managerService.findAllObjects();
+		Collections.sort(resultList, new Comparator<Manager>() {
+			@Override
+			public int compare(Manager m1, Manager m2) {
+				return m1.getFullName().compareTo(m2.getFullName());
+			}
+		});
+
+		return resultList;
+	}
+
+	@ModelAttribute("productionList")
+	public List<ProductionDirectory> getProductionsList() {
+		List<ProductionDirectory> resultList = productionService.findAllObjects();
+		Collections.sort(resultList, new Comparator<ProductionDirectory>() {
+			@Override
+			public int compare(ProductionDirectory m1, ProductionDirectory m2) {
+				return m1.getFullName().compareTo(m2.getFullName());
+			}
+		});
+
+		return resultList;
+	}
+
+	@ModelAttribute("clientList")
+	public List<Client> getClientsList() {
+		List<Client> resultList = clientService.findAllObjects();
+
+		List<Client> result = resultList.stream()           // convert list to stream
+				.filter(client -> !StringUtils.isEmpty(client.getFullName())
+						&& client.getManager() != null && !StringUtils.isEmpty(client.getLastName())
+						&& !StringUtils.isEmpty(client.getFirstName()) && !StringUtils.isEmpty(client.getEmail())
+						&& !StringUtils.isEmpty(client.getPhone()) && !StringUtils.isEmpty(client.getAddress())
+				)
+				.sorted(Comparator.comparing(Client::getFullName))
+				.collect(Collectors.toList());
+		return result;
+	}
 
 }
