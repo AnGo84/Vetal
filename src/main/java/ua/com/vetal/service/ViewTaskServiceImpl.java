@@ -7,8 +7,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.entity.ViewTask;
+import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.repositories.ViewTaskRepository;
 
 import javax.persistence.EntityManager;
@@ -140,7 +140,8 @@ public class ViewTaskServiceImpl {
 
 
     private Sort sortByDateBeginDesc() {
-        return new Sort(Sort.Direction.DESC, "dateBegin");
+        //return new Sort(Sort.Direction.DESC, "dateBegin");
+        return Sort.by(Sort.Direction.DESC, "dateBegin");
     }
 
 

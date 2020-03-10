@@ -7,8 +7,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.dao.StencilDAO;
-import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.entity.Stencil;
+import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.repositories.StencilRepository;
 
 import javax.persistence.EntityManager;
@@ -172,6 +172,7 @@ public class StencilServiceImpl implements SimpleService<Stencil> {
     }
 
     private Sort sortByDateBeginDesc() {
-        return new Sort(Sort.Direction.DESC, "dateBegin");
+        //return new Sort(Sort.Direction.DESC, "dateBegin");
+        return Sort.by(Sort.Direction.DESC, "dateBegin");
     }
 }

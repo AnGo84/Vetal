@@ -132,7 +132,8 @@ public class OrderServiceImpl implements SimpleService<Order> {
 	}
 
 	private Sort sortByDateBegin(Sort.Direction direction) {
-		return new Sort(direction, "dateBegin");
+		//return new Sort(direction, "dateBegin");
+		return Sort.by(direction, "dateBegin");
 	}
 
 }
