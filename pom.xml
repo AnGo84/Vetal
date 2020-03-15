@@ -27,6 +27,9 @@
         <!--<apache.poi.version>4.0.0</apache.poi.version>-->
         <apache.poi.version>3.15</apache.poi.version>
         <h2.database.version>1.4.200</h2.database.version>
+        <junit.jupiter.version>5.5.2</junit.jupiter.version>
+        <lombock.version>1.18.12</lombock.version>
+
         <!-- <springframework.version>4.1.6.RELEASE</springframework.version> <springsecurity.version>4.0.1.RELEASE</springsecurity.version>
             <hibernate.version>4.3.6.Final</hibernate.version> <mysql.version>5.1.31</mysql.version> -->
         <start-class>ua.com.vetal.VetalApplication</start-class>
@@ -74,10 +77,29 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+            <!-- exclude junit 4 -->
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- junit 5 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -126,6 +148,13 @@
             <version>${h2.database.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombock.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -146,7 +175,22 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M4</version>
+                <!--<dependencies>
+                    <dependency>
+                        <groupId>org.junit.platform</groupId>
+                        <artifactId>junit-platform-surefire-provider</artifactId>
+                        <version>1.3.2</version>
+                    </dependency>
+                </dependencies>-->
+            </plugin>
+
         </plugins>
+
     </build>
 
     <profiles>
