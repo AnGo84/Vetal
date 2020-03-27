@@ -22,7 +22,7 @@ import java.util.Set;
 public class User implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "User_Id", nullable = false)
     private Long id;
 
@@ -39,14 +39,16 @@ public class User implements Serializable {
     private boolean enabled;
 
     @NotEmpty
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "USER_ROLE", joinColumns = {@JoinColumn(name = "USER_ID")}, inverseJoinColumns = {
-            @JoinColumn(name = "ROLE_ID")})
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @JoinTable(name = "USER_ROLE",
+            joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName="User_Id")},
+            inverseJoinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName="ROLE_ID")})
     private Set<UserRole> userRoles = new HashSet<>();
 
     @Size(max = 100)
     @Column(name = "Email", length = 100)
     private String email;
+
 
     public Long getId() {
         return id;

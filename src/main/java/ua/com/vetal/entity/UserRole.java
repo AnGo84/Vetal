@@ -7,9 +7,9 @@ import javax.persistence.*;
         uniqueConstraints = { //
                 @UniqueConstraint(name = "APP_ROLE_UK", columnNames = "ROLE_NAME")})
 public class UserRole {
-
+//https://stackoverflow.com/questions/43600797/jpa-user-role-manytomany-hibernate-relationship/43604669
     @Id
-    @GeneratedValue
+    //@GeneratedValue
     @Column(name = "Role_Id", nullable = false)
     private Long id;
 
