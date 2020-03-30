@@ -1,27 +1,37 @@
 package ua.com.vetal.entity;
 
+import lombok.Data;
+import ua.com.vetal.entity.pk.CompositeAppUserRoleID;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "USER_ROLE", //
         uniqueConstraints = { //
                 @UniqueConstraint(name = "USER_ROLE_UK", columnNames = {"User_Id", "Role_Id"})})
+@Data
 public class AppUserRole {
 
-    @Id
-    @GeneratedValue
+    /*@Id
+    //@GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id", nullable = false)
-    private Long id;
+    private Long id;*/
 
+    @EmbeddedId
+    private CompositeAppUserRoleID appUserRoleID;
+
+    @MapsId("appUserID")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "User_Id", nullable = false)
     private AppUser appUser;
 
+    @MapsId("appUserRoleID")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Role_Id", nullable = false)
     private AppRole appRole;
 
-    public Long getId() {
+    /*public Long getId() {
         return id;
     }
 
@@ -43,6 +53,6 @@ public class AppUserRole {
 
     public void setAppRole(AppRole appRole) {
         this.appRole = appRole;
-    }
+    }*/
 
 }

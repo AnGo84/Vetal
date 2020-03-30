@@ -7,74 +7,178 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import ua.com.vetal.TestDataUtils;
-import ua.com.vetal.entity.AppUser;
 import ua.com.vetal.entity.User;
 import ua.com.vetal.service.UserServiceImpl;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
 
-import static org.mockito.Mockito.when;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 class UserControllerTest {
 
+    public static final String URL_PREFIX = "/users";
+    public static final String HTTP_LOCALHOST_LOGIN = "http://localhost/login";
     @Autowired
     private MockMvc mockMvc;
     @MockBean
     private UserServiceImpl mockUserService;
 
-    private AppUser appUser;
+    private User user;
 
     @BeforeEach
     public void beforeEach() {
-        appUser = TestDataUtils.getAppUser();
+        user = TestDataUtils.getUser("New Name", "", true, null);
+        user.setId(1l);
+        user.setUserRoles(new HashSet<>(Arrays.asList(TestDataUtils.getUserRole(1l, "ROLE_ADMIN"))));
+
+        when(mockUserService.findAllObjects()).thenReturn(Arrays.asList(user));
+        when(mockUserService.findById(anyLong())).thenReturn(user);
+
+
     }
 
     @Test
-    void personList() throws Exception {
-        //when(mockUserService.findAllObjects()).thenReturn(Arrays.asList(appUser));
-
-        mockMvc.perform(get("/users"))
+    @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
+    public void whenGetPersonListAsAuthorized_thenOk() throws Exception {
+        mockMvc.perform(get(URL_PREFIX))
                 .andDo(print())
                 .andExpect(status().isOk())
-        //.andExpect(content().json("{\"id\":1,\"title\":\"delectus aut autem\",\"userId\":1,\"completed\":false}"))
-        ;
+                .andExpect(model().attribute("users", notNullValue()))
+                .andExpect(view().name("usersPage"));
+        mockMvc.perform(get(URL_PREFIX+ "/all"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("users", notNullValue()))
+                .andExpect(view().name("usersPage"));
+        mockMvc.perform(get(URL_PREFIX+ "/list"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("users", notNullValue()))
+                .andExpect(view().name("usersPage"));
     }
 
     @Test
-    void showAddUserPage() {
+    public void whenGetPersonListAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
+        mockMvc.perform(get(URL_PREFIX))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl(HTTP_LOCALHOST_LOGIN));
     }
 
     @Test
-    void editUser() {
+    @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
+    public void whenGetShowAddUserPageAsAuthorized_thenOk() throws Exception {
+        mockMvc.perform(get(URL_PREFIX + "/add"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user", notNullValue()))
+                .andExpect(model().attribute("edit", false))
+                .andExpect(view().name("userPage"));
+    }
+
+
+    @Test
+    public void whenGetShowAddUserPageAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
+        mockMvc.perform(get(URL_PREFIX + "/add"))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl(HTTP_LOCALHOST_LOGIN));
     }
 
     @Test
-    void updateUser() {
+    @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
+    public void whenEditUserAsAuthorized_thenOk() throws Exception {
+        mockMvc.perform(get(URL_PREFIX + "/edit-" + user.getId()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user", notNullValue()))
+                .andExpect(model().attribute("edit", true))
+                .andExpect(view().name("userPage"));
     }
 
     @Test
-    void deleteUser() {
+    public void whenEditUserAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
+        mockMvc.perform(get(URL_PREFIX + "/edit-" + user.getId()))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl(HTTP_LOCALHOST_LOGIN));
     }
 
     @Test
-    void resetUserPassword() {
+    @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
+    public void whenUpdateUserAsAuthorizedWithNullUser_thenOk() throws Exception {
+        mockMvc.perform(post(URL_PREFIX + "/update"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user", notNullValue()))
+                .andExpect(model().attribute("user", hasProperty("id", nullValue())))
+                .andExpect(model().attribute("user", hasProperty("name", blankOrNullString())))
+                .andExpect(model().attribute("user", hasProperty("enabled", equalTo(false) )))
+                .andExpect(model().attribute("user", hasProperty("userRoles", empty())))
+                .andExpect(model().attributeHasFieldErrors("user","userRoles", "name"))
+                .andExpect(view().name("userPage"));
     }
 
     @Test
-    void initializeRoles() {
+    @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
+    public void whenUpdateUserAsAuthorizedWithNotNullUser_thenOk() throws Exception {
+        //doNothing().when(mockUserService).updateObject(any(User.class));
+        mockUserService.updateObject(user);
+
+        //doNothing().when(mockUserService).updateObject(any(User.class));
+
+        mockMvc.perform(post(URL_PREFIX + "/update")
+                .param("id", String.valueOf(user.getId()))
+                .param("name", user.getName())
+                .param("enabled", String.valueOf(user.isEnabled()))
+                 .param("userRoles", "1")
+                //{id=1, name=ROLE_ADMIN}
+                )
+                .andDo(print())
+                .andExpect(status().isFound())
+                /*.andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user", notNullValue()))
+                .andExpect(model().attribute("user", hasProperty("id", equalTo(user.getId()))))
+                .andExpect(model().attribute("user", hasProperty("name", equalTo(user.getName()))))
+                .andExpect(model().attribute("user", hasProperty("enabled", equalTo(user.isEnabled()) )))
+                .andExpect(model().attribute("user", hasProperty("userRoles", hasSize(1))))*/
+                //.andExpect(view().name("usersPage"))
+                .andExpect(redirectedUrl("/users"));
+        verify(mockUserService, times(1)).updateObject(user);
+    }
+
+
+    @Test
+    public void whenUpdateUserAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
+        mockMvc.perform(post(URL_PREFIX + "/update"))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl(HTTP_LOCALHOST_LOGIN));
     }
 
     @Test
-    void initializeTitle() {
+    public void deleteUser() {
     }
+
+    @Test
+    public void resetUserPassword() {
+    }
+
 }

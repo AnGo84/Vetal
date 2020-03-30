@@ -35,7 +35,7 @@ public class UserController {
     @Autowired
     private final UserServiceImpl userService;
     @Autowired
-    MessageSource messageSource;
+    private MessageSource messageSource;
     private String title = "user";
     @Value("${user.password.default}")
     private String userPasswordDefault;
@@ -49,7 +49,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = {"", "all", "list"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"", "/all", "/list"}, method = RequestMethod.GET)
     public String personList(Model model) {
         model.addAttribute("users", userService.findAllObjects());
         return "usersPage";
@@ -60,8 +60,8 @@ public class UserController {
         logger.info("Add new user");
         User user = new User();
         user.setEnabled(true);
-        title = "New user";
-        // model.addAttribute("title", "New user");
+        //title = "New user";
+        //model.addAttribute("title", title);
         // model.addAttribute("userRolesList",
         // userRoleService.findAllObjects());
         model.addAttribute("edit", false);
@@ -90,8 +90,8 @@ public class UserController {
     @RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
     public String editUser(@PathVariable Long id, Model model) {
         logger.info("Edit user with ID= " + id);
-        title = "Edit user";
-        // model.addAttribute("title", "Edit user");
+        //title = "Edit user";
+        //model.addAttribute("title", title);
         // model.addAttribute("userRolesList",
         // userRoleService.findAllObjects());
         model.addAttribute("edit", true);
@@ -138,7 +138,6 @@ public class UserController {
             model.addAttribute("edit", (user.getId() != null));
             return "userPage";
         }
-
 
         return "redirect:/users";
     }

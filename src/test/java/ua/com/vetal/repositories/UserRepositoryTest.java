@@ -1,5 +1,6 @@
 package ua.com.vetal.repositories;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import ua.com.vetal.entity.User;
 import ua.com.vetal.entity.UserRole;
 
 import javax.persistence.PersistenceException;
+import javax.validation.ConstraintViolationException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,12 +23,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 class UserRepositoryTest {
 	@Autowired
-	private static TestEntityManager entityManager;
+	private TestEntityManager entityManager;
 
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
-	private static UserRoleRepository userRoleRepository;
+	private UserRoleRepository userRoleRepository;
 
 	private User user;
 	private static Set<UserRole> userRoleSet;
@@ -34,15 +36,17 @@ class UserRepositoryTest {
 
 	@BeforeAll
 	public static void beforeAll() {
-		UserRole userRole = TestDataUtils.getUserRole(1l, "USER");
-		entityManager.persistAndFlush(userRole);
-		userRoleSet = new HashSet<>(userRoleRepository.findAll());
+
 		//new HashSet<>(Arrays.asList(userRole));
 	}
 
 	@BeforeEach
 	public void beforeEach() {
 		userRepository.deleteAll();
+		UserRole userRole = TestDataUtils.getUserRole(null, "USER");
+		entityManager.persistAndFlush(userRole);
+		userRoleSet = new HashSet<>(userRoleRepository.findAll());
+
 		// given
 
 		user = TestDataUtils.getUser("User", "password", true, userRoleSet);
@@ -50,6 +54,11 @@ class UserRepositoryTest {
 		entityManager.persistAndFlush(user);
 		//entityManager.flush();
 	}
+	@AfterEach
+	public void afterEach(){
+
+	}
+
 
 	@Test
 	public void whenFindByUserName_thenReturnUser() {
@@ -123,39 +132,46 @@ class UserRepositoryTest {
 	}
 
 	@Test
-	public void whenSaveUserWithNameWrongLength_thenThrowPersistenceException() {
+	public void whenSaveUserWithNameTooLong_thenThrowConstraintViolationException() {
 		User user = TestDataUtils.getUser("NameWithLengthMoreThen36SymbolsIsTooLongForSaving", "second pass", true, userRoleSet);
-		assertThrows(PersistenceException.class, () -> {
-			entityManager.persistAndFlush(user);
-		});
-		user.setName("1");
-		assertThrows(PersistenceException.class, () -> {
-			entityManager.persistAndFlush(user);
+		assertThrows(ConstraintViolationException.class, () -> {
+			userRepository.save(user);
 		});
 	}
 
 	@Test
-	public void whenSaveUserWithPassWrongLength_thenThrowPersistenceException() {
+	public void whenSaveUserWithNameTooShortLength_thenThrowConstraintViolationException() {
+		User user = TestDataUtils.getUser("1", "second pass", true, userRoleSet);
+		assertThrows(ConstraintViolationException.class, () -> {
+			//entityManager.persistAndFlush(user);
+			userRepository.save(user);
+		});
+	}
+
+	@Test
+	public void whenSaveUserWithPassWrongLength_thenThrowConstraintViolationException() {
 		User user = TestDataUtils.getUser("New Name", "", true, userRoleSet);
-		assertThrows(PersistenceException.class, () -> {
-			entityManager.persistAndFlush(user);
+		assertThrows(ConstraintViolationException.class, () -> {
+			//entityManager.persistAndFlush(user);
+			userRepository.saveAndFlush(user);
 		});
 	}
 
 	@Test
-	public void whenSaveUserWithEmailWrongLength_thenThrowPersistenceException() {
+	public void whenSaveUserWithEmailWrongLength_thenThrowConstraintViolationException() {
 		User user = TestDataUtils.getUser("New Name", "", true, userRoleSet);
 		user.setEmail("Email_With_Length_More_Then_100_Symbols_Is_Too_Long_For_Saving_And_Should_be_an_error_on_saving_attempt");
-		assertThrows(PersistenceException.class, () -> {
-			entityManager.persistAndFlush(user);
+		assertThrows(ConstraintViolationException.class, () -> {
+			userRepository.saveAndFlush(user);
 		});
 	}
 
 	@Test
-	public void whenSaveUserWithExistName_thenThrowPersistenceException() {
-		// given
-		assertThrows(PersistenceException.class, () -> {
-			entityManager.persistAndFlush(user);
+	public void whenSaveUserWithExistName_thenThrowConstraintViolationException() {
+		User user = TestDataUtils.getUser("New Name", "", true, userRoleSet);
+		assertThrows(ConstraintViolationException.class, () -> {
+			//entityManager.persistAndFlush(user);
+			userRepository.save(user);
 		});
 	}
 

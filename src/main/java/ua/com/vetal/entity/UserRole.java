@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class UserRole {
 //https://stackoverflow.com/questions/43600797/jpa-user-role-manytomany-hibernate-relationship/43604669
     @Id
-    //@GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Role_Id", nullable = false)
     private Long id;
 
