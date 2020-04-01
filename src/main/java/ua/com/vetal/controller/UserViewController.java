@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -28,7 +29,8 @@ public class UserViewController {
     @Autowired
     private final UserServiceImpl userService;
     @Autowired
-    MessageSource messageSource;
+    private MessageSource messageSource;
+
     private String title = "user";
     @Value("${user.password.default}")
     private String userPasswordDefault;
@@ -39,7 +41,6 @@ public class UserViewController {
     public UserViewController(UserServiceImpl userService) {
         this.userService = userService;
     }
-
 
     @RequestMapping(value = {"/view"}, method = RequestMethod.GET)
     public String showUserViewPage(Model model) {
@@ -58,13 +59,12 @@ public class UserViewController {
         User user = userService.findById(id);
         //logger.info("Find User= " + user);
         if (!userService.isObjectExist(user)) {
-            return "/view";
+            return "error";
+            //throw new RuntimeException("User error");
         }
-
         PasswordResetToken token = PasswordResetTokenHandler.getPasswordResetToken(user);
         tokenRepository.save(token);
 /*
-
         Mail mail = new Mail();
         mail.setFrom("no-reply@memorynotfound.com");
         mail.setTo(user.getEmail());
@@ -81,6 +81,7 @@ public class UserViewController {
 
         return "redirect:/forgot-password?success";
 */
+        logger.error("Test token: " + token.getToken());
         return "redirect:/passwordReset?token=" + token.getToken();
     }
 

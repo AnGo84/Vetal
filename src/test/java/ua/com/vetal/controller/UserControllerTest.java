@@ -25,13 +25,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ExtendWith(SpringExtension.class)
+//@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 class UserControllerTest {
 
     public static final String URL_PREFIX = "/users";
-    public static final String HTTP_LOCALHOST_LOGIN = "http://localhost/login";
+
     @Autowired
     private MockMvc mockMvc;
     @MockBean
@@ -47,8 +47,6 @@ class UserControllerTest {
 
         when(mockUserService.findAllObjects()).thenReturn(Arrays.asList(user));
         when(mockUserService.findById(anyLong())).thenReturn(user);
-
-
     }
 
     @Test
@@ -76,7 +74,7 @@ class UserControllerTest {
         mockMvc.perform(get(URL_PREFIX))
                 .andDo(print())
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl(HTTP_LOCALHOST_LOGIN));
+                .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
 
     @Test
@@ -97,7 +95,7 @@ class UserControllerTest {
         mockMvc.perform(get(URL_PREFIX + "/add"))
                 .andDo(print())
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl(HTTP_LOCALHOST_LOGIN));
+                .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
 
     @Test
@@ -117,7 +115,7 @@ class UserControllerTest {
         mockMvc.perform(get(URL_PREFIX + "/edit-" + user.getId()))
                 .andDo(print())
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl(HTTP_LOCALHOST_LOGIN));
+                .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
 
     @Test
@@ -141,8 +139,6 @@ class UserControllerTest {
     public void whenUpdateUserAsAuthorizedWithNotNullUser_thenOk() throws Exception {
         //doNothing().when(mockUserService).updateObject(any(User.class));
         mockUserService.updateObject(user);
-
-        //doNothing().when(mockUserService).updateObject(any(User.class));
 
         mockMvc.perform(post(URL_PREFIX + "/update")
                 .param("id", String.valueOf(user.getId()))
@@ -170,15 +166,54 @@ class UserControllerTest {
         mockMvc.perform(post(URL_PREFIX + "/update"))
                 .andDo(print())
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl(HTTP_LOCALHOST_LOGIN));
+                .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
 
     @Test
-    public void deleteUser() {
+    @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
+    public void whenDeleteUserUserAsAuthorizedWithNotNullUser_thenOk() throws Exception {
+        mockMvc.perform(get(URL_PREFIX + "/delete-" + user.getId()))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/users"));
+
+        verify(mockUserService, times(1)).deleteById(user.getId());
     }
 
     @Test
-    public void resetUserPassword() {
+    public void whenDeleteUserAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
+        mockMvc.perform(get(URL_PREFIX + "/delete-" + user.getId()))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
+    }
+
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
+    public void whenResetUserPasswordAsAuthorizedWithNotNullUser_thenOk() throws Exception {
+        when(mockUserService.isObjectExist(any())).thenReturn(true);
+        mockMvc.perform(get(URL_PREFIX + "/resetPassword-" + user.getId()))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/users/edit-" + user.getId() + "?resetSuccess"));
+        when(mockUserService.isObjectExist(any())).thenReturn(false);
+
+        User notExistUser = TestDataUtils.getUser("New Name", "", true, null);
+        notExistUser.setId(123654321l);
+        when(mockUserService.findById(anyLong())).thenReturn(notExistUser);
+        mockMvc.perform(get(URL_PREFIX + "/resetPassword-" + notExistUser.getId()))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/users/edit-" + notExistUser.getId()));
+    }
+
+    @Test
+    public void whenResetUserPasswordAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
+        mockMvc.perform(get(URL_PREFIX + "/resetPassword-" + user.getId()))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
 
 }
