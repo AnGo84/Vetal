@@ -1,6 +1,7 @@
 package ua.com.vetal;
 
 import ua.com.vetal.entity.AppUser;
+import ua.com.vetal.entity.ChromaticityDirectory;
 import ua.com.vetal.entity.User;
 import ua.com.vetal.entity.UserRole;
 
@@ -32,5 +33,11 @@ public class TestDataUtils {
 		userRole.setId(id);
 		userRole.setName(name);
 		return userRole;
+	}
+	public static ChromaticityDirectory getChromaticityDirectory(String name) {
+		ChromaticityDirectory chromaticityDirectory = new ChromaticityDirectory();
+		//chromaticityDirectory.setId(id);
+		chromaticityDirectory.setName(name);
+		return chromaticityDirectory;
 	}
 }

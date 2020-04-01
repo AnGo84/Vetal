@@ -171,7 +171,7 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
-    public void whenDeleteUserUserAsAuthorizedWithNotNullUser_thenOk() throws Exception {
+    public void whenDeleteUserAsAuthorizedWithNotNullUser_thenOk() throws Exception {
         mockMvc.perform(get(URL_PREFIX + "/delete-" + user.getId()))
                 .andDo(print())
                 .andExpect(status().isFound())

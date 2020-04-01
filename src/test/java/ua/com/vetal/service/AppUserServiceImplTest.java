@@ -130,7 +130,7 @@ class AppUserServiceImplTest {
 	}
 
 	@TestConfiguration
-	static class EmployeeServiceImplTestContextConfiguration {
+	static class AppUserServiceImplTestContextConfiguration {
 		@Bean
 		public AppUserServiceImpl appUserServiceImpl() {
 			return new AppUserServiceImpl();

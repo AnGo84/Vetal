@@ -80,7 +80,7 @@ class UserRepositoryTest {
 
 	@Test
 	public void whenFindByID_thenReturnUser() {
-		User user = userRepository.findByName("User");
+		//User user = userRepository.findByName("User");
 		// when
 		Optional<User> foundUser = userRepository.findById(user.getId());
 		// then
@@ -193,9 +193,6 @@ class UserRepositoryTest {
 
 	@Test
 	public void whenDeleteById_thenThrowEmptyResultDataAccessException() {
-		User user = TestDataUtils.getUser("User2", "second pass", true, userRoleSet);
-		entityManager.persistAndFlush(user);
-		assertEquals(userRepository.findAll().size(), 2);
 		assertThrows(EmptyResultDataAccessException.class, () -> {
 			userRepository.deleteById(10000000l);
 		});

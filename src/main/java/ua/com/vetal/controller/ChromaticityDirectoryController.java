@@ -44,7 +44,7 @@ public class ChromaticityDirectoryController {
 	 * this.userService = userService; }
 	 */
 
-	@RequestMapping(value = { "", "list" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "", "/list" }, method = RequestMethod.GET)
 	public String directoryList(Model model) {
 		model.addAttribute("directoryList", directoryService.findAllObjects());
 		return "directoryPage";

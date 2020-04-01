@@ -9,7 +9,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.dao.EmptyResultDataAccessException;
 import ua.com.vetal.TestDataUtils;
-import ua.com.vetal.entity.AppUser;
 import ua.com.vetal.entity.User;
 import ua.com.vetal.entity.UserRole;
 import ua.com.vetal.repositories.UserRepository;
@@ -30,7 +29,7 @@ class UserServiceImplTest {
 	@Autowired
 	private UserServiceImpl userService;
 	@MockBean
-	private UserRepository userRepository;
+	private UserRepository mockUserRepository;
 	private User user;
 	private Set<UserRole> userRoleSet;
 
@@ -42,7 +41,7 @@ class UserServiceImplTest {
 
 	@Test
 	void whenFindById_thenReturnUser() {
-		when(userRepository.getOne(1L)).thenReturn(user);
+		when(mockUserRepository.getOne(1L)).thenReturn(user);
 		long id = 1;
 		User found = userService.findById(id);
 
@@ -52,7 +51,7 @@ class UserServiceImplTest {
 
 	@Test
 	void whenFindById_thenReturnNull() {
-		when(userRepository.getOne(1L)).thenReturn(user);
+		when(mockUserRepository.getOne(1L)).thenReturn(user);
 		long id = 2;
 		User found = userService.findById(id);
 		assertNull(found);
@@ -60,7 +59,7 @@ class UserServiceImplTest {
 
 	@Test
 	void whenFindByName_thenReturnUser() {
-		when(userRepository.findByName(user.getName())).thenReturn(user);
+		when(mockUserRepository.findByName(user.getName())).thenReturn(user);
 		User found = userService.findByName("User");
 
 		assertNotNull(found);
@@ -70,7 +69,7 @@ class UserServiceImplTest {
 
 	@Test
 	void whenFindByName_thenReturnNull() {
-		when(userRepository.findByName(user.getName())).thenReturn(user);
+		when(mockUserRepository.findByName(user.getName())).thenReturn(user);
 		User found = userService.findByName("wrong name");
 		assertNull(found);
 	}
@@ -79,12 +78,12 @@ class UserServiceImplTest {
 	void whenSaveObject_thenSuccess() {
 		User newUser = TestDataUtils.getUser("User2", "second pass", true,userRoleSet);
 		userService.saveObject(newUser);
-		verify(userRepository, times(1)).save(newUser);
+		verify(mockUserRepository, times(1)).save(newUser);
 	}
 
 	@Test
 	void whenSaveObject_thenNPE() {
-		when(userRepository.save(any(User.class))).thenThrow(NullPointerException.class);
+		when(mockUserRepository.save(any(User.class))).thenThrow(NullPointerException.class);
 		assertThrows(NullPointerException.class, () -> {
 			userService.saveObject(user);
 		});
@@ -94,12 +93,12 @@ class UserServiceImplTest {
 	void whenUpdateObject_thenSuccess() {
 		User newUser = TestDataUtils.getUser("User2", "second pass", true,userRoleSet);
 		userService.saveObject(newUser);
-		verify(userRepository, times(1)).save(newUser);
+		verify(mockUserRepository, times(1)).save(newUser);
 	}
 
 	@Test
 	void whenUpdateObject_thenThrow() {
-		when(userRepository.save(any(User.class))).thenThrow(NullPointerException.class);
+		when(mockUserRepository.save(any(User.class))).thenThrow(NullPointerException.class);
 		assertThrows(NullPointerException.class, () -> {
 			userService.updateObject(user);
 		});
@@ -108,12 +107,12 @@ class UserServiceImplTest {
 	@Test
 	void whenDeleteById_thenSuccess() {
 		userService.deleteById(1l);
-		verify(userRepository, times(1)).deleteById(1l);
+		verify(mockUserRepository, times(1)).deleteById(1l);
 	}
 
 	@Test
 	void whenDeleteById_thenThrowEmptyResultDataAccessException() {
-		doThrow(new EmptyResultDataAccessException(0)).when(userRepository).deleteById(anyLong());
+		doThrow(new EmptyResultDataAccessException(0)).when(mockUserRepository).deleteById(anyLong());
 		assertThrows(EmptyResultDataAccessException.class, () -> {
 			userService.deleteById(1000000l);
 		});
@@ -121,7 +120,7 @@ class UserServiceImplTest {
 
 	@Test
 	void findAllObjects() {
-		when(userRepository.findAll()).thenReturn(Arrays.asList(user));
+		when(mockUserRepository.findAll()).thenReturn(Arrays.asList(user));
 		List<User> userList = userService.findAllObjects();
 		assertNotNull(userList);
 		assertFalse(userList.isEmpty());
@@ -130,13 +129,13 @@ class UserServiceImplTest {
 
 	@Test
 	void isObjectExist() {
-		when(userRepository.findByName(user.getName())).thenReturn(user);
+		when(mockUserRepository.findByName(user.getName())).thenReturn(user);
 		assertTrue(userService.isObjectExist(user));
-		when(userRepository.findByName(user.getName())).thenReturn(user);
+		when(mockUserRepository.findByName(user.getName())).thenReturn(user);
 	}
 
 	@TestConfiguration
-	static class EmployeeServiceImplTestContextConfiguration {
+	static class UserServiceImplTestContextConfiguration {
 		@Bean
 		public UserServiceImpl userServiceImpl() {
 			return new UserServiceImpl();
