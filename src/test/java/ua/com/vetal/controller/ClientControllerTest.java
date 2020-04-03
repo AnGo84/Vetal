@@ -182,7 +182,7 @@ class ClientControllerTest {
 
     @Test
     public void whenDeleteClientAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
-        mockMvc.perform(get(URL_PREFIX + "/delete-" + manager.getId()))
+        mockMvc.perform(get(URL_PREFIX + "/delete-" + client.getId()))
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
