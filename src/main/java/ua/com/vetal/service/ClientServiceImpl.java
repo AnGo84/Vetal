@@ -5,9 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.entity.Client;
-import ua.com.vetal.entity.Contractor;
 import ua.com.vetal.entity.filter.ClientFilter;
-import ua.com.vetal.entity.filter.PersonFilter;
 import ua.com.vetal.repositories.ClientRepository;
 
 import javax.persistence.EntityManager;
@@ -74,8 +72,8 @@ public class ClientServiceImpl implements SimpleService<Client> {
     }
 
     public List<Client> findByFilterData(ClientFilter filterData) {
+        //https://www.baeldung.com/rest-api-search-language-spring-data-specifications
         List<Client> list = null;
-
         if (filterData == null) {
             return findAllObjects();
         }
@@ -85,7 +83,6 @@ public class ClientServiceImpl implements SimpleService<Client> {
         Root<Client> root = query.from(Client.class);
 
         Predicate predicate = builder.conjunction();
-
 
         if (!Strings.isBlank(filterData.getFullName())) {
 //			predicate = builder.and(predicate, builder.equal(root.get("account"), filterData.getAccount()));
@@ -99,7 +96,6 @@ public class ClientServiceImpl implements SimpleService<Client> {
 
         query.where(predicate);
         //query.orderBy(builder.desc(root.get("fullName")));
-
         list = entityManager.createQuery(query).getResultList();
 
         // https://www.baeldung.com/rest-search-language-spring-jpa-criteria

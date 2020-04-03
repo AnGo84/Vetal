@@ -11,12 +11,13 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.User;
-import ua.com.vetal.entity.User;
 import ua.com.vetal.entity.UserRole;
 
-import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolationException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -120,16 +121,17 @@ class UserRepositoryTest {
 
 	@Test
 	public void it_should_save_user() {
-		// when
-		User foundUser = userRepository.findByName(user.getName());
+        User newUser = TestDataUtils.getUser("User2", "second pass", true, userRoleSet);
+        userRepository.save(newUser);
+        User foundUser = userRepository.findByName(newUser.getName());
 
-		// then
-		assertNotNull(foundUser);
-		assertNotNull(foundUser.getId());
-		assertEquals(foundUser.getName(), user.getName());
-		assertEquals(foundUser.getEncryptedPassword(), user.getEncryptedPassword());
-		assertEquals(foundUser.isEnabled(), user.isEnabled());
-	}
+        // then
+        assertNotNull(foundUser);
+        assertNotNull(foundUser.getId());
+        assertEquals(foundUser.getName(), newUser.getName());
+        assertEquals(foundUser.getEncryptedPassword(), newUser.getEncryptedPassword());
+        assertEquals(foundUser.isEnabled(), newUser.isEnabled());
+    }
 
 	@Test
 	public void whenSaveUserWithNameTooLong_thenThrowConstraintViolationException() {

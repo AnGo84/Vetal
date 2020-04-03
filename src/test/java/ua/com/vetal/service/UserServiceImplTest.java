@@ -41,7 +41,7 @@ class UserServiceImplTest {
 
 	@Test
 	void whenFindById_thenReturnUser() {
-		when(mockUserRepository.getOne(1L)).thenReturn(user);
+		when(mockUserRepository.getOne(anyLong())).thenReturn(user);
 		long id = 1;
 		User found = userService.findById(id);
 
@@ -51,7 +51,7 @@ class UserServiceImplTest {
 
 	@Test
 	void whenFindById_thenReturnNull() {
-		when(mockUserRepository.getOne(1L)).thenReturn(user);
+		when(mockUserRepository.getOne(anyLong())).thenReturn(null);
 		long id = 2;
 		User found = userService.findById(id);
 		assertNull(found);

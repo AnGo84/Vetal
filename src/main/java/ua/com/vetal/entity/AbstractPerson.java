@@ -1,13 +1,15 @@
 package ua.com.vetal.entity;
 
+import org.apache.logging.log4j.util.Strings;
+
 public abstract class AbstractPerson {
-	Long id;
+    Long id;
 
-	String corpName;
+    String corpName;
 
-	String shortName;
+    String shortName;
 
-	String lastName;
+    String lastName;
 
 	String firstName;
 
@@ -74,21 +76,21 @@ public abstract class AbstractPerson {
 	}
 
 	public String getFullName() {
-		String result = "";
-		if (corpName != null) {
-			return corpName;
-		}
-		if (lastName != null) {
-			result += (result.equals("") ? "" : " ") + lastName;
-		}
-		if (firstName != null) {
-			result += (result.equals("") ? "" : " ") + firstName;
-		}
-		if (middleName != null) {
-			result += (result.equals("") ? "" : " ") + middleName;
-		}
-		return result;
-	}
+        String result = "";
+        if (!Strings.isBlank(corpName)) {
+            return corpName;
+        }
+        if (!Strings.isBlank(lastName)) {
+            result += (result.equals("") ? "" : " ") + lastName;
+        }
+        if (!Strings.isBlank(firstName)) {
+            result += (result.equals("") ? "" : " ") + firstName;
+        }
+        if (!Strings.isBlank(middleName)) {
+            result += (result.equals("") ? "" : " ") + middleName;
+        }
+        return result;
+    }
 
 	@Override
 	public boolean equals(Object o) {

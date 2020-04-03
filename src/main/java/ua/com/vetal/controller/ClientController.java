@@ -14,7 +14,6 @@ import ua.com.vetal.entity.Client;
 import ua.com.vetal.entity.Manager;
 import ua.com.vetal.entity.ReportType;
 import ua.com.vetal.entity.filter.ClientFilter;
-import ua.com.vetal.entity.filter.PersonFilter;
 import ua.com.vetal.service.ClientServiceImpl;
 import ua.com.vetal.service.ManagerServiceImpl;
 import ua.com.vetal.service.reports.ExporterService;
@@ -55,7 +54,7 @@ public class ClientController {
 	@Autowired
 	private ClientFilter clientFilter;
 
-	@RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"", "/list"}, method = RequestMethod.GET)
 	public String clientsList(Model model) {
 		//model.addAttribute("clientsList", clientService.findAllObjects());
 		return "clientsPage";
@@ -130,22 +129,22 @@ public class ClientController {
 
 	//Filter
 	@RequestMapping(value = "/filter", method = RequestMethod.GET)
-	public String filterTask(@ModelAttribute("clientFilterData") ClientFilter filterData, BindingResult bindingResult,
-							 Model model) {
+	public String filterClients(@ModelAttribute("clientFilterData") ClientFilter filterData, BindingResult bindingResult,
+								Model model) {
 		logger.info("Filter: " + filterData);
 		this.clientFilter = filterData;
 		return "redirect:/clients";
 	}
 
 	@RequestMapping(value = "/clearFilter", method = RequestMethod.GET)
-	public String clearFilterTask() {
+	public String clearFilterClients() {
 		this.clientFilter = new ClientFilter();
 		return "redirect:/clients";
 	}
 
 	@RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
 	@ResponseBody
-	public void exportToExcelReportTask(HttpServletResponse response) throws JRException, IOException {
+	public void exportToExcelReportClients(HttpServletResponse response) throws JRException, IOException {
 
 		exporterService.export(ReportType.XLSX, jasperService.clientsTable(clientFilter), title, response);
 
@@ -168,7 +167,7 @@ public class ClientController {
 	}
 
 	@ModelAttribute("clientsList")
-	public List<Client> getViewTasksListData() {
+	public List<Client> getViewClientsListData() {
 		//logger.info("Get Filter: " + filterData);
 		clientList = clientService.findByFilterData(getFilterData());
 		// logger.info("Get TaskList : " + tasksList.size());

@@ -55,8 +55,7 @@ public class ManagerServiceImpl implements SimpleService<Manager> {
 
     @Override
     public boolean isObjectExist(Manager person) {
-        // return findByName(manager.getName()) != null;
-        return false;
+        return findById(person.getId()) != null;
     }
 
 }
