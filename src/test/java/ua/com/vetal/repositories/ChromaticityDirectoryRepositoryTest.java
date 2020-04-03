@@ -17,8 +17,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-public
-class ChromaticityDirectoryRepositoryTest {
+public class ChromaticityDirectoryRepositoryTest {
     public static final String SECOND_DIRECTORY_NAME = "Second Chromaticity Directory";
     public static final String NAME_WITH_LENGTH_MORE_THEN_250_SYMBOLS = "NameWithLengthMoreThen250SymbolsIsTooLongForSavingNameWithLengthMoreThen250SymbolsIsTooLongForSavingNameWithLengthMoreThen250SymbolsIsTooLongForSavingNameWithLengthMoreThen250SymbolsIsTooLongForSavingNameWithLengthMoreThen250SymbolsIsTooLongForSavingNameWithLengthMoreThen250SymbolsIsTooLongForSaving";
     public static final String DIRECTORY_NAME = "ChromaticityDirectory";
@@ -95,11 +94,13 @@ class ChromaticityDirectoryRepositoryTest {
 
     @Test
     public void it_should_save_object() {
-        ChromaticityDirectory foundDirectory = directoryRepository.findByName(directory.getName());
+        ChromaticityDirectory newDirectory = TestDataUtils.getChromaticityDirectory(SECOND_DIRECTORY_NAME);
+        directoryRepository.save(newDirectory);
+        ChromaticityDirectory foundDirectory = directoryRepository.findByName(newDirectory.getName());
         // then
         assertNotNull(foundDirectory);
         assertNotNull(foundDirectory.getId());
-        assertEquals(foundDirectory.getName(), directory.getName());
+        assertEquals(foundDirectory.getName(), newDirectory.getName());
     }
 
     @Test

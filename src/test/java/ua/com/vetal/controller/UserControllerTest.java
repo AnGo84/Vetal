@@ -2,13 +2,11 @@ package ua.com.vetal.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.User;
@@ -19,6 +17,7 @@ import java.util.HashSet;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -57,12 +56,12 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("users", notNullValue()))
                 .andExpect(view().name("usersPage"));
-        mockMvc.perform(get(URL_PREFIX+ "/all"))
+        mockMvc.perform(get(URL_PREFIX + "/all"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("users", notNullValue()))
                 .andExpect(view().name("usersPage"));
-        mockMvc.perform(get(URL_PREFIX+ "/list"))
+        mockMvc.perform(get(URL_PREFIX + "/list"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("users", notNullValue()))
@@ -128,9 +127,9 @@ class UserControllerTest {
                 .andExpect(model().attribute("user", notNullValue()))
                 .andExpect(model().attribute("user", hasProperty("id", nullValue())))
                 .andExpect(model().attribute("user", hasProperty("name", blankOrNullString())))
-                .andExpect(model().attribute("user", hasProperty("enabled", equalTo(false) )))
+                .andExpect(model().attribute("user", hasProperty("enabled", equalTo(false))))
                 .andExpect(model().attribute("user", hasProperty("userRoles", empty())))
-                .andExpect(model().attributeHasFieldErrors("user","userRoles", "name"))
+                .andExpect(model().attributeHasFieldErrors("user", "userRoles", "name"))
                 .andExpect(view().name("userPage"));
     }
 
@@ -141,12 +140,12 @@ class UserControllerTest {
         mockUserService.updateObject(user);
 
         mockMvc.perform(post(URL_PREFIX + "/update")
-                .param("id", String.valueOf(user.getId()))
-                .param("name", user.getName())
-                .param("enabled", String.valueOf(user.isEnabled()))
-                 .param("userRoles", "1")
+                        .param("id", String.valueOf(user.getId()))
+                        .param("name", user.getName())
+                        .param("enabled", String.valueOf(user.isEnabled()))
+                        .param("userRoles", "1")
                 //{id=1, name=ROLE_ADMIN}
-                )
+        )
                 .andDo(print())
                 .andExpect(status().isFound())
                 /*.andExpect(model().attributeExists("user"))

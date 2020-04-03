@@ -2,7 +2,6 @@ package ua.com.vetal.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -16,7 +15,7 @@ public class Client {
 
     //@NotNull
     @NotEmpty
-    @Size(min = 0, max = 250)
+    @Size(min = 1, max = 250)
     @Column(name = "FullName", length = 250, nullable = false)
     private String fullName;
 
@@ -26,17 +25,17 @@ public class Client {
 
     //@NotNull
     @NotEmpty
-    @Size(max = 45)
+    @Size(min = 1, max = 50)
     @Column(name = "LastName", length = 50, nullable = false)
     private String lastName;
 
     //@NotNull
     @NotEmpty
-    @Size( max = 45)
+    @Size(min = 1, max = 50)
     @Column(name = "FirstName", length = 50, nullable = false)
     private String firstName;
 
-    @Size(min = 0, max = 45)
+    @Size(min = 0, max = 50)
     @Column(name = "MiddleName", length = 50, nullable = true)
     private String middleName;
 
