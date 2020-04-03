@@ -50,6 +50,21 @@ public class TestDataUtils {
         return client;
     }
 
+    public static Contractor getContractor(Long id, String corpName, String shortName, String firstName, String lastName, String middleName, String address, String email, String phone, String siteURL) {
+        Contractor contractor = new Contractor();
+        contractor.setId(id);
+        contractor.setCorpName(corpName);
+        contractor.setShortName(shortName);
+        contractor.setFirstName(firstName);
+        contractor.setLastName(lastName);
+        contractor.setMiddleName(middleName);
+        contractor.setAddress(address);
+        contractor.setEmail(email);
+        contractor.setPhone(phone);
+        contractor.setSiteURL(siteURL);
+        return contractor;
+    }
+
     public static Manager getManager(String firstName, String lastName, String middleName, String email) {
         Manager manager = new Manager();
         //Manager.setId(1l);

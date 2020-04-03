@@ -236,7 +236,7 @@ public class ClientRepositoryTest {
     }
 
     @Test
-    public void whenSavClientWithAddressTooShortLength_thenThrowConstraintViolationException() {
+    public void whenSaveClientWithAddressTooShortLength_thenThrowConstraintViolationException() {
         Client newClient = TestDataUtils.getClient(null, "fullName",
                 "firstName", "lastName", "middleName", "",
                 "email", "phone");
@@ -271,7 +271,7 @@ public class ClientRepositoryTest {
     }
 
     @Test
-    public void whenSavClientWithEmailTooShortLength_thenThrowConstraintViolationException() {
+    public void whenSaveClientWithEmailTooShortLength_thenThrowConstraintViolationException() {
         Client newClient = TestDataUtils.getClient(null, "fullName",
                 "firstName", "lastName", "middleName", "address",
                 "", "phone");
