@@ -25,26 +25,33 @@ public class TestDataUtils {
 
 	public static UserRole getUserRole(Long id, String name) {
 		UserRole userRole = new UserRole();
-        userRole.setId(id);
-        userRole.setName(name);
-        return userRole;
-    }
+		userRole.setId(id);
+		userRole.setName(name);
+		return userRole;
+	}
 
-    public static ChromaticityDirectory getChromaticityDirectory(String name) {
-        ChromaticityDirectory chromaticityDirectory = new ChromaticityDirectory();
-        //chromaticityDirectory.setId(id);
-        chromaticityDirectory.setName(name);
-        return chromaticityDirectory;
-    }
+	public static ChromaticityDirectory getChromaticityDirectory(String name) {
+		ChromaticityDirectory chromaticityDirectory = new ChromaticityDirectory();
+		//chromaticityDirectory.setId(id);
+		chromaticityDirectory.setName(name);
+		return chromaticityDirectory;
+	}
 
-    public static Client getClient(Long id, String fullName, String firstName, String lastName, String middleName, String address, String email, String phone) {
-        Client client = new Client();
-        client.setId(id);
-        client.setFullName(fullName);
-        client.setFirstName(firstName);
-        client.setLastName(lastName);
-        client.setMiddleName(middleName);
-        client.setAddress(address);
+	public static CringleDirectory getCringleDirectory(String name) {
+		CringleDirectory cringleDirectory = new CringleDirectory();
+		//cringleDirectory.setId(id);
+		cringleDirectory.setName(name);
+		return cringleDirectory;
+	}
+
+	public static Client getClient(Long id, String fullName, String firstName, String lastName, String middleName, String address, String email, String phone) {
+		Client client = new Client();
+		client.setId(id);
+		client.setFullName(fullName);
+		client.setFirstName(firstName);
+		client.setLastName(lastName);
+		client.setMiddleName(middleName);
+		client.setAddress(address);
         client.setEmail(email);
         client.setPhone(phone);
         return client;

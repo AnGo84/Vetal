@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 class ManagerControllerTest {
-    public static final String URL_PREFIX = "/manager";
+    public static final String MAPPED_URL = "/manager";
 
     @Autowired
     private MockMvc mockMvc;
@@ -47,13 +47,13 @@ class ManagerControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
     public void whenGetManagerListAsAuthorized_thenOk() throws Exception {
-        mockMvc.perform(get(URL_PREFIX))
+		mockMvc.perform(get(MAPPED_URL))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("personList", notNullValue()))
                 .andExpect(view().name("personsPage"));
 
-        mockMvc.perform(get(URL_PREFIX + "/list"))
+		mockMvc.perform(get(MAPPED_URL + "/list"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("personList", notNullValue()))
@@ -62,7 +62,7 @@ class ManagerControllerTest {
 
     @Test
     public void whenGetManagerListAsNoAuthorized_thenOk() throws Exception {
-        mockMvc.perform(get(URL_PREFIX))
+		mockMvc.perform(get(MAPPED_URL))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -70,7 +70,7 @@ class ManagerControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenShowAddPersonPageAsAuthorized_thenOk() throws Exception {
-        mockMvc.perform(get(URL_PREFIX + "/add"))
+		mockMvc.perform(get(MAPPED_URL + "/add"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("person"))
@@ -82,7 +82,7 @@ class ManagerControllerTest {
 
     @Test
     public void whenShowAddPersonPageAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
-        mockMvc.perform(get(URL_PREFIX + "/add"))
+		mockMvc.perform(get(MAPPED_URL + "/add"))
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
@@ -91,7 +91,7 @@ class ManagerControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenEditPersonAsAuthorized_thenOk() throws Exception {
-        mockMvc.perform(get(URL_PREFIX + "/edit-" + manager.getId()))
+		mockMvc.perform(get(MAPPED_URL + "/edit-" + manager.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("person"))
@@ -102,7 +102,7 @@ class ManagerControllerTest {
 
     @Test
     public void whenEditPersonAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
-        mockMvc.perform(get(URL_PREFIX + "/edit-" + manager.getId()))
+		mockMvc.perform(get(MAPPED_URL + "/edit-" + manager.getId()))
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
@@ -111,7 +111,7 @@ class ManagerControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdatePersonAsAuthorizedWithNullManager_thenOk() throws Exception {
-        mockMvc.perform(post(URL_PREFIX + "/update"))
+		mockMvc.perform(post(MAPPED_URL + "/update"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("person"))
@@ -130,23 +130,23 @@ class ManagerControllerTest {
         //doNothing().when(mockUserService).updateObject(any(User.class));
         mockManagerService.updateObject(manager);
 
-        mockMvc.perform(post(URL_PREFIX + "/update")
-                .param("id", String.valueOf(manager.getId()))
-                .param("firstName", manager.getFirstName())
-                .param("lastName", manager.getLastName())
-                .param("middleName", manager.getMiddleName())
-                .param("email", manager.getEmail()))
-                .andDo(print())
-                .andExpect(status().isFound())
+		mockMvc.perform(post(MAPPED_URL + "/update")
+				.param("id", String.valueOf(manager.getId()))
+				.param("firstName", manager.getFirstName())
+				.param("lastName", manager.getLastName())
+				.param("middleName", manager.getMiddleName())
+				.param("email", manager.getEmail()))
+				.andDo(print())
+				.andExpect(status().isFound())
 
-                .andExpect(redirectedUrl(URL_PREFIX));
-        verify(mockManagerService, times(1)).updateObject(manager);
+				.andExpect(redirectedUrl(MAPPED_URL));
+		verify(mockManagerService, times(1)).updateObject(manager);
     }
 
 
     @Test
     public void whenUpdatePersonAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
-        mockMvc.perform(post(URL_PREFIX + "/update"))
+		mockMvc.perform(post(MAPPED_URL + "/update"))
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
@@ -155,17 +155,17 @@ class ManagerControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenDeletePersonAsAuthorizedWithNotNullUser_thenOk() throws Exception {
-        mockMvc.perform(get(URL_PREFIX + "/delete-" + manager.getId()))
-                .andDo(print())
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl(URL_PREFIX));
+		mockMvc.perform(get(MAPPED_URL + "/delete-" + manager.getId()))
+				.andDo(print())
+				.andExpect(status().isFound())
+				.andExpect(redirectedUrl(MAPPED_URL));
 
         verify(mockManagerService, times(1)).deleteById(manager.getId());
     }
 
     @Test
     public void whenDeletePersonAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
-        mockMvc.perform(get(URL_PREFIX + "/delete-" + manager.getId()))
+		mockMvc.perform(get(MAPPED_URL + "/delete-" + manager.getId()))
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
