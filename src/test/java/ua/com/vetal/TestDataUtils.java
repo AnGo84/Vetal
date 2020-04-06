@@ -44,6 +44,13 @@ public class TestDataUtils {
 		return cringleDirectory;
 	}
 
+	public static FormatDirectory getFormatDirectory(String name) {
+		FormatDirectory formatDirectory = new FormatDirectory();
+		//formatDirectory.setId(id);
+		formatDirectory.setName(name);
+		return formatDirectory;
+	}
+
 	public static Client getClient(Long id, String fullName, String firstName, String lastName, String middleName, String address, String email, String phone) {
 		Client client = new Client();
 		client.setId(id);

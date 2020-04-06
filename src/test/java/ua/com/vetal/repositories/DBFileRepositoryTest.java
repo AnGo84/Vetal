@@ -51,7 +51,6 @@ public class DBFileRepositoryTest {
         });
     }
 
-
     @Test
     public void it_should_save_dbFile() {
         DBFile newDBFile = new DBFile("file2", "content_type", "file2 data".getBytes());
