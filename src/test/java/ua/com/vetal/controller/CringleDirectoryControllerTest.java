@@ -54,6 +54,12 @@ public class CringleDirectoryControllerTest {
 				.andExpect(model().attribute("directoryList", notNullValue()))
 				.andExpect(view().name("directoryPage"));
 
+		mockMvc.perform(get(MAPPED_URL + "/"))
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(model().attribute("directoryList", notNullValue()))
+				.andExpect(view().name("directoryPage"));
+
 		mockMvc.perform(get(MAPPED_URL + "/list"))
 				.andDo(print())
 				.andExpect(status().isOk())

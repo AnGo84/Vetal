@@ -9,9 +9,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ua.com.vetal.TestDataUtils;
-import ua.com.vetal.entity.FormatDirectory;
-import ua.com.vetal.repositories.FormatDirectoryRepositoryTest;
-import ua.com.vetal.service.FormatDirectoryServiceImpl;
+import ua.com.vetal.entity.LaminateDirectory;
+import ua.com.vetal.repositories.LaminateDirectoryRepositoryTest;
+import ua.com.vetal.service.LaminateDirectoryServiceImpl;
 
 import java.util.Arrays;
 
@@ -25,19 +25,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class FormatDirectoryControllerTest {
-	public static final String MAPPED_URL = "/format";
+public class LaminateDirectoryControllerTest {
+	public static final String MAPPED_URL = "/laminate";
 
 	@Autowired
 	private MockMvc mockMvc;
 	@MockBean
-	private FormatDirectoryServiceImpl mockDirectoryService;
+	private LaminateDirectoryServiceImpl mockDirectoryService;
 
-	private FormatDirectory directory;
+	private LaminateDirectory directory;
 
 	@BeforeEach
 	public void beforeEach() {
-		directory = TestDataUtils.getFormatDirectory(FormatDirectoryRepositoryTest.DIRECTORY_NAME);
+		directory = TestDataUtils.getLaminateDirectory(LaminateDirectoryRepositoryTest.DIRECTORY_NAME);
 		directory.setId(1l);
 
 		when(mockDirectoryService.findAllObjects()).thenReturn(Arrays.asList(directory));

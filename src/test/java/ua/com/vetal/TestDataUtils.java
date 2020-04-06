@@ -51,6 +51,20 @@ public class TestDataUtils {
 		return formatDirectory;
 	}
 
+	public static LaminateDirectory getLaminateDirectory(String name) {
+		LaminateDirectory laminateDirectory = new LaminateDirectory();
+		//laminateDirectory.setId(id);
+		laminateDirectory.setName(name);
+		return laminateDirectory;
+	}
+
+	public static LinkType getLinkType(String name) {
+		LinkType linkType = new LinkType();
+		//linkType.setId(id);
+		linkType.setName(name);
+		return linkType;
+	}
+
 	public static Client getClient(Long id, String fullName, String firstName, String lastName, String middleName, String address, String email, String phone) {
 		Client client = new Client();
 		client.setId(id);
@@ -59,7 +73,7 @@ public class TestDataUtils {
 		client.setLastName(lastName);
 		client.setMiddleName(middleName);
 		client.setAddress(address);
-        client.setEmail(email);
+		client.setEmail(email);
         client.setPhone(phone);
         return client;
     }
