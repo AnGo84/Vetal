@@ -19,7 +19,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-class ManagerServiceImplTest {
+public class ManagerServiceImplTest {
     @Autowired
     private ManagerServiceImpl managerService;
     @MockBean
@@ -94,7 +94,7 @@ class ManagerServiceImplTest {
     }
 
     @Test
-    void whenUpdateObject_thenThrow() {
+    void whenUpdateObject_thenThrowNPE() {
         when(mockManagerRepository.save(any(Manager.class))).thenThrow(NullPointerException.class);
         assertThrows(NullPointerException.class, () -> {
             managerService.updateObject(manager);

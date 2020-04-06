@@ -17,31 +17,33 @@ public class DBFileStorageService {
     @Autowired
     private DBFileRepository dbFileRepository;
 
-    public DBFile storeFile(MultipartFile file) throws FileUploadException {
+    public DBFile storeMultipartFile(MultipartFile file) throws FileUploadException, FileNotFoundException {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        // Check if the file's name contains invalid characters
+        if (fileName.contains("..")) {
+            throw new FileNotFoundException("Sorry! Filename contains invalid path sequence " + fileName);
+        }
 
         try {
-            // Check if the file's name contains invalid characters
-            if (fileName.contains("..")) {
-                throw new FileNotFoundException("Sorry! Filename contains invalid path sequence " + fileName);
-            }
-
             DBFile dbFile = new DBFile(fileName, file.getContentType(), file.getBytes());
-
+            System.out.println("DBFile created: " + dbFile);
             return dbFileRepository.save(dbFile);
         } catch (IOException ex) {
             throw new FileUploadException("Could not store file " + fileName + ". Please try again!", ex);
         }
     }
 
-    public DBFile getFile(Long fileId) throws FileNotFoundException {
+    public DBFile save(DBFile dbFile) {
+        return dbFileRepository.save(dbFile);
+    }
+
+    public DBFile findById(Long fileId) throws FileNotFoundException {
         return dbFileRepository.findById(fileId)
                 .orElseThrow(() -> new FileNotFoundException("File not found with id " + fileId));
     }
 
-    public void deleteFile(Long fileId) {
-
+    public void deleteById(Long fileId) {
         dbFileRepository.deleteById(fileId);
     }
 }

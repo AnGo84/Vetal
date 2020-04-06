@@ -34,6 +34,7 @@ import javax.activation.DataSource;
 import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -222,7 +223,7 @@ public class TasksController {
 		if (uploadFile != null && !uploadFile.isEmpty()) {
 			logger.info("uploadFile is not NULL");
 			try {
-				DBFile dbFile = dbFileStorageService.storeFile(uploadFile);
+				DBFile dbFile = dbFileStorageService.storeMultipartFile(uploadFile);
 				logger.info("Saved dbFile: " + dbFile);
 
 				if (task.getDbFile() != null) {
@@ -230,8 +231,8 @@ public class TasksController {
 					//dbFileStorageService.deleteFile(task.getDbFile().getId());
 				}
 				task.setDbFile(dbFile);
-			} catch (FileUploadException e) {
-				logger.info(e.getMessage());
+			} catch (FileUploadException | FileNotFoundException e) {
+				logger.error(e.getMessage());
 				return "taskPage";
 			}
 		} else {
@@ -239,14 +240,15 @@ public class TasksController {
 			//logger.info("Is DBFile null: " + task.getDbFile() ) ;
 			//logger.info("Is FILENAME null: " + (task.getFileName() == null || task.getFileName().equals(""))) ;
 			if (task.getDbFile() != null && (task.getFileName() == null || task.getFileName().equals(""))) {
-				logger.info("Delete dbFile by ID= " + task.getDbFile().getId());
+
 				fileId = task.getDbFile().getId();
 				task.setDbFile(null);
 			}
 		}
 		taskService.saveObject(task);
 		if (fileId != null) {
-			dbFileStorageService.deleteFile(fileId);
+			logger.info("Delete dbFile by ID= " + fileId);
+			dbFileStorageService.deleteById(fileId);
 		}
 
 		return "redirect:/tasks";

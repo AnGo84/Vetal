@@ -74,7 +74,7 @@ public class DBFile {
         return sb.toString();
     }
 
-    public String toShortString() {
+/*    public String toShortString() {
         final StringBuilder sb = new StringBuilder("DBFile{");
         sb.append("id='").append(id).append('\'');
         sb.append(", fileName='").append(fileName).append('\'');
@@ -87,5 +87,5 @@ public class DBFile {
         final StringBuilder sb = new StringBuilder(fileName);
         sb.append("(").append(id).append(fileType).append(")");
         return sb.toString();
-    }
+    }*/
 }
