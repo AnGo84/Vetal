@@ -48,7 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // The pages does not require login
         http.authorizeRequests()
                 .antMatchers("/", "/main", "/login", "/logout", "/forgotPassword", "/resetPassword",
-                        "/manager", "/clients", "/contractor", "/production", "/printer", "/worker",
+                        "/manager", "/clients", "/contractor", "/productions", "/printer", "/worker",
                         "/paper", "/chromaticity", "/laminate", "/cringle", "/format", "/stock", "/numberBases",
                         "/printingUnit", "/productionType",
                         "/tasks/view**", "/tasks/clearFilter", "/tasks/Filter", "/tasks",
@@ -66,7 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/printer/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/clients/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/contractor/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
-        http.authorizeRequests().antMatchers("/production/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/productions/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/productionType/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/paper/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/printingUnit/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");

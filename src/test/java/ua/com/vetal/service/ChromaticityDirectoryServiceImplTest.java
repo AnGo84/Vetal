@@ -2,14 +2,10 @@ package ua.com.vetal.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.ChromaticityDirectory;
 import ua.com.vetal.repositories.ChromaticityDirectoryRepository;
@@ -63,9 +59,9 @@ public class ChromaticityDirectoryServiceImplTest {
 
     @Test
     void whenSaveObject_thenSuccess() {
-        ChromaticityDirectory newDirector = TestDataUtils.getChromaticityDirectory(ChromaticityDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
-        directoryService.saveObject(newDirector);
-        verify(mockDirectoryRepository, times(1)).save(newDirector);
+        ChromaticityDirectory newDirectory = TestDataUtils.getChromaticityDirectory(ChromaticityDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
+        directoryService.saveObject(newDirectory);
+        verify(mockDirectoryRepository, times(1)).save(newDirectory);
     }
 
     @Test
@@ -78,9 +74,9 @@ public class ChromaticityDirectoryServiceImplTest {
 
     @Test
     void whenUpdateObject_thenSuccess() {
-        ChromaticityDirectory newDirector = TestDataUtils.getChromaticityDirectory(ChromaticityDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
-        directoryService.saveObject(newDirector);
-        verify(mockDirectoryRepository, times(1)).save(newDirector);
+        directory.setName(ChromaticityDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
+        directoryService.updateObject(directory);
+        verify(mockDirectoryRepository, times(1)).save(directory);
     }
 
     @Test

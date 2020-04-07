@@ -155,25 +155,34 @@ public class TestDataUtils {
         return manager;
     }
 
-    public static Printer getPrinter(Long id, String firstName, String lastName, String middleName, String email) {
-        Printer printer = new Printer();
-        printer.setId(id);
-        printer.setFirstName(firstName);
-        printer.setLastName(lastName);
-        printer.setMiddleName(middleName);
-        printer.setEmail(email);
-        return printer;
-    }
+	public static Printer getPrinter(Long id, String firstName, String lastName, String middleName, String email) {
+		Printer printer = new Printer();
+		printer.setId(id);
+		printer.setFirstName(firstName);
+		printer.setLastName(lastName);
+		printer.setMiddleName(middleName);
+		printer.setEmail(email);
+		return printer;
+	}
 
-    public static Order getOrder(Long id, double amount, Client client, Date dateBegin, double debtAmount, String fullNumber, Manager manager, String orderType, int printing, ProductionDirectory production) {
-        Order order = new Order();
-        order.setId(id);
-        order.setAmount(amount);
-        order.setClient(client);
-        order.setDateBegin(dateBegin);
-        order.setDebtAmount(debtAmount);
-        order.setFullNumber(fullNumber);
-        order.setManager(manager);
+	public static ProductionDirectory getProductionDirectory(Long id, String fullName, String shortName, ProductionTypeDirectory productionTypeDirectory) {
+		ProductionDirectory printer = new ProductionDirectory();
+		printer.setId(id);
+		printer.setFullName(fullName);
+		printer.setShortName(shortName);
+		printer.setProductionType(productionTypeDirectory);
+		return printer;
+	}
+
+	public static Order getOrder(Long id, double amount, Client client, Date dateBegin, double debtAmount, String fullNumber, Manager manager, String orderType, int printing, ProductionDirectory production) {
+		Order order = new Order();
+		order.setId(id);
+		order.setAmount(amount);
+		order.setClient(client);
+		order.setDateBegin(dateBegin);
+		order.setDebtAmount(debtAmount);
+		order.setFullNumber(fullNumber);
+		order.setManager(manager);
         order.setOrderType(orderType);
         order.setPrinting(printing);
         order.setProduction(production);

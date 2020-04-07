@@ -59,9 +59,9 @@ public class LinkTypeServiceImplTest {
 
 	@Test
 	void whenSaveObject_thenSuccess() {
-		LinkType newDirector = TestDataUtils.getLinkType(LinkTypeRepositoryTest.SECOND_DIRECTORY_NAME);
-		linkTypeService.saveObject(newDirector);
-		verify(mockLinkTypeRepository, times(1)).save(newDirector);
+		LinkType newLinkType = TestDataUtils.getLinkType(LinkTypeRepositoryTest.SECOND_DIRECTORY_NAME);
+		linkTypeService.saveObject(newLinkType);
+		verify(mockLinkTypeRepository, times(1)).save(newLinkType);
 	}
 
 	@Test
@@ -74,9 +74,9 @@ public class LinkTypeServiceImplTest {
 
 	@Test
 	void whenUpdateObject_thenSuccess() {
-		LinkType newDirector = TestDataUtils.getLinkType(LinkTypeRepositoryTest.SECOND_DIRECTORY_NAME);
-		linkTypeService.saveObject(newDirector);
-		verify(mockLinkTypeRepository, times(1)).save(newDirector);
+		linkType.setName(LinkTypeRepositoryTest.SECOND_DIRECTORY_NAME);
+		linkTypeService.updateObject(linkType);
+		verify(mockLinkTypeRepository, times(1)).save(linkType);
 	}
 
 	@Test

@@ -75,9 +75,9 @@ public class PaymentServiceImplTest {
 
 	@Test
 	void whenUpdateObject_thenSuccess() {
-		Payment newPayment = TestDataUtils.getPayment(null, "name2", "altname2");
-		paymentService.saveObject(newPayment);
-		verify(mockPaymentRepository, times(1)).save(newPayment);
+		payment.setName("name2");
+		paymentService.updateObject(payment);
+		verify(mockPaymentRepository, times(1)).save(payment);
 	}
 
 	@Test

@@ -88,9 +88,9 @@ public class ManagerServiceImplTest {
 
     @Test
     void whenUpdateObject_thenSuccess() {
-        Manager newManager = TestDataUtils.getManager("firstName2", "lastName2", "middleName2", "email2");
-        managerService.saveObject(newManager);
-        verify(mockManagerRepository, times(1)).save(newManager);
+        manager.setCorpName("corpName2");
+        managerService.updateObject(manager);
+        verify(mockManagerRepository, times(1)).save(manager);
     }
 
     @Test

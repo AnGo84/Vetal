@@ -70,9 +70,9 @@ public class PrinterServiceImplTest {
 
 	@Test
 	void whenUpdateObject_thenSuccess() {
-		Printer newPrinter = TestDataUtils.getPrinter(null, "firstName2", "lastName2", "middleName2", "email2");
-		printerService.saveObject(newPrinter);
-		verify(mockPrinterRepository, times(1)).save(newPrinter);
+		printer.setCorpName("CorpName2");
+		printerService.updateObject(printer);
+		verify(mockPrinterRepository, times(1)).save(printer);
 	}
 
 	@Test

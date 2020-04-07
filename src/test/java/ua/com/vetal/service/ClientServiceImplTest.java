@@ -114,10 +114,11 @@ public class ClientServiceImplTest {
 
     @Test
     void whenUpdateClient_thenSuccess() {
-        Client newClient = TestDataUtils.getClient(null, "fullName2", "firstName2", "lastName2", "middleName2", "address2", "email2", "phone2");
-        newClient.setManager(manager);
-        clientService.saveObject(newClient);
-        verify(mockClientRepository, times(1)).save(newClient);
+        client.setFullName("fullName2");
+        client.setFirstName("firstName2");
+
+        clientService.updateObject(client);
+        verify(mockClientRepository, times(1)).save(client);
     }
 
     @Test

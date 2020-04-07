@@ -59,9 +59,9 @@ public class CringleDirectoryServiceImplTest {
 
 	@Test
 	void whenSaveObject_thenSuccess() {
-		CringleDirectory newDirector = TestDataUtils.getCringleDirectory(CringleDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
-		directoryService.saveObject(newDirector);
-		verify(mockDirectoryRepository, times(1)).save(newDirector);
+		CringleDirectory newDirectory = TestDataUtils.getCringleDirectory(CringleDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
+		directoryService.saveObject(newDirectory);
+		verify(mockDirectoryRepository, times(1)).save(newDirectory);
 	}
 
 	@Test
@@ -74,9 +74,9 @@ public class CringleDirectoryServiceImplTest {
 
 	@Test
 	void whenUpdateObject_thenSuccess() {
-		CringleDirectory newDirector = TestDataUtils.getCringleDirectory(CringleDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
-		directoryService.saveObject(newDirector);
-		verify(mockDirectoryRepository, times(1)).save(newDirector);
+		directory.setName(CringleDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
+		directoryService.updateObject(directory);
+		verify(mockDirectoryRepository, times(1)).save(directory);
 	}
 
 	@Test

@@ -59,9 +59,9 @@ class NumberBaseDirectoryServiceImplTest {
 
     @Test
     void whenSaveObject_thenSuccess() {
-        NumberBaseDirectory newDirector = TestDataUtils.getNumberBaseDirectory(NumberBaseDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
-        directoryService.saveObject(newDirector);
-        verify(mockDirectoryRepository, times(1)).save(newDirector);
+        NumberBaseDirectory newDirectory = TestDataUtils.getNumberBaseDirectory(NumberBaseDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
+        directoryService.saveObject(newDirectory);
+        verify(mockDirectoryRepository, times(1)).save(newDirectory);
     }
 
     @Test
@@ -74,9 +74,9 @@ class NumberBaseDirectoryServiceImplTest {
 
     @Test
     void whenUpdateObject_thenSuccess() {
-        NumberBaseDirectory newDirector = TestDataUtils.getNumberBaseDirectory(NumberBaseDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
-        directoryService.saveObject(newDirector);
-        verify(mockDirectoryRepository, times(1)).save(newDirector);
+        directory.setName(NumberBaseDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
+        directoryService.updateObject(directory);
+        verify(mockDirectoryRepository, times(1)).save(directory);
     }
 
     @Test

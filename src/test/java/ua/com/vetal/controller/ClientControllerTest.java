@@ -27,16 +27,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class ClientControllerTest {
-    public static final String MAPPED_URL = "/clients";
+public class ClientControllerTest {
+	public static final String MAPPED_URL = "/clients";
 
-    @Autowired
-    private MockMvc mockMvc;
-    @MockBean
-    private ClientServiceImpl mockClientService;
+	@Autowired
+	private MockMvc mockMvc;
+	@MockBean
+	private ClientServiceImpl mockClientService;
 
-    private Manager manager;
-    private Client client;
+	private Manager manager;
+	private Client client;
 
     @BeforeEach
     public void beforeEach() {

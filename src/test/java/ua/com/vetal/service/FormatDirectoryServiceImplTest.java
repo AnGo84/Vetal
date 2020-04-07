@@ -59,9 +59,9 @@ public class FormatDirectoryServiceImplTest {
 
 	@Test
 	void whenSaveObject_thenSuccess() {
-		FormatDirectory newDirector = TestDataUtils.getFormatDirectory(FormatDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
-		directoryService.saveObject(newDirector);
-		verify(mockDirectoryRepository, times(1)).save(newDirector);
+		FormatDirectory newDirectory = TestDataUtils.getFormatDirectory(FormatDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
+		directoryService.saveObject(newDirectory);
+		verify(mockDirectoryRepository, times(1)).save(newDirectory);
 	}
 
 	@Test
@@ -74,9 +74,9 @@ public class FormatDirectoryServiceImplTest {
 
 	@Test
 	void whenUpdateObject_thenSuccess() {
-		FormatDirectory newDirector = TestDataUtils.getFormatDirectory(FormatDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
-		directoryService.saveObject(newDirector);
-		verify(mockDirectoryRepository, times(1)).save(newDirector);
+		directory.setName(FormatDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
+		directoryService.updateObject(directory);
+		verify(mockDirectoryRepository, times(1)).save(directory);
 	}
 
 	@Test

@@ -146,10 +146,9 @@ class ContractorServiceImplTest {
 
 	@Test
 	void whenUpdateContractor_thenSuccess() {
-		Contractor newContractor = TestDataUtils.getContractor(null, "corpName2", "shortName2", "firstName2", "lastName2", "middleName2", "address2", "email2", "phone2", "siteURL2");
-		newContractor.setManager(manager);
-		contractorService.saveObject(newContractor);
-		verify(mockContractorRepository, times(1)).save(newContractor);
+		contractor.setCorpName("corpName2");
+		contractorService.updateObject(contractor);
+		verify(mockContractorRepository, times(1)).save(contractor);
 	}
 
 	@Test

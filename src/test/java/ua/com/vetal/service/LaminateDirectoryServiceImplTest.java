@@ -59,9 +59,9 @@ public class LaminateDirectoryServiceImplTest {
 
 	@Test
 	void whenSaveObject_thenSuccess() {
-		LaminateDirectory newDirector = TestDataUtils.getLaminateDirectory(LaminateDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
-		directoryService.saveObject(newDirector);
-		verify(mockDirectoryRepository, times(1)).save(newDirector);
+		LaminateDirectory newDirectory = TestDataUtils.getLaminateDirectory(LaminateDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
+		directoryService.saveObject(newDirectory);
+		verify(mockDirectoryRepository, times(1)).save(newDirectory);
 	}
 
 	@Test
@@ -74,9 +74,9 @@ public class LaminateDirectoryServiceImplTest {
 
 	@Test
 	void whenUpdateObject_thenSuccess() {
-		LaminateDirectory newDirector = TestDataUtils.getLaminateDirectory(LaminateDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
-		directoryService.saveObject(newDirector);
-		verify(mockDirectoryRepository, times(1)).save(newDirector);
+		directory.setName(LaminateDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
+		directoryService.updateObject(directory);
+		verify(mockDirectoryRepository, times(1)).save(directory);
 	}
 
 	@Test

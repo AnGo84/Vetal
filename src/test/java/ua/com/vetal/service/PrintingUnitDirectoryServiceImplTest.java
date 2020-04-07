@@ -59,9 +59,9 @@ public class PrintingUnitDirectoryServiceImplTest {
 
 	@Test
 	void whenSaveObject_thenSuccess() {
-		PrintingUnitDirectory newDirector = TestDataUtils.getPrintingUnitDirectory(PrintingUnitDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
-		directoryService.saveObject(newDirector);
-		verify(mockDirectoryRepository, times(1)).save(newDirector);
+		PrintingUnitDirectory newDirectory = TestDataUtils.getPrintingUnitDirectory(PrintingUnitDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
+		directoryService.saveObject(newDirectory);
+		verify(mockDirectoryRepository, times(1)).save(newDirectory);
 	}
 
 	@Test
@@ -74,9 +74,9 @@ public class PrintingUnitDirectoryServiceImplTest {
 
 	@Test
 	void whenUpdateObject_thenSuccess() {
-		PrintingUnitDirectory newDirector = TestDataUtils.getPrintingUnitDirectory(PrintingUnitDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
-		directoryService.saveObject(newDirector);
-		verify(mockDirectoryRepository, times(1)).save(newDirector);
+		directory.setName(PrintingUnitDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
+		directoryService.saveObject(directory);
+		verify(mockDirectoryRepository, times(1)).save(directory);
 	}
 
 	@Test

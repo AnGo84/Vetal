@@ -59,9 +59,9 @@ public class PaperDirectoryServiceImplTest {
 
     @Test
     void whenSaveObject_thenSuccess() {
-        PaperDirectory newDirector = TestDataUtils.getPaperDirectory(PaperDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
-        directoryService.saveObject(newDirector);
-        verify(mockDirectoryRepository, times(1)).save(newDirector);
+        PaperDirectory newDirectory = TestDataUtils.getPaperDirectory(PaperDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
+        directoryService.saveObject(newDirectory);
+        verify(mockDirectoryRepository, times(1)).save(newDirectory);
     }
 
     @Test
@@ -74,9 +74,9 @@ public class PaperDirectoryServiceImplTest {
 
     @Test
     void whenUpdateObject_thenSuccess() {
-        PaperDirectory newDirector = TestDataUtils.getPaperDirectory(PaperDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
-        directoryService.saveObject(newDirector);
-        verify(mockDirectoryRepository, times(1)).save(newDirector);
+        directory.setName(PaperDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
+        directoryService.updateObject(directory);
+        verify(mockDirectoryRepository, times(1)).save(directory);
     }
 
     @Test

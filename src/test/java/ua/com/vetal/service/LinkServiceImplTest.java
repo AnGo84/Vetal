@@ -114,9 +114,9 @@ public class LinkServiceImplTest {
 
     @Test
     void whenUpdateLink_thenSuccess() {
-        Link newLink = TestDataUtils.getLink(null, "fullName2", "shortName2", linkType, "path2");
-        linkService.saveObject(newLink);
-        verify(mockLinkRepository, times(1)).save(newLink);
+        link.setFullName("fullName2");
+        linkService.updateObject(link);
+        verify(mockLinkRepository, times(1)).save(link);
     }
 
     @Test
