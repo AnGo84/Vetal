@@ -73,6 +73,13 @@ public class TestDataUtils {
         return directory;
     }
 
+    public static PrintingUnitDirectory getPrintingUnitDirectory(String name) {
+        PrintingUnitDirectory directory = new PrintingUnitDirectory();
+        //directory.setId(id);
+        directory.setName(name);
+        return directory;
+    }
+
 
     public static Payment getPayment(Long id, String name, String altName) {
         Payment payment = new Payment();
