@@ -97,26 +97,34 @@ public class FormatDirectoryRepositoryTest {
 		FormatDirectory newDirectory = TestDataUtils.getFormatDirectory(SECOND_DIRECTORY_NAME);
 		directoryRepository.save(newDirectory);
 		FormatDirectory foundDirectory = directoryRepository.findByName(newDirectory.getName());
-		// then
-		assertNotNull(foundDirectory);
-		assertNotNull(foundDirectory.getId());
-		assertEquals(foundDirectory.getName(), newDirectory.getName());
-	}
+        // then
+        assertNotNull(foundDirectory);
+        assertNotNull(foundDirectory.getId());
+        assertEquals(foundDirectory.getName(), newDirectory.getName());
+    }
 
-	@Test
-	public void whenSaveObjectWithNameTooLong_thenThrowConstraintViolationException() {
-		FormatDirectory directory = TestDataUtils.getFormatDirectory(NAME_WITH_LENGTH_MORE_THEN_250_SYMBOLS);
-		assertThrows(ConstraintViolationException.class, () -> {
-			directoryRepository.save(directory);
-		});
-	}
+    @Test
+    public void whenSaveObjectWithNameTooLong_thenThrowConstraintViolationException() {
+        FormatDirectory directory = TestDataUtils.getFormatDirectory(NAME_WITH_LENGTH_MORE_THEN_250_SYMBOLS);
+        assertThrows(ConstraintViolationException.class, () -> {
+            directoryRepository.save(directory);
+        });
+    }
 
-	@Test
-	public void whenDeleteById_thenOk() {
-		//given
-		FormatDirectory newDirectory = TestDataUtils.getFormatDirectory(SECOND_DIRECTORY_NAME);
+    @Test
+    public void whenSaveObjectWithNameTooShort_thenThrowConstraintViolationException() {
+        FormatDirectory directory = TestDataUtils.getFormatDirectory("");
+        assertThrows(ConstraintViolationException.class, () -> {
+            directoryRepository.save(directory);
+        });
+    }
 
-		entityManager.persistAndFlush(newDirectory);
+    @Test
+    public void whenDeleteById_thenOk() {
+        //given
+        FormatDirectory newDirectory = TestDataUtils.getFormatDirectory(SECOND_DIRECTORY_NAME);
+
+        entityManager.persistAndFlush(newDirectory);
 		assertEquals(directoryRepository.findAll().size(), 2);
 
 		FormatDirectory foundDirectory = directoryRepository.findByName(SECOND_DIRECTORY_NAME);

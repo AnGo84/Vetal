@@ -1,7 +1,7 @@
 package ua.com.vetal.entity;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "productions")
@@ -11,7 +11,7 @@ public class ProductionDirectory {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @NotNull
+    @NotEmpty
     @Column(name = "FullName", length = 250, nullable = false)
     private String fullName;
 

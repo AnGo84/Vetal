@@ -97,26 +97,34 @@ public class CringleDirectoryRepositoryTest {
 		CringleDirectory newDirectory = TestDataUtils.getCringleDirectory(SECOND_DIRECTORY_NAME);
 		directoryRepository.save(newDirectory);
 		CringleDirectory foundDirectory = directoryRepository.findByName(newDirectory.getName());
-		// then
-		assertNotNull(foundDirectory);
-		assertNotNull(foundDirectory.getId());
-		assertEquals(foundDirectory.getName(), newDirectory.getName());
-	}
+        // then
+        assertNotNull(foundDirectory);
+        assertNotNull(foundDirectory.getId());
+        assertEquals(foundDirectory.getName(), newDirectory.getName());
+    }
 
-	@Test
-	public void whenSaveObjectWithNameTooLong_thenThrowConstraintViolationException() {
-		CringleDirectory directory = TestDataUtils.getCringleDirectory(NAME_WITH_LENGTH_MORE_THEN_250_SYMBOLS);
-		assertThrows(ConstraintViolationException.class, () -> {
-			directoryRepository.save(directory);
-		});
-	}
+    @Test
+    public void whenSaveObjectWithNameTooLong_thenThrowConstraintViolationException() {
+        CringleDirectory directory = TestDataUtils.getCringleDirectory(NAME_WITH_LENGTH_MORE_THEN_250_SYMBOLS);
+        assertThrows(ConstraintViolationException.class, () -> {
+            directoryRepository.save(directory);
+        });
+    }
 
-	@Test
-	public void whenDeleteById_thenOk() {
-		//given
-		CringleDirectory newDirectory = TestDataUtils.getCringleDirectory(SECOND_DIRECTORY_NAME);
+    @Test
+    public void whenSaveObjectWithNameTooShort_thenThrowConstraintViolationException() {
+        CringleDirectory directory = TestDataUtils.getCringleDirectory("");
+        assertThrows(ConstraintViolationException.class, () -> {
+            directoryRepository.save(directory);
+        });
+    }
 
-		entityManager.persistAndFlush(newDirectory);
+    @Test
+    public void whenDeleteById_thenOk() {
+        //given
+        CringleDirectory newDirectory = TestDataUtils.getCringleDirectory(SECOND_DIRECTORY_NAME);
+
+        entityManager.persistAndFlush(newDirectory);
 		assertEquals(directoryRepository.findAll().size(), 2);
 
 		CringleDirectory foundDirectory = directoryRepository.findByName(SECOND_DIRECTORY_NAME);

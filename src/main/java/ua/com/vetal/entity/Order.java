@@ -5,53 +5,50 @@ import ua.com.vetal.entity.indificators.OrderKey;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
 @Table(name = "vorders")
 @IdClass(OrderKey.class)
 public class Order {
-	@Id
-	@Column(name = "order_id")
-	private Long id;
-	@Id
-	@Column(name = "order_type")
-	private String orderType;
+    @Id
+    @Column(name = "order_id")
+    private Long id;
+    @Id
+    @Column(name = "order_type")
+    private String orderType;
 
-	@Column(name = "Full_number")
-	private String fullNumber;
+    @Column(name = "Full_number")
+    private String fullNumber;
 
-	@Column(name = "Date_BEGIN", nullable = false)
-	@Temporal(TemporalType.DATE)
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date dateBegin;
+    @Column(name = "Date_BEGIN")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date dateBegin;
 
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "Manager_ID")
-	private Manager manager;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "Manager_ID")
+    private Manager manager;
 
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "Client_ID")
-	private Client client;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "Client_ID")
+    private Client client;
 
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "Production_ID")
-	private ProductionDirectory production;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "Production_ID")
+    private ProductionDirectory production;
 
-	@NotNull
-	@Column(name = "Printing", nullable = false)
-	private int printing;
+    @Column(name = "Printing")
+    private int printing;
 
-	@NotNull
-	@Digits(integer = 8, fraction = 2)
-	@Column(name = "Amount", nullable = true)
-	private double amount;
+    @Digits(integer = 8, fraction = 2)
+    @Column(name = "Amount")
+    private double amount;
 
 
-	@Digits(integer = 8, fraction = 2)
-	@Column(name = "Debt_amount", nullable = true)
-	private double debtAmount;
+    @Digits(integer = 8, fraction = 2)
+    @Column(name = "Debt_amount")
+    private double debtAmount;
 
 	public Long getId() {
 		return id;

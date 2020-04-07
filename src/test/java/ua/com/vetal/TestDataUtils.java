@@ -48,32 +48,46 @@ public class TestDataUtils {
 		FormatDirectory formatDirectory = new FormatDirectory();
 		//formatDirectory.setId(id);
 		formatDirectory.setName(name);
-		return formatDirectory;
-	}
+        return formatDirectory;
+    }
 
-	public static LaminateDirectory getLaminateDirectory(String name) {
-		LaminateDirectory laminateDirectory = new LaminateDirectory();
-		//laminateDirectory.setId(id);
-		laminateDirectory.setName(name);
-		return laminateDirectory;
-	}
+    public static LaminateDirectory getLaminateDirectory(String name) {
+        LaminateDirectory laminateDirectory = new LaminateDirectory();
+        //laminateDirectory.setId(id);
+        laminateDirectory.setName(name);
+        return laminateDirectory;
+    }
 
-	public static LinkType getLinkType(String name) {
-		LinkType linkType = new LinkType();
-		//linkType.setId(id);
-		linkType.setName(name);
-		return linkType;
-	}
+    public static LinkType getLinkType(Long id, String name) {
+        LinkType linkType = new LinkType();
+        linkType.setId(id);
+        linkType.setName(name);
+        return linkType;
+    }
 
-	public static Client getClient(Long id, String fullName, String firstName, String lastName, String middleName, String address, String email, String phone) {
-		Client client = new Client();
-		client.setId(id);
-		client.setFullName(fullName);
-		client.setFirstName(firstName);
-		client.setLastName(lastName);
-		client.setMiddleName(middleName);
-		client.setAddress(address);
-		client.setEmail(email);
+    public static LinkType getLinkType(String name) {
+        return getLinkType(null, name);
+    }
+
+    public static Link getLink(Long id, String fullName, String shortName, LinkType linkType, String path) {
+        Link link = new Link();
+        link.setId(id);
+        link.setFullName(fullName);
+        link.setShortName(shortName);
+        link.setLinkType(linkType);
+        link.setPath(path);
+        return link;
+    }
+
+    public static Client getClient(Long id, String fullName, String firstName, String lastName, String middleName, String address, String email, String phone) {
+        Client client = new Client();
+        client.setId(id);
+        client.setFullName(fullName);
+        client.setFirstName(firstName);
+        client.setLastName(lastName);
+        client.setMiddleName(middleName);
+        client.setAddress(address);
+        client.setEmail(email);
         client.setPhone(phone);
         return client;
     }

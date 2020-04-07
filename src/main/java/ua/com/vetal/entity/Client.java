@@ -13,7 +13,6 @@ public class Client {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    //@NotNull
     @NotEmpty
     @Size(min = 1, max = 250)
     @Column(name = "FullName", length = 250, nullable = false)
@@ -23,29 +22,25 @@ public class Client {
     @JoinColumn(name = "manager_id")
     private Manager manager;
 
-    //@NotNull
     @NotEmpty
-    @Size(min = 1, max = 50)
+    @Size(max = 50)
     @Column(name = "LastName", length = 50, nullable = false)
     private String lastName;
 
-    //@NotNull
     @NotEmpty
-    @Size(min = 1, max = 50)
+    @Size(max = 50)
     @Column(name = "FirstName", length = 50, nullable = false)
     private String firstName;
 
-    @Size(min = 0, max = 50)
+    @Size(max = 50)
     @Column(name = "MiddleName", length = 50, nullable = true)
     private String middleName;
 
-    //@NotNull
     @NotEmpty
     @Size(max = 255)
     @Column(name = "email", length = 255, nullable = false)
     private String email;
 
-    //@NotNull
     @NotEmpty
     @Size(max = 255)
     @Column(name = "phone", length = 255, nullable = false)

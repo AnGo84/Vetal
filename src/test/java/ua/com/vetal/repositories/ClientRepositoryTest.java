@@ -347,7 +347,6 @@ public class ClientRepositoryTest {
         assertEquals(foundClient.getEmail(), newClient.getEmail());
         assertEquals(foundClient.getPhone(), newClient.getPhone());
         assertNull(foundClient.getManager());
-        //assertEquals(foundClient.getManager(), newClient.getManager());
     }
 
     @Test

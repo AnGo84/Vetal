@@ -70,16 +70,24 @@ class UserControllerTest {
 
     @Test
     public void whenGetPersonListAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
-		mockMvc.perform(get(MAPPED_URL))
+        mockMvc.perform(get(MAPPED_URL))
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
 
     @Test
+    @WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
+    public void whenGetPersonListAsAuthorizedWithWrongRoleMANAGER_thenRedirectToLoginPage() throws Exception {
+        mockMvc.perform(get(MAPPED_URL))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenGetShowAddUserPageAsAuthorized_thenOk() throws Exception {
-		mockMvc.perform(get(MAPPED_URL + "/add"))
+        mockMvc.perform(get(MAPPED_URL + "/add"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("user"))
@@ -140,21 +148,15 @@ class UserControllerTest {
         mockUserService.updateObject(user);
 
 		mockMvc.perform(post(MAPPED_URL + "/update")
-						.param("id", String.valueOf(user.getId()))
-						.param("name", user.getName())
+                        .param("id", String.valueOf(user.getId()))
+                        .param("name", user.getName())
+                        .param("encryptedPassword", "password")
 						.param("enabled", String.valueOf(user.isEnabled()))
 						.param("userRoles", "1")
 				//{id=1, name=ROLE_ADMIN}
 		)
 				.andDo(print())
 				.andExpect(status().isFound())
-				/*.andExpect(model().attributeExists("user"))
-				.andExpect(model().attribute("user", notNullValue()))
-				.andExpect(model().attribute("user", hasProperty("id", equalTo(user.getId()))))
-				.andExpect(model().attribute("user", hasProperty("name", equalTo(user.getName()))))
-				.andExpect(model().attribute("user", hasProperty("enabled", equalTo(user.isEnabled()) )))
-				.andExpect(model().attribute("user", hasProperty("userRoles", hasSize(1))))*/
-				//.andExpect(view().name("usersPage"))
 				.andExpect(redirectedUrl(MAPPED_URL));
 		verify(mockUserService, times(1)).updateObject(user);
     }

@@ -124,6 +124,38 @@ public class ManagerRepositoryTest {
     }
 
     @Test
+    public void it_should_save_manager_with_null_fields() {
+        Manager newManager = TestDataUtils.getManager(null, "lastName2", null, "email2");
+        newManager = managerRepository.save(newManager);
+        Manager foundManager = managerRepository.findById(newManager.getId()).get();
+
+        // then
+        assertNotNull(foundManager);
+        assertNotNull(foundManager.getId());
+        assertEquals(foundManager.getId(), newManager.getId());
+        assertEquals(foundManager.getFirstName(), newManager.getFirstName());
+        assertEquals(foundManager.getLastName(), newManager.getLastName());
+        assertEquals(foundManager.getMiddleName(), newManager.getMiddleName());
+        assertEquals(foundManager.getEmail(), newManager.getEmail());
+    }
+
+    @Test
+    public void it_should_save_manager_with_empty_fields() {
+        Manager newManager = TestDataUtils.getManager("", "lastName2", "", "email2");
+        newManager = managerRepository.save(newManager);
+        Manager foundManager = managerRepository.findById(newManager.getId()).get();
+
+        // then
+        assertNotNull(foundManager);
+        assertNotNull(foundManager.getId());
+        assertEquals(foundManager.getId(), newManager.getId());
+        assertEquals(foundManager.getFirstName(), newManager.getFirstName());
+        assertEquals(foundManager.getLastName(), newManager.getLastName());
+        assertEquals(foundManager.getMiddleName(), newManager.getMiddleName());
+        assertEquals(foundManager.getEmail(), newManager.getEmail());
+    }
+
+    @Test
     public void whenSaveManagerWithFirstNameTooLong_thenThrowConstraintViolationException() {
         Manager newManager = TestDataUtils.getManager("FirstNameWithLengthMoreThen50SymbolsIsTooLongForSaving", "lastName2", "middleName2", "email2");
         assertThrows(ConstraintViolationException.class, () -> {
@@ -131,13 +163,13 @@ public class ManagerRepositoryTest {
         });
     }
 
-    @Test
+    /*@Test
     public void whenSaveManagerWithFirstNameTooShortLength_thenThrowConstraintViolationException() {
         Manager newManager = TestDataUtils.getManager("", "lastName2", "middleName2", "email2");
         assertThrows(ConstraintViolationException.class, () -> {
             managerRepository.save(newManager);
         });
-    }
+    }*/
 
     @Test
     public void whenSaveManagerWithLastNameTooLong_thenThrowConstraintViolationException() {
@@ -163,13 +195,13 @@ public class ManagerRepositoryTest {
         });
     }
 
-    @Test
+    /*@Test
     public void whenSaveManagerWithMiddleNameTooShortLength_thenThrowConstraintViolationException() {
         Manager newManager = TestDataUtils.getManager("firstName2", "lastName2", "", "email2");
         assertThrows(ConstraintViolationException.class, () -> {
             managerRepository.save(newManager);
         });
-    }
+    }*/
 
 
     @Test

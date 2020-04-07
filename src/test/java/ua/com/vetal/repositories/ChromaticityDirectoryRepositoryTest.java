@@ -112,6 +112,14 @@ public class ChromaticityDirectoryRepositoryTest {
     }
 
     @Test
+    public void whenSaveObjectWithNameTooShort_thenThrowConstraintViolationException() {
+        ChromaticityDirectory directory = TestDataUtils.getChromaticityDirectory("");
+        assertThrows(ConstraintViolationException.class, () -> {
+            directoryRepository.save(directory);
+        });
+    }
+
+    @Test
     public void whenDeleteById_thenOk() {
         //given
         ChromaticityDirectory newDirectory = TestDataUtils.getChromaticityDirectory(SECOND_DIRECTORY_NAME);

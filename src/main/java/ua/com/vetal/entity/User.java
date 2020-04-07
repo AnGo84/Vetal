@@ -26,15 +26,17 @@ public class User implements Serializable {
     @Column(name = "User_Id", nullable = false)
     private Long id;
 
-    @NotNull
+    @NotEmpty
     @Size(min = 4, max = 36)
     @Column(name = "User_Name", length = 36, nullable = false, unique = true)
     private String name;
 
-    @Size(min = 1, max = 128)
+    @NotEmpty
+    @Size(max = 128)
     @Column(name = "Encrypted_Password", length = 128, nullable = false)
     private String encryptedPassword;
 
+    @NotNull
     @Column(name = "Enabled", length = 1, nullable = false)
     private boolean enabled;
 

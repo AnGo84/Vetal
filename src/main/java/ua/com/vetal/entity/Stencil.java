@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.text.DecimalFormat;
@@ -48,7 +49,7 @@ public class Stencil {
     @JoinColumn(name = "Client_ID")
     private Client client;
 
-    @NotNull
+    @NotEmpty
     @Column(name = "Order_Name", nullable = false)
     private String orderName;
 

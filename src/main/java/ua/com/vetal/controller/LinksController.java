@@ -7,6 +7,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import ua.com.vetal.service.LinkTypeServiceImpl;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Locale;
 
 @RequestMapping("/links")
 @Controller
@@ -34,7 +36,7 @@ public class LinksController {
     @Autowired
     private LinkTypeServiceImpl linkTypeService;
 
-    @RequestMapping(value = {""}, method = RequestMethod.GET)
+    @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String mainPage(Model model) {
         model.addAttribute("title", "links");
         model.addAttribute("linksList", linkService.findAllObjects());
@@ -43,7 +45,7 @@ public class LinksController {
 
 
     @RequestMapping(value = {"/add"}, method = RequestMethod.GET)
-    public String showAddPersonPage(Model model) {
+    public String showAddLinkPage(Model model) {
         logger.info("Add new link record");
         Link link = new Link();
 
@@ -54,7 +56,7 @@ public class LinksController {
     }
 
     @RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
-    public String editPerson(@PathVariable Long id, Model model) {
+    public String editLink(@PathVariable Long id, Model model) {
         logger.info("Edit link with ID= " + id);
         model.addAttribute("edit", true);
         model.addAttribute("link", linkService.findById(id));
@@ -62,8 +64,8 @@ public class LinksController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String updatePerson(@Valid @ModelAttribute("link") Link link, BindingResult bindingResult,
-                               Model model) {
+    public String updateLink(@Valid @ModelAttribute("link") Link link, BindingResult bindingResult,
+                             Model model) {
         logger.info("Update link: " + link);
         if (bindingResult.hasErrors()) {
             // model.addAttribute("title", title);
@@ -71,20 +73,21 @@ public class LinksController {
             return "linkPage";
         }
 
-        /*
-         * if (personService.isObjectExist(person)) { FieldError fieldError =
-         * new FieldError("person", "name",
-         * messageSource.getMessage("non.unique.name", new String[] {
-         * person.getName() }, Locale.getDefault()));
-         * bindingResult.addError(fieldError); return "personRecordPage"; }
-         */
+        if (linkService.isObjectExist(link)) {
+            FieldError fieldError =
+                    new FieldError("Link", "fullName",
+                            messageSource.getMessage("non.unique.name", new String[]{
+                                    link.getFullName()}, Locale.getDefault()));
+            bindingResult.addError(fieldError);
+            return "linkPage";
+        }
 
         linkService.saveObject(link);
         return "redirect:/links";
     }
 
     @RequestMapping(value = {"/delete-{id}"}, method = RequestMethod.GET)
-    public String deletePerson(@PathVariable Long id) {
+    public String deleteLink(@PathVariable Long id) {
         logger.info("Delete link with ID= " + id);
         linkService.deleteById(id);
         return "redirect:/links";

@@ -1,7 +1,7 @@
 package ua.com.vetal.entity;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -15,7 +15,7 @@ public class Printer extends AbstractPerson {
         return id;
     }
 
-    @NotNull
+    @NotEmpty
     @Size(min = 0, max = 50)
     @Column(name = "LastName", length = 50, nullable = false)
     public String getLastName() {

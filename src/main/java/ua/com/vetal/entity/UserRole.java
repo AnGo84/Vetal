@@ -1,6 +1,7 @@
 package ua.com.vetal.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "APP_ROLE", //
@@ -13,6 +14,7 @@ public class UserRole {
     @Column(name = "Role_Id", nullable = false)
     private Long id;
 
+    @NotEmpty
     @Column(name = "Role_Name", length = 30, nullable = false)
     private String name;
 

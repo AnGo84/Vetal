@@ -1,9 +1,7 @@
 package ua.com.vetal.entity;
 
-import lombok.Data;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -16,7 +14,7 @@ public class ChromaticityDirectory extends AbstractDirectory {
         return id;
     }
 
-    @NotNull
+    @NotEmpty
     @Size(max = 250)
     @Column(name = "FullName", length = 250, nullable = false, unique = true)
     public String getName() {
