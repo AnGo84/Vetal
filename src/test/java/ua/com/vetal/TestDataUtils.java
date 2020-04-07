@@ -31,31 +31,38 @@ public class TestDataUtils {
 	}
 
 	public static ChromaticityDirectory getChromaticityDirectory(String name) {
-		ChromaticityDirectory chromaticityDirectory = new ChromaticityDirectory();
-		//chromaticityDirectory.setId(id);
-		chromaticityDirectory.setName(name);
-		return chromaticityDirectory;
-	}
+        ChromaticityDirectory directory = new ChromaticityDirectory();
+        //directory.setId(id);
+        directory.setName(name);
+        return directory;
+    }
 
 	public static CringleDirectory getCringleDirectory(String name) {
-		CringleDirectory cringleDirectory = new CringleDirectory();
-		//cringleDirectory.setId(id);
-		cringleDirectory.setName(name);
-		return cringleDirectory;
-	}
+        CringleDirectory directory = new CringleDirectory();
+        //directory.setId(id);
+        directory.setName(name);
+        return directory;
+    }
 
-	public static FormatDirectory getFormatDirectory(String name) {
-		FormatDirectory formatDirectory = new FormatDirectory();
-		//formatDirectory.setId(id);
-		formatDirectory.setName(name);
-        return formatDirectory;
+    public static FormatDirectory getFormatDirectory(String name) {
+        FormatDirectory directory = new FormatDirectory();
+        //directory.setId(id);
+        directory.setName(name);
+        return directory;
     }
 
     public static LaminateDirectory getLaminateDirectory(String name) {
-        LaminateDirectory laminateDirectory = new LaminateDirectory();
-        //laminateDirectory.setId(id);
-        laminateDirectory.setName(name);
-        return laminateDirectory;
+        LaminateDirectory directory = new LaminateDirectory();
+        //directory.setId(id);
+        directory.setName(name);
+        return directory;
+    }
+
+    public static NumberBaseDirectory getNumberBaseDirectory(String name) {
+        NumberBaseDirectory directory = new NumberBaseDirectory();
+        //directory.setId(id);
+        directory.setName(name);
+        return directory;
     }
 
     public static LinkType getLinkType(Long id, String name) {

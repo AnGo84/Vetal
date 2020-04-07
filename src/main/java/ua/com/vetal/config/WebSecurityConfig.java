@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/", "/main", "/login", "/logout", "/forgotPassword", "/resetPassword",
                         "/manager", "/clients", "/contractor", "/production", "/printer", "/worker",
-                        "/paper", "/chromaticity", "/laminate", "/cringle", "/format", "/stock",
+                        "/paper", "/chromaticity", "/laminate", "/cringle", "/format", "/stock", "/numberBases",
                         "/tasks/view**", "/tasks/clearFilter", "/tasks/Filter", "/tasks",
                         "/stencils/clearFilter", "/stencils/Filter", "/stencils", "/stencils/view**",
                         "/statistic/clearFilter", "/statistic/Filter", "/statistic",
@@ -71,6 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/cringle/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/format/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/stock/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/numberBases/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/tasks/add", "/tasks/update", "/tasks/edit**", "/tasks/delete**", "/tasks/sendEmail**")
                 .access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/stencils/add", "/stencils/update", "/stencils/edit**", "/stencils/delete**")

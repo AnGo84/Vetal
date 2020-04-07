@@ -104,10 +104,10 @@ public class LaminateDirectoryServiceImplTest {
 	@Test
 	void findAllObjects() {
 		when(mockDirectoryRepository.findAll()).thenReturn(Arrays.asList(directory));
-		List<LaminateDirectory> directorieList = directoryService.findAllObjects();
-		assertNotNull(directorieList);
-		assertFalse(directorieList.isEmpty());
-		assertEquals(directorieList.size(), 1);
+		List<LaminateDirectory> directoriesList = directoryService.findAllObjects();
+		assertNotNull(directoriesList);
+		assertFalse(directoriesList.isEmpty());
+		assertEquals(directoriesList.size(), 1);
 	}
 
 	@Test
