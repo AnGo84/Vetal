@@ -16,7 +16,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import ua.com.vetal.entity.User;
 import ua.com.vetal.entity.UserRole;
-import ua.com.vetal.repositories.PasswordResetTokenRepository;
 import ua.com.vetal.service.UserRoleServiceImpl;
 import ua.com.vetal.service.UserServiceImpl;
 import ua.com.vetal.utils.EncrytedPasswordUtils;
@@ -41,8 +40,8 @@ public class UserController {
     private String userPasswordDefault;
     @Autowired
     private UserRoleServiceImpl userRoleService;
-    @Autowired
-    private PasswordResetTokenRepository tokenRepository;
+/*    @Autowired
+    private PasswordResetTokenRepository tokenRepository;*/
 
     @Autowired
     public UserController(UserServiceImpl userService) {
