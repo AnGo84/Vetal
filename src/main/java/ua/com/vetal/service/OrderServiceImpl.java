@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.entity.Order;
 import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.repositories.OrderRepository;
@@ -19,48 +18,18 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Service("orderService")
-@Transactional
-public class OrderServiceImpl implements SimpleService<Order> {
+//@Transactional
+public class OrderServiceImpl {
 
-	private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
-	@PersistenceContext
-	private EntityManager entityManager;
-	@Autowired
-	private OrderRepository orderRepository;
+    @PersistenceContext
+    private EntityManager entityManager;
+    @Autowired
+    private OrderRepository orderRepository;
 
-	@Override
-	public Order findById(Long id) {
-		/*
-		 * Optional<User> optinalEntity = userRepository.findById(id); User user
-		 * = optinalEntity.get(); return user;
-		 */
-		return orderRepository.getOne(id);
-	}
-
-	@Override
-	public Order findByName(String name) {
-		return null;
-	}
-
-	@Override
-	public void saveObject(Order order) {
-
-	}
-
-	@Override
-	public void updateObject(Order order) {
-
-	}
-
-	@Override
-	public void deleteById(Long id) {
-
-	}
-
-	@Override
-	public List<Order> findAllObjects() {
-		// logger.info("Get all TASKS");
+    public List<Order> findAllObjects() {
+        // logger.info("Get all TASKS");
 		List<Order> getList = orderRepository.findAll(sortByDateBegin(Sort.Direction.ASC));
 		// List<Task> getList = stencilRepository.findAllByOrderByDateBeginDesc();
 		// logger.info("List size: " + getList.size());
@@ -124,11 +93,6 @@ public class OrderServiceImpl implements SimpleService<Order> {
 
 
 		return list;
-	}
-
-	@Override
-	public boolean isObjectExist(Order order) {
-		return findById(order.getId()) != null;
 	}
 
 	private Sort sortByDateBegin(Sort.Direction direction) {

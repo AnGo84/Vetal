@@ -2,6 +2,7 @@ package ua.com.vetal;
 
 import ua.com.vetal.entity.*;
 
+import java.util.Date;
 import java.util.Set;
 
 public class TestDataUtils {
@@ -60,6 +61,13 @@ public class TestDataUtils {
 
     public static NumberBaseDirectory getNumberBaseDirectory(String name) {
         NumberBaseDirectory directory = new NumberBaseDirectory();
+        //directory.setId(id);
+        directory.setName(name);
+        return directory;
+    }
+
+    public static PaperDirectory getPaperDirectory(String name) {
+        PaperDirectory directory = new PaperDirectory();
         //directory.setId(id);
         directory.setName(name);
         return directory;
@@ -125,5 +133,20 @@ public class TestDataUtils {
         manager.setEmail(email);
         //manager.setPhone(phone);
         return manager;
+    }
+
+    public static Order getOrder(Long id, double amount, Client client, Date dateBegin, double debtAmount, String fullNumber, Manager manager, String orderType, int printing, ProductionDirectory production) {
+        Order order = new Order();
+        order.setId(id);
+        order.setAmount(amount);
+        order.setClient(client);
+        order.setDateBegin(dateBegin);
+        order.setDebtAmount(debtAmount);
+        order.setFullNumber(fullNumber);
+        order.setManager(manager);
+        order.setOrderType(orderType);
+        order.setPrinting(printing);
+        order.setProduction(production);
+        return order;
     }
 }
