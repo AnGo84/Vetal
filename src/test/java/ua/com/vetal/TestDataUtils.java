@@ -80,6 +80,13 @@ public class TestDataUtils {
         return directory;
     }
 
+    public static ProductionTypeDirectory getProductionTypeDirectory(String name) {
+        ProductionTypeDirectory directory = new ProductionTypeDirectory();
+        //directory.setId(id);
+        directory.setName(name);
+        return directory;
+    }
+
 
     public static Payment getPayment(Long id, String name, String altName) {
         Payment payment = new Payment();

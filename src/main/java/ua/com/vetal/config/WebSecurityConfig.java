@@ -50,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/main", "/login", "/logout", "/forgotPassword", "/resetPassword",
                         "/manager", "/clients", "/contractor", "/production", "/printer", "/worker",
                         "/paper", "/chromaticity", "/laminate", "/cringle", "/format", "/stock", "/numberBases",
-                        "/printingUnit",
+                        "/printingUnit", "/productionType",
                         "/tasks/view**", "/tasks/clearFilter", "/tasks/Filter", "/tasks",
                         "/stencils/clearFilter", "/stencils/Filter", "/stencils", "/stencils/view**",
                         "/statistic/clearFilter", "/statistic/Filter", "/statistic",
@@ -67,6 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/clients/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/contractor/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/production/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/productionType/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/paper/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/printingUnit/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/chromaticity/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
