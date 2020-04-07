@@ -73,6 +73,15 @@ public class TestDataUtils {
         return directory;
     }
 
+
+    public static Payment getPayment(Long id, String name, String altName) {
+        Payment payment = new Payment();
+        payment.setId(id);
+        payment.setName(name);
+        payment.setAltName(altName);
+        return payment;
+    }
+
     public static LinkType getLinkType(Long id, String name) {
         LinkType linkType = new LinkType();
         linkType.setId(id);
@@ -128,11 +137,18 @@ public class TestDataUtils {
         manager.setFirstName(firstName);
         manager.setLastName(lastName);
         manager.setMiddleName(middleName);
-        //manager.setShortName(shortName);
-        //manager.setCorpName(corpName);
         manager.setEmail(email);
-        //manager.setPhone(phone);
         return manager;
+    }
+
+    public static Printer getPrinter(Long id, String firstName, String lastName, String middleName, String email) {
+        Printer printer = new Printer();
+        printer.setId(id);
+        printer.setFirstName(firstName);
+        printer.setLastName(lastName);
+        printer.setMiddleName(middleName);
+        printer.setEmail(email);
+        return printer;
     }
 
     public static Order getOrder(Long id, double amount, Client client, Date dateBegin, double debtAmount, String fullNumber, Manager manager, String orderType, int printing, ProductionDirectory production) {
