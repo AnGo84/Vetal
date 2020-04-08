@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.LinkType;
 import ua.com.vetal.repositories.LinkTypeRepository;
 import ua.com.vetal.repositories.LinkTypeRepositoryTest;
@@ -29,8 +29,8 @@ public class LinkTypeServiceImplTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		linkType = TestDataUtils.getLinkType(LinkTypeRepositoryTest.DIRECTORY_NAME);
-	}
+        linkType = TestBuildersUtils.getLinkType(LinkTypeRepositoryTest.DIRECTORY_NAME);
+    }
 
 	@Test
 	void whenFindById_thenReturnObject() {
@@ -59,10 +59,10 @@ public class LinkTypeServiceImplTest {
 
 	@Test
 	void whenSaveObject_thenSuccess() {
-		LinkType newLinkType = TestDataUtils.getLinkType(LinkTypeRepositoryTest.SECOND_DIRECTORY_NAME);
-		linkTypeService.saveObject(newLinkType);
-		verify(mockLinkTypeRepository, times(1)).save(newLinkType);
-	}
+        LinkType newLinkType = TestBuildersUtils.getLinkType(LinkTypeRepositoryTest.SECOND_DIRECTORY_NAME);
+        linkTypeService.saveObject(newLinkType);
+        verify(mockLinkTypeRepository, times(1)).save(newLinkType);
+    }
 
 	@Test
 	void whenSaveObject_thenNPE() {

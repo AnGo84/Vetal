@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.ChromaticityDirectory;
 import ua.com.vetal.repositories.ChromaticityDirectoryRepository;
 import ua.com.vetal.repositories.ChromaticityDirectoryRepositoryTest;
@@ -29,7 +29,7 @@ public class ChromaticityDirectoryServiceImplTest {
 
     @BeforeEach
     public void beforeEach() {
-        directory = TestDataUtils.getChromaticityDirectory(ChromaticityDirectoryRepositoryTest.DIRECTORY_NAME);
+        directory = TestBuildersUtils.getChromaticityDirectory(null, ChromaticityDirectoryRepositoryTest.DIRECTORY_NAME);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class ChromaticityDirectoryServiceImplTest {
 
     @Test
     void whenSaveObject_thenSuccess() {
-        ChromaticityDirectory newDirectory = TestDataUtils.getChromaticityDirectory(ChromaticityDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
+        ChromaticityDirectory newDirectory = TestBuildersUtils.getChromaticityDirectory(null, ChromaticityDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
         directoryService.saveObject(newDirectory);
         verify(mockDirectoryRepository, times(1)).save(newDirectory);
     }

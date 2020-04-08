@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.PrintingUnitDirectory;
 import ua.com.vetal.repositories.PrintingUnitDirectoryRepository;
 import ua.com.vetal.repositories.PrintingUnitDirectoryRepositoryTest;
@@ -29,8 +29,8 @@ public class PrintingUnitDirectoryServiceImplTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		directory = TestDataUtils.getPrintingUnitDirectory(PrintingUnitDirectoryRepositoryTest.DIRECTORY_NAME);
-	}
+        directory = TestBuildersUtils.getPrintingUnitDirectory(1l, PrintingUnitDirectoryRepositoryTest.DIRECTORY_NAME);
+    }
 
 	@Test
 	void whenFindById_thenReturnObject() {
@@ -59,10 +59,10 @@ public class PrintingUnitDirectoryServiceImplTest {
 
 	@Test
 	void whenSaveObject_thenSuccess() {
-		PrintingUnitDirectory newDirectory = TestDataUtils.getPrintingUnitDirectory(PrintingUnitDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
-		directoryService.saveObject(newDirectory);
-		verify(mockDirectoryRepository, times(1)).save(newDirectory);
-	}
+        PrintingUnitDirectory newDirectory = TestBuildersUtils.getPrintingUnitDirectory(2l, PrintingUnitDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
+        directoryService.saveObject(newDirectory);
+        verify(mockDirectoryRepository, times(1)).save(newDirectory);
+    }
 
 	@Test
 	void whenSaveObject_thenNPE() {

@@ -10,7 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.User;
 import ua.com.vetal.repositories.PasswordResetTokenRepository;
 import ua.com.vetal.service.UserServiceImpl;
@@ -43,9 +43,9 @@ class UserViewControllerTest {
 
     @BeforeEach
     public void beforeEach() {
-        user = TestDataUtils.getUser("New Name", "", true, null);
+        user = TestBuildersUtils.getUser(null, "New Name", "", true, null);
         user.setId(1l);
-        user.setUserRoles(new HashSet<>(Arrays.asList(TestDataUtils.getUserRole(1l, "ROLE_ADMIN"))));
+        user.setUserRoles(new HashSet<>(Arrays.asList(TestBuildersUtils.getUserRole(1l, "ROLE_ADMIN"))));
 
     }
 

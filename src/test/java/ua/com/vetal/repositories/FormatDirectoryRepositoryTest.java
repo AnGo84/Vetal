@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.FormatDirectory;
 
 import javax.validation.ConstraintViolationException;
@@ -30,11 +30,11 @@ public class FormatDirectoryRepositoryTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		directoryRepository.deleteAll();
-		directory = TestDataUtils.getFormatDirectory(DIRECTORY_NAME);
+        directoryRepository.deleteAll();
+        directory = TestBuildersUtils.getFormatDirectory(null, DIRECTORY_NAME);
 
-		entityManager.persistAndFlush(directory);
-	}
+        entityManager.persistAndFlush(directory);
+    }
 
 	@Test
 	public void whenFindByName_thenReturnObject() {
@@ -81,22 +81,22 @@ public class FormatDirectoryRepositoryTest {
 
 	@Test
 	public void whenFindAll_thenReturnListOfRecords() {
-		//given
-		FormatDirectory newDirectory = TestDataUtils.getFormatDirectory(SECOND_DIRECTORY_NAME);
-		entityManager.persistAndFlush(newDirectory);
-		// when
-		List<FormatDirectory> directoryList = directoryRepository.findAll();
-		// then
-		assertNotNull(directoryList);
-		assertFalse(directoryList.isEmpty());
-		assertEquals(directoryList.size(), 2);
-	}
+        //given
+        FormatDirectory newDirectory = TestBuildersUtils.getFormatDirectory(null, SECOND_DIRECTORY_NAME);
+        entityManager.persistAndFlush(newDirectory);
+        // when
+        List<FormatDirectory> directoryList = directoryRepository.findAll();
+        // then
+        assertNotNull(directoryList);
+        assertFalse(directoryList.isEmpty());
+        assertEquals(directoryList.size(), 2);
+    }
 
 	@Test
 	public void it_should_save_object() {
-		FormatDirectory newDirectory = TestDataUtils.getFormatDirectory(SECOND_DIRECTORY_NAME);
-		directoryRepository.save(newDirectory);
-		FormatDirectory foundDirectory = directoryRepository.findByName(newDirectory.getName());
+        FormatDirectory newDirectory = TestBuildersUtils.getFormatDirectory(null, SECOND_DIRECTORY_NAME);
+        directoryRepository.save(newDirectory);
+        FormatDirectory foundDirectory = directoryRepository.findByName(newDirectory.getName());
         // then
         assertNotNull(foundDirectory);
         assertNotNull(foundDirectory.getId());
@@ -105,7 +105,7 @@ public class FormatDirectoryRepositoryTest {
 
     @Test
     public void whenSaveObjectWithNameTooLong_thenThrowConstraintViolationException() {
-        FormatDirectory directory = TestDataUtils.getFormatDirectory(NAME_WITH_LENGTH_MORE_THEN_250_SYMBOLS);
+        FormatDirectory directory = TestBuildersUtils.getFormatDirectory(null, NAME_WITH_LENGTH_MORE_THEN_250_SYMBOLS);
         assertThrows(ConstraintViolationException.class, () -> {
             directoryRepository.save(directory);
         });
@@ -113,7 +113,7 @@ public class FormatDirectoryRepositoryTest {
 
     @Test
     public void whenSaveObjectWithNameTooShort_thenThrowConstraintViolationException() {
-        FormatDirectory directory = TestDataUtils.getFormatDirectory("");
+        FormatDirectory directory = TestBuildersUtils.getFormatDirectory(null, "");
         assertThrows(ConstraintViolationException.class, () -> {
             directoryRepository.save(directory);
         });
@@ -122,7 +122,7 @@ public class FormatDirectoryRepositoryTest {
     @Test
     public void whenDeleteById_thenOk() {
         //given
-        FormatDirectory newDirectory = TestDataUtils.getFormatDirectory(SECOND_DIRECTORY_NAME);
+        FormatDirectory newDirectory = TestBuildersUtils.getFormatDirectory(null, SECOND_DIRECTORY_NAME);
 
         entityManager.persistAndFlush(newDirectory);
 		assertEquals(directoryRepository.findAll().size(), 2);

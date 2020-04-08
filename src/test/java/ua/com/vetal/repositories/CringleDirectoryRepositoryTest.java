@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.CringleDirectory;
 
 import javax.validation.ConstraintViolationException;
@@ -30,11 +30,11 @@ public class CringleDirectoryRepositoryTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		directoryRepository.deleteAll();
-		directory = TestDataUtils.getCringleDirectory(DIRECTORY_NAME);
+        directoryRepository.deleteAll();
+        directory = TestBuildersUtils.getCringleDirectory(null, DIRECTORY_NAME);
 
-		entityManager.persistAndFlush(directory);
-	}
+        entityManager.persistAndFlush(directory);
+    }
 
 	@Test
 	public void whenFindByName_thenReturnObject() {
@@ -81,22 +81,22 @@ public class CringleDirectoryRepositoryTest {
 
 	@Test
 	public void whenFindAll_thenReturnListOfRecords() {
-		//given
-		CringleDirectory newDirectory = TestDataUtils.getCringleDirectory(SECOND_DIRECTORY_NAME);
-		entityManager.persistAndFlush(newDirectory);
-		// when
-		List<CringleDirectory> directoryList = directoryRepository.findAll();
-		// then
-		assertNotNull(directoryList);
-		assertFalse(directoryList.isEmpty());
-		assertEquals(directoryList.size(), 2);
-	}
+        //given
+        CringleDirectory newDirectory = TestBuildersUtils.getCringleDirectory(null, SECOND_DIRECTORY_NAME);
+        entityManager.persistAndFlush(newDirectory);
+        // when
+        List<CringleDirectory> directoryList = directoryRepository.findAll();
+        // then
+        assertNotNull(directoryList);
+        assertFalse(directoryList.isEmpty());
+        assertEquals(directoryList.size(), 2);
+    }
 
 	@Test
 	public void it_should_save_object() {
-		CringleDirectory newDirectory = TestDataUtils.getCringleDirectory(SECOND_DIRECTORY_NAME);
-		directoryRepository.save(newDirectory);
-		CringleDirectory foundDirectory = directoryRepository.findByName(newDirectory.getName());
+        CringleDirectory newDirectory = TestBuildersUtils.getCringleDirectory(null, SECOND_DIRECTORY_NAME);
+        directoryRepository.save(newDirectory);
+        CringleDirectory foundDirectory = directoryRepository.findByName(newDirectory.getName());
         // then
         assertNotNull(foundDirectory);
         assertNotNull(foundDirectory.getId());
@@ -105,7 +105,7 @@ public class CringleDirectoryRepositoryTest {
 
     @Test
     public void whenSaveObjectWithNameTooLong_thenThrowConstraintViolationException() {
-        CringleDirectory directory = TestDataUtils.getCringleDirectory(NAME_WITH_LENGTH_MORE_THEN_250_SYMBOLS);
+        CringleDirectory directory = TestBuildersUtils.getCringleDirectory(null, NAME_WITH_LENGTH_MORE_THEN_250_SYMBOLS);
         assertThrows(ConstraintViolationException.class, () -> {
             directoryRepository.save(directory);
         });
@@ -113,7 +113,7 @@ public class CringleDirectoryRepositoryTest {
 
     @Test
     public void whenSaveObjectWithNameTooShort_thenThrowConstraintViolationException() {
-        CringleDirectory directory = TestDataUtils.getCringleDirectory("");
+        CringleDirectory directory = TestBuildersUtils.getCringleDirectory(null, "");
         assertThrows(ConstraintViolationException.class, () -> {
             directoryRepository.save(directory);
         });
@@ -122,7 +122,7 @@ public class CringleDirectoryRepositoryTest {
     @Test
     public void whenDeleteById_thenOk() {
         //given
-        CringleDirectory newDirectory = TestDataUtils.getCringleDirectory(SECOND_DIRECTORY_NAME);
+        CringleDirectory newDirectory = TestBuildersUtils.getCringleDirectory(null, SECOND_DIRECTORY_NAME);
 
         entityManager.persistAndFlush(newDirectory);
 		assertEquals(directoryRepository.findAll().size(), 2);

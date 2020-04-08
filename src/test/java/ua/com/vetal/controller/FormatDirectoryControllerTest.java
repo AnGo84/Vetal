@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.FormatDirectory;
 import ua.com.vetal.repositories.FormatDirectoryRepositoryTest;
 import ua.com.vetal.service.FormatDirectoryServiceImpl;
@@ -37,12 +37,11 @@ public class FormatDirectoryControllerTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		directory = TestDataUtils.getFormatDirectory(FormatDirectoryRepositoryTest.DIRECTORY_NAME);
-		directory.setId(1l);
+        directory = TestBuildersUtils.getFormatDirectory(1l, FormatDirectoryRepositoryTest.DIRECTORY_NAME);
 
-		when(mockDirectoryService.findAllObjects()).thenReturn(Arrays.asList(directory));
-		when(mockDirectoryService.findById(anyLong())).thenReturn(directory);
-	}
+        when(mockDirectoryService.findAllObjects()).thenReturn(Arrays.asList(directory));
+        when(mockDirectoryService.findById(anyLong())).thenReturn(directory);
+    }
 
 
 	@Test

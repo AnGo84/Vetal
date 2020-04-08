@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.PaperDirectory;
 
 import javax.validation.ConstraintViolationException;
@@ -31,7 +31,7 @@ public class PaperDirectoryRepositoryTest {
     @BeforeEach
     public void beforeEach() {
         directoryRepository.deleteAll();
-        directory = TestDataUtils.getPaperDirectory(DIRECTORY_NAME);
+        directory = TestBuildersUtils.getPaperDirectory(null, DIRECTORY_NAME);
 
         entityManager.persistAndFlush(directory);
     }
@@ -82,7 +82,7 @@ public class PaperDirectoryRepositoryTest {
     @Test
     public void whenFindAll_thenReturnListOfRecords() {
         //given
-        PaperDirectory newDirectory = TestDataUtils.getPaperDirectory(SECOND_DIRECTORY_NAME);
+        PaperDirectory newDirectory = TestBuildersUtils.getPaperDirectory(null, SECOND_DIRECTORY_NAME);
         entityManager.persistAndFlush(newDirectory);
         // when
         List<PaperDirectory> directoryList = directoryRepository.findAll();
@@ -94,7 +94,7 @@ public class PaperDirectoryRepositoryTest {
 
     @Test
     public void it_should_save_object() {
-        PaperDirectory newDirectory = TestDataUtils.getPaperDirectory(SECOND_DIRECTORY_NAME);
+        PaperDirectory newDirectory = TestBuildersUtils.getPaperDirectory(null, SECOND_DIRECTORY_NAME);
         directoryRepository.save(newDirectory);
         PaperDirectory foundDirectory = directoryRepository.findByName(newDirectory.getName());
         // then
@@ -105,7 +105,7 @@ public class PaperDirectoryRepositoryTest {
 
     @Test
     public void whenSaveObjectWithNameTooLong_thenThrowConstraintViolationException() {
-        PaperDirectory directory = TestDataUtils.getPaperDirectory(NAME_WITH_LENGTH_MORE_THEN_250_SYMBOLS);
+        PaperDirectory directory = TestBuildersUtils.getPaperDirectory(null, NAME_WITH_LENGTH_MORE_THEN_250_SYMBOLS);
         assertThrows(ConstraintViolationException.class, () -> {
             directoryRepository.save(directory);
         });
@@ -113,7 +113,7 @@ public class PaperDirectoryRepositoryTest {
 
     @Test
     public void whenSaveObjectWithNameTooShort_thenThrowConstraintViolationException() {
-        PaperDirectory directory = TestDataUtils.getPaperDirectory("");
+        PaperDirectory directory = TestBuildersUtils.getPaperDirectory(null, "");
         assertThrows(ConstraintViolationException.class, () -> {
             directoryRepository.save(directory);
         });
@@ -122,7 +122,7 @@ public class PaperDirectoryRepositoryTest {
     @Test
     public void whenDeleteById_thenOk() {
         //given
-        PaperDirectory newDirectory = TestDataUtils.getPaperDirectory(SECOND_DIRECTORY_NAME);
+        PaperDirectory newDirectory = TestBuildersUtils.getPaperDirectory(null, SECOND_DIRECTORY_NAME);
 
         entityManager.persistAndFlush(newDirectory);
         assertEquals(directoryRepository.findAll().size(), 2);

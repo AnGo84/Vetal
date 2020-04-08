@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.LaminateDirectory;
 import ua.com.vetal.repositories.LaminateDirectoryRepository;
 import ua.com.vetal.repositories.LaminateDirectoryRepositoryTest;
@@ -29,8 +29,8 @@ public class LaminateDirectoryServiceImplTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		directory = TestDataUtils.getLaminateDirectory(LaminateDirectoryRepositoryTest.DIRECTORY_NAME);
-	}
+        directory = TestBuildersUtils.getLaminateDirectory(null, LaminateDirectoryRepositoryTest.DIRECTORY_NAME);
+    }
 
 	@Test
 	void whenFindById_thenReturnObject() {
@@ -59,10 +59,10 @@ public class LaminateDirectoryServiceImplTest {
 
 	@Test
 	void whenSaveObject_thenSuccess() {
-		LaminateDirectory newDirectory = TestDataUtils.getLaminateDirectory(LaminateDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
-		directoryService.saveObject(newDirectory);
-		verify(mockDirectoryRepository, times(1)).save(newDirectory);
-	}
+        LaminateDirectory newDirectory = TestBuildersUtils.getLaminateDirectory(null, LaminateDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
+        directoryService.saveObject(newDirectory);
+        verify(mockDirectoryRepository, times(1)).save(newDirectory);
+    }
 
 	@Test
 	void whenSaveObject_thenNPE() {

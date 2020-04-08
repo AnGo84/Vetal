@@ -9,7 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.User;
 import ua.com.vetal.entity.UserRole;
 
@@ -43,18 +43,18 @@ class UserRepositoryTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		userRepository.deleteAll();
-		UserRole userRole = TestDataUtils.getUserRole(null, "USER");
-		entityManager.persistAndFlush(userRole);
-		userRoleSet = new HashSet<>(userRoleRepository.findAll());
+        userRepository.deleteAll();
+        UserRole userRole = TestBuildersUtils.getUserRole(null, "USER");
+        entityManager.persistAndFlush(userRole);
+        userRoleSet = new HashSet<>(userRoleRepository.findAll());
 
-		// given
+        // given
 
-		user = TestDataUtils.getUser("User", "password", true, userRoleSet);
+        user = TestBuildersUtils.getUser(null, "User", "password", true, userRoleSet);
 
-		entityManager.persistAndFlush(user);
-		//entityManager.flush();
-	}
+        entityManager.persistAndFlush(user);
+        //entityManager.flush();
+    }
 	@AfterEach
 	public void afterEach(){
 
@@ -107,21 +107,21 @@ class UserRepositoryTest {
 
 	@Test
 	public void whenFindAll_thenReturnListOfUser() {
-		//given
-		User user = TestDataUtils.getUser("User2", "second pass", true, userRoleSet);
-		entityManager.persistAndFlush(user);
-		// when
-		List<User> users = userRepository.findAll();
-		// then
-		assertNotNull(users);
-		assertFalse(users.isEmpty());
-		assertEquals(users.size(), 2);
+        //given
+        User user = TestBuildersUtils.getUser(null, "User2", "second pass", true, userRoleSet);
+        entityManager.persistAndFlush(user);
+        // when
+        List<User> users = userRepository.findAll();
+        // then
+        assertNotNull(users);
+        assertFalse(users.isEmpty());
+        assertEquals(users.size(), 2);
 
-	}
+    }
 
 	@Test
 	public void it_should_save_user() {
-        User newUser = TestDataUtils.getUser("User2", "second pass", true, userRoleSet);
+        User newUser = TestBuildersUtils.getUser(null, "User2", "second pass", true, userRoleSet);
         userRepository.save(newUser);
         User foundUser = userRepository.findByName(newUser.getName());
 
@@ -135,63 +135,63 @@ class UserRepositoryTest {
 
 	@Test
 	public void whenSaveUserWithNameTooLong_thenThrowConstraintViolationException() {
-		User user = TestDataUtils.getUser("NameWithLengthMoreThen36SymbolsIsTooLongForSaving", "second pass", true, userRoleSet);
-		assertThrows(ConstraintViolationException.class, () -> {
-			userRepository.save(user);
-		});
-	}
+        User user = TestBuildersUtils.getUser(null, "NameWithLengthMoreThen36SymbolsIsTooLongForSaving", "second pass", true, userRoleSet);
+        assertThrows(ConstraintViolationException.class, () -> {
+            userRepository.save(user);
+        });
+    }
 
 	@Test
 	public void whenSaveUserWithNameTooShortLength_thenThrowConstraintViolationException() {
-		User user = TestDataUtils.getUser("1", "second pass", true, userRoleSet);
-		assertThrows(ConstraintViolationException.class, () -> {
-			//entityManager.persistAndFlush(user);
-			userRepository.save(user);
-		});
-	}
+        User user = TestBuildersUtils.getUser(null, "1", "second pass", true, userRoleSet);
+        assertThrows(ConstraintViolationException.class, () -> {
+            //entityManager.persistAndFlush(user);
+            userRepository.save(user);
+        });
+    }
 
 	@Test
 	public void whenSaveUserWithPassWrongLength_thenThrowConstraintViolationException() {
-		User user = TestDataUtils.getUser("New Name", "", true, userRoleSet);
-		assertThrows(ConstraintViolationException.class, () -> {
-			//entityManager.persistAndFlush(user);
-			userRepository.saveAndFlush(user);
-		});
-	}
+        User user = TestBuildersUtils.getUser(null, "New Name", "", true, userRoleSet);
+        assertThrows(ConstraintViolationException.class, () -> {
+            //entityManager.persistAndFlush(user);
+            userRepository.saveAndFlush(user);
+        });
+    }
 
 	@Test
 	public void whenSaveUserWithEmailWrongLength_thenThrowConstraintViolationException() {
-		User user = TestDataUtils.getUser("New Name", "", true, userRoleSet);
-		user.setEmail("Email_With_Length_More_Then_100_Symbols_Is_Too_Long_For_Saving_And_Should_be_an_error_on_saving_attempt");
-		assertThrows(ConstraintViolationException.class, () -> {
-			userRepository.saveAndFlush(user);
-		});
-	}
+        User user = TestBuildersUtils.getUser(null, "New Name", "", true, userRoleSet);
+        user.setEmail("Email_With_Length_More_Then_100_Symbols_Is_Too_Long_For_Saving_And_Should_be_an_error_on_saving_attempt");
+        assertThrows(ConstraintViolationException.class, () -> {
+            userRepository.saveAndFlush(user);
+        });
+    }
 
 	@Test
 	public void whenSaveUserWithExistName_thenThrowConstraintViolationException() {
-		User user = TestDataUtils.getUser("New Name", "", true, userRoleSet);
-		assertThrows(ConstraintViolationException.class, () -> {
-			//entityManager.persistAndFlush(user);
-			userRepository.save(user);
-		});
-	}
+        User user = TestBuildersUtils.getUser(null, "New Name", "", true, userRoleSet);
+        assertThrows(ConstraintViolationException.class, () -> {
+            //entityManager.persistAndFlush(user);
+            userRepository.save(user);
+        });
+    }
 
 
 	@Test
 	public void whenDeleteById_thenOk() {
-		//given
-		User user = TestDataUtils.getUser("User2", "second pass", true, userRoleSet);
-		entityManager.persistAndFlush(user);
-		assertEquals(userRepository.findAll().size(), 2);
+        //given
+        User user = TestBuildersUtils.getUser(null, "User2", "second pass", true, userRoleSet);
+        entityManager.persistAndFlush(user);
+        assertEquals(userRepository.findAll().size(), 2);
 
-		User foundUser = userRepository.findByName("User2");
+        User foundUser = userRepository.findByName("User2");
 
-		// when
-		userRepository.deleteById(foundUser.getId());
-		// then
-		assertEquals(userRepository.findAll().size(), 1);
-	}
+        // when
+        userRepository.deleteById(foundUser.getId());
+        // then
+        assertEquals(userRepository.findAll().size(), 1);
+    }
 
 	@Test
 	public void whenDeleteById_thenThrowEmptyResultDataAccessException() {

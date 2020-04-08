@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.dao.EmptyResultDataAccessException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.User;
 import ua.com.vetal.entity.UserRole;
 import ua.com.vetal.repositories.UserRepository;
@@ -35,9 +35,9 @@ class UserServiceImplTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		userRoleSet = new HashSet<>(Arrays.asList(TestDataUtils.getUserRole(1l, "USER")));
-		user = TestDataUtils.getUser("User", "password", true, userRoleSet);
-	}
+        userRoleSet = new HashSet<>(Arrays.asList(TestBuildersUtils.getUserRole(1l, "USER")));
+        user = TestBuildersUtils.getUser(null, "User", "password", true, userRoleSet);
+    }
 
 	@Test
 	void whenFindById_thenReturnUser() {
@@ -76,10 +76,10 @@ class UserServiceImplTest {
 
 	@Test
 	void whenSaveObject_thenSuccess() {
-		User newUser = TestDataUtils.getUser("User2", "second pass", true,userRoleSet);
-		userService.saveObject(newUser);
-		verify(mockUserRepository, times(1)).save(newUser);
-	}
+        User newUser = TestBuildersUtils.getUser(null, "User2", "second pass", true, userRoleSet);
+        userService.saveObject(newUser);
+        verify(mockUserRepository, times(1)).save(newUser);
+    }
 
 	@Test
 	void whenSaveObject_thenNPE() {
@@ -91,10 +91,10 @@ class UserServiceImplTest {
 
 	@Test
 	void whenUpdateObject_thenSuccess() {
-		User newUser = TestDataUtils.getUser("User2", "second pass", true,userRoleSet);
-		userService.saveObject(newUser);
-		verify(mockUserRepository, times(1)).save(newUser);
-	}
+        User newUser = TestBuildersUtils.getUser(null, "User2", "second pass", true, userRoleSet);
+        userService.saveObject(newUser);
+        verify(mockUserRepository, times(1)).save(newUser);
+    }
 
 	@Test
 	void whenUpdateObject_thenThrow() {

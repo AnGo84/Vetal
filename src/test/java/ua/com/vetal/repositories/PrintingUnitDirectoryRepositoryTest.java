@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.PrintingUnitDirectory;
 
 import javax.validation.ConstraintViolationException;
@@ -30,11 +30,11 @@ public class PrintingUnitDirectoryRepositoryTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		directoryRepository.deleteAll();
-		directory = TestDataUtils.getPrintingUnitDirectory(DIRECTORY_NAME);
+        directoryRepository.deleteAll();
+        directory = TestBuildersUtils.getPrintingUnitDirectory(null, DIRECTORY_NAME);
 
-		entityManager.persistAndFlush(directory);
-	}
+        entityManager.persistAndFlush(directory);
+    }
 
 	@Test
 	public void whenFindByName_thenReturnObject() {
@@ -81,58 +81,58 @@ public class PrintingUnitDirectoryRepositoryTest {
 
 	@Test
 	public void whenFindAll_thenReturnListOfRecords() {
-		//given
-		PrintingUnitDirectory newDirectory = TestDataUtils.getPrintingUnitDirectory(SECOND_DIRECTORY_NAME);
-		entityManager.persistAndFlush(newDirectory);
-		// when
-		List<PrintingUnitDirectory> directoryList = directoryRepository.findAll();
-		// then
-		assertNotNull(directoryList);
-		assertFalse(directoryList.isEmpty());
-		assertEquals(directoryList.size(), 2);
-	}
+        //given
+        PrintingUnitDirectory newDirectory = TestBuildersUtils.getPrintingUnitDirectory(null, SECOND_DIRECTORY_NAME);
+        entityManager.persistAndFlush(newDirectory);
+        // when
+        List<PrintingUnitDirectory> directoryList = directoryRepository.findAll();
+        // then
+        assertNotNull(directoryList);
+        assertFalse(directoryList.isEmpty());
+        assertEquals(directoryList.size(), 2);
+    }
 
 	@Test
 	public void it_should_save_object() {
-		PrintingUnitDirectory newDirectory = TestDataUtils.getPrintingUnitDirectory(SECOND_DIRECTORY_NAME);
-		directoryRepository.save(newDirectory);
-		PrintingUnitDirectory foundDirectory = directoryRepository.findByName(newDirectory.getName());
-		// then
-		assertNotNull(foundDirectory);
-		assertNotNull(foundDirectory.getId());
-		assertEquals(foundDirectory.getName(), newDirectory.getName());
-	}
+        PrintingUnitDirectory newDirectory = TestBuildersUtils.getPrintingUnitDirectory(null, SECOND_DIRECTORY_NAME);
+        directoryRepository.save(newDirectory);
+        PrintingUnitDirectory foundDirectory = directoryRepository.findByName(newDirectory.getName());
+        // then
+        assertNotNull(foundDirectory);
+        assertNotNull(foundDirectory.getId());
+        assertEquals(foundDirectory.getName(), newDirectory.getName());
+    }
 
 	@Test
 	public void whenSaveObjectWithNameTooLong_thenThrowConstraintViolationException() {
-		PrintingUnitDirectory directory = TestDataUtils.getPrintingUnitDirectory(NAME_WITH_LENGTH_MORE_THEN_250_SYMBOLS);
-		assertThrows(ConstraintViolationException.class, () -> {
-			directoryRepository.save(directory);
-		});
-	}
+        PrintingUnitDirectory directory = TestBuildersUtils.getPrintingUnitDirectory(null, NAME_WITH_LENGTH_MORE_THEN_250_SYMBOLS);
+        assertThrows(ConstraintViolationException.class, () -> {
+            directoryRepository.save(directory);
+        });
+    }
 
 	@Test
 	public void whenSaveObjectWithNameTooShort_thenThrowConstraintViolationException() {
-		PrintingUnitDirectory directory = TestDataUtils.getPrintingUnitDirectory("");
-		assertThrows(ConstraintViolationException.class, () -> {
-			directoryRepository.save(directory);
-		});
-	}
+        PrintingUnitDirectory directory = TestBuildersUtils.getPrintingUnitDirectory(null, "");
+        assertThrows(ConstraintViolationException.class, () -> {
+            directoryRepository.save(directory);
+        });
+    }
 
 	@Test
 	public void whenDeleteById_thenOk() {
-		//given
-		PrintingUnitDirectory newDirectory = TestDataUtils.getPrintingUnitDirectory(SECOND_DIRECTORY_NAME);
+        //given
+        PrintingUnitDirectory newDirectory = TestBuildersUtils.getPrintingUnitDirectory(null, SECOND_DIRECTORY_NAME);
 
-		entityManager.persistAndFlush(newDirectory);
-		assertEquals(directoryRepository.findAll().size(), 2);
+        entityManager.persistAndFlush(newDirectory);
+        assertEquals(directoryRepository.findAll().size(), 2);
 
-		PrintingUnitDirectory foundDirectory = directoryRepository.findByName(SECOND_DIRECTORY_NAME);
+        PrintingUnitDirectory foundDirectory = directoryRepository.findByName(SECOND_DIRECTORY_NAME);
 
-		// when
-		directoryRepository.deleteById(foundDirectory.getId());
-		// then
-		assertEquals(directoryRepository.findAll().size(), 1);
+        // when
+        directoryRepository.deleteById(foundDirectory.getId());
+        // then
+        assertEquals(directoryRepository.findAll().size(), 1);
 	}
 
 	@Test

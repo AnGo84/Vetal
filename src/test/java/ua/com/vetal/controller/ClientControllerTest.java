@@ -40,11 +40,13 @@ public class ClientControllerTest {
 
     @BeforeEach
     public void beforeEach() {
-        manager = TestDataUtils.getManager("firstName", "lastName", "middleName", "email");
-        manager.setId(1l);
+        /*manager = TestBuildersUtils.getManager(1l,"firstName", "lastName", "middleName", "email");
 
-        client = TestDataUtils.getClient(1l, "fullName", "firstName", "lastName", "middleName", "address", "email", "phone");
-        client.setManager(manager);
+        client = TestBuildersUtils.getClient(1l, "fullName", "firstName", "lastName", "middleName", "address", "email", "phone");
+        client.setManager(manager);*/
+
+        client = TestDataUtils.getClient(1l);
+        manager = client.getManager();
 
         when(mockClientService.findAllObjects()).thenReturn(Arrays.asList(client));
         when(mockClientService.findById(anyLong())).thenReturn(client);

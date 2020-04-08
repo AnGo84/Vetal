@@ -8,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.Link;
 import ua.com.vetal.entity.LinkType;
 
@@ -40,7 +40,7 @@ public class LinkRepositoryTest {
         //LinkType = entityManager.persistAndFlush(TestDataUtils.getLinkType("LinkTypeFirstName", "LinkTypeLastName", "LinkTypeMiddleName", "LinkTypeEmail"));
         linkTypes = linkTypeRepository.saveAll(getLinkTypes());
 
-        link = entityManager.persistAndFlush(TestDataUtils.getLink(null, "fullName", "shortName", linkTypes.get(0), "path"));
+        link = entityManager.persistAndFlush(TestBuildersUtils.getLink(null, "fullName", "shortName", linkTypes.get(0), "path"));
     }
 
     @Test
@@ -115,7 +115,7 @@ public class LinkRepositoryTest {
     @Test
     public void whenFindAll_thenReturnListOfLinkTypes() {
         //given
-        Link newLink = TestDataUtils.getLink(null, "fullName2", "shortName2", linkTypes.get(1), "path2");
+        Link newLink = TestBuildersUtils.getLink(null, "fullName2", "shortName2", linkTypes.get(1), "path2");
         entityManager.persistAndFlush(newLink);
         // when
         List<Link> links = linkRepository.findAll();
@@ -128,7 +128,7 @@ public class LinkRepositoryTest {
 
     @Test
     public void it_should_save_Link() {
-        Link newLink = TestDataUtils.getLink(null, "fullName2", "shortName2", linkTypes.get(1), "path2");
+        Link newLink = TestBuildersUtils.getLink(null, "fullName2", "shortName2", linkTypes.get(1), "path2");
         newLink = linkRepository.save(newLink);
         Link foundLink = linkRepository.findById(newLink.getId()).get();
 
@@ -144,7 +144,7 @@ public class LinkRepositoryTest {
 
     @Test
     public void it_should_save_Link_with_empty_fields() {
-        Link newLink = TestDataUtils.getLink(null, "fullName2", null, linkTypes.get(2), "path2");
+        Link newLink = TestBuildersUtils.getLink(null, "fullName2", null, linkTypes.get(2), "path2");
         newLink = linkRepository.save(newLink);
         Link foundLink = linkRepository.findById(newLink.getId()).get();
 
@@ -160,7 +160,7 @@ public class LinkRepositoryTest {
 
     @Test
     public void whenSaveLinkWithFullNameTooLong_thenThrowDataIntegrityViolationException() {
-        Link newLink = TestDataUtils.getLink(null, "fullNameWithLengthMoreThen250SymbolsIsTooLongForSavingWithLengthMoreThen250SymbolsIsTooLongForSavingWithLengthMoreThen250SymbolsIsTooLongForSavingWithLengthMoreThen250SymbolsIsTooLongForSavingWithLengthMoreThen250SymbolsIsTooLongForSavingWithLengthMoreThen250SymbolsIsTooLongForSaving", "shortName2", linkTypes.get(1), "path2");
+        Link newLink = TestBuildersUtils.getLink(null, "fullNameWithLengthMoreThen250SymbolsIsTooLongForSavingWithLengthMoreThen250SymbolsIsTooLongForSavingWithLengthMoreThen250SymbolsIsTooLongForSavingWithLengthMoreThen250SymbolsIsTooLongForSavingWithLengthMoreThen250SymbolsIsTooLongForSavingWithLengthMoreThen250SymbolsIsTooLongForSaving", "shortName2", linkTypes.get(1), "path2");
         assertThrows(DataIntegrityViolationException.class, () -> {
             linkRepository.save(newLink);
         });
@@ -168,7 +168,7 @@ public class LinkRepositoryTest {
 
     @Test
     public void whenSaveLinkWithFullNameTooShortLength_thenThrowConstraintViolationException() {
-        Link newLink = TestDataUtils.getLink(null, "", "shortName2", linkTypes.get(1), "path2");
+        Link newLink = TestBuildersUtils.getLink(null, "", "shortName2", linkTypes.get(1), "path2");
         assertThrows(ConstraintViolationException.class, () -> {
             linkRepository.save(newLink);
         });
@@ -176,7 +176,7 @@ public class LinkRepositoryTest {
 
     @Test
     public void whenSaveLinkWithFullNameNull_thenThrowConstraintViolationException() {
-        Link newLink = TestDataUtils.getLink(null, null, "shortName2", linkTypes.get(1), "path2");
+        Link newLink = TestBuildersUtils.getLink(null, null, "shortName2", linkTypes.get(1), "path2");
         assertThrows(ConstraintViolationException.class, () -> {
             linkRepository.save(newLink);
         });
@@ -184,7 +184,7 @@ public class LinkRepositoryTest {
 
     @Test
     public void whenSaveLinkWithShortNameTooLong_thenThrowDataIntegrityViolationException() {
-        Link newLink = TestDataUtils.getLink(null, "fullName", "shortNameWithLengthMoreThen50SymbolsIsTooLongForSaving", linkTypes.get(1), "path2");
+        Link newLink = TestBuildersUtils.getLink(null, "fullName", "shortNameWithLengthMoreThen50SymbolsIsTooLongForSaving", linkTypes.get(1), "path2");
         assertThrows(DataIntegrityViolationException.class, () -> {
             linkRepository.save(newLink);
         });
@@ -192,7 +192,7 @@ public class LinkRepositoryTest {
 
     @Test
     public void whenSaveLinkWithPathTooLongLength_thenThrowDataIntegrityViolationException() {
-        Link newLink = TestDataUtils.getLink(null, "fullName", null, linkTypes.get(1),
+        Link newLink = TestBuildersUtils.getLink(null, "fullName", null, linkTypes.get(1),
                 "pathWithLengthMoreThen500SymbolsIsTooLongForSavingWithLengthMoreThen500SymbolsIsTooLongForSavingWithLengthMoreThen500SymbolsIsTooLongForSavingWithLengthMoreThen500SymbolsIsTooLongForSavingWithLengthMoreThen500SymbolsIsTooLongForSavingWithLengthMoreThen500SymbolsIsTooLongForSavingWithLengthMoreThen500SymbolsIsTooLongForSavingWithLengthMoreThen500SymbolsIsTooLongForSavingWithLengthMoreThen500SymbolsIsTooLongForSavingWithLengthMoreThen500SymbolsIsTooLongForSavingWithLengthMoreThen500SymbolsIsTooLongForSaving");
         assertThrows(DataIntegrityViolationException.class, () -> {
             linkRepository.save(newLink);
@@ -201,7 +201,7 @@ public class LinkRepositoryTest {
 
     @Test
     public void whenSaveLinkWithPathTooShortLength_thenThrowConstraintViolationException() {
-        Link newLink = TestDataUtils.getLink(null, "fullName", null, linkTypes.get(1), "");
+        Link newLink = TestBuildersUtils.getLink(null, "fullName", null, linkTypes.get(1), "");
         assertThrows(ConstraintViolationException.class, () -> {
             linkRepository.save(newLink);
         });
@@ -210,7 +210,7 @@ public class LinkRepositoryTest {
 
     @Test
     public void whenSaveLinkWithPathNull_thenThrowConstraintViolationException() {
-        Link newLink = TestDataUtils.getLink(null, "fullName", null, linkTypes.get(1), null);
+        Link newLink = TestBuildersUtils.getLink(null, "fullName", null, linkTypes.get(1), null);
         assertThrows(ConstraintViolationException.class, () -> {
             linkRepository.save(newLink);
         });
@@ -218,7 +218,7 @@ public class LinkRepositoryTest {
 
     @Test
     public void whenSaveLinkWithLinkTypeNull_thenThrowConstraintViolationException() {
-        Link newLink = TestDataUtils.getLink(null, "fullName2", null, null, null);
+        Link newLink = TestBuildersUtils.getLink(null, "fullName2", null, null, null);
         assertThrows(ConstraintViolationException.class, () -> {
             linkRepository.save(newLink);
         });
@@ -227,7 +227,7 @@ public class LinkRepositoryTest {
     @Test
     public void whenSaveLinkWithNotExistLinkType_thenThrowInvalidDataAccessApiUsageException() {
 
-        Link newLink = TestDataUtils.getLink(null, "fullName2", null, TestDataUtils.getLinkType("new Name"), null);
+        Link newLink = TestBuildersUtils.getLink(null, "fullName2", null, TestBuildersUtils.getLinkType("new Name"), null);
         assertThrows(InvalidDataAccessApiUsageException.class, () -> {
             linkRepository.save(newLink);
         });
@@ -237,7 +237,7 @@ public class LinkRepositoryTest {
     @Test
     public void whenDeleteById_thenOk() {
         //given
-        Link newLink = TestDataUtils.getLink(null, "fullName2", "shortName2", linkTypes.get(1), "path2");
+        Link newLink = TestBuildersUtils.getLink(null, "fullName2", "shortName2", linkTypes.get(1), "path2");
         newLink = entityManager.persistAndFlush(newLink);
         assertEquals(linkRepository.findAll().size(), 2);
 
@@ -256,9 +256,9 @@ public class LinkRepositoryTest {
 
     private List<LinkType> getLinkTypes() {
         List<LinkType> linkTypes = new ArrayList<>(
-                Arrays.asList(TestDataUtils.getLinkType(1l, "link"),
-                        TestDataUtils.getLinkType(2l, "file"),
-                        TestDataUtils.getLinkType(3l, "folder"))
+                Arrays.asList(TestBuildersUtils.getLinkType(1l, "link"),
+                        TestBuildersUtils.getLinkType(2l, "file"),
+                        TestBuildersUtils.getLinkType(3l, "folder"))
         );
         return linkTypes;
     }

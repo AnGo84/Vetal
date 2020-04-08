@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.ChromaticityDirectory;
 
 import javax.validation.ConstraintViolationException;
@@ -31,7 +31,7 @@ public class ChromaticityDirectoryRepositoryTest {
     @BeforeEach
     public void beforeEach() {
         directoryRepository.deleteAll();
-        directory = TestDataUtils.getChromaticityDirectory(DIRECTORY_NAME);
+        directory = TestBuildersUtils.getChromaticityDirectory(null, DIRECTORY_NAME);
 
         entityManager.persistAndFlush(directory);
     }
@@ -82,7 +82,7 @@ public class ChromaticityDirectoryRepositoryTest {
     @Test
     public void whenFindAll_thenReturnListOfRecords() {
         //given
-        ChromaticityDirectory newDirectory = TestDataUtils.getChromaticityDirectory(SECOND_DIRECTORY_NAME);
+        ChromaticityDirectory newDirectory = TestBuildersUtils.getChromaticityDirectory(null, SECOND_DIRECTORY_NAME);
         entityManager.persistAndFlush(newDirectory);
         // when
         List<ChromaticityDirectory> directoryList = directoryRepository.findAll();
@@ -94,7 +94,7 @@ public class ChromaticityDirectoryRepositoryTest {
 
     @Test
     public void it_should_save_object() {
-        ChromaticityDirectory newDirectory = TestDataUtils.getChromaticityDirectory(SECOND_DIRECTORY_NAME);
+        ChromaticityDirectory newDirectory = TestBuildersUtils.getChromaticityDirectory(null, SECOND_DIRECTORY_NAME);
         directoryRepository.save(newDirectory);
         ChromaticityDirectory foundDirectory = directoryRepository.findByName(newDirectory.getName());
         // then
@@ -105,7 +105,7 @@ public class ChromaticityDirectoryRepositoryTest {
 
     @Test
     public void whenSaveObjectWithNameTooLong_thenThrowConstraintViolationException() {
-        ChromaticityDirectory directory = TestDataUtils.getChromaticityDirectory(NAME_WITH_LENGTH_MORE_THEN_250_SYMBOLS);
+        ChromaticityDirectory directory = TestBuildersUtils.getChromaticityDirectory(null, NAME_WITH_LENGTH_MORE_THEN_250_SYMBOLS);
         assertThrows(ConstraintViolationException.class, () -> {
             directoryRepository.save(directory);
         });
@@ -113,7 +113,7 @@ public class ChromaticityDirectoryRepositoryTest {
 
     @Test
     public void whenSaveObjectWithNameTooShort_thenThrowConstraintViolationException() {
-        ChromaticityDirectory directory = TestDataUtils.getChromaticityDirectory("");
+        ChromaticityDirectory directory = TestBuildersUtils.getChromaticityDirectory(null, "");
         assertThrows(ConstraintViolationException.class, () -> {
             directoryRepository.save(directory);
         });
@@ -122,7 +122,7 @@ public class ChromaticityDirectoryRepositoryTest {
     @Test
     public void whenDeleteById_thenOk() {
         //given
-        ChromaticityDirectory newDirectory = TestDataUtils.getChromaticityDirectory(SECOND_DIRECTORY_NAME);
+        ChromaticityDirectory newDirectory = TestBuildersUtils.getChromaticityDirectory(null, SECOND_DIRECTORY_NAME);
 
         entityManager.persistAndFlush(newDirectory);
         assertEquals(directoryRepository.findAll().size(), 2);

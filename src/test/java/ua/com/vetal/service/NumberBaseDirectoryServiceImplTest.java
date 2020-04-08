@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.NumberBaseDirectory;
 import ua.com.vetal.repositories.NumberBaseDirectoryRepository;
 import ua.com.vetal.repositories.NumberBaseDirectoryRepositoryTest;
@@ -29,7 +29,7 @@ class NumberBaseDirectoryServiceImplTest {
 
     @BeforeEach
     public void beforeEach() {
-        directory = TestDataUtils.getNumberBaseDirectory(NumberBaseDirectoryRepositoryTest.DIRECTORY_NAME);
+        directory = TestBuildersUtils.getNumberBaseDirectory(null, NumberBaseDirectoryRepositoryTest.DIRECTORY_NAME);
     }
 
     @Test
@@ -59,7 +59,7 @@ class NumberBaseDirectoryServiceImplTest {
 
     @Test
     void whenSaveObject_thenSuccess() {
-        NumberBaseDirectory newDirectory = TestDataUtils.getNumberBaseDirectory(NumberBaseDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
+        NumberBaseDirectory newDirectory = TestBuildersUtils.getNumberBaseDirectory(null, NumberBaseDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
         directoryService.saveObject(newDirectory);
         verify(mockDirectoryRepository, times(1)).save(newDirectory);
     }

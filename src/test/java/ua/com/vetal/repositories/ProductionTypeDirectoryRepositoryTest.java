@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.ProductionTypeDirectory;
 
 import javax.validation.ConstraintViolationException;
@@ -30,11 +30,11 @@ public class ProductionTypeDirectoryRepositoryTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		directoryRepository.deleteAll();
-		directory = TestDataUtils.getProductionTypeDirectory(DIRECTORY_NAME);
+        directoryRepository.deleteAll();
+        directory = TestBuildersUtils.getProductionTypeDirectory(null, DIRECTORY_NAME);
 
-		entityManager.persistAndFlush(directory);
-	}
+        entityManager.persistAndFlush(directory);
+    }
 
 	@Test
 	public void whenFindByName_thenReturnObject() {
@@ -81,58 +81,58 @@ public class ProductionTypeDirectoryRepositoryTest {
 
 	@Test
 	public void whenFindAll_thenReturnListOfRecords() {
-		//given
-		ProductionTypeDirectory newDirectory = TestDataUtils.getProductionTypeDirectory(SECOND_DIRECTORY_NAME);
-		entityManager.persistAndFlush(newDirectory);
-		// when
-		List<ProductionTypeDirectory> directoryList = directoryRepository.findAll();
-		// then
-		assertNotNull(directoryList);
-		assertFalse(directoryList.isEmpty());
-		assertEquals(directoryList.size(), 2);
-	}
+        //given
+        ProductionTypeDirectory newDirectory = TestBuildersUtils.getProductionTypeDirectory(null, SECOND_DIRECTORY_NAME);
+        entityManager.persistAndFlush(newDirectory);
+        // when
+        List<ProductionTypeDirectory> directoryList = directoryRepository.findAll();
+        // then
+        assertNotNull(directoryList);
+        assertFalse(directoryList.isEmpty());
+        assertEquals(directoryList.size(), 2);
+    }
 
 	@Test
 	public void it_should_save_object() {
-		ProductionTypeDirectory newDirectory = TestDataUtils.getProductionTypeDirectory(SECOND_DIRECTORY_NAME);
-		directoryRepository.save(newDirectory);
-		ProductionTypeDirectory foundDirectory = directoryRepository.findByName(newDirectory.getName());
-		// then
-		assertNotNull(foundDirectory);
-		assertNotNull(foundDirectory.getId());
-		assertEquals(foundDirectory.getName(), newDirectory.getName());
-	}
+        ProductionTypeDirectory newDirectory = TestBuildersUtils.getProductionTypeDirectory(null, SECOND_DIRECTORY_NAME);
+        directoryRepository.save(newDirectory);
+        ProductionTypeDirectory foundDirectory = directoryRepository.findByName(newDirectory.getName());
+        // then
+        assertNotNull(foundDirectory);
+        assertNotNull(foundDirectory.getId());
+        assertEquals(foundDirectory.getName(), newDirectory.getName());
+    }
 
 	@Test
 	public void whenSaveObjectWithNameTooLong_thenThrowConstraintViolationException() {
-		ProductionTypeDirectory directory = TestDataUtils.getProductionTypeDirectory(NAME_WITH_LENGTH_MORE_THEN_250_SYMBOLS);
-		assertThrows(ConstraintViolationException.class, () -> {
-			directoryRepository.save(directory);
-		});
-	}
+        ProductionTypeDirectory directory = TestBuildersUtils.getProductionTypeDirectory(null, NAME_WITH_LENGTH_MORE_THEN_250_SYMBOLS);
+        assertThrows(ConstraintViolationException.class, () -> {
+            directoryRepository.save(directory);
+        });
+    }
 
 	@Test
 	public void whenSaveObjectWithNameTooShort_thenThrowConstraintViolationException() {
-		ProductionTypeDirectory directory = TestDataUtils.getProductionTypeDirectory("");
-		assertThrows(ConstraintViolationException.class, () -> {
-			directoryRepository.save(directory);
-		});
-	}
+        ProductionTypeDirectory directory = TestBuildersUtils.getProductionTypeDirectory(null, "");
+        assertThrows(ConstraintViolationException.class, () -> {
+            directoryRepository.save(directory);
+        });
+    }
 
 	@Test
 	public void whenDeleteById_thenOk() {
-		//given
-		ProductionTypeDirectory newDirectory = TestDataUtils.getProductionTypeDirectory(SECOND_DIRECTORY_NAME);
+        //given
+        ProductionTypeDirectory newDirectory = TestBuildersUtils.getProductionTypeDirectory(null, SECOND_DIRECTORY_NAME);
 
-		entityManager.persistAndFlush(newDirectory);
-		assertEquals(directoryRepository.findAll().size(), 2);
+        entityManager.persistAndFlush(newDirectory);
+        assertEquals(directoryRepository.findAll().size(), 2);
 
-		ProductionTypeDirectory foundDirectory = directoryRepository.findByName(SECOND_DIRECTORY_NAME);
+        ProductionTypeDirectory foundDirectory = directoryRepository.findByName(SECOND_DIRECTORY_NAME);
 
-		// when
-		directoryRepository.deleteById(foundDirectory.getId());
-		// then
-		assertEquals(directoryRepository.findAll().size(), 1);
+        // when
+        directoryRepository.deleteById(foundDirectory.getId());
+        // then
+        assertEquals(directoryRepository.findAll().size(), 1);
 	}
 
 	@Test

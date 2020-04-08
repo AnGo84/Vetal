@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.FormatDirectory;
 import ua.com.vetal.repositories.FormatDirectoryRepository;
 import ua.com.vetal.repositories.FormatDirectoryRepositoryTest;
@@ -29,8 +29,8 @@ public class FormatDirectoryServiceImplTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		directory = TestDataUtils.getFormatDirectory(FormatDirectoryRepositoryTest.DIRECTORY_NAME);
-	}
+        directory = TestBuildersUtils.getFormatDirectory(null, FormatDirectoryRepositoryTest.DIRECTORY_NAME);
+    }
 
 	@Test
 	void whenFindById_thenReturnObject() {
@@ -59,10 +59,10 @@ public class FormatDirectoryServiceImplTest {
 
 	@Test
 	void whenSaveObject_thenSuccess() {
-		FormatDirectory newDirectory = TestDataUtils.getFormatDirectory(FormatDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
-		directoryService.saveObject(newDirectory);
-		verify(mockDirectoryRepository, times(1)).save(newDirectory);
-	}
+        FormatDirectory newDirectory = TestBuildersUtils.getFormatDirectory(null, FormatDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
+        directoryService.saveObject(newDirectory);
+        verify(mockDirectoryRepository, times(1)).save(newDirectory);
+    }
 
 	@Test
 	void whenSaveObject_thenNPE() {

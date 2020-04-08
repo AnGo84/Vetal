@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.LaminateDirectory;
 
 import javax.validation.ConstraintViolationException;
@@ -30,11 +30,11 @@ public class LaminateDirectoryRepositoryTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		directoryRepository.deleteAll();
-		directory = TestDataUtils.getLaminateDirectory(DIRECTORY_NAME);
+        directoryRepository.deleteAll();
+        directory = TestBuildersUtils.getLaminateDirectory(null, DIRECTORY_NAME);
 
-		entityManager.persistAndFlush(directory);
-	}
+        entityManager.persistAndFlush(directory);
+    }
 
 	@Test
 	public void whenFindByName_thenReturnObject() {
@@ -81,22 +81,22 @@ public class LaminateDirectoryRepositoryTest {
 
 	@Test
 	public void whenFindAll_thenReturnListOfRecords() {
-		//given
-		LaminateDirectory newDirectory = TestDataUtils.getLaminateDirectory(SECOND_DIRECTORY_NAME);
-		entityManager.persistAndFlush(newDirectory);
-		// when
-		List<LaminateDirectory> directoryList = directoryRepository.findAll();
-		// then
-		assertNotNull(directoryList);
-		assertFalse(directoryList.isEmpty());
-		assertEquals(directoryList.size(), 2);
-	}
+        //given
+        LaminateDirectory newDirectory = TestBuildersUtils.getLaminateDirectory(null, SECOND_DIRECTORY_NAME);
+        entityManager.persistAndFlush(newDirectory);
+        // when
+        List<LaminateDirectory> directoryList = directoryRepository.findAll();
+        // then
+        assertNotNull(directoryList);
+        assertFalse(directoryList.isEmpty());
+        assertEquals(directoryList.size(), 2);
+    }
 
 	@Test
 	public void it_should_save_object() {
-		LaminateDirectory newDirectory = TestDataUtils.getLaminateDirectory(SECOND_DIRECTORY_NAME);
-		directoryRepository.save(newDirectory);
-		LaminateDirectory foundDirectory = directoryRepository.findByName(newDirectory.getName());
+        LaminateDirectory newDirectory = TestBuildersUtils.getLaminateDirectory(null, SECOND_DIRECTORY_NAME);
+        directoryRepository.save(newDirectory);
+        LaminateDirectory foundDirectory = directoryRepository.findByName(newDirectory.getName());
         // then
         assertNotNull(foundDirectory);
         assertNotNull(foundDirectory.getId());
@@ -105,7 +105,7 @@ public class LaminateDirectoryRepositoryTest {
 
     @Test
     public void whenSaveObjectWithNameTooLong_thenThrowConstraintViolationException() {
-        LaminateDirectory directory = TestDataUtils.getLaminateDirectory(NAME_WITH_LENGTH_MORE_THEN_250_SYMBOLS);
+        LaminateDirectory directory = TestBuildersUtils.getLaminateDirectory(null, NAME_WITH_LENGTH_MORE_THEN_250_SYMBOLS);
         assertThrows(ConstraintViolationException.class, () -> {
             directoryRepository.save(directory);
         });
@@ -113,7 +113,7 @@ public class LaminateDirectoryRepositoryTest {
 
     @Test
     public void whenSaveObjectWithNameTooShort_thenThrowConstraintViolationException() {
-        LaminateDirectory directory = TestDataUtils.getLaminateDirectory("");
+        LaminateDirectory directory = TestBuildersUtils.getLaminateDirectory(null, "");
         assertThrows(ConstraintViolationException.class, () -> {
             directoryRepository.save(directory);
         });
@@ -122,7 +122,7 @@ public class LaminateDirectoryRepositoryTest {
     @Test
     public void whenDeleteById_thenOk() {
         //given
-        LaminateDirectory newDirectory = TestDataUtils.getLaminateDirectory(SECOND_DIRECTORY_NAME);
+        LaminateDirectory newDirectory = TestBuildersUtils.getLaminateDirectory(null, SECOND_DIRECTORY_NAME);
 
         entityManager.persistAndFlush(newDirectory);
 		assertEquals(directoryRepository.findAll().size(), 2);

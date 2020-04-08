@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.Payment;
 import ua.com.vetal.repositories.PaymentRepository;
 
@@ -28,8 +28,8 @@ public class PaymentServiceImplTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		payment = TestDataUtils.getPayment(1L, "name", "altname");
-	}
+        payment = TestBuildersUtils.getPayment(1L, "name", "altname");
+    }
 
 	@Test
 	void whenFindById_thenReturnObject() {
@@ -60,10 +60,10 @@ public class PaymentServiceImplTest {
 
 	@Test
 	void whenSaveObject_thenSuccess() {
-		Payment newPayment = TestDataUtils.getPayment(null, "name2", "altname2");
-		paymentService.saveObject(newPayment);
-		verify(mockPaymentRepository, times(1)).save(newPayment);
-	}
+        Payment newPayment = TestBuildersUtils.getPayment(null, "name2", "altname2");
+        paymentService.saveObject(newPayment);
+        verify(mockPaymentRepository, times(1)).save(newPayment);
+    }
 
 	@Test
 	void whenSaveObject_thenNPE() {

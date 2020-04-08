@@ -41,18 +41,20 @@ public class ContractorControllerTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		manager = TestDataUtils.getManager("firstName", "lastName", "middleName", "email");
-		manager.setId(1l);
+		/*manager = TestBuildersUtils.getManager(1l,"firstName", "lastName", "middleName", "email");
 
-		contractor = TestDataUtils.getContractor(1l, "corpName", "shortName",
+		contractor = TestBuildersUtils.getContractor(1l, "corpName", "shortName",
 				"firstName", "lastName", "middleName", "address",
 				"email", "phone", "siteURL");
-		contractor.setManager(manager);
+		contractor.setManager(manager);*/
 
-		when(mockContractorService.findAllObjects()).thenReturn(Arrays.asList(contractor));
-		when(mockContractorService.findById(anyLong())).thenReturn(contractor);
-		when(mockContractorService.findByName(anyString())).thenReturn(contractor);
-	}
+        contractor = TestDataUtils.getContractor(1l);
+        manager = contractor.getManager();
+
+        when(mockContractorService.findAllObjects()).thenReturn(Arrays.asList(contractor));
+        when(mockContractorService.findById(anyLong())).thenReturn(contractor);
+        when(mockContractorService.findByName(anyString())).thenReturn(contractor);
+    }
 
 
 	@Test

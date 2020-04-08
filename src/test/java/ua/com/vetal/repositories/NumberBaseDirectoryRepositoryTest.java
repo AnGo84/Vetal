@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.NumberBaseDirectory;
 
 import javax.validation.ConstraintViolationException;
@@ -31,7 +31,7 @@ public class NumberBaseDirectoryRepositoryTest {
     @BeforeEach
     public void beforeEach() {
         directoryRepository.deleteAll();
-        directory = TestDataUtils.getNumberBaseDirectory(DIRECTORY_NAME);
+        directory = TestBuildersUtils.getNumberBaseDirectory(null, DIRECTORY_NAME);
 
         entityManager.persistAndFlush(directory);
     }
@@ -82,7 +82,7 @@ public class NumberBaseDirectoryRepositoryTest {
     @Test
     public void whenFindAll_thenReturnListOfRecords() {
         //given
-        NumberBaseDirectory newDirectory = TestDataUtils.getNumberBaseDirectory(SECOND_DIRECTORY_NAME);
+        NumberBaseDirectory newDirectory = TestBuildersUtils.getNumberBaseDirectory(null, SECOND_DIRECTORY_NAME);
         entityManager.persistAndFlush(newDirectory);
         // when
         List<NumberBaseDirectory> directoryList = directoryRepository.findAll();
@@ -94,7 +94,7 @@ public class NumberBaseDirectoryRepositoryTest {
 
     @Test
     public void it_should_save_object() {
-        NumberBaseDirectory newDirectory = TestDataUtils.getNumberBaseDirectory(SECOND_DIRECTORY_NAME);
+        NumberBaseDirectory newDirectory = TestBuildersUtils.getNumberBaseDirectory(null, SECOND_DIRECTORY_NAME);
         directoryRepository.save(newDirectory);
         NumberBaseDirectory foundDirectory = directoryRepository.findByName(newDirectory.getName());
         // then
@@ -105,7 +105,7 @@ public class NumberBaseDirectoryRepositoryTest {
 
     @Test
     public void whenSaveObjectWithNameTooLong_thenThrowConstraintViolationException() {
-        NumberBaseDirectory directory = TestDataUtils.getNumberBaseDirectory(NAME_WITH_LENGTH_MORE_THEN_250_SYMBOLS);
+        NumberBaseDirectory directory = TestBuildersUtils.getNumberBaseDirectory(null, NAME_WITH_LENGTH_MORE_THEN_250_SYMBOLS);
         assertThrows(ConstraintViolationException.class, () -> {
             directoryRepository.save(directory);
         });
@@ -113,7 +113,7 @@ public class NumberBaseDirectoryRepositoryTest {
 
     @Test
     public void whenSaveObjectWithNameTooShort_thenThrowConstraintViolationException() {
-        NumberBaseDirectory directory = TestDataUtils.getNumberBaseDirectory("");
+        NumberBaseDirectory directory = TestBuildersUtils.getNumberBaseDirectory(null, "");
         assertThrows(ConstraintViolationException.class, () -> {
             directoryRepository.save(directory);
         });
@@ -122,7 +122,7 @@ public class NumberBaseDirectoryRepositoryTest {
     @Test
     public void whenDeleteById_thenOk() {
         //given
-        NumberBaseDirectory newDirectory = TestDataUtils.getNumberBaseDirectory(SECOND_DIRECTORY_NAME);
+        NumberBaseDirectory newDirectory = TestBuildersUtils.getNumberBaseDirectory(null, SECOND_DIRECTORY_NAME);
 
         entityManager.persistAndFlush(newDirectory);
         assertEquals(directoryRepository.findAll().size(), 2);

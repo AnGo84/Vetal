@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.Client;
 import ua.com.vetal.entity.Manager;
 
@@ -34,9 +34,9 @@ public class ClientRepositoryTest {
     public void beforeEach() {
         clientRepository.deleteAll();
         managerRepository.deleteAll();
-        manager = entityManager.persistAndFlush(TestDataUtils.getManager("managerFirstName", "managerLastName", "managerMiddleName", "managerEmail"));
+        manager = entityManager.persistAndFlush(TestBuildersUtils.getManager(null, "managerFirstName", "managerLastName", "managerMiddleName", "managerEmail"));
 
-        client = TestDataUtils.getClient(null, "fullName", "firstName", "lastName", "middleName", "address", "email", "phone");
+        client = TestBuildersUtils.getClient(null, "fullName", "firstName", "lastName", "middleName", "address", "email", "phone");
         client.setManager(manager);
         client = entityManager.persistAndFlush(client);
     }
@@ -131,7 +131,7 @@ public class ClientRepositoryTest {
 
     @Test
     public void whenSaveClientWithFullNameTooLong_thenThrowConstraintViolationException() {
-        Client newClient = TestDataUtils.getClient(null, "fullNameWithLengthMoreThen250SymbolsIsTooLongForSavingfullNameWithLengthMoreThen250SymbolsIsTooLongForSavingfullNameWithLengthMoreThen250SymbolsIsTooLongForSavingfullNameWithLengthMoreThen250SymbolsIsTooLongForSavingfullNameWithLengthMoreThen250SymbolsIsTooLongForSaving",
+        Client newClient = TestBuildersUtils.getClient(null, "fullNameWithLengthMoreThen250SymbolsIsTooLongForSavingfullNameWithLengthMoreThen250SymbolsIsTooLongForSavingfullNameWithLengthMoreThen250SymbolsIsTooLongForSavingfullNameWithLengthMoreThen250SymbolsIsTooLongForSavingfullNameWithLengthMoreThen250SymbolsIsTooLongForSaving",
                 "firstName", "lastName", "middleName", "address", "email", "phone");
         newClient.setManager(manager);
         assertThrows(ConstraintViolationException.class, () -> {
@@ -141,7 +141,7 @@ public class ClientRepositoryTest {
 
     @Test
     public void whenSaveClientWithFullNameTooShortLength_thenThrowConstraintViolationException() {
-        Client newClient = TestDataUtils.getClient(null, "", "firstName", "lastName", "middleName", "address", "email", "phone");
+        Client newClient = TestBuildersUtils.getClient(null, "", "firstName", "lastName", "middleName", "address", "email", "phone");
         newClient.setManager(manager);
         assertThrows(ConstraintViolationException.class, () -> {
             clientRepository.save(newClient);
@@ -150,7 +150,7 @@ public class ClientRepositoryTest {
 
     @Test
     public void whenSaveClientWithFullNameNull_thenThrowConstraintViolationException() {
-        Client newClient = TestDataUtils.getClient(null, null, "firstName", "lastName", "middleName", "address", "email", "phone");
+        Client newClient = TestBuildersUtils.getClient(null, null, "firstName", "lastName", "middleName", "address", "email", "phone");
         assertThrows(ConstraintViolationException.class, () -> {
             clientRepository.save(newClient);
         });
@@ -158,7 +158,7 @@ public class ClientRepositoryTest {
 
     @Test
     public void whenSaveClientWithFirstNameTooLong_thenThrowConstraintViolationException() {
-        Client newClient = TestDataUtils.getClient(null, "fullName", "firstNameWithLengthMoreThen50SymbolsIsTooLongForSaving", "lastName", "middleName", "address", "email", "phone");
+        Client newClient = TestBuildersUtils.getClient(null, "fullName", "firstNameWithLengthMoreThen50SymbolsIsTooLongForSaving", "lastName", "middleName", "address", "email", "phone");
         newClient.setManager(manager);
         assertThrows(ConstraintViolationException.class, () -> {
             clientRepository.save(newClient);
@@ -167,7 +167,7 @@ public class ClientRepositoryTest {
 
     @Test
     public void whenSaveClientWithFirstNameTooShortLength_thenThrowConstraintViolationException() {
-        Client newClient = TestDataUtils.getClient(null, "fullName", "", "lastName", "middleName", "address", "email", "phone");
+        Client newClient = TestBuildersUtils.getClient(null, "fullName", "", "lastName", "middleName", "address", "email", "phone");
         newClient.setManager(manager);
         assertThrows(ConstraintViolationException.class, () -> {
             clientRepository.save(newClient);
@@ -177,7 +177,7 @@ public class ClientRepositoryTest {
 
     @Test
     public void whenSaveClientWithFirstNameNull_thenThrowConstraintViolationException() {
-        Client newClient = TestDataUtils.getClient(null, "fullName", null, "lastName", "middleName", "address", "email", "phone");
+        Client newClient = TestBuildersUtils.getClient(null, "fullName", null, "lastName", "middleName", "address", "email", "phone");
         assertThrows(ConstraintViolationException.class, () -> {
             clientRepository.save(newClient);
         });
@@ -186,7 +186,7 @@ public class ClientRepositoryTest {
 
     @Test
     public void whenSaveClientWithLastNameTooLong_thenThrowConstraintViolationException() {
-        Client newClient = TestDataUtils.getClient(null, "fullName", "firstName",
+        Client newClient = TestBuildersUtils.getClient(null, "fullName", "firstName",
                 "lastNameWithLengthMoreThen50SymbolsIsTooLongForSaving", "middleName",
                 "address", "email", "phone");
         newClient.setManager(manager);
@@ -197,7 +197,7 @@ public class ClientRepositoryTest {
 
     @Test
     public void whenSaveClientWithLastNameTooShortLength_thenThrowConstraintViolationException() {
-        Client newClient = TestDataUtils.getClient(null, "fullName", "firstName", "", "middleName", "address", "email", "phone");
+        Client newClient = TestBuildersUtils.getClient(null, "fullName", "firstName", "", "middleName", "address", "email", "phone");
         newClient.setManager(manager);
         assertThrows(ConstraintViolationException.class, () -> {
             clientRepository.save(newClient);
@@ -207,7 +207,7 @@ public class ClientRepositoryTest {
 
     @Test
     public void whenSaveClientWithLastNameNull_thenThrowConstraintViolationException() {
-        Client newClient = TestDataUtils.getClient(null, "fullName", "firstName", null, "middleName", "address", "email", "phone");
+        Client newClient = TestBuildersUtils.getClient(null, "fullName", "firstName", null, "middleName", "address", "email", "phone");
         newClient.setManager(manager);
         assertThrows(ConstraintViolationException.class, () -> {
             clientRepository.save(newClient);
@@ -216,7 +216,7 @@ public class ClientRepositoryTest {
 
     @Test
     public void whenSaveClientWithMiddleNameTooLong_thenThrowConstraintViolationException() {
-        Client newClient = TestDataUtils.getClient(null, "fullName", "firstName", "lastName", "middleNameWithLengthMoreThen50SymbolsIsTooLongForSaving", "address", "email", "phone");
+        Client newClient = TestBuildersUtils.getClient(null, "fullName", "firstName", "lastName", "middleNameWithLengthMoreThen50SymbolsIsTooLongForSaving", "address", "email", "phone");
         newClient.setManager(manager);
         assertThrows(ConstraintViolationException.class, () -> {
             clientRepository.save(newClient);
@@ -225,7 +225,7 @@ public class ClientRepositoryTest {
 
     @Test
     public void whenSaveClientWithAddressTooLong_thenThrowConstraintViolationException() {
-        Client newClient = TestDataUtils.getClient(null, "fullName", "firstName",
+        Client newClient = TestBuildersUtils.getClient(null, "fullName", "firstName",
                 "lastName", "middleName",
                 "addressWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSaving",
                 "email", "phone");
@@ -237,7 +237,7 @@ public class ClientRepositoryTest {
 
     @Test
     public void whenSaveClientWithAddressTooShortLength_thenThrowConstraintViolationException() {
-        Client newClient = TestDataUtils.getClient(null, "fullName",
+        Client newClient = TestBuildersUtils.getClient(null, "fullName",
                 "firstName", "lastName", "middleName", "",
                 "email", "phone");
         newClient.setManager(manager);
@@ -249,7 +249,7 @@ public class ClientRepositoryTest {
 
     @Test
     public void whenSaveClientWithAddressNull_thenThrowConstraintViolationException() {
-        Client newClient = TestDataUtils.getClient(null, "fullName",
+        Client newClient = TestBuildersUtils.getClient(null, "fullName",
                 "firstName", null, "middleName", null,
                 "email", "phone");
         newClient.setManager(manager);
@@ -260,7 +260,7 @@ public class ClientRepositoryTest {
 
     @Test
     public void whenSaveClientWithEmailTooLong_thenThrowConstraintViolationException() {
-        Client newClient = TestDataUtils.getClient(null, "fullName", "firstName",
+        Client newClient = TestBuildersUtils.getClient(null, "fullName", "firstName",
                 "lastName", "middleName", "address",
                 "emailWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSaving"
                 , "phone");
@@ -272,7 +272,7 @@ public class ClientRepositoryTest {
 
     @Test
     public void whenSaveClientWithEmailTooShortLength_thenThrowConstraintViolationException() {
-        Client newClient = TestDataUtils.getClient(null, "fullName",
+        Client newClient = TestBuildersUtils.getClient(null, "fullName",
                 "firstName", "lastName", "middleName", "address",
                 "", "phone");
         newClient.setManager(manager);
@@ -284,7 +284,7 @@ public class ClientRepositoryTest {
 
     @Test
     public void whenSaveClientWithEmailNull_thenThrowConstraintViolationException() {
-        Client newClient = TestDataUtils.getClient(null, "fullName",
+        Client newClient = TestBuildersUtils.getClient(null, "fullName",
                 "firstName", null, "middleName", "address",
                 null, "phone");
         newClient.setManager(manager);
@@ -296,7 +296,7 @@ public class ClientRepositoryTest {
 
     @Test
     public void whenSaveClientWithPhoneTooLong_thenThrowConstraintViolationException() {
-        Client newClient = TestDataUtils.getClient(null, "fullName", "firstName",
+        Client newClient = TestBuildersUtils.getClient(null, "fullName", "firstName",
                 "lastName", "middleName", "address",
                 "email", "WithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSaving");
         newClient.setManager(manager);
@@ -307,7 +307,7 @@ public class ClientRepositoryTest {
 
     @Test
     public void whenSaveClientWithPhoneTooShortLength_thenThrowConstraintViolationException() {
-        Client newClient = TestDataUtils.getClient(null, "fullName",
+        Client newClient = TestBuildersUtils.getClient(null, "fullName",
                 "firstName", "lastName", "middleName", "address",
                 "email", "");
         newClient.setManager(manager);
@@ -319,7 +319,7 @@ public class ClientRepositoryTest {
 
     @Test
     public void whenSaveClientWithPhoneNull_thenThrowConstraintViolationException() {
-        Client newClient = TestDataUtils.getClient(null, "fullName",
+        Client newClient = TestBuildersUtils.getClient(null, "fullName",
                 "firstName", null, "middleName", "address",
                 "email", null);
         newClient.setManager(manager);
@@ -392,7 +392,7 @@ public class ClientRepositoryTest {
 
 
     private Client getSecondClient() {
-        Client newClient = TestDataUtils.getClient(null, "fullName2", "firstName2", "lastName2", "middleName2", "address2", "email2", "phone2");
+        Client newClient = TestBuildersUtils.getClient(null, "fullName2", "firstName2", "lastName2", "middleName2", "address2", "email2", "phone2");
         newClient.setManager(manager);
         return newClient;
     }

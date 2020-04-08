@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.dao.EmptyResultDataAccessException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.AppUser;
 import ua.com.vetal.repositories.AppUserRepository;
 
@@ -31,8 +31,8 @@ class AppUserServiceImplTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		appUser = TestDataUtils.getAppUser();
-	}
+        appUser = TestBuildersUtils.getAppUser();
+    }
 
 	@Test
 	void whenFindById_thenReturnUser() {

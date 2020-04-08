@@ -68,24 +68,23 @@ public class StatisticController {
 
 	@LogExecutionTime
 	@RequestMapping(value = {""}, method = RequestMethod.GET)
-	public String taskList(Model model) {
+	public String ordersList(Model model) {
 		logger.info("Get Filter: " + filterData);
 		model.addAttribute("title", title);
-		model.addAttribute("tasksList", getOrdersListData());
+		model.addAttribute("ordersList", getOrdersListData());
 
 		return "statisticPage";
 	}
 
 	@RequestMapping(value = "/filter", method = RequestMethod.GET)
-	public String filterTask(@ModelAttribute("taskFilterData") FilterData filterData, BindingResult bindingResult,
-							 Model model) {
+	public String filterOrders(@ModelAttribute("statisticFilterData") FilterData filterData, BindingResult bindingResult,
+							   Model model) {
 		this.filterData = filterData;
-
 		return "redirect:/statistic";
 	}
 
 	@RequestMapping(value = "/clearFilter", method = RequestMethod.GET)
-	public String clearFilterTask() {
+	public String clearFilterOrders() {
 		this.filterData = new FilterData();
 		return "redirect:/statistic";
 	}

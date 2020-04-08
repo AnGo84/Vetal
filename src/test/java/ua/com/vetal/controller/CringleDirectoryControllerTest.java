@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.CringleDirectory;
 import ua.com.vetal.repositories.CringleDirectoryRepositoryTest;
 import ua.com.vetal.service.CringleDirectoryServiceImpl;
@@ -37,12 +37,11 @@ public class CringleDirectoryControllerTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		directory = TestDataUtils.getCringleDirectory(CringleDirectoryRepositoryTest.DIRECTORY_NAME);
-		directory.setId(1l);
+        directory = TestBuildersUtils.getCringleDirectory(1l, CringleDirectoryRepositoryTest.DIRECTORY_NAME);
 
-		when(mockDirectoryService.findAllObjects()).thenReturn(Arrays.asList(directory));
-		when(mockDirectoryService.findById(anyLong())).thenReturn(directory);
-	}
+        when(mockDirectoryService.findAllObjects()).thenReturn(Arrays.asList(directory));
+        when(mockDirectoryService.findById(anyLong())).thenReturn(directory);
+    }
 
 
 	@Test

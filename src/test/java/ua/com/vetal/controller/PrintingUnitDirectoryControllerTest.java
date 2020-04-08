@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.PrintingUnitDirectory;
 import ua.com.vetal.repositories.PrintingUnitDirectoryRepositoryTest;
 import ua.com.vetal.service.PrintingUnitDirectoryServiceImpl;
@@ -37,13 +37,11 @@ public class PrintingUnitDirectoryControllerTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		directory = TestDataUtils.getPrintingUnitDirectory(PrintingUnitDirectoryRepositoryTest.DIRECTORY_NAME);
-		directory.setId(1l);
+        directory = TestBuildersUtils.getPrintingUnitDirectory(1l, PrintingUnitDirectoryRepositoryTest.DIRECTORY_NAME);
 
-		when(mockDirectoryService.findAllObjects()).thenReturn(Arrays.asList(directory));
-		when(mockDirectoryService.findById(anyLong())).thenReturn(directory);
-	}
-
+        when(mockDirectoryService.findAllObjects()).thenReturn(Arrays.asList(directory));
+        when(mockDirectoryService.findById(anyLong())).thenReturn(directory);
+    }
 
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})

@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.ProductionTypeDirectory;
 import ua.com.vetal.repositories.ProductionTypeDirectoryRepositoryTest;
 import ua.com.vetal.service.ProductionTypeDirectoryServiceImpl;
@@ -37,12 +37,11 @@ public class ProductionTypeDirectoryControllerTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		directory = TestDataUtils.getProductionTypeDirectory(ProductionTypeDirectoryRepositoryTest.DIRECTORY_NAME);
-		directory.setId(1l);
+        directory = TestBuildersUtils.getProductionTypeDirectory(1l, ProductionTypeDirectoryRepositoryTest.DIRECTORY_NAME);
 
-		when(mockDirectoryService.findAllObjects()).thenReturn(Arrays.asList(directory));
-		when(mockDirectoryService.findById(anyLong())).thenReturn(directory);
-	}
+        when(mockDirectoryService.findAllObjects()).thenReturn(Arrays.asList(directory));
+        when(mockDirectoryService.findById(anyLong())).thenReturn(directory);
+    }
 
 
 	@Test

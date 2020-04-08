@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.ProductionDirectory;
 import ua.com.vetal.entity.ProductionTypeDirectory;
 import ua.com.vetal.repositories.ProductionDirectoryRepository;
@@ -31,10 +31,9 @@ public class ProductionDirectoryServiceImplTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		productionType = TestDataUtils.getProductionTypeDirectory("Production type");
-		productionType.setId(1l);
-		production = TestDataUtils.getProductionDirectory(1l, "fullName", "shortName", productionType);
-	}
+        productionType = TestBuildersUtils.getProductionTypeDirectory(1l, "Production type");
+        production = TestBuildersUtils.getProductionDirectory(1l, "fullName", "shortName", productionType);
+    }
 
 	@Test
 	void whenFindById_thenReturnClient() {
@@ -81,10 +80,10 @@ public class ProductionDirectoryServiceImplTest {
 
 	@Test
 	void whenSaveClient_thenSuccess() {
-		ProductionDirectory newProduction = TestDataUtils.getProductionDirectory(2l, "fullName2", "shortName2", productionType);
-		productionDirectoryService.saveObject(newProduction);
-		verify(mockProductionDirectoryRepository, times(1)).save(newProduction);
-	}
+        ProductionDirectory newProduction = TestBuildersUtils.getProductionDirectory(2l, "fullName2", "shortName2", productionType);
+        productionDirectoryService.saveObject(newProduction);
+        verify(mockProductionDirectoryRepository, times(1)).save(newProduction);
+    }
 
 	@Test
 	void whenSaveClient_thenNPE() {

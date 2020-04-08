@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.Printer;
 import ua.com.vetal.repositories.PrinterRepository;
 
@@ -28,8 +28,8 @@ public class PrinterServiceImplTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		printer = TestDataUtils.getPrinter(1l, "firstName", "lastName", "middleName", "email");
-	}
+        printer = TestBuildersUtils.getPrinter(1l, "firstName", "lastName", "middleName", "email");
+    }
 
 	@Test
 	void whenFindById_thenReturnPrinter() {
@@ -55,10 +55,10 @@ public class PrinterServiceImplTest {
 
 	@Test
 	void whenSaveObject_thenSuccess() {
-		Printer newPrinter = TestDataUtils.getPrinter(null, "firstName2", "lastName2", "middleName2", "email2");
-		printerService.saveObject(newPrinter);
-		verify(mockPrinterRepository, times(1)).save(newPrinter);
-	}
+        Printer newPrinter = TestBuildersUtils.getPrinter(null, "firstName2", "lastName2", "middleName2", "email2");
+        printerService.saveObject(newPrinter);
+        verify(mockPrinterRepository, times(1)).save(newPrinter);
+    }
 
 	@Test
 	void whenSaveObject_thenNPE() {

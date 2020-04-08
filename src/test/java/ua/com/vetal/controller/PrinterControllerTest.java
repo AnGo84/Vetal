@@ -36,10 +36,11 @@ public class PrinterControllerTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		printer = TestDataUtils.getPrinter(1l, "firstName", "lastName", "middleName", "email");
-		when(mockPrinterService.findAllObjects()).thenReturn(Arrays.asList(printer));
-		when(mockPrinterService.findById(anyLong())).thenReturn(printer);
-	}
+        //printer = TestBuildersUtils.getPrinter(1l, "firstName", "lastName", "middleName", "email");
+        printer = TestDataUtils.getPrinter(1l);
+        when(mockPrinterService.findAllObjects()).thenReturn(Arrays.asList(printer));
+        when(mockPrinterService.findById(anyLong())).thenReturn(printer);
+    }
 
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})

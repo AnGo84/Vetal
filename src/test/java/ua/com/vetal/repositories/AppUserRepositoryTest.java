@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.AppUser;
 
 import javax.persistence.PersistenceException;
@@ -30,7 +30,7 @@ class AppUserRepositoryTest {
     public void beforeEach() {
         appUserRepository.deleteAll();
         // given
-        appUser = TestDataUtils.getAppUser();
+        appUser = TestBuildersUtils.getAppUser();
         entityManager.persistAndFlush(appUser);
     }
 
@@ -120,7 +120,7 @@ class AppUserRepositoryTest {
     public void whenSaveAppUserWithExistName_thenThrowPersistenceException() {
         // given
         assertThrows(PersistenceException.class, () -> {
-            entityManager.persistAndFlush(TestDataUtils.getAppUser());
+            entityManager.persistAndFlush(TestBuildersUtils.getAppUser());
         });
     }
 

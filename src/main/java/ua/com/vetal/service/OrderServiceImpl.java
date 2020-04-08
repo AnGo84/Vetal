@@ -91,7 +91,6 @@ public class OrderServiceImpl {
 
 		list = entityManager.createQuery(query).getResultList();
 
-
 		return list;
 	}
 

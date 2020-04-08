@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.User;
 import ua.com.vetal.service.UserServiceImpl;
 
@@ -40,9 +40,8 @@ class UserControllerTest {
 
     @BeforeEach
     public void beforeEach() {
-        user = TestDataUtils.getUser("New Name", "", true, null);
-        user.setId(1l);
-        user.setUserRoles(new HashSet<>(Arrays.asList(TestDataUtils.getUserRole(1l, "ROLE_ADMIN"))));
+        user = TestBuildersUtils.getUser(1l, "New Name", "", true, null);
+        user.setUserRoles(new HashSet<>(Arrays.asList(TestBuildersUtils.getUserRole(1l, "ROLE_ADMIN"))));
 
         when(mockUserService.findAllObjects()).thenReturn(Arrays.asList(user));
         when(mockUserService.findById(anyLong())).thenReturn(user);
@@ -95,7 +94,6 @@ class UserControllerTest {
                 .andExpect(model().attribute("edit", false))
                 .andExpect(view().name("userPage"));
     }
-
 
     @Test
     public void whenGetShowAddUserPageAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
@@ -189,7 +187,6 @@ class UserControllerTest {
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
 
-
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenResetUserPasswordAsAuthorizedWithNotNullUser_thenOk() throws Exception {
@@ -200,8 +197,7 @@ class UserControllerTest {
                 .andExpect(redirectedUrl("/users/edit-" + user.getId() + "?resetSuccess"));
         when(mockUserService.isObjectExist(any())).thenReturn(false);
 
-        User notExistUser = TestDataUtils.getUser("New Name", "", true, null);
-        notExistUser.setId(123654321l);
+        User notExistUser = TestBuildersUtils.getUser(123654321l, "New Name", "", true, null);
         when(mockUserService.findById(anyLong())).thenReturn(notExistUser);
 		mockMvc.perform(get(MAPPED_URL + "/resetPassword-" + notExistUser.getId()))
                 .andDo(print())

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.PaperDirectory;
 import ua.com.vetal.repositories.PaperDirectoryRepository;
 import ua.com.vetal.repositories.PaperDirectoryRepositoryTest;
@@ -29,7 +29,7 @@ public class PaperDirectoryServiceImplTest {
 
     @BeforeEach
     public void beforeEach() {
-        directory = TestDataUtils.getPaperDirectory(PaperDirectoryRepositoryTest.DIRECTORY_NAME);
+        directory = TestBuildersUtils.getPaperDirectory(1l, PaperDirectoryRepositoryTest.DIRECTORY_NAME);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class PaperDirectoryServiceImplTest {
 
     @Test
     void whenSaveObject_thenSuccess() {
-        PaperDirectory newDirectory = TestDataUtils.getPaperDirectory(PaperDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
+        PaperDirectory newDirectory = TestBuildersUtils.getPaperDirectory(null, PaperDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
         directoryService.saveObject(newDirectory);
         verify(mockDirectoryRepository, times(1)).save(newDirectory);
     }

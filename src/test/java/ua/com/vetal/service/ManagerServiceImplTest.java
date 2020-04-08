@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.Manager;
 import ua.com.vetal.repositories.ManagerRepository;
 
@@ -28,8 +28,7 @@ public class ManagerServiceImplTest {
 
     @BeforeEach
     public void beforeEach() {
-        manager = TestDataUtils.getManager("firstName", "lastName", "middleName", "email");
-        manager.setId(1l);
+        manager = TestBuildersUtils.getManager(1l, "firstName", "lastName", "middleName", "email");
     }
 
     @Test
@@ -73,7 +72,7 @@ public class ManagerServiceImplTest {
 
     @Test
     void whenSaveObject_thenSuccess() {
-        Manager newManager = TestDataUtils.getManager("firstName2", "lastName2", "middleName2", "email2");
+        Manager newManager = TestBuildersUtils.getManager(null, "firstName2", "lastName2", "middleName2", "email2");
         managerService.saveObject(newManager);
         verify(mockManagerRepository, times(1)).save(newManager);
     }

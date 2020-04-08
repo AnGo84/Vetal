@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.ProductionTypeDirectory;
 import ua.com.vetal.repositories.ProductionTypeDirectoryRepository;
 import ua.com.vetal.repositories.ProductionTypeDirectoryRepositoryTest;
@@ -29,8 +29,8 @@ public class ProductionTypeDirectoryServiceImplTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		directory = TestDataUtils.getProductionTypeDirectory(ProductionTypeDirectoryRepositoryTest.DIRECTORY_NAME);
-	}
+        directory = TestBuildersUtils.getProductionTypeDirectory(null, ProductionTypeDirectoryRepositoryTest.DIRECTORY_NAME);
+    }
 
 	@Test
 	void whenFindById_thenReturnObject() {
@@ -59,10 +59,10 @@ public class ProductionTypeDirectoryServiceImplTest {
 
 	@Test
 	void whenSaveObject_thenSuccess() {
-		ProductionTypeDirectory newDirector = TestDataUtils.getProductionTypeDirectory(ProductionTypeDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
-		directoryService.saveObject(newDirector);
-		verify(mockDirectoryRepository, times(1)).save(newDirector);
-	}
+        ProductionTypeDirectory newDirector = TestBuildersUtils.getProductionTypeDirectory(null, ProductionTypeDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
+        directoryService.saveObject(newDirector);
+        verify(mockDirectoryRepository, times(1)).save(newDirector);
+    }
 
 	@Test
 	void whenSaveObject_thenNPE() {
@@ -74,10 +74,10 @@ public class ProductionTypeDirectoryServiceImplTest {
 
 	@Test
 	void whenUpdateObject_thenSuccess() {
-		ProductionTypeDirectory newDirector = TestDataUtils.getProductionTypeDirectory(ProductionTypeDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
-		directoryService.saveObject(newDirector);
-		verify(mockDirectoryRepository, times(1)).save(newDirector);
-	}
+        ProductionTypeDirectory newDirector = TestBuildersUtils.getProductionTypeDirectory(null, ProductionTypeDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
+        directoryService.saveObject(newDirector);
+        verify(mockDirectoryRepository, times(1)).save(newDirector);
+    }
 
 	@Test
 	void whenUpdateObject_thenThrow() {

@@ -8,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.ProductionDirectory;
 import ua.com.vetal.entity.ProductionTypeDirectory;
 
@@ -35,9 +35,9 @@ public class ProductionDirectoryRepositoryTest {
 	public void beforeEach() {
 		productionDirectoryRepository.deleteAll();
 		productionTypeDirectoryRepository.deleteAll();
-		productionType = testEntityManager.persistAndFlush(TestDataUtils.getProductionTypeDirectory("Production type"));
+		productionType = testEntityManager.persistAndFlush(TestBuildersUtils.getProductionTypeDirectory(null, "Production type"));
 
-		production = TestDataUtils.getProductionDirectory(null, "fullName", "shortName", productionType);
+		production = TestBuildersUtils.getProductionDirectory(null, "fullName", "shortName", productionType);
 		production = testEntityManager.persistAndFlush(production);
 	}
 
@@ -85,7 +85,7 @@ public class ProductionDirectoryRepositoryTest {
 
 	@Test
 	public void whenFindAll_thenReturnListOfProductionTypes() {
-		ProductionDirectory newProduction = TestDataUtils.getProductionDirectory(null, "fullName2", "shortName2", productionType);
+		ProductionDirectory newProduction = TestBuildersUtils.getProductionDirectory(null, "fullName2", "shortName2", productionType);
 
 		testEntityManager.persistAndFlush(newProduction);
 
@@ -99,7 +99,7 @@ public class ProductionDirectoryRepositoryTest {
 
 	@Test
 	public void it_should_save_Production() {
-		ProductionDirectory newProduction = TestDataUtils.getProductionDirectory(null, "fullName2", "shortName2", productionType);
+		ProductionDirectory newProduction = TestBuildersUtils.getProductionDirectory(null, "fullName2", "shortName2", productionType);
 		newProduction = productionDirectoryRepository.save(newProduction);
 		ProductionDirectory foundProduction = productionDirectoryRepository.findById(newProduction.getId()).get();
 
@@ -115,7 +115,7 @@ public class ProductionDirectoryRepositoryTest {
 
 	@Test
 	public void whenSaveProductionWithFullNameTooLong_thenThrowDataIntegrityViolationExceptionn() {
-		ProductionDirectory newProduction = TestDataUtils.getProductionDirectory(null, "fullNameWithLengthMoreThen250SymbolsIsTooLongForSavingfullNameWithLengthMoreThen250SymbolsIsTooLongForSavingfullNameWithLengthMoreThen250SymbolsIsTooLongForSavingfullNameWithLengthMoreThen250SymbolsIsTooLongForSavingfullNameWithLengthMoreThen250SymbolsIsTooLongForSaving",
+		ProductionDirectory newProduction = TestBuildersUtils.getProductionDirectory(null, "fullNameWithLengthMoreThen250SymbolsIsTooLongForSavingfullNameWithLengthMoreThen250SymbolsIsTooLongForSavingfullNameWithLengthMoreThen250SymbolsIsTooLongForSavingfullNameWithLengthMoreThen250SymbolsIsTooLongForSavingfullNameWithLengthMoreThen250SymbolsIsTooLongForSaving",
 				"shortName2", productionType);
 		assertThrows(DataIntegrityViolationException.class, () -> {
 			productionDirectoryRepository.save(newProduction);
@@ -124,7 +124,7 @@ public class ProductionDirectoryRepositoryTest {
 
 	@Test
 	public void whenSaveProductionWithFullNameTooShortLength_thenThrowConstraintViolationException() {
-		ProductionDirectory newProduction = TestDataUtils.getProductionDirectory(null, "", "shortName2", productionType);
+		ProductionDirectory newProduction = TestBuildersUtils.getProductionDirectory(null, "", "shortName2", productionType);
 		assertThrows(ConstraintViolationException.class, () -> {
 			productionDirectoryRepository.save(newProduction);
 		});
@@ -132,7 +132,7 @@ public class ProductionDirectoryRepositoryTest {
 
 	@Test
 	public void whenSaveProductionWithFullNameNull_thenThrowConstraintViolationException() {
-		ProductionDirectory newProduction = TestDataUtils.getProductionDirectory(null, null, "firstName2", productionType);
+		ProductionDirectory newProduction = TestBuildersUtils.getProductionDirectory(null, null, "firstName2", productionType);
 		assertThrows(ConstraintViolationException.class, () -> {
 			productionDirectoryRepository.save(newProduction);
 		});
@@ -140,7 +140,7 @@ public class ProductionDirectoryRepositoryTest {
 
 	@Test
 	public void whenSaveProductionWithShortNameTooLong_thenThrowDataIntegrityViolationException() {
-		ProductionDirectory newProduction = TestDataUtils.getProductionDirectory(null, "fullName2", "shortNameWithLengthMoreThen50SymbolsIsTooLongForSaving", productionType);
+		ProductionDirectory newProduction = TestBuildersUtils.getProductionDirectory(null, "fullName2", "shortNameWithLengthMoreThen50SymbolsIsTooLongForSaving", productionType);
 		assertThrows(DataIntegrityViolationException.class, () -> {
 			productionDirectoryRepository.save(newProduction);
 		});
@@ -149,7 +149,7 @@ public class ProductionDirectoryRepositoryTest {
 
 	@Test
 	public void whenSaveProductionWithProductionTypeNull_thenThrowDataIntegrityViolationException() {
-		ProductionDirectory newProduction = TestDataUtils.getProductionDirectory(null, "fullName2", "shortName2", null);
+		ProductionDirectory newProduction = TestBuildersUtils.getProductionDirectory(null, "fullName2", "shortName2", null);
 		assertThrows(DataIntegrityViolationException.class, () -> {
 			productionDirectoryRepository.save(newProduction);
 		});
@@ -157,7 +157,7 @@ public class ProductionDirectoryRepositoryTest {
 
 	@Test
 	public void whenSaveProductionWithNotExistProductionType_thenThrowInvalidDataAccessApiUsageException() {
-		ProductionDirectory newProduction = TestDataUtils.getProductionDirectory(null, "fullName2", "shortName2", new ProductionTypeDirectory());
+		ProductionDirectory newProduction = TestBuildersUtils.getProductionDirectory(null, "fullName2", "shortName2", new ProductionTypeDirectory());
 
 		assertThrows(InvalidDataAccessApiUsageException.class, () -> {
 			productionDirectoryRepository.save(newProduction);
@@ -167,7 +167,7 @@ public class ProductionDirectoryRepositoryTest {
 
 	@Test
 	public void whenDeleteById_thenOk() {
-		ProductionDirectory newProduction = TestDataUtils.getProductionDirectory(null, "fullName2", "shortName2", productionType);
+		ProductionDirectory newProduction = TestBuildersUtils.getProductionDirectory(null, "fullName2", "shortName2", productionType);
 		newProduction = testEntityManager.persistAndFlush(newProduction);
 		assertEquals(productionDirectoryRepository.findAll().size(), 2);
 

@@ -8,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.Manager;
 
 import javax.validation.ConstraintViolationException;
@@ -30,7 +30,7 @@ public class ManagerRepositoryTest {
     @BeforeEach
     public void beforeEach() {
         managerRepository.deleteAll();
-        manager = TestDataUtils.getManager("firstName", "lastName", "middleName", "email");
+        manager = TestBuildersUtils.getManager(null, "firstName", "lastName", "middleName", "email");
 
         manager = entityManager.persistAndFlush(manager);
 
@@ -69,7 +69,7 @@ public class ManagerRepositoryTest {
     @Test
     public void whenFindAll_thenReturnListOfManagers() {
         //given
-        Manager newManager = TestDataUtils.getManager("firstName2", "lastName2", "middleName2", "email2");
+        Manager newManager = TestBuildersUtils.getManager(null, "firstName2", "lastName2", "middleName2", "email2");
         entityManager.persistAndFlush(newManager);
         // when
         List<Manager> managers = managerRepository.findAll();
@@ -82,7 +82,7 @@ public class ManagerRepositoryTest {
 
     @Test
     public void it_should_save_manager() {
-        Manager newManager = TestDataUtils.getManager("firstName2", "lastName2", "middleName2", "email2");
+        Manager newManager = TestBuildersUtils.getManager(null, "firstName2", "lastName2", "middleName2", "email2");
         newManager = managerRepository.save(newManager);
         Manager foundManager = managerRepository.findById(newManager.getId()).get();
 
@@ -98,7 +98,7 @@ public class ManagerRepositoryTest {
 
     @Test
     public void it_should_save_manager_with_null_fields() {
-        Manager newManager = TestDataUtils.getManager(null, "lastName2", null, "email2");
+        Manager newManager = TestBuildersUtils.getManager(null, null, "lastName2", null, "email2");
         newManager = managerRepository.save(newManager);
         Manager foundManager = managerRepository.findById(newManager.getId()).get();
 
@@ -114,7 +114,7 @@ public class ManagerRepositoryTest {
 
     @Test
     public void it_should_save_manager_with_empty_fields() {
-        Manager newManager = TestDataUtils.getManager("", "lastName2", "", "email2");
+        Manager newManager = TestBuildersUtils.getManager(null, "", "lastName2", "", "email2");
         newManager = managerRepository.save(newManager);
         Manager foundManager = managerRepository.findById(newManager.getId()).get();
 
@@ -130,7 +130,7 @@ public class ManagerRepositoryTest {
 
     @Test
     public void whenSaveManagerWithFirstNameTooLong_thenThrowConstraintViolationException() {
-        Manager newManager = TestDataUtils.getManager("FirstNameWithLengthMoreThen50SymbolsIsTooLongForSaving", "lastName2", "middleName2", "email2");
+        Manager newManager = TestBuildersUtils.getManager(null, "FirstNameWithLengthMoreThen50SymbolsIsTooLongForSaving", "lastName2", "middleName2", "email2");
         assertThrows(ConstraintViolationException.class, () -> {
             managerRepository.save(newManager);
         });
@@ -138,7 +138,7 @@ public class ManagerRepositoryTest {
 
     @Test
     public void whenSaveManagerWithLastNameTooLong_thenThrowConstraintViolationException() {
-        Manager newManager = TestDataUtils.getManager("FirstName2", "lastNameWithLengthMoreThen50SymbolsIsTooLongForSaving", "middleName2", "email2");
+        Manager newManager = TestBuildersUtils.getManager(null, "FirstName2", "lastNameWithLengthMoreThen50SymbolsIsTooLongForSaving", "middleName2", "email2");
         assertThrows(ConstraintViolationException.class, () -> {
             managerRepository.save(newManager);
         });
@@ -146,7 +146,7 @@ public class ManagerRepositoryTest {
 
     @Test
     public void whenSaveManagerWithLastNameTooShortLength_thenThrowConstraintViolationException() {
-        Manager newManager = TestDataUtils.getManager("firstName2", "", "middleName2", "email2");
+        Manager newManager = TestBuildersUtils.getManager(null, "firstName2", "", "middleName2", "email2");
         assertThrows(ConstraintViolationException.class, () -> {
             managerRepository.save(newManager);
         });
@@ -154,7 +154,7 @@ public class ManagerRepositoryTest {
 
     @Test
     public void whenSaveManagerWithMiddleNameTooLong_thenThrowConstraintViolationException() {
-        Manager newManager = TestDataUtils.getManager("FirstName", "lastName2", "middleNameWithLengthMoreThen50SymbolsIsTooLongForSaving", "email2");
+        Manager newManager = TestBuildersUtils.getManager(null, "FirstName", "lastName2", "middleNameWithLengthMoreThen50SymbolsIsTooLongForSaving", "email2");
         assertThrows(ConstraintViolationException.class, () -> {
             managerRepository.save(newManager);
         });
@@ -162,7 +162,7 @@ public class ManagerRepositoryTest {
 
     @Test
     public void whenSaveManagerWithEmailWrongLength_thenThrowConstraintViolationException() {
-        Manager newManager = TestDataUtils.getManager("firstName2", "lastName2", "middleName2", "EmailLengthMoreThen100SymbolsEmailLengthMoreThen100SymbolsEmailLengthMoreThen100SymbolsEmailLengthMoreThen100Symbols");
+        Manager newManager = TestBuildersUtils.getManager(null, "firstName2", "lastName2", "middleName2", "EmailLengthMoreThen100SymbolsEmailLengthMoreThen100SymbolsEmailLengthMoreThen100SymbolsEmailLengthMoreThen100Symbols");
         assertThrows(ConstraintViolationException.class, () -> {
             managerRepository.save(newManager);
         });
@@ -171,7 +171,7 @@ public class ManagerRepositoryTest {
     @Test
     public void whenDeleteById_thenOk() {
         //given
-        Manager newManager = TestDataUtils.getManager("firstName2", "lastName2", "middleName2", "email2");
+        Manager newManager = TestBuildersUtils.getManager(null, "firstName2", "lastName2", "middleName2", "email2");
         newManager = entityManager.persistAndFlush(newManager);
         assertEquals(managerRepository.findAll().size(), 2);
 

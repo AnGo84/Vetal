@@ -8,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.LinkType;
 
 import javax.validation.ConstraintViolationException;
@@ -32,11 +32,11 @@ class LinkTypeRepositoryTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		linkTypeRepository.deleteAll();
-		linkType = TestDataUtils.getLinkType(DIRECTORY_NAME);
+        linkTypeRepository.deleteAll();
+        linkType = TestBuildersUtils.getLinkType(DIRECTORY_NAME);
 
-		entityManager.persistAndFlush(linkType);
-	}
+        entityManager.persistAndFlush(linkType);
+    }
 
 	@Test
 	public void whenFindByName_thenReturnObject() {
@@ -83,66 +83,66 @@ class LinkTypeRepositoryTest {
 
 	@Test
 	public void whenFindAll_thenReturnListOfRecords() {
-		//given
-		LinkType newDirectory = TestDataUtils.getLinkType(SECOND_DIRECTORY_NAME);
-		entityManager.persistAndFlush(newDirectory);
-		// when
-		List<LinkType> directoryList = linkTypeRepository.findAll();
-		// then
-		assertNotNull(directoryList);
-		assertFalse(directoryList.isEmpty());
-		assertEquals(directoryList.size(), 2);
-	}
+        //given
+        LinkType newDirectory = TestBuildersUtils.getLinkType(SECOND_DIRECTORY_NAME);
+        entityManager.persistAndFlush(newDirectory);
+        // when
+        List<LinkType> directoryList = linkTypeRepository.findAll();
+        // then
+        assertNotNull(directoryList);
+        assertFalse(directoryList.isEmpty());
+        assertEquals(directoryList.size(), 2);
+    }
 
 	@Test
 	public void it_should_save_object() {
-		LinkType newDirectory = TestDataUtils.getLinkType(SECOND_DIRECTORY_NAME);
-		linkTypeRepository.save(newDirectory);
-		LinkType foundDirectory = linkTypeRepository.findByName(newDirectory.getName());
-		// then
-		assertNotNull(foundDirectory);
-		assertNotNull(foundDirectory.getId());
-		assertEquals(foundDirectory.getName(), newDirectory.getName());
-	}
+        LinkType newDirectory = TestBuildersUtils.getLinkType(SECOND_DIRECTORY_NAME);
+        linkTypeRepository.save(newDirectory);
+        LinkType foundDirectory = linkTypeRepository.findByName(newDirectory.getName());
+        // then
+        assertNotNull(foundDirectory);
+        assertNotNull(foundDirectory.getId());
+        assertEquals(foundDirectory.getName(), newDirectory.getName());
+    }
 
 	@Test
 	public void whenSaveObjectWithNameTooLong_thenThrowConstraintViolationException() {
-		LinkType linkType = TestDataUtils.getLinkType("NAME_WITH_LENGTH_MORE_THEN_30_SYMBOLS");
-		assertThrows(ConstraintViolationException.class, () -> {
-			linkTypeRepository.save(linkType);
-		});
-	}
+        LinkType linkType = TestBuildersUtils.getLinkType("NAME_WITH_LENGTH_MORE_THEN_30_SYMBOLS");
+        assertThrows(ConstraintViolationException.class, () -> {
+            linkTypeRepository.save(linkType);
+        });
+    }
 
 	@Test
 	public void whenSaveObjectWithNameTooShort_thenThrowConstraintViolationException() {
-		LinkType linkType = TestDataUtils.getLinkType("");
-		assertThrows(ConstraintViolationException.class, () -> {
-			linkTypeRepository.save(linkType);
-		});
-	}
+        LinkType linkType = TestBuildersUtils.getLinkType("");
+        assertThrows(ConstraintViolationException.class, () -> {
+            linkTypeRepository.save(linkType);
+        });
+    }
 
 	@Test
 	public void whenSaveObjectWithExistingName_thenThrowDataIntegrityViolationException() {
-		LinkType linkType = TestDataUtils.getLinkType(this.linkType.getName());
-		assertThrows(DataIntegrityViolationException.class, () -> {
-			linkTypeRepository.save(linkType);
-		});
-	}
+        LinkType linkType = TestBuildersUtils.getLinkType(this.linkType.getName());
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            linkTypeRepository.save(linkType);
+        });
+    }
 
 	@Test
 	public void whenDeleteById_thenOk() {
-		//given
-		LinkType newDirectory = TestDataUtils.getLinkType(SECOND_DIRECTORY_NAME);
+        //given
+        LinkType newDirectory = TestBuildersUtils.getLinkType(SECOND_DIRECTORY_NAME);
 
-		entityManager.persistAndFlush(newDirectory);
-		assertEquals(linkTypeRepository.findAll().size(), 2);
+        entityManager.persistAndFlush(newDirectory);
+        assertEquals(linkTypeRepository.findAll().size(), 2);
 
-		LinkType foundDirectory = linkTypeRepository.findByName(SECOND_DIRECTORY_NAME);
+        LinkType foundDirectory = linkTypeRepository.findByName(SECOND_DIRECTORY_NAME);
 
-		// when
-		linkTypeRepository.deleteById(foundDirectory.getId());
-		// then
-		assertEquals(linkTypeRepository.findAll().size(), 1);
+        // when
+        linkTypeRepository.deleteById(foundDirectory.getId());
+        // then
+        assertEquals(linkTypeRepository.findAll().size(), 1);
 	}
 
 	@Test

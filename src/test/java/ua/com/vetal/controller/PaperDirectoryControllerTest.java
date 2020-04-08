@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.PaperDirectory;
 import ua.com.vetal.repositories.PaperDirectoryRepositoryTest;
 import ua.com.vetal.service.PaperDirectoryServiceImpl;
@@ -37,8 +37,7 @@ public class PaperDirectoryControllerTest {
 
     @BeforeEach
     public void beforeEach() {
-        directory = TestDataUtils.getPaperDirectory(PaperDirectoryRepositoryTest.DIRECTORY_NAME);
-        directory.setId(1l);
+        directory = TestBuildersUtils.getPaperDirectory(1l, PaperDirectoryRepositoryTest.DIRECTORY_NAME);
 
         when(mockDirectoryService.findAllObjects()).thenReturn(Arrays.asList(directory));
         when(mockDirectoryService.findById(anyLong())).thenReturn(directory);

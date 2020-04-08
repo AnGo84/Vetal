@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.Client;
 import ua.com.vetal.entity.Manager;
 import ua.com.vetal.entity.filter.ClientFilter;
@@ -36,10 +36,9 @@ public class ClientServiceImplTest {
 
     @BeforeEach
     public void beforeEach() {
-        manager = TestDataUtils.getManager("firstName", "lastName", "middleName", "email");
-        manager.setId(1l);
+        manager = TestBuildersUtils.getManager(1l, "firstName", "lastName", "middleName", "email");
 
-        client = TestDataUtils.getClient(1l, "fullName", "firstName", "lastName", "middleName", "address", "email", "phone");
+        client = TestBuildersUtils.getClient(1l, "fullName", "firstName", "lastName", "middleName", "address", "email", "phone");
         client.setManager(manager);
     }
 
@@ -98,7 +97,7 @@ public class ClientServiceImplTest {
 
     @Test
     void whenSaveClient_thenSuccess() {
-        Client newClient = TestDataUtils.getClient(null, "fullName2", "firstName2", "lastName2", "middleName2", "address2", "email2", "phone2");
+        Client newClient = TestBuildersUtils.getClient(null, "fullName2", "firstName2", "lastName2", "middleName2", "address2", "email2", "phone2");
         newClient.setManager(manager);
         clientService.saveObject(newClient);
         verify(mockClientRepository, times(1)).save(newClient);

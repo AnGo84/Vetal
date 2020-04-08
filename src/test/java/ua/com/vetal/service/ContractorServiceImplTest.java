@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.Contractor;
 import ua.com.vetal.entity.Manager;
 import ua.com.vetal.entity.filter.PersonFilter;
@@ -34,14 +34,13 @@ class ContractorServiceImplTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		manager = TestDataUtils.getManager("firstName", "lastName", "middleName", "email");
-		manager.setId(1l);
+        manager = TestBuildersUtils.getManager(1l, "firstName", "lastName", "middleName", "email");
 
-		contractor = TestDataUtils.getContractor(1l, "corpName", "shortName",
-				"firstName", "lastName", "middleName", "address",
-				"email", "phone", "siteURL");
-		contractor.setManager(manager);
-	}
+        contractor = TestBuildersUtils.getContractor(1l, "corpName", "shortName",
+                "firstName", "lastName", "middleName", "address",
+                "email", "phone", "siteURL");
+        contractor.setManager(manager);
+    }
 
 	@Test
 	void whenFindById_thenReturnContractor() {
@@ -130,11 +129,11 @@ class ContractorServiceImplTest {
 
 	@Test
 	void whenSaveContractor_thenSuccess() {
-		Contractor newContractor = TestDataUtils.getContractor(null, "corpName2", "shortName2", "firstName2", "lastName2", "middleName2", "address2", "email2", "phone2", "siteURL2");
-		newContractor.setManager(manager);
-		contractorService.saveObject(newContractor);
-		verify(mockContractorRepository, times(1)).save(newContractor);
-	}
+        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName2", "shortName2", "firstName2", "lastName2", "middleName2", "address2", "email2", "phone2", "siteURL2");
+        newContractor.setManager(manager);
+        contractorService.saveObject(newContractor);
+        verify(mockContractorRepository, times(1)).save(newContractor);
+    }
 
 	@Test
 	void whenSaveContractor_thenNPE() {

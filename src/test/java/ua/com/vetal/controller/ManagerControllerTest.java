@@ -36,8 +36,9 @@ class ManagerControllerTest {
 
     @BeforeEach
     public void beforeEach() {
-        manager = TestDataUtils.getManager("firstName", "lastName", "middleName", "email");
-        manager.setId(1l);
+        //manager = TestBuildersUtils.getManager(1l,"firstName", "lastName", "middleName", "email");
+
+        manager = TestDataUtils.getManager(1l);
 
         when(mockManagerService.findAllObjects()).thenReturn(Arrays.asList(manager));
         when(mockManagerService.findById(anyLong())).thenReturn(manager);

@@ -8,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.Payment;
 
 import javax.validation.ConstraintViolationException;
@@ -28,10 +28,10 @@ public class PaymentRepositoryTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		paymentRepository.deleteAll();
-		payment = TestDataUtils.getPayment(null, "name", "altname");
-		entityManager.persistAndFlush(payment);
-	}
+        paymentRepository.deleteAll();
+        payment = TestBuildersUtils.getPayment(null, "name", "altname");
+        entityManager.persistAndFlush(payment);
+    }
 
 	@Test
 	public void whenFindByName_thenReturnObject() {
@@ -78,96 +78,96 @@ public class PaymentRepositoryTest {
 
 	@Test
 	public void whenFindAll_thenReturnListOfRecords() {
-		//given
-		Payment newPayment = TestDataUtils.getPayment(null, "name2", "altname2");
-		entityManager.persistAndFlush(newPayment);
-		// when
-		List<Payment> payments = paymentRepository.findAll();
-		// then
-		assertNotNull(payments);
-		assertFalse(payments.isEmpty());
-		assertEquals(payments.size(), 2);
-	}
+        //given
+        Payment newPayment = TestBuildersUtils.getPayment(null, "name2", "altname2");
+        entityManager.persistAndFlush(newPayment);
+        // when
+        List<Payment> payments = paymentRepository.findAll();
+        // then
+        assertNotNull(payments);
+        assertFalse(payments.isEmpty());
+        assertEquals(payments.size(), 2);
+    }
 
 	@Test
 	public void it_should_save_object() {
-		Payment newPayment = TestDataUtils.getPayment(null, "name2", "altname2");
-		newPayment = paymentRepository.save(newPayment);
-		Payment foundPayment = paymentRepository.findByName(newPayment.getName());
-		// then
-		assertNotNull(foundPayment);
-		assertNotNull(foundPayment.getId());
-		assertEquals(foundPayment.getId(), newPayment.getId());
-		assertEquals(foundPayment.getName(), newPayment.getName());
-		assertEquals(foundPayment.getAltName(), newPayment.getAltName());
-	}
+        Payment newPayment = TestBuildersUtils.getPayment(null, "name2", "altname2");
+        newPayment = paymentRepository.save(newPayment);
+        Payment foundPayment = paymentRepository.findByName(newPayment.getName());
+        // then
+        assertNotNull(foundPayment);
+        assertNotNull(foundPayment.getId());
+        assertEquals(foundPayment.getId(), newPayment.getId());
+        assertEquals(foundPayment.getName(), newPayment.getName());
+        assertEquals(foundPayment.getAltName(), newPayment.getAltName());
+    }
 
 	@Test
 	public void it_should_save_object_with_empty_fields() {
-		Payment newPayment = TestDataUtils.getPayment(null, "name2", "");
-		newPayment = paymentRepository.save(newPayment);
-		Payment foundPayment = paymentRepository.findByName(newPayment.getName());
-		// then
-		assertNotNull(foundPayment);
-		assertNotNull(foundPayment.getId());
-		assertEquals(foundPayment.getId(), newPayment.getId());
-		assertEquals(foundPayment.getName(), newPayment.getName());
-		assertEquals(foundPayment.getAltName(), newPayment.getAltName());
-	}
+        Payment newPayment = TestBuildersUtils.getPayment(null, "name2", "");
+        newPayment = paymentRepository.save(newPayment);
+        Payment foundPayment = paymentRepository.findByName(newPayment.getName());
+        // then
+        assertNotNull(foundPayment);
+        assertNotNull(foundPayment.getId());
+        assertEquals(foundPayment.getId(), newPayment.getId());
+        assertEquals(foundPayment.getName(), newPayment.getName());
+        assertEquals(foundPayment.getAltName(), newPayment.getAltName());
+    }
 
 	@Test
 	public void it_should_save_object_with_null_fields() {
-		Payment newPayment = TestDataUtils.getPayment(null, "name2", null);
-		newPayment = paymentRepository.save(newPayment);
-		Payment foundPayment = paymentRepository.findByName(newPayment.getName());
-		// then
-		assertNotNull(foundPayment);
-		assertNotNull(foundPayment.getId());
-		assertEquals(foundPayment.getId(), newPayment.getId());
-		assertEquals(foundPayment.getName(), newPayment.getName());
-		assertEquals(foundPayment.getAltName(), newPayment.getAltName());
-	}
+        Payment newPayment = TestBuildersUtils.getPayment(null, "name2", null);
+        newPayment = paymentRepository.save(newPayment);
+        Payment foundPayment = paymentRepository.findByName(newPayment.getName());
+        // then
+        assertNotNull(foundPayment);
+        assertNotNull(foundPayment.getId());
+        assertEquals(foundPayment.getId(), newPayment.getId());
+        assertEquals(foundPayment.getName(), newPayment.getName());
+        assertEquals(foundPayment.getAltName(), newPayment.getAltName());
+    }
 
 	@Test
 	public void whenSaveObjectWithNameTooLong_thenThrowDataIntegrityViolationException() {
 
-		Payment newPayment = TestDataUtils.getPayment(null, "nameWithLengthMoreThen30SymbolsIsTooLongForSaving", "altname2");
-		assertThrows(DataIntegrityViolationException.class, () -> {
-			paymentRepository.save(newPayment);
-		});
-	}
+        Payment newPayment = TestBuildersUtils.getPayment(null, "nameWithLengthMoreThen30SymbolsIsTooLongForSaving", "altname2");
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            paymentRepository.save(newPayment);
+        });
+    }
 
 	@Test
 	public void whenSaveObjectWithNameTooShort_thenThrowConstraintViolationException() {
-		Payment newPayment = TestDataUtils.getPayment(null, "", "altname2");
-		assertThrows(ConstraintViolationException.class, () -> {
-			paymentRepository.save(newPayment);
-		});
-	}
+        Payment newPayment = TestBuildersUtils.getPayment(null, "", "altname2");
+        assertThrows(ConstraintViolationException.class, () -> {
+            paymentRepository.save(newPayment);
+        });
+    }
 
 
 	@Test
 	public void whenSaveObjectWithAltNameTooLong_thenThrowDataIntegrityViolationException() {
-		Payment newPayment = TestDataUtils.getPayment(null, "name", "altNameWithLengthMoreThen30SymbolsIsTooLongForSaving");
-		assertThrows(DataIntegrityViolationException.class, () -> {
-			paymentRepository.save(newPayment);
-		});
-	}
+        Payment newPayment = TestBuildersUtils.getPayment(null, "name", "altNameWithLengthMoreThen30SymbolsIsTooLongForSaving");
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            paymentRepository.save(newPayment);
+        });
+    }
 
 	@Test
 	public void whenDeleteById_thenOk() {
-		//given
-		Payment newPayment = TestDataUtils.getPayment(null, "name2", "altname2");
+        //given
+        Payment newPayment = TestBuildersUtils.getPayment(null, "name2", "altname2");
 
-		entityManager.persistAndFlush(newPayment);
-		assertEquals(paymentRepository.findAll().size(), 2);
+        entityManager.persistAndFlush(newPayment);
+        assertEquals(paymentRepository.findAll().size(), 2);
 
-		Payment foundPayment = paymentRepository.findByName(newPayment.getName());
+        Payment foundPayment = paymentRepository.findByName(newPayment.getName());
 
-		// when
-		paymentRepository.deleteById(foundPayment.getId());
-		// then
-		assertEquals(paymentRepository.findAll().size(), 1);
+        // when
+        paymentRepository.deleteById(foundPayment.getId());
+        // then
+        assertEquals(paymentRepository.findAll().size(), 1);
 	}
 
 	@Test

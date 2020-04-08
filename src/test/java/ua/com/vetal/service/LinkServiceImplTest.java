@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.Link;
 import ua.com.vetal.entity.LinkType;
 import ua.com.vetal.repositories.LinkRepository;
@@ -30,9 +30,9 @@ public class LinkServiceImplTest {
 
     @BeforeEach
     public void beforeEach() {
-        linkType = TestDataUtils.getLinkType(1l, "file");
+        linkType = TestBuildersUtils.getLinkType(1l, "file");
 
-        link = TestDataUtils.getLink(1l, "fullName", "shortName", linkType, "path");
+        link = TestBuildersUtils.getLink(1l, "fullName", "shortName", linkType, "path");
     }
 
     @Test
@@ -99,7 +99,7 @@ public class LinkServiceImplTest {
 
     @Test
     void whenSaveLink_thenSuccess() {
-        Link newLink = TestDataUtils.getLink(null, "fullName2", "shortName2", linkType, "path2");
+        Link newLink = TestBuildersUtils.getLink(null, "fullName2", "shortName2", linkType, "path2");
         linkService.saveObject(newLink);
         verify(mockLinkRepository, times(1)).save(newLink);
     }

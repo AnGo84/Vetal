@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
-import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.PasswordResetToken;
 import ua.com.vetal.entity.User;
 import ua.com.vetal.entity.UserRole;
@@ -31,9 +31,9 @@ public class PasswordResetTokenRepositoryTest {
     @BeforeEach
     public void beforeEach() {
         Set<UserRole> userRoleSet = new HashSet<>();
-        UserRole userRole = testEntityManager.persistAndFlush(TestDataUtils.getUserRole(null, "USER"));
+        UserRole userRole = testEntityManager.persistAndFlush(TestBuildersUtils.getUserRole(null, "USER"));
         userRoleSet.add(userRole);
-        userRole = testEntityManager.persistAndFlush(TestDataUtils.getUserRole(null, "ADMIN"));
+        userRole = testEntityManager.persistAndFlush(TestBuildersUtils.getUserRole(null, "ADMIN"));
         userRoleSet.add(userRole);
 
         passwordResetTokenRepository.deleteAll();
@@ -103,7 +103,7 @@ public class PasswordResetTokenRepositoryTest {
     }
 
     private User getUser(Set<UserRole> userRoleSet) {
-        User user = TestDataUtils.getUser("User", "password", true, userRoleSet);
+        User user = TestBuildersUtils.getUser(null, "User", "password", true, userRoleSet);
         return user;
     }
 }
