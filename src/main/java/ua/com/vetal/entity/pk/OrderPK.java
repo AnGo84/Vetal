@@ -1,20 +1,20 @@
-package ua.com.vetal.entity.indificators;
+package ua.com.vetal.entity.pk;
 
 import java.io.Serializable;
 
-public class OrderKey implements Serializable {
+public class OrderPK implements Serializable {
 	private Long id;
 	private String orderType;
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (!(o instanceof OrderKey)) return false;
+		if (!(o instanceof OrderPK)) return false;
 
-		OrderKey orderKey = (OrderKey) o;
+		OrderPK orderPK = (OrderPK) o;
 
-		if (id != null ? !id.equals(orderKey.id) : orderKey.id != null) return false;
-		return orderType != null ? orderType.equals(orderKey.orderType) : orderKey.orderType == null;
+		if (id != null ? !id.equals(orderPK.id) : orderPK.id != null) return false;
+		return orderType != null ? orderType.equals(orderPK.orderType) : orderPK.orderType == null;
 	}
 
 	@Override

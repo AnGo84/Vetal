@@ -1,7 +1,7 @@
 package ua.com.vetal.entity;
 
 import lombok.Data;
-import ua.com.vetal.entity.pk.CompositeAppUserRoleID;
+import ua.com.vetal.entity.pk.CompositeAppUserRolePK;
 
 import javax.persistence.*;
 
@@ -19,7 +19,7 @@ public class AppUserRole {
     private Long id;*/
 
     @EmbeddedId
-    private CompositeAppUserRoleID appUserRoleID;
+    private CompositeAppUserRolePK appUserRoleID;
 
     @MapsId("appUserID")
     @ManyToOne(fetch = FetchType.LAZY)

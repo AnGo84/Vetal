@@ -1,7 +1,7 @@
 package ua.com.vetal.entity;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import ua.com.vetal.entity.indificators.OrderKey;
+import ua.com.vetal.entity.pk.OrderPK;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
@@ -12,7 +12,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "vorders")
-@IdClass(OrderKey.class)
+@IdClass(OrderPK.class)
 public class Order {
 	@Id
 	@Column(name = "order_id")

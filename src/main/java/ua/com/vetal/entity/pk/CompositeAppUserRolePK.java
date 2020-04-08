@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CompositeAppUserRoleID  implements Serializable {
+public class CompositeAppUserRolePK implements Serializable {
     private Long appUserID;
     private Long appUserRoleID;
 }
