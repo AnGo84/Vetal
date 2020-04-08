@@ -118,6 +118,14 @@ public class TestBuildersUtils {
         return link;
     }
 
+    public static State getState(Long id, String name, String altName) {
+        State state = new State();
+        state.setId(id);
+        state.setName(name);
+        state.setAltName(altName);
+        return state;
+    }
+
     public static Client getClient(Long id, String fullName, String firstName, String lastName, String middleName, String address, String email, String phone) {
         Client client = new Client();
         client.setId(id);
