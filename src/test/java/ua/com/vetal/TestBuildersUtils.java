@@ -88,6 +88,13 @@ public class TestBuildersUtils {
         return directory;
     }
 
+    public static StockDirectory getStockDirectory(Long id, String name) {
+        StockDirectory directory = new StockDirectory();
+        directory.setId(id);
+        directory.setName(name);
+        return directory;
+    }
+
 
     public static Payment getPayment(Long id, String name, String altName) {
         Payment payment = new Payment();
