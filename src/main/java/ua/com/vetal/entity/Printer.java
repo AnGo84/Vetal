@@ -16,19 +16,19 @@ public class Printer extends AbstractPerson {
     }
 
     @NotEmpty
-    @Size(min = 0, max = 50)
+    @Size(max = 50)
     @Column(name = "LastName", length = 50, nullable = false)
     public String getLastName() {
         return lastName;
     }
 
-    @Size(min = 0, max = 50)
+    @Size(max = 50)
     @Column(name = "FirstName", length = 50, nullable = true)
     public String getFirstName() {
         return firstName;
     }
 
-    @Size(min = 0, max = 50)
+    @Size(max = 50)
     @Column(name = "MiddleName", length = 50, nullable = true)
     public String getMiddleName() {
         return middleName;

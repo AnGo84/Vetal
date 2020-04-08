@@ -18,6 +18,12 @@ public class TestDataUtils {
         return printer;
     }
 
+    public static Worker getWorker(Long id) {
+        Worker worker = TestBuildersUtils.getWorker(id, "firstName" + id,
+                "lastName" + id, "middleName" + id, "email" + id);
+        return worker;
+    }
+
     public static Client getClient(Long id) {
         Client client = TestBuildersUtils.getClient(id, "fullName" + id,
                 "firstName" + id, "lastName" + id, "middleName" + id,

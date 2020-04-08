@@ -181,6 +181,16 @@ public class TestBuildersUtils {
         return printer;
     }
 
+    public static Worker getWorker(Long id, String firstName, String lastName, String middleName, String email) {
+        Worker worker = new Worker();
+        worker.setId(id);
+        worker.setFirstName(firstName);
+        worker.setLastName(lastName);
+        worker.setMiddleName(middleName);
+        worker.setEmail(email);
+        return worker;
+    }
+
     public static ProductionDirectory getProductionDirectory(Long id, String fullName, String shortName, ProductionTypeDirectory productionTypeDirectory) {
         ProductionDirectory printer = new ProductionDirectory();
         printer.setId(id);
