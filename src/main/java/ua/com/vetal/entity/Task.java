@@ -1,5 +1,6 @@
 package ua.com.vetal.entity;
 
+import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -12,6 +13,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "tasks")
+@Data
 public class Task {
 
 	@Id
@@ -22,7 +24,6 @@ public class Task {
 	@NotNull
 	@Column(name = "Number", nullable = false)
 	private int number;
-
 
 	@NotNull
 	@ManyToOne(optional = false)
@@ -765,65 +766,4 @@ public class Task {
 		return dbFile.getFileName();
 	}
 
-	@Override
-	public String toString() {
-		final StringBuilder sb = new StringBuilder("Task{");
-		sb.append("id=").append(id);
-		sb.append(", number=").append(number);
-		sb.append(", numberBase=").append(numberBase);
-		sb.append(", numberSuffix=").append(numberSuffix);
-		sb.append(", fullNumber='").append(fullNumber).append('\'');
-		sb.append(", account='").append(account).append('\'');
-		sb.append(", manager=").append(manager);
-		sb.append(", workName='").append(workName).append('\'');
-		sb.append(", fileName='").append(fileName).append('\'');
-		//sb.append(", dbFile=").append(dbFile);
-		sb.append(", dbFile='").append(getDBFileName()).append('\'');
-		sb.append(", contractor=").append(contractor);
-		sb.append(", contractorNumber='").append(contractorNumber).append('\'');
-		sb.append(", amountForContractor=").append(amountForContractor);
-		sb.append(", contractorAmount=").append(contractorAmount);
-		sb.append(", provider='").append(provider).append('\'');
-		sb.append(", providerCost=").append(providerCost);
-		sb.append(", otherExpenses=").append(otherExpenses);
-		sb.append(", production=").append(production);
-		sb.append(", productionType=").append(productionType);
-		sb.append(", dateBegin=").append(dateBegin);
-		sb.append(", dateEnd=").append(dateEnd);
-		sb.append(", client=").append(client);
-		sb.append(", stock=").append(stock);
-		sb.append(", printing=").append(printing);
-		sb.append(", printingUnit=").append(printingUnit);
-		sb.append(", chromaticity=").append(chromaticity);
-		sb.append(", format=").append(format);
-		sb.append(", printingFormat='").append(printingFormat).append('\'');
-		sb.append(", laminate=").append(laminate);
-		sb.append(", paper=").append(paper);
-		sb.append(", wares='").append(wares).append('\'');
-		sb.append(", cringle=").append(cringle);
-		sb.append(", fillet=").append(fillet);
-		sb.append(", popup=").append(popup);
-		sb.append(", carving=").append(carving);
-		sb.append(", stamping=").append(stamping);
-		sb.append(", embossing=").append(embossing);
-		sb.append(", bending=").append(bending);
-		sb.append(", plotter=").append(plotter);
-		sb.append(", assembly=").append(assembly);
-		sb.append(", cutting=").append(cutting);
-		sb.append(", note='").append(note).append('\'');
-		sb.append(", packBox=").append(packBox);
-		sb.append(", packPellicle=").append(packPellicle);
-		sb.append(", packPaper=").append(packPaper);
-		sb.append(", packPackage=").append(packPackage);
-		sb.append(", packNP=").append(packNP);
-		sb.append(", packBy='").append(packBy).append('\'');
-		sb.append(", numeration=").append(numeration);
-		sb.append(", numerationStart=").append(numerationStart);
-		sb.append(", amount=").append(amount);
-		sb.append(", state=").append(state);
-		sb.append(", payment=").append(payment);
-		sb.append(", debtAmount=").append(debtAmount);
-		sb.append('}');
-		return sb.toString();
-	}
 }
