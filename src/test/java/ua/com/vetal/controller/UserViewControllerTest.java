@@ -43,10 +43,8 @@ class UserViewControllerTest {
 
     @BeforeEach
     public void beforeEach() {
-        user = TestBuildersUtils.getUser(null, "New Name", "", true, null);
-        user.setId(1l);
+        user = TestBuildersUtils.getUser(1l, "New Name", "", true, null);
         user.setUserRoles(new HashSet<>(Arrays.asList(TestBuildersUtils.getUserRole(1l, "ROLE_ADMIN"))));
-
     }
 
     @Test

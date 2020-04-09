@@ -1,5 +1,6 @@
 package ua.com.vetal.controller;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,13 +44,17 @@ public class PasswordResetController {
     @GetMapping
     public String displayResetPasswordPage(@RequestParam(required = false) String token, Model model) {
         //logger.info("Change password for token: " + token);
-
+        System.out.println("!!!!!!! started");
         PasswordResetToken resetToken = tokenRepository.findByToken(token);
+        System.out.println("!!!!!!! resetToken =  " + resetToken);
         if (resetToken == null) {
+            System.out.println("!!!!!!! resetToken == null");
             model.addAttribute("error", messageSource.getMessage("non.found.token", null, new Locale("ru")));
         } else if (resetToken.isExpired()) {
+            System.out.println("!!!!!!! resetToken.isExpired()");
             model.addAttribute("error", messageSource.getMessage("non.token.hasExpired", null, new Locale("ru")));
         } else {
+            System.out.println("!!!!!!! ok");
             model.addAttribute("token", resetToken.getToken());
         }
 
@@ -58,31 +63,31 @@ public class PasswordResetController {
 
     @PostMapping
     @Transactional
-    public String handlePasswordReset(@ModelAttribute("passwordResetForm") @Valid PasswordResetDto form,
+    public String handlePasswordReset(@ModelAttribute("passwordResetForm") @Valid PasswordResetDto passwordResetDto,
                                       BindingResult result, RedirectAttributes redirectAttributes) {
-        //logger.info("Update password: " + form);
+        //logger.info("Update password: " + passwordResetDto);
         //logger.info("Post User Edit: " + editUser);
-
+        System.out.println("PasswordResetDto: " + passwordResetDto);
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute(BindingResult.class.getName() + ".passwordResetForm", result);
-            redirectAttributes.addFlashAttribute("passwordResetForm", form);
-            return "redirect:/passwordReset?token=" + form.getToken();
+            redirectAttributes.addFlashAttribute("passwordResetForm", passwordResetDto);
+            return "redirect:/passwordReset?token=" + passwordResetDto.getToken();
         }
-        //if (form.getPassword() == null && form.getConfirmPassword() == null || form.getPassword() != null && form.getPassword().equals(form.getConfirmPassword()))
-        if (form.getPassword() == null || form.getPassword().equals("")) {
+        //if (passwordResetDto.getPassword() == null && passwordResetDto.getConfirmPassword() == null || passwordResetDto.getPassword() != null && passwordResetDto.getPassword().equals(passwordResetDto.getConfirmPassword()))
+        if (StringUtils.isBlank(passwordResetDto.getPassword())) {
             redirectAttributes.addFlashAttribute("error", messageSource.getMessage("required.password", null, new Locale("ru")));
-            return "redirect:/passwordReset?token=" + form.getToken();
-        } else if (form.getPassword() == null || form.getConfirmPassword().equals("")) {
+            return "redirect:/passwordReset?token=" + passwordResetDto.getToken();
+        } else if (StringUtils.isBlank(passwordResetDto.getConfirmPassword())) {
             redirectAttributes.addFlashAttribute("error", messageSource.getMessage("required.passwordConfirm", null, new Locale("ru")));
-            return "redirect:/passwordReset?token=" + form.getToken();
-        } else if (!form.getPassword().equals(form.getConfirmPassword())) {
+            return "redirect:/passwordReset?token=" + passwordResetDto.getToken();
+        } else if (!passwordResetDto.getPassword().equals(passwordResetDto.getConfirmPassword())) {
             redirectAttributes.addFlashAttribute("error", messageSource.getMessage("non.match.passwords", null, new Locale("ru")));
-            return "redirect:/passwordReset?token=" + form.getToken();
+            return "redirect:/passwordReset?token=" + passwordResetDto.getToken();
         }
 
-        PasswordResetToken token = tokenRepository.findByToken(form.getToken());
+        PasswordResetToken token = tokenRepository.findByToken(passwordResetDto.getToken());
         User user = token.getUser();
-        String updatedPassword = passwordEncoder.encode(form.getPassword());
+        String updatedPassword = passwordEncoder.encode(passwordResetDto.getPassword());
 
         user.setEncryptedPassword(updatedPassword);
         // userService.updatePassword(updatedPassword, user.getId());

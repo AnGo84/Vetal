@@ -7,7 +7,10 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import ua.com.vetal.entity.PasswordResetToken;
 import ua.com.vetal.entity.User;
 import ua.com.vetal.entity.dto.PasswordForgotDto;
@@ -18,7 +21,6 @@ import ua.com.vetal.service.UserServiceImpl;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Locale;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/forgotPassword")
@@ -26,7 +28,7 @@ public class PasswordForgotController {
     static final Logger logger = LoggerFactory.getLogger(PasswordForgotController.class);
 
     @Autowired
-    MessageSource messageSource;
+    private MessageSource messageSource;
 
     @Autowired
     private UserServiceImpl userService;
@@ -68,18 +70,15 @@ public class PasswordForgotController {
     public String processForgotPasswordForm(@ModelAttribute("forgotPasswordForm") @Valid PasswordForgotDto form,
                                             BindingResult result,
                                             HttpServletRequest request) {
-
         if (result.hasErrors()){
             return "passwordForgotPage";
         }
-
         User user = userService.findByName(form.getUserName());
         if (user == null){
             result.rejectValue("userName", null, messageSource.getMessage("non.unique.field",
                     new String[] { "Login", form.getUserName() }, new Locale("ru")));
             return "passwordForgotPage";
         }
-
         /*PasswordResetToken token = new PasswordResetToken();
         token.setToken(UUID.randomUUID().toString());
         token.setUser(user);
