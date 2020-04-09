@@ -17,6 +17,7 @@ import java.util.Arrays;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -115,7 +116,7 @@ public class PrintingUnitDirectoryControllerTest {
 
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
-	public void whenUpdateRecordAsAuthorizedWithNullUser_thenOk() throws Exception {
+	public void whenUpdateRecordAsAuthorizedWithNullDirectory_thenOk() throws Exception {
 		mockMvc.perform(post(MAPPED_URL + "/update"))
 				.andDo(print())
 				.andExpect(status().isOk())
@@ -128,7 +129,7 @@ public class PrintingUnitDirectoryControllerTest {
 
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
-	public void whenUpdateRecordAsAuthorizedWithNotNullUser_thenOk() throws Exception {
+	public void whenUpdateRecordAsAuthorizedWithNotNullDirectory_thenOk() throws Exception {
 		//doNothing().when(mockUserService).updateObject(any(User.class));
 		mockDirectoryService.updateObject(directory);
 
@@ -153,7 +154,24 @@ public class PrintingUnitDirectoryControllerTest {
 
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
-	public void whenDeleteRecordAsAuthorizedWithNotNullUser_thenOk() throws Exception {
+	public void whenUpdateRecordAsAuthorizedWithExistName_thenError() throws Exception {
+		when(mockDirectoryService.isObjectExist(any())).thenReturn(true);
+		//mockDirectoryService.updateObject(directory);
+
+		mockMvc.perform(post(MAPPED_URL + "/update")
+				.param("id", String.valueOf(directory.getId()))
+				.param("name", directory.getName()))
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(model().attributeExists("directory"))
+				.andExpect(model().attributeHasFieldErrors("directory", "name"))
+				.andExpect(view().name("directoryRecordPage"));
+		verify(mockDirectoryService, times(0)).updateObject(directory);
+	}
+
+	@Test
+	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
+	public void whenDeleteRecordAsAuthorizedWithNotNullDirectory_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/delete-" + directory.getId()))
 				.andDo(print())
 				.andExpect(status().isFound())

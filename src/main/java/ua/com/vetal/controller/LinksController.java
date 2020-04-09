@@ -76,7 +76,7 @@ public class LinksController {
         if (linkService.isObjectExist(link)) {
             FieldError fieldError =
                     new FieldError("Link", "fullName",
-                            messageSource.getMessage("non.unique.name", new String[]{
+                            messageSource.getMessage("non.unique.field", new String[]{
                                     link.getFullName()}, Locale.getDefault()));
             bindingResult.addError(fieldError);
             return "linkPage";

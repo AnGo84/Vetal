@@ -44,7 +44,6 @@ class ManagerControllerTest {
         when(mockManagerService.findById(anyLong())).thenReturn(manager);
     }
 
-
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
     public void whenGetManagerListAsAuthorized_thenOk() throws Exception {
@@ -144,6 +143,24 @@ class ManagerControllerTest {
 		verify(mockManagerService, times(1)).updateObject(manager);
     }
 
+/*    @Test
+    @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
+    public void whenUpdateRecordAsAuthorizedWithExistName_thenError() throws Exception {
+        when(mockManagerService.isObjectExist(any())).thenReturn(true);
+
+        mockMvc.perform(post(MAPPED_URL + "/update")
+                .param("id", String.valueOf(manager.getId()))
+                .param("firstName", manager.getFirstName())
+                .param("lastName", manager.getLastName())
+                .param("middleName", manager.getMiddleName())
+                .param("email", manager.getEmail()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("directory"))
+                .andExpect(model().attributeHasFieldErrors("directory","name"))
+                .andExpect(view().name("directoryRecordPage"));
+        verify(mockDirectoryService, times(0)).updateObject(directory);
+    }*/
 
     @Test
     public void whenUpdatePersonAsNoAuthorized_thenRedirectToLoginPage() throws Exception {

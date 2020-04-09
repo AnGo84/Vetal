@@ -18,6 +18,7 @@ import java.util.Arrays;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -159,6 +160,26 @@ public class LinksControllerTest {
         verify(mockLinkService, times(1)).updateObject(link);
     }
 
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
+    public void whenUpdateRecordAsAuthorizedWithExistName_thenError() throws Exception {
+        when(mockLinkService.isObjectExist(any())).thenReturn(true);
+
+        mockMvc.perform(post(MAPPED_URL + "/update")
+                .param("id", String.valueOf(link.getId()))
+                .param("fullName", link.getFullName())
+                .param("showName", link.getShortName())
+                .param("linkType", String.valueOf(linkType.getId()))
+                .param("path", link.getPath())
+        )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("link"))
+                .andExpect(model().attributeHasFieldErrors("link", "fullName"))
+                .andExpect(view().name("linkPage"));
+        verify(mockLinkService, times(0)).updateObject(link);
+    }
 
     @Test
     public void whenUpdateLinkAsNoAuthorized_thenRedirectToLoginPage() throws Exception {

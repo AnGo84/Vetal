@@ -159,7 +159,7 @@ public class ProductionDirectoryControllerTest {
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
-    public void whenDeleteProductionDirectoryAsAuthorizedWithNotNullUser_thenOk() throws Exception {
+    public void whenDeleteProductionDirectoryAsAuthorizedWithNotNullProduction_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/delete-" + production.getId()))
                 .andDo(print())
                 .andExpect(status().isFound())
