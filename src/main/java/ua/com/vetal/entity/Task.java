@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.text.DecimalFormat;
@@ -38,27 +39,27 @@ public class Task {
 	@Column(name = "Full_number")
 	private String fullNumber;
 
-	//@NotNull
-	//@Column(name = "Account", nullable = false, unique = true)
-	@Column(name = "Account")
-	@Size(max = 50)
-	private String account;
+    //@NotNull
+    //@Column(name = "Account", nullable = false, unique = true)
+    @Column(name = "Account")
+    @Size(max = 50)
+    private String account;
 
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "Manager_ID")
-	private Manager manager;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "Manager_ID")
+    private Manager manager;
 
-	@NotNull
-	@Column(name = "Work_Name", nullable = false)
-	private String workName;
+    @NotEmpty
+    @Column(name = "Work_Name", nullable = false)
+    private String workName;
 
-	//@NotNull
-	@Column(name = "File_Name", nullable = false)
-	private String fileName;
+    //@NotNull
+    @Column(name = "File_Name", nullable = false)
+    private String fileName;
 
-	@OneToOne
-	@JoinColumn(name = "file_id")
-	private DBFile dbFile;
+    @OneToOne
+    @JoinColumn(name = "file_id")
+    private DBFile dbFile;
 
 
 	@ManyToOne(optional = false)

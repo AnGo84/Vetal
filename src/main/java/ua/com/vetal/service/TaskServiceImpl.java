@@ -170,21 +170,11 @@ public class TaskServiceImpl implements SimpleService<Task> {
 
     @Override
     public boolean isObjectExist(Task task) {
-        // return findByName(manager.getName()) != null;
         return findById(task.getId()) != null;
     }
 
     public boolean isAccountValueExist(Task task) {
-
         Task findTask = findByAccount(task.getAccount());
-
-        /*
-         * System.out.println(findTask); System.out.println(findTask != null &&
-         * findTask.getId()!=null && !findTask.getId().equals(task.getId()));
-         * System.out.println((findTask != null )+": "+ (findTask.getId()!=null)
-         * +": "+ (!findTask.getId().equals(task.getId())));
-         * System.out.println(findTask.getId() +" : "+task.getId());
-         */
         return (findTask != null && findTask.getId() != null && !findTask.getId().equals(task.getId()));
 
         // return findByAccount(task.getAccount()) != null;
