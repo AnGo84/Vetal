@@ -21,7 +21,6 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -49,19 +48,19 @@ public class CringleDirectoryControllerTest {
 	@WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
 	public void whenGetDirectoryListAsAuthorized_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isOk())
 				.andExpect(model().attribute("directoryList", notNullValue()))
 				.andExpect(view().name("directoryPage"));
 
 		mockMvc.perform(get(MAPPED_URL + "/"))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isOk())
 				.andExpect(model().attribute("directoryList", notNullValue()))
 				.andExpect(view().name("directoryPage"));
 
 		mockMvc.perform(get(MAPPED_URL + "/list"))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isOk())
 				.andExpect(model().attribute("directoryList", notNullValue()))
 				.andExpect(view().name("directoryPage"));
@@ -70,7 +69,7 @@ public class CringleDirectoryControllerTest {
 	@Test
 	public void whenGetDirectoryListAsNoAuthorized_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isOk());
 	}
 
@@ -78,7 +77,7 @@ public class CringleDirectoryControllerTest {
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenGetShowAddRecordPageAsAuthorized_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/add"))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isOk())
 				.andExpect(model().attributeExists("directory"))
 				.andExpect(model().attribute("directory", notNullValue()))
@@ -90,7 +89,7 @@ public class CringleDirectoryControllerTest {
 	@Test
 	public void whenGetShowAddRecordPageAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/add"))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
 	}
@@ -99,7 +98,7 @@ public class CringleDirectoryControllerTest {
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenEditRecordAsAuthorized_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/edit-" + directory.getId()))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isOk())
 				.andExpect(model().attributeExists("directory"))
 				.andExpect(model().attribute("directory", notNullValue()))
@@ -110,7 +109,7 @@ public class CringleDirectoryControllerTest {
 	@Test
 	public void whenEditRecordAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/edit-" + directory.getId()))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
 	}
@@ -119,7 +118,7 @@ public class CringleDirectoryControllerTest {
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenUpdateRecordAsAuthorizedWithNullDirectory_thenOk() throws Exception {
 		mockMvc.perform(post(MAPPED_URL + "/update"))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isOk())
 				.andExpect(model().attributeExists("directory"))
 				.andExpect(model().attribute("directory", notNullValue()))
@@ -137,7 +136,7 @@ public class CringleDirectoryControllerTest {
 		mockMvc.perform(post(MAPPED_URL + "/update")
 				.param("id", String.valueOf(directory.getId()))
 				.param("name", directory.getName()))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isFound())
 
 				.andExpect(redirectedUrl(MAPPED_URL));
@@ -154,7 +153,7 @@ public class CringleDirectoryControllerTest {
 		mockMvc.perform(post(MAPPED_URL + "/update")
 				.param("id", String.valueOf(directory.getId()))
 				.param("name", directory.getName()))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isOk())
 				.andExpect(model().attributeExists("directory"))
 				.andExpect(model().attributeHasFieldErrors("directory", "name"))
@@ -165,7 +164,7 @@ public class CringleDirectoryControllerTest {
 	@Test
 	public void whenUpdateRecordAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(post(MAPPED_URL + "/update"))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
 	}
@@ -174,7 +173,7 @@ public class CringleDirectoryControllerTest {
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenDeleteRecordAsAuthorizedWithNotNullDirectory_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/delete-" + directory.getId()))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl(MAPPED_URL));
 
@@ -184,7 +183,7 @@ public class CringleDirectoryControllerTest {
 	@Test
 	public void whenDeleteRecordAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/delete-" + directory.getId()))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
 	}

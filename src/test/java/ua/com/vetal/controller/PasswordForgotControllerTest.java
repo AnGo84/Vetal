@@ -20,7 +20,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -48,7 +47,7 @@ public class PasswordForgotControllerTest {
     //@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenGetPasswordResetPageAsAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("title", notNullValue()))
                 .andExpect(model().attribute("title", "Forgot Password"))
@@ -58,7 +57,7 @@ public class PasswordForgotControllerTest {
     /*@Test
     public void whenGetPasswordResetPageAsNoAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("title", notNullValue()))
                 .andExpect(model().attribute("title", "Forgot Password"))
@@ -71,7 +70,7 @@ public class PasswordForgotControllerTest {
 
         when(mockUserService.findByName(anyString())).thenReturn(user);
         mockMvc.perform(post(MAPPED_URL).param("userName", "user"))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrlPattern("/passwordReset?token=*"));
     }
@@ -80,7 +79,7 @@ public class PasswordForgotControllerTest {
     public void whenPostPasswordResetPageAsNoAuthorized_thenOk() throws Exception {
         when(mockUserService.findByName(anyString())).thenReturn(user);
         mockMvc.perform(post(MAPPED_URL).param("userName", "user"))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("forgotPasswordForm", notNullValue()))
                 .andExpect(redirectedUrlPattern("/passwordReset?token=*"));
@@ -92,7 +91,7 @@ public class PasswordForgotControllerTest {
 
         //when(mockUserService.findByName(anyString())).thenReturn(user);
         mockMvc.perform(post(MAPPED_URL))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(model().attribute("forgotPasswordForm", notNullValue()))
@@ -107,7 +106,7 @@ public class PasswordForgotControllerTest {
         when(mockUserService.findByName(anyString())).thenReturn(null);
         mockMvc.perform(post(MAPPED_URL)
                 .param("userName", "user"))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("forgotPasswordForm", notNullValue()))
                 .andExpect(model().attributeHasFieldErrors("forgotPasswordForm", "userName"))
@@ -118,7 +117,7 @@ public class PasswordForgotControllerTest {
     public void whenPostPasswordResetPageWithEmptyUserAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         when(mockUserService.findByName(anyString())).thenReturn(user);
         mockMvc.perform(post(MAPPED_URL))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("error", notNullValue()))
                 .andExpect(view().name("passwordForgotPage"));

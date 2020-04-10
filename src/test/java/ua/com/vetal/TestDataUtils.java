@@ -78,8 +78,8 @@ public class TestDataUtils {
         Task task = new Task();
         task.setId(id);
         task.setNumber(taskNumber);
-        task.setNumberBase(TestBuildersUtils.getNumberBaseDirectory(id, "numberBaseDirectory" + taskNumber));
-        task.setNumberSuffix(taskNumber);
+		task.setNumberBase(TestBuildersUtils.getNumberBaseDirectory(id, "numberBaseTask" + taskNumber));
+		task.setNumberSuffix(taskNumber);
         task.setFullNumber("fullNumber" + taskNumber);
         task.setAccount("account" + taskNumber);
         Manager manager = TestBuildersUtils.getManager(id, "managerFirstName" + taskNumber, "managerLastName" + taskNumber, "managerMiddleName" + taskNumber, "managerEmail" + taskNumber);
@@ -97,8 +97,8 @@ public class TestDataUtils {
         task.setProviderCost(8 * taskNumber);
         task.setOtherExpenses(3 * taskNumber);
 
-        ProductionTypeDirectory productionType = TestBuildersUtils.getProductionTypeDirectory(id, "Production type" + taskNumber);
-        ProductionDirectory production = TestBuildersUtils.getProductionDirectory(id, "fullName" + taskNumber, "shortName" + taskNumber, productionType);
+		ProductionTypeDirectory productionType = TestBuildersUtils.getProductionTypeDirectory(id, "Production type Task" + taskNumber);
+		ProductionDirectory production = TestBuildersUtils.getProductionDirectory(id, "fullName" + taskNumber, "shortName" + taskNumber, productionType);
         task.setProduction(production);
         task.setProductionType(productionType);
 
@@ -107,18 +107,18 @@ public class TestDataUtils {
 
         Client client = TestBuildersUtils.getClient(id, "fullName" + taskNumber, "firstName" + taskNumber, "lastName" + taskNumber, "middleName" + taskNumber, "address" + taskNumber, "email" + taskNumber, "phone" + taskNumber);
         client.setManager(manager);
-        task.setClient(client);
-        task.setStock(TestBuildersUtils.getStockDirectory(id, "Stock" + taskNumber));
-        task.setPrinting(100 * taskNumber);
-        task.setPrintingUnit(TestBuildersUtils.getPrintingUnitDirectory(id, "PrintingUnit" + taskNumber));
-        task.setChromaticity(TestBuildersUtils.getChromaticityDirectory(id, "Chromaticity" + taskNumber));
+		task.setClient(client);
+		task.setStock(TestBuildersUtils.getStockDirectory(id, "Stock Task" + taskNumber));
+		task.setPrinting(100 * taskNumber);
+		task.setPrintingUnit(TestBuildersUtils.getPrintingUnitDirectory(id, "PrintingUnit task" + taskNumber));
+		task.setChromaticity(TestBuildersUtils.getChromaticityDirectory(id, "Chromaticity" + taskNumber));
 
         task.setFormat(TestBuildersUtils.getFormatDirectory(id, "format" + taskNumber));
         task.setPrintingFormat("printing format" + taskNumber);
 
-        task.setLaminate(TestBuildersUtils.getLaminateDirectory(id, "Laminate" + taskNumber));
-        task.setPaper(TestBuildersUtils.getPaperDirectory(id, "Paper" + taskNumber));
-        task.setWares("wares" + taskNumber);
+		task.setLaminate(TestBuildersUtils.getLaminateDirectory(id, "Laminate" + taskNumber));
+		task.setPaper(TestBuildersUtils.getPaperDirectory(id, "Paper task" + taskNumber));
+		task.setWares("wares" + taskNumber);
         task.setCringle(TestBuildersUtils.getCringleDirectory(id, "Cringle" + taskNumber));
         boolean taskTrueFalse = (taskNumber % 2) == 0;
         task.setFillet(taskTrueFalse);
@@ -130,20 +130,93 @@ public class TestDataUtils {
         task.setPlotter(taskTrueFalse);
         task.setAssembly(taskTrueFalse);
         task.setCutting(taskTrueFalse);
-        task.setNote("Task description" + taskNumber);
-        task.setPackBox(taskTrueFalse);
-        task.setPackPellicle(taskTrueFalse);
-        task.setPackPaper(taskTrueFalse);
-        task.setPackPackage(taskTrueFalse);
-        task.setPackNP(taskTrueFalse);
-        task.setPackBy("Pack by" + taskNumber);
-        task.setNumeration(taskTrueFalse);
-        task.setNumerationStart(taskNumber + 1);
-        task.setAmount(20 * taskNumber);
-        task.setState(TestBuildersUtils.getState(id, "name" + taskNumber, "altname" + taskNumber));
-        task.setPayment(TestBuildersUtils.getPayment(id, "name" + taskNumber, "altname" + taskNumber));
-        task.setDebtAmount(5 * taskNumber);
+		task.setNote("Task description" + taskNumber);
+		task.setPackBox(taskTrueFalse);
+		task.setPackPellicle(taskTrueFalse);
+		task.setPackPaper(taskTrueFalse);
+		task.setPackPackage(taskTrueFalse);
+		task.setPackNP(taskTrueFalse);
+		task.setPackBy("Pack by" + taskNumber);
+		task.setNumeration(taskTrueFalse);
+		task.setNumerationStart(taskNumber + 1);
+		task.setAmount(20 * taskNumber);
+		task.setState(TestBuildersUtils.getState(id, "name task" + taskNumber, "altname" + taskNumber));
+		task.setPayment(TestBuildersUtils.getPayment(id, "name task" + taskNumber, "altname" + taskNumber));
+		task.setDebtAmount(5 * taskNumber);
 
-        return task;
-    }
+		return task;
+	}
+
+	public static Stencil getStencil(Long id, int number) {
+		Stencil stencil = new Stencil();
+		stencil.setId(id);
+		stencil.setNumber(number);
+		stencil.setNumberBase(TestBuildersUtils.getNumberBaseDirectory(id, "numberBaseStencil" + number));
+		stencil.setNumberSuffix(number);
+		stencil.setFullNumber("fullNumber" + number);
+		stencil.setAccount("account" + number);
+
+		Manager manager = TestBuildersUtils.getManager(id, "managerFirstName" + number, "managerLastName" + number, "managerMiddleName" + number, "managerEmail" + number);
+		stencil.setManager(manager);
+		stencil.setOrderName("orderName" + number);
+
+		Client client = TestBuildersUtils.getClient(id, "fullName" + number, "firstName" + number, "lastName" + number, "middleName" + number, "address" + number, "email" + number, "phone" + number);
+		client.setManager(manager);
+		stencil.setClient(client);
+
+		stencil.setDateBegin(DateUtils.addToDate(new Date(), Calendar.DATE, -10 * number));
+		stencil.setDateEnd(DateUtils.addToDate(new Date(), Calendar.DATE, -1 * number));
+
+		ProductionTypeDirectory productionType = TestBuildersUtils.getProductionTypeDirectory(id, "Production type Stencil" + number);
+		ProductionDirectory production = TestBuildersUtils.getProductionDirectory(id, "fullName" + number, "shortName" + number, productionType);
+		stencil.setProduction(production);
+
+		stencil.setStock(TestBuildersUtils.getStockDirectory(id, "Stock Stencil" + number));
+
+		stencil.setPrinting(100 * number);
+		stencil.setPrintingUnit(TestBuildersUtils.getPrintingUnitDirectory(id, "PrintingUnit Stencil" + number));
+
+		stencil.setAdjustment("Adjustment" + number);
+		stencil.setPaper(TestBuildersUtils.getPaperDirectory(id, "Paper Stencil" + number));
+		stencil.setPaperFormat("PaperFormat" + number);
+		stencil.setSheetNumber(2 * number);
+
+		stencil.setPrinter(TestBuildersUtils.getPrinter(id, "PrinterFirstName" + number, "PrinterLastName" + number, "PrinterMiddleName" + number, "PrinterEmail" + number));
+		stencil.setDatePrintBegin(DateUtils.addToDate(new Date(), Calendar.DATE, -5 * number));
+		stencil.setPrintingNote("Stencil printing description" + number);
+
+		stencil.setWorkerPrint(TestBuildersUtils.getWorker(id, "WorkerFirstName" + number, "WorkerLastName" + number, "WorkerMiddleName" + number, "WorkerEmail" + number));
+		stencil.setWorkerCut(stencil.getWorkerPrint());
+
+		boolean stencilTrueFalse = (number % 2) == 0;
+		stencil.setFillet(stencilTrueFalse);
+		stencil.setPopup(stencilTrueFalse);
+		stencil.setCarving(stencilTrueFalse);
+		stencil.setStamping(stencilTrueFalse);
+		stencil.setEmbossing(stencilTrueFalse);
+		stencil.setBending(stencilTrueFalse);
+		stencil.setPlotter(stencilTrueFalse);
+
+		stencil.setPackBox(stencilTrueFalse);
+		stencil.setPackPellicle(stencilTrueFalse);
+		stencil.setPackPaper(stencilTrueFalse);
+		stencil.setPackPackage(stencilTrueFalse);
+		stencil.setPackNP(stencilTrueFalse);
+
+		stencil.setNumeration(stencilTrueFalse);
+		stencil.setNumerationStart(number + 1);
+		stencil.setCutRibbon(stencilTrueFalse);
+		stencil.setRibbonLength(8 * number);
+		stencil.setSticker(stencilTrueFalse);
+		stencil.setAmount(20 * number);
+		stencil.setState(TestBuildersUtils.getState(id, "name stencil" + number, "altname" + number));
+		stencil.setPayment(TestBuildersUtils.getPayment(id, "name stencil" + number, "altname" + number));
+		stencil.setDebtAmount(5 * number);
+		stencil.setKraskoottisk(8 * number);
+		stencil.setCostOfMaterials(15 * number);
+		stencil.setCostOfPrinting(2 * number);
+		stencil.setOtherExpenses(3 * number);
+
+		return stencil;
+	}
 }

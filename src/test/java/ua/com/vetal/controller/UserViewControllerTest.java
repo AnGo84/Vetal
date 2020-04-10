@@ -22,7 +22,6 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
@@ -53,7 +52,7 @@ class UserViewControllerTest {
         when(mockUserService.findByName(anyString())).thenReturn(user);
         when(mockUserService.isObjectExist(any())).thenReturn(true);
 		mockMvc.perform(get(MAPPED_URL + "/view"))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("user"))
                 .andExpect(model().attribute("user", notNullValue()))
@@ -61,7 +60,7 @@ class UserViewControllerTest {
 
         when(mockUserService.isObjectExist(any())).thenReturn(false);
 		mockMvc.perform(get(MAPPED_URL + "/view"))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("mainPage"));
     }
@@ -70,7 +69,7 @@ class UserViewControllerTest {
     @Test
     public void whenShowUserViewPageAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/view"))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -83,7 +82,7 @@ class UserViewControllerTest {
         when(mockUserService.findByName(anyString())).thenReturn(user);
         when(mockUserService.isObjectExist(any())).thenReturn(true);
 		mockMvc.perform(get(MAPPED_URL + "/changePassword-" + user.getId()))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrlPattern("/passwordReset?token=*"));
                 //.andExpect(redirectedUrlPattern("/passwordReset?token=^[a-zA-Z0-9]+$"));
@@ -93,14 +92,14 @@ class UserViewControllerTest {
         when(mockUserService.findByName(anyString())).thenReturn(wrongUser);
         when(mockUserService.isObjectExist(any())).thenReturn(false);
 		mockMvc.perform(get(MAPPED_URL + "/changePassword-" + wrongUser.getId()))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     public void whenChangeUserPasswordAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/changePassword-" + user.getId()))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }

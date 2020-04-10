@@ -19,7 +19,6 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -48,13 +47,13 @@ class ManagerControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
     public void whenGetManagerListAsAuthorized_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("personList", notNullValue()))
                 .andExpect(view().name("personsPage"));
 
 		mockMvc.perform(get(MAPPED_URL + "/list"))
-                .andDo(print())
+				//.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("personList", notNullValue()))
                 .andExpect(view().name("personsPage"));
@@ -63,7 +62,7 @@ class ManagerControllerTest {
     @Test
     public void whenGetManagerListAsNoAuthorized_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL))
-                .andDo(print())
+				//.andDo
                 .andExpect(status().isOk());
     }
 
@@ -71,7 +70,7 @@ class ManagerControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenShowAddPersonPageAsAuthorized_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/add"))
-                .andDo(print())
+				//.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("person"))
                 .andExpect(model().attribute("person", notNullValue()))
@@ -83,7 +82,7 @@ class ManagerControllerTest {
     @Test
     public void whenShowAddPersonPageAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/add"))
-                .andDo(print())
+				//.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -92,7 +91,7 @@ class ManagerControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenEditPersonAsAuthorized_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/edit-" + manager.getId()))
-                .andDo(print())
+				//.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("person"))
                 .andExpect(model().attribute("person", notNullValue()))
@@ -103,7 +102,7 @@ class ManagerControllerTest {
     @Test
     public void whenEditPersonAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/edit-" + manager.getId()))
-                .andDo(print())
+				//.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -112,7 +111,7 @@ class ManagerControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdatePersonAsAuthorizedWithNullManager_thenOk() throws Exception {
 		mockMvc.perform(post(MAPPED_URL + "/update"))
-                .andDo(print())
+				//.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("person"))
                 .andExpect(model().attribute("person", notNullValue()))
@@ -136,7 +135,7 @@ class ManagerControllerTest {
 				.param("lastName", manager.getLastName())
 				.param("middleName", manager.getMiddleName())
 				.param("email", manager.getEmail()))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isFound())
 
 				.andExpect(redirectedUrl(MAPPED_URL));
@@ -154,7 +153,7 @@ class ManagerControllerTest {
                 .param("lastName", manager.getLastName())
                 .param("middleName", manager.getMiddleName())
                 .param("email", manager.getEmail()))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("directory"))
                 .andExpect(model().attributeHasFieldErrors("directory","name"))
@@ -165,7 +164,7 @@ class ManagerControllerTest {
     @Test
     public void whenUpdatePersonAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(post(MAPPED_URL + "/update"))
-                .andDo(print())
+				//.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -174,7 +173,7 @@ class ManagerControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenDeletePersonAsAuthorizedWithNotNullUser_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/delete-" + manager.getId()))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl(MAPPED_URL));
 
@@ -184,7 +183,7 @@ class ManagerControllerTest {
     @Test
     public void whenDeletePersonAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/delete-" + manager.getId()))
-                .andDo(print())
+				//.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }

@@ -79,7 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/numberBases/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/tasks/add", "/tasks/update", "/tasks/edit**", "/tasks/delete**", "/tasks/sendEmail**", "/tasks/copy**")
                 .access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
-        http.authorizeRequests().antMatchers("/stencils/add", "/stencils/update", "/stencils/edit**", "/stencils/delete**")
+        http.authorizeRequests().antMatchers("/stencils/add", "/stencils/update", "/stencils/edit**", "/stencils/delete**", "/stencils/copy**")
                 .access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
 
         // For ADMIN only.

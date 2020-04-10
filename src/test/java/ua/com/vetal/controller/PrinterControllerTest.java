@@ -19,7 +19,6 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -46,13 +45,13 @@ public class PrinterControllerTest {
 	@WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
 	public void whenGetPrinterListAsAuthorized_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isOk())
 				.andExpect(model().attribute("personList", notNullValue()))
 				.andExpect(view().name("personsPage"));
 
 		mockMvc.perform(get(MAPPED_URL + "/list"))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isOk())
 				.andExpect(model().attribute("personList", notNullValue()))
 				.andExpect(view().name("personsPage"));
@@ -61,7 +60,7 @@ public class PrinterControllerTest {
 	@Test
 	public void whenGetPrinterListAsNoAuthorized_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isOk());
 	}
 
@@ -69,7 +68,7 @@ public class PrinterControllerTest {
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenShowAddPersonPageAsAuthorized_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/add"))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isOk())
 				.andExpect(model().attributeExists("person"))
 				.andExpect(model().attribute("person", notNullValue()))
@@ -81,7 +80,7 @@ public class PrinterControllerTest {
 	@Test
 	public void whenShowAddPersonPageAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/add"))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
 	}
@@ -90,7 +89,7 @@ public class PrinterControllerTest {
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenEditPersonAsAuthorized_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/edit-" + printer.getId()))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isOk())
 				.andExpect(model().attributeExists("person"))
 				.andExpect(model().attribute("person", notNullValue()))
@@ -101,7 +100,7 @@ public class PrinterControllerTest {
 	@Test
 	public void whenEditPersonAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/edit-" + printer.getId()))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
 	}
@@ -110,7 +109,7 @@ public class PrinterControllerTest {
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenUpdatePersonAsAuthorizedWithNullPrinter_thenOk() throws Exception {
 		mockMvc.perform(post(MAPPED_URL + "/update"))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isOk())
 				.andExpect(model().attributeExists("person"))
 				.andExpect(model().attribute("person", notNullValue()))
@@ -134,7 +133,7 @@ public class PrinterControllerTest {
 				.param("lastName", printer.getLastName())
 				.param("middleName", printer.getMiddleName())
 				.param("email", printer.getEmail()))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isFound())
 
 				.andExpect(redirectedUrl(MAPPED_URL));
@@ -145,7 +144,7 @@ public class PrinterControllerTest {
 	@Test
 	public void whenUpdatePersonAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(post(MAPPED_URL + "/update"))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
 	}
@@ -154,7 +153,7 @@ public class PrinterControllerTest {
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenDeletePersonAsAuthorizedWithNotNullUser_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/delete-" + printer.getId()))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl(MAPPED_URL));
 
@@ -164,7 +163,7 @@ public class PrinterControllerTest {
 	@Test
 	public void whenDeletePersonAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/delete-" + printer.getId()))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
 	}

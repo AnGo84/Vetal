@@ -22,7 +22,6 @@ import java.util.List;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -54,7 +53,7 @@ public class StatisticControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
     public void whenGetOrderListAsAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("ordersList", notNullValue()))
                 .andExpect(view().name("statisticPage"));
@@ -64,7 +63,7 @@ public class StatisticControllerTest {
     @Test
     public void whenGetClientListAsNoAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk());
     }
 
@@ -73,7 +72,7 @@ public class StatisticControllerTest {
     public void whenGetCrossReportAsAuthorized_thenOk() throws Exception {
         //when(mockExporterService.export(any(ReportType.class), any(), anyString(), any()).thenReturn(null);
         mockMvc.perform(get(MAPPED_URL + "/crossReport"))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk());
 
     }
@@ -82,7 +81,7 @@ public class StatisticControllerTest {
     public void whenGetCrossReportAsNoAuthorized_thenOk() throws Exception {
 
         mockMvc.perform(get(MAPPED_URL + "/crossReport"))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk());
     }
 
@@ -96,7 +95,7 @@ public class StatisticControllerTest {
         mockMvc.perform(get(MAPPED_URL + "/filter")
                 .param("statisticFilterData", filterData.toString())
         )
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(model().attributeExists("statisticFilterData"))
                 .andExpect(model().attribute("statisticFilterData", notNullValue()))
@@ -106,7 +105,7 @@ public class StatisticControllerTest {
     @Test
     public void whenClearFilterClientsAsNoAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/filter"))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(MAPPED_URL));
     }
@@ -116,7 +115,7 @@ public class StatisticControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenClearFilterClientsAsAuthorizedWithNotNullUser_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/clearFilter"))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(MAPPED_URL));
     }
@@ -124,7 +123,7 @@ public class StatisticControllerTest {
     @Test
     public void whenFilterClientsAsNoAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/clearFilter"))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(MAPPED_URL));
     }

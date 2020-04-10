@@ -22,7 +22,6 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -58,13 +57,13 @@ public class ClientControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
     public void whenGetClientListAsAuthorized_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("clientsList", notNullValue()))
                 .andExpect(view().name("clientsPage"));
 
 		mockMvc.perform(get(MAPPED_URL + "/list"))
-                .andDo(print())
+				//.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("clientsList", notNullValue()))
                 .andExpect(view().name("clientsPage"));
@@ -73,7 +72,7 @@ public class ClientControllerTest {
     @Test
     public void whenGetClientListAsNoAuthorized_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL))
-                .andDo(print())
+				//.andDo
                 .andExpect(status().isOk());
     }
 
@@ -81,7 +80,7 @@ public class ClientControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenShowAddClientPageAsAuthorized_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/add"))
-                .andDo(print())
+				//.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("client"))
                 .andExpect(model().attribute("client", notNullValue()))
@@ -93,7 +92,7 @@ public class ClientControllerTest {
     @Test
     public void whenShowAddClientPageAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/add"))
-                .andDo(print())
+				//.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -102,7 +101,7 @@ public class ClientControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenEditClientAsAuthorized_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/edit-" + client.getId()))
-                .andDo(print())
+				//.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("client"))
                 .andExpect(model().attribute("client", notNullValue()))
@@ -113,7 +112,7 @@ public class ClientControllerTest {
     @Test
     public void whenEditClientAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/edit-" + client.getId()))
-                .andDo(print())
+				//.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -122,7 +121,7 @@ public class ClientControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateClientAsAuthorizedWithNullClient_thenOk() throws Exception {
 		mockMvc.perform(post(MAPPED_URL + "/update"))
-                .andDo(print())
+				//.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("client"))
                 .andExpect(model().attribute("client", notNullValue()))
@@ -155,7 +154,7 @@ public class ClientControllerTest {
 				.param("email", client.getEmail())
 				.param("phone", client.getPhone())
 		)
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isFound())
 
 				.andExpect(redirectedUrl(MAPPED_URL));
@@ -166,7 +165,7 @@ public class ClientControllerTest {
     @Test
     public void whenUpdateClientAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(post(MAPPED_URL + "/update"))
-                .andDo(print())
+				//.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -175,7 +174,7 @@ public class ClientControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenDeleteClientAsAuthorizedWithNotNullUser_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/delete-" + client.getId()))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl(MAPPED_URL));
 
@@ -185,7 +184,7 @@ public class ClientControllerTest {
     @Test
     public void whenDeleteClientAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/delete-" + client.getId()))
-                .andDo(print())
+				//.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -200,7 +199,7 @@ public class ClientControllerTest {
 		mockMvc.perform(get(MAPPED_URL + "/filter")
 				.param("clientFilterData", clientFilter.toString())
 		)
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isFound())
 				.andExpect(model().attributeExists("clientFilterData"))
 				.andExpect(model().attribute("clientFilterData", notNullValue()))
@@ -210,7 +209,7 @@ public class ClientControllerTest {
     @Test
     public void whenClearFilterClientsAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/filter"))
-                .andDo(print())
+				//.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -220,7 +219,7 @@ public class ClientControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenClearFilterClientsAsAuthorizedWithNotNullUser_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/clearFilter"))
-				.andDo(print())
+				//.andDo
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl(MAPPED_URL));
     }
@@ -228,7 +227,7 @@ public class ClientControllerTest {
     @Test
     public void whenFilterClientsAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/clearFilter"))
-                .andDo(print())
+				//.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }

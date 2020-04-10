@@ -22,7 +22,6 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -56,13 +55,13 @@ public class LinksControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenGetLinkListAsAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("linksList", notNullValue()))
                 .andExpect(view().name("linksPage"));
 
         mockMvc.perform(get(MAPPED_URL + "/list"))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("linksList", notNullValue()))
                 .andExpect(view().name("linksPage"));
@@ -72,14 +71,14 @@ public class LinksControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
     public void whenGetPersonListAsAuthorizedWithWrongRoleMANAGER_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(get(MAPPED_URL))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isForbidden());
     }
 
     @Test
     public void whenGetLinkListAsNoAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -88,7 +87,7 @@ public class LinksControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenShowAddLinkPageAsAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/add"))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("link"))
                 .andExpect(model().attribute("link", notNullValue()))
@@ -100,7 +99,7 @@ public class LinksControllerTest {
     @Test
     public void whenShowAddLinkPageAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/add"))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -109,7 +108,7 @@ public class LinksControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenEditLinkAsAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/edit-" + link.getId()))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("link"))
                 .andExpect(model().attribute("link", notNullValue()))
@@ -120,7 +119,7 @@ public class LinksControllerTest {
     @Test
     public void whenEditLinkAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/edit-" + link.getId()))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -129,7 +128,7 @@ public class LinksControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateLinkAsAuthorizedWithNullLink_thenOk() throws Exception {
         mockMvc.perform(post(MAPPED_URL + "/update"))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("link"))
                 .andExpect(model().attribute("link", notNullValue()))
@@ -153,7 +152,7 @@ public class LinksControllerTest {
                 .param("linkType", String.valueOf(linkType.getId()))
                 .param("path", link.getPath())
         )
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
 
                 .andExpect(redirectedUrl(MAPPED_URL));
@@ -173,7 +172,7 @@ public class LinksControllerTest {
                 .param("linkType", String.valueOf(linkType.getId()))
                 .param("path", link.getPath())
         )
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("link"))
                 .andExpect(model().attributeHasFieldErrors("link", "fullName"))
@@ -184,7 +183,7 @@ public class LinksControllerTest {
     @Test
     public void whenUpdateLinkAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(post(MAPPED_URL + "/update"))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -193,7 +192,7 @@ public class LinksControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenDeleteLinkAsAuthorizedWithNotNullUser_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/delete-" + link.getId()))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(MAPPED_URL));
 
@@ -203,7 +202,7 @@ public class LinksControllerTest {
     @Test
     public void whenDeleteLinkAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/delete-" + link.getId()))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }

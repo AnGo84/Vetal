@@ -21,7 +21,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -54,13 +53,13 @@ public class ProductionDirectoryControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
     public void whenGetProductionDirectoryListAsAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("productionsList", notNullValue()))
                 .andExpect(view().name("productionsPage"));
 
         mockMvc.perform(get(MAPPED_URL + "/list"))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("productionsList", notNullValue()))
                 .andExpect(view().name("productionsPage"));
@@ -69,7 +68,7 @@ public class ProductionDirectoryControllerTest {
     @Test
     public void whenGetProductionDirectoryListAsNoAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk());
     }
 
@@ -77,7 +76,7 @@ public class ProductionDirectoryControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenShowAddProductionDirectoryPageAsAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/add"))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("production"))
                 .andExpect(model().attribute("production", notNullValue()))
@@ -89,7 +88,7 @@ public class ProductionDirectoryControllerTest {
     @Test
     public void whenShowAddProductionDirectoryPageAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/add"))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -98,7 +97,7 @@ public class ProductionDirectoryControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenEditProductionDirectoryAsAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/edit-" + production.getId()))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("production"))
                 .andExpect(model().attribute("production", notNullValue()))
@@ -109,7 +108,7 @@ public class ProductionDirectoryControllerTest {
     @Test
     public void whenEditProductionDirectoryAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/edit-" + production.getId()))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -118,7 +117,7 @@ public class ProductionDirectoryControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateProductionDirectoryAsAuthorizedWithNullProductionDirectory_thenOk() throws Exception {
         mockMvc.perform(post(MAPPED_URL + "/update"))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("production"))
                 .andExpect(model().attribute("production", notNullValue()))
@@ -141,7 +140,7 @@ public class ProductionDirectoryControllerTest {
                 .param("shortName", production.getShortName())
                 .param("productionType", String.valueOf(productionType.getId()))
         )
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
 
                 .andExpect(redirectedUrl(MAPPED_URL));
@@ -152,7 +151,7 @@ public class ProductionDirectoryControllerTest {
     @Test
     public void whenUpdateProductionDirectoryAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(post(MAPPED_URL + "/update"))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -161,7 +160,7 @@ public class ProductionDirectoryControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenDeleteProductionDirectoryAsAuthorizedWithNotNullProduction_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/delete-" + production.getId()))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(MAPPED_URL));
 
@@ -171,7 +170,7 @@ public class ProductionDirectoryControllerTest {
     @Test
     public void whenDeleteProductionDirectoryAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/delete-" + production.getId()))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }

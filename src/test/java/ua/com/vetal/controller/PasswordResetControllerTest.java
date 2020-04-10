@@ -22,7 +22,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -54,7 +53,7 @@ public class PasswordResetControllerTest {
         when(mockTokenRepository.findByToken(anyString())).thenReturn(token);
 
         mockMvc.perform(get(MAPPED_URL).param("token", "token"))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("token", notNullValue()))
                 .andExpect(model().attribute("token", token.getToken()))
@@ -67,7 +66,7 @@ public class PasswordResetControllerTest {
         //when(mockTokenRepository.findByToken(anyString())).thenReturn(token);
 
         mockMvc.perform(get(MAPPED_URL))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("error", notNullValue()))
                 .andExpect(view().name("passwordResetPage"));
@@ -79,7 +78,7 @@ public class PasswordResetControllerTest {
         when(mockTokenRepository.findByToken(anyString())).thenReturn(token);
 
         mockMvc.perform(get(MAPPED_URL))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("error", notNullValue()))
                 .andExpect(view().name("passwordResetPage"));
@@ -92,7 +91,7 @@ public class PasswordResetControllerTest {
         when(mockTokenRepository.findByToken(anyString())).thenReturn(token);
 
         mockMvc.perform(get(MAPPED_URL))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("error", notNullValue()))
                 .andExpect(view().name("passwordResetPage"));
@@ -105,7 +104,7 @@ public class PasswordResetControllerTest {
         when(mockTokenRepository.findByToken(anyString())).thenReturn(token);
 
         mockMvc.perform(get(MAPPED_URL))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("error", notNullValue()))
                 .andExpect(view().name("passwordResetPage"));
@@ -122,7 +121,7 @@ public class PasswordResetControllerTest {
                 .param("token", "token")
                 .param("userId", "1")
         )
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/login?resetSuccess"));
     }
@@ -133,7 +132,7 @@ public class PasswordResetControllerTest {
         when(mockTokenRepository.findByToken(anyString())).thenReturn(token);
 
         mockMvc.perform(post(MAPPED_URL))
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrlPattern("/passwordReset?token*"));
     }
@@ -148,7 +147,7 @@ public class PasswordResetControllerTest {
                 .param("token", "token")
                 .param("userId", "1")
         )
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrlPattern("/passwordReset?token*"));
         mockMvc.perform(post(MAPPED_URL)
@@ -157,7 +156,7 @@ public class PasswordResetControllerTest {
                 .param("token", "token")
                 .param("userId", "1")
         )
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrlPattern("/passwordReset?token*"));
     }
@@ -172,7 +171,7 @@ public class PasswordResetControllerTest {
                 .param("token", "token")
                 .param("userId", "1")
         )
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrlPattern("/passwordReset?token*"));
         mockMvc.perform(post(MAPPED_URL)
@@ -181,7 +180,7 @@ public class PasswordResetControllerTest {
                 .param("token", "token")
                 .param("userId", "1")
         )
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrlPattern("/passwordReset?token*"));
     }
@@ -196,7 +195,7 @@ public class PasswordResetControllerTest {
                 .param("token", "token")
                 .param("userId", "1")
         )
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrlPattern("/passwordReset?token*"));
         mockMvc.perform(post(MAPPED_URL)
@@ -205,7 +204,7 @@ public class PasswordResetControllerTest {
                 .param("token", "token")
                 .param("userId", "1")
         )
-                .andDo(print())
+                //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrlPattern("/passwordReset?token*"));
     }

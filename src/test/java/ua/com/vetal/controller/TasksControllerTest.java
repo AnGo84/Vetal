@@ -26,7 +26,6 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -68,14 +67,14 @@ public class TasksControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
     public void whenGetTaskListAsAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("title", "Tasks"))
                 .andExpect(model().attribute("tasksList", notNullValue()))
                 .andExpect(view().name("tasksPage"));
 
         mockMvc.perform(get(MAPPED_URL + "/list"))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(model().attribute("title", "Tasks"))
                 .andExpect(model().attribute("tasksList", notNullValue()))
                 .andExpect(view().name("tasksPage"));
@@ -84,7 +83,7 @@ public class TasksControllerTest {
     @Test
     public void whenGetTaskListAsNoAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isOk());
     }
 
@@ -92,7 +91,7 @@ public class TasksControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenShowAddTaskPageAsAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/add"))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("task"))
                 .andExpect(model().attribute("task", notNullValue()))
@@ -105,7 +104,7 @@ public class TasksControllerTest {
     @Test
     public void whenShowAddTaskPageAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/add"))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -114,7 +113,7 @@ public class TasksControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenEditTaskAsAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/edit-" + task.getId()))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("task"))
                 .andExpect(model().attribute("task", notNullValue()))
@@ -126,7 +125,7 @@ public class TasksControllerTest {
     @Test
     public void whenEditTaskAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/edit-" + task.getId()))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -136,7 +135,7 @@ public class TasksControllerTest {
     public void whenCopyTaskAsAuthorized_thenOk() throws Exception {
         when(mockTaskService.getMaxID()).thenReturn(100l);
         mockMvc.perform(get(MAPPED_URL + "/copy-" + task.getId()))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("task"))
                 .andExpect(model().attribute("task", notNullValue()))
@@ -157,7 +156,7 @@ public class TasksControllerTest {
     @Test
     public void whenCopyTaskAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/copy-" + task.getId()))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -167,7 +166,7 @@ public class TasksControllerTest {
     public void whenViewTaskAsAuthorized_thenOk() throws Exception {
 
         mockMvc.perform(get(MAPPED_URL + "/view-" + task.getId()))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("task"))
                 .andExpect(model().attribute("task", notNullValue()))
@@ -181,7 +180,7 @@ public class TasksControllerTest {
     @Test
     public void whenViewTaskAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/view-" + task.getId()))
-                .andDo(print())
+                //.andDo(print())
                 /*.andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));*/
                 .andExpect(status().isOk())
@@ -192,7 +191,7 @@ public class TasksControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateTaskAsAuthorizedWithNullTask_thenOk() throws Exception {
         mockMvc.perform(post(MAPPED_URL + "/update"))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("task"))
                 .andExpect(model().attribute("task", notNullValue()))
@@ -239,7 +238,7 @@ public class TasksControllerTest {
                 .param("paper", String.valueOf(task.getPaper().getId()))
                 .param("cringle", String.valueOf(task.getCringle().getId()))
         )
-                .andDo(print())
+                //.andDo(print())
                 /*.andExpect(status().isFound())
                 .andExpect(redirectedUrl(MAPPED_URL));*/
                 .andExpect(status().isOk())
@@ -253,7 +252,7 @@ public class TasksControllerTest {
     @Test
     public void whenUpdateTaskAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(post(MAPPED_URL + "/update"))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -262,7 +261,7 @@ public class TasksControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenDeleteTaskAsAuthorizedWithNotNullUser_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/delete-" + task.getId()))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(MAPPED_URL));
 
@@ -272,7 +271,7 @@ public class TasksControllerTest {
     @Test
     public void whenDeleteTaskAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/delete-" + task.getId()))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -287,7 +286,7 @@ public class TasksControllerTest {
         mockMvc.perform(get(MAPPED_URL + "/filter")
                 .param("FilterDataData", filterData.toString())
         )
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(model().attributeExists("FilterDataData"))
                 .andExpect(model().attribute("FilterDataData", notNullValue()))
@@ -297,7 +296,7 @@ public class TasksControllerTest {
     @Test
     public void whenClearFilterTasksAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/filter"))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(MAPPED_URL));
     }
@@ -307,7 +306,7 @@ public class TasksControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenClearFilterTasksAsAuthorizedWithNotNullUser_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/clearFilter"))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(MAPPED_URL));
     }
@@ -315,7 +314,7 @@ public class TasksControllerTest {
     @Test
     public void whenFilterTasksAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/clearFilter"))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(MAPPED_URL));
     }
@@ -326,7 +325,7 @@ public class TasksControllerTest {
     public void whenExportToExcelReportTaskAsAuthorized_thenOk() throws Exception {
         //when(mockExporterService.export(any(ReportType.class), any(), anyString(), any()).thenReturn(null);
         mockMvc.perform(get(MAPPED_URL + "/excelExport"))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isOk());
 
     }
@@ -335,7 +334,7 @@ public class TasksControllerTest {
     public void whenExportToExcelReportTaskAsNoAuthorized_thenOk() throws Exception {
 
         mockMvc.perform(get(MAPPED_URL + "/excelExport"))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isOk());
     }
 
@@ -344,7 +343,7 @@ public class TasksControllerTest {
     public void whenPdfReportTaskAsAuthorized_thenOk() throws Exception {
         //when(mockExporterService.export(any(ReportType.class), any(), anyString(), any()).thenReturn(null);
         mockMvc.perform(get(MAPPED_URL + "/pdfReport-" + task.getId()))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isOk());
 
     }
@@ -352,7 +351,7 @@ public class TasksControllerTest {
     @Test
     public void whenPdfReportTaskAsNoAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/pdfReport-" + task.getId()))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isOk());
     }
 
@@ -361,7 +360,7 @@ public class TasksControllerTest {
     public void whenSendEmailAsAuthorized_thenOk() throws Exception {
         when(mockTaskService.checkTaskForMailing(any())).thenReturn("");
         mockMvc.perform(get(MAPPED_URL + "/sendEmail-" + task.getId()))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("title", "email"))
                 .andExpect(model().attribute("resultSuccess", notNullValue()))
@@ -373,7 +372,7 @@ public class TasksControllerTest {
     @Test
     public void whenSendEmailAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/sendEmail-" + task.getId()))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -383,7 +382,7 @@ public class TasksControllerTest {
     public void whenSendEmailAsAuthorized_thenError() throws Exception {
         when(mockTaskService.findById(anyLong())).thenReturn(null);
         mockMvc.perform(get(MAPPED_URL + "/sendEmail-" + task.getId()))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("title", "email"))
                 .andExpect(model().attribute("resultSuccess", notNullValue()))
@@ -394,7 +393,7 @@ public class TasksControllerTest {
         when(mockTaskService.findById(anyLong())).thenReturn(task);
         when(mockTaskService.checkTaskForMailing(any())).thenReturn("error message");
         mockMvc.perform(get(MAPPED_URL + "/sendEmail-" + task.getId()))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("title", "email"))
                 .andExpect(model().attribute("resultSuccess", notNullValue()))

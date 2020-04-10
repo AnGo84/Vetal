@@ -81,7 +81,7 @@ public class StencilsController {
 	private KraskoottiskService kraskoottiskService;
 
 	@LogExecutionTime
-	@RequestMapping(value = {""}, method = RequestMethod.GET)
+	@RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
 	public String stencilList(Model model) {
 
 		model.addAttribute("title", title);

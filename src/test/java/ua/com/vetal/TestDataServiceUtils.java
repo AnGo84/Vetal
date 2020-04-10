@@ -34,14 +34,52 @@ public class TestDataServiceUtils {
         task.setFormat(formatDirectory);
         LaminateDirectory laminateDirectory = entityManager.persistAndFlush(task.getLaminate());
         task.setLaminate(laminateDirectory);
-        PaperDirectory paperDirectory = entityManager.persistAndFlush(task.getPaper());
-        task.setPaper(paperDirectory);
-        CringleDirectory cringleDirectory = entityManager.persistAndFlush(task.getCringle());
-        task.setCringle(cringleDirectory);
-        State state = entityManager.persistAndFlush(task.getState());
-        task.setState(state);
-        Payment payment = entityManager.persistAndFlush(task.getPayment());
-        task.setPayment(payment);
-        return task;
-    }
+		PaperDirectory paperDirectory = entityManager.persistAndFlush(task.getPaper());
+		task.setPaper(paperDirectory);
+		CringleDirectory cringleDirectory = entityManager.persistAndFlush(task.getCringle());
+		task.setCringle(cringleDirectory);
+		State state = entityManager.persistAndFlush(task.getState());
+		task.setState(state);
+		Payment payment = entityManager.persistAndFlush(task.getPayment());
+		task.setPayment(payment);
+		return task;
+	}
+
+	public static Stencil saveStencilParts(Stencil stencil, TestEntityManager entityManager) {
+		NumberBaseDirectory numberBaseDirectory = entityManager.persistAndFlush(stencil.getNumberBase());
+		stencil.setNumberBase(numberBaseDirectory);
+		Manager manager = entityManager.persistAndFlush(stencil.getManager());
+		stencil.setManager(manager);
+		Client client = stencil.getClient();
+		client.setManager(manager);
+		client = entityManager.persistAndFlush(client);
+		stencil.setClient(client);
+
+		ProductionTypeDirectory productionTypeDirectory = entityManager.persistAndFlush(stencil.getProduction().getProductionType());
+		ProductionDirectory productionDirectory = stencil.getProduction();
+		productionDirectory.setProductionType(productionTypeDirectory);
+		productionDirectory = entityManager.persistAndFlush(productionDirectory);
+		stencil.setProduction(productionDirectory);
+
+		StockDirectory stockDirectory = entityManager.persistAndFlush(stencil.getStock());
+		stencil.setStock(stockDirectory);
+		PrintingUnitDirectory printingUnitDirectory = entityManager.persistAndFlush(stencil.getPrintingUnit());
+		stencil.setPrintingUnit(printingUnitDirectory);
+
+		PaperDirectory paperDirectory = entityManager.persistAndFlush(stencil.getPaper());
+		stencil.setPaper(paperDirectory);
+
+		Printer printer = entityManager.persistAndFlush(stencil.getPrinter());
+		stencil.setPrinter(printer);
+
+		Worker worker = entityManager.persistAndFlush(stencil.getWorkerPrint());
+		stencil.setWorkerPrint(worker);
+		stencil.setWorkerCut(worker);
+
+		State state = entityManager.persistAndFlush(stencil.getState());
+		stencil.setState(state);
+		Payment payment = entityManager.persistAndFlush(stencil.getPayment());
+		stencil.setPayment(payment);
+		return stencil;
+	}
 }

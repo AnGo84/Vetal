@@ -1,5 +1,6 @@
 package ua.com.vetal.entity;
 
+import org.hibernate.annotations.Immutable;
 import org.springframework.format.annotation.DateTimeFormat;
 import ua.com.vetal.entity.pk.OrderPK;
 
@@ -12,6 +13,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "vorders")
+@Immutable
 @IdClass(OrderPK.class)
 public class Order {
 	@Id
@@ -47,7 +49,6 @@ public class Order {
 	@Digits(integer = 8, fraction = 2)
 	@Column(name = "Amount")
 	private double amount;
-
 
 	@Digits(integer = 8, fraction = 2)
 	@Column(name = "Debt_amount")

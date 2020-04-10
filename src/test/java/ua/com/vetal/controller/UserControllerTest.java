@@ -22,7 +22,6 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 //@ExtendWith(SpringExtension.class)
@@ -52,17 +51,17 @@ class UserControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenGetPersonListAsAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL))
-                .andDo(print())
+                ////.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("users", notNullValue()))
                 .andExpect(view().name("usersPage"));
         mockMvc.perform(get(MAPPED_URL + "/all"))
-                .andDo(print())
+                ////.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("users", notNullValue()))
                 .andExpect(view().name("usersPage"));
         mockMvc.perform(get(MAPPED_URL + "/list"))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("users", notNullValue()))
                 .andExpect(view().name("usersPage"));
@@ -71,7 +70,7 @@ class UserControllerTest {
     @Test
     public void whenGetPersonListAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(get(MAPPED_URL))
-                .andDo(print())
+                ////.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -80,7 +79,7 @@ class UserControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
     public void whenGetPersonListAsAuthorizedWithWrongRoleMANAGER_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(get(MAPPED_URL))
-                .andDo(print())
+                ////.andDo(print())
                 .andExpect(status().isForbidden());
     }
 
@@ -88,7 +87,7 @@ class UserControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenGetShowAddUserPageAsAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/add"))
-                .andDo(print())
+                ////.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("user"))
                 .andExpect(model().attribute("user", notNullValue()))
@@ -99,7 +98,7 @@ class UserControllerTest {
     @Test
     public void whenGetShowAddUserPageAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/add"))
-                .andDo(print())
+                ////.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -108,7 +107,7 @@ class UserControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenEditUserAsAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/edit-" + user.getId()))
-                .andDo(print())
+                ////.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("user"))
                 .andExpect(model().attribute("user", notNullValue()))
@@ -119,7 +118,7 @@ class UserControllerTest {
     @Test
     public void whenEditUserAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/edit-" + user.getId()))
-                .andDo(print())
+                ////.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -128,7 +127,7 @@ class UserControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateUserAsAuthorizedWithNullUser_thenOk() throws Exception {
         mockMvc.perform(post(MAPPED_URL + "/update"))
-                .andDo(print())
+                ////.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("user"))
                 .andExpect(model().attribute("user", notNullValue()))
@@ -154,7 +153,7 @@ class UserControllerTest {
                         .param("userRoles", "1")
                 //{id=1, name=ROLE_ADMIN}
         )
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(MAPPED_URL));
         verify(mockUserService, times(1)).updateObject(user);
@@ -174,7 +173,7 @@ class UserControllerTest {
                 .param("enabled", String.valueOf(user.isEnabled()))
                 .param("userRoles", "1")
         )
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("user"))
                 .andExpect(model().attributeHasFieldErrors("user", "name"))
@@ -185,7 +184,7 @@ class UserControllerTest {
     @Test
     public void whenUpdateUserAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(post(MAPPED_URL + "/update"))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -194,7 +193,7 @@ class UserControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenDeleteUserAsAuthorizedWithNotNullUser_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/delete-" + user.getId()))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(MAPPED_URL));
 
@@ -204,7 +203,7 @@ class UserControllerTest {
     @Test
     public void whenDeleteUserAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/delete-" + user.getId()))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
@@ -214,7 +213,7 @@ class UserControllerTest {
     public void whenResetUserPasswordAsAuthorizedWithNotNullUser_thenOk() throws Exception {
         when(mockUserService.isObjectExist(any())).thenReturn(true);
         mockMvc.perform(get(MAPPED_URL + "/resetPassword-" + user.getId()))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/users/edit-" + user.getId() + "?resetSuccess"));
         when(mockUserService.isObjectExist(any())).thenReturn(false);
@@ -222,7 +221,7 @@ class UserControllerTest {
         User notExistUser = TestBuildersUtils.getUser(123654321l, "New Name", "", true, null);
         when(mockUserService.findById(anyLong())).thenReturn(notExistUser);
         mockMvc.perform(get(MAPPED_URL + "/resetPassword-" + notExistUser.getId()))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/users/edit-" + notExistUser.getId()));
     }
@@ -230,7 +229,7 @@ class UserControllerTest {
     @Test
     public void whenResetUserPasswordAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/resetPassword-" + user.getId()))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }

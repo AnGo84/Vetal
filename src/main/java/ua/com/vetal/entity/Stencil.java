@@ -1,5 +1,6 @@
 package ua.com.vetal.entity;
 
+import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -13,6 +14,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "stencils")
+@Data
 public class Stencil {
 
     @Id
@@ -94,9 +96,10 @@ public class Stencil {
     @Column(name = "Adjustment")
     private String adjustment;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "Paper_ID")
-    private PaperDirectory paper;
+	@NotNull
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "Paper_ID")
+	private PaperDirectory paper;
 
     @NotNull
     @Column(name = "Paper_format", nullable = false)
@@ -690,59 +693,4 @@ public class Stencil {
         return new DecimalFormat("#,##0.00").format(amount / 100) + " грн";
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("Stencil{");
-        sb.append("id=").append(id);
-        sb.append(", number=").append(number);
-        sb.append(", numberBase=").append(numberBase);
-        sb.append(", numberSuffix=").append(numberSuffix);
-        sb.append(", fullNumber='").append(fullNumber).append('\'');
-        sb.append(", account='").append(account).append('\'');
-        sb.append(", client=").append(client);
-        sb.append(", orderName='").append(orderName).append('\'');
-        sb.append(", manager=").append(manager);
-        sb.append(", dateBegin=").append(dateBegin);
-        sb.append(", dateEnd=").append(dateEnd);
-        sb.append(", production=").append(production);
-        sb.append(", stock=").append(stock);
-        sb.append(", printing=").append(printing);
-        sb.append(", printingUnit=").append(printingUnit);
-        sb.append(", adjustment='").append(adjustment).append('\'');
-        sb.append(", paper=").append(paper);
-        sb.append(", paperFormat='").append(paperFormat).append('\'');
-        sb.append(", sheetNumber=").append(sheetNumber);
-        sb.append(", printer=").append(printer);
-        sb.append(", datePrintBegin=").append(datePrintBegin);
-        sb.append(", printingNote='").append(printingNote).append('\'');
-        sb.append(", workerPrint=").append(workerPrint);
-        sb.append(", workerCut=").append(workerCut);
-        sb.append(", fillet=").append(fillet);
-        sb.append(", popup=").append(popup);
-        sb.append(", carving=").append(carving);
-        sb.append(", stamping=").append(stamping);
-        sb.append(", embossing=").append(embossing);
-        sb.append(", bending=").append(bending);
-        sb.append(", plotter=").append(plotter);
-        sb.append(", packBox=").append(packBox);
-        sb.append(", packPellicle=").append(packPellicle);
-        sb.append(", packPaper=").append(packPaper);
-        sb.append(", packPackage=").append(packPackage);
-        sb.append(", packNP=").append(packNP);
-        sb.append(", numeration=").append(numeration);
-        sb.append(", numerationStart=").append(numerationStart);
-        sb.append(", cutRibbon=").append(cutRibbon);
-        sb.append(", ribbonLength=").append(ribbonLength);
-        sb.append(", sticker=").append(sticker);
-        sb.append(", amount=").append(amount);
-        sb.append(", state=").append(state);
-        sb.append(", payment=").append(payment);
-        sb.append(", debtAmount=").append(debtAmount);
-        sb.append(", kraskoottisk=").append(kraskoottisk);
-        sb.append(", costOfMaterials=").append(costOfMaterials);
-        sb.append(", otherExpenses=").append(otherExpenses);
-        sb.append(", costOfPrinting=").append(costOfPrinting);
-        sb.append('}');
-        return sb.toString();
-    }
 }
