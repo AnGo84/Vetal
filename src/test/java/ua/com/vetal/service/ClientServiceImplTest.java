@@ -1,19 +1,18 @@
 package ua.com.vetal.service;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
 import ua.com.vetal.TestBuildersUtils;
+import ua.com.vetal.dao.ClientDAO;
 import ua.com.vetal.entity.Client;
 import ua.com.vetal.entity.Manager;
 import ua.com.vetal.entity.filter.ClientFilter;
 import ua.com.vetal.repositories.ClientRepository;
 
-import javax.persistence.EntityManager;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,11 +25,11 @@ import static org.mockito.Mockito.*;
 public class ClientServiceImplTest {
 
     @Autowired
-    private EntityManager entityManager;
-    @Autowired
     private ClientServiceImpl clientService;
     @MockBean
     private ClientRepository mockClientRepository;
+    @MockBean
+    private ClientDAO mockClientDAO;
     private Manager manager;
     private Client client;
 
@@ -168,42 +167,13 @@ public class ClientServiceImplTest {
         assertFalse(clientService.isFullNameExist(client));
     }
 
-    @Disabled("Disabled until refactoring filters")
     @Test
     void whenFindByFilterData() {
-        List<Client> filteredList = clientService.findByFilterData(null);
-        assertEquals(filteredList.size(), 1);
-
-        ClientFilter filterData = new ClientFilter();
-        filterData.setFullName(client.getFullName());
-        filterData.setManager(client.getManager());
-
-        filteredList = clientService.findByFilterData(filterData);
-        assertEquals(1, filteredList.size());
-
-        filterData = new ClientFilter();
-        filteredList = clientService.findByFilterData(filterData);
-        assertEquals(0, filteredList.size());
-
-        filterData = new ClientFilter();
-        filterData.setFullName(client.getFullName());
-        filteredList = clientService.findByFilterData(filterData);
-        assertEquals(1, filteredList.size());
-
-        filterData = new ClientFilter();
-        filterData.setManager(client.getManager());
-        filteredList = clientService.findByFilterData(filterData);
-        assertEquals(1, filteredList.size());
-
-        filterData = new ClientFilter();
-        filterData.setManager(new Manager());
-        filteredList = clientService.findByFilterData(filterData);
-        assertEquals(0, filteredList.size());
-
-        filterData = new ClientFilter();
-        filterData.setFullName("not exist name");
-        filteredList = clientService.findByFilterData(filterData);
-        assertEquals(0, filteredList.size());
+        when(mockClientDAO.findByFilterData(any(ClientFilter.class))).thenReturn(Arrays.asList(client));
+        List<Client> objects = mockClientDAO.findByFilterData(new ClientFilter());
+        assertNotNull(objects);
+        assertFalse(objects.isEmpty());
+        assertEquals(objects.size(), 1);
     }
 
 }

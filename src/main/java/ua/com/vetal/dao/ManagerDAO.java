@@ -7,7 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Repository
-@Transactional
+@Transactional(readOnly = true)
 public class ManagerDAO {
 
     @PersistenceContext

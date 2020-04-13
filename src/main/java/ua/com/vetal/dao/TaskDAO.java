@@ -10,7 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 @Repository
-@Transactional
+@Transactional(readOnly = true)
 public class TaskDAO {
 
     @PersistenceContext

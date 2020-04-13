@@ -1,19 +1,13 @@
 package ua.com.vetal.service;
 
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.vetal.dao.ContractorDAO;
 import ua.com.vetal.entity.Contractor;
 import ua.com.vetal.entity.filter.PersonFilter;
 import ua.com.vetal.repositories.ContractorRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Service("contractorService")
@@ -24,9 +18,12 @@ public class ContractorServiceImpl implements SimpleService<Contractor> {
 	// LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Autowired
+	private ContractorDAO contractorDAO;
+
+	@Autowired
 	private ContractorRepository personRepository;
-	@PersistenceContext
-	private EntityManager entityManager;
+	/*@PersistenceContext
+	private EntityManager entityManager;*/
 
 	@Override
 	public Contractor findById(Long id) {
@@ -76,13 +73,13 @@ public class ContractorServiceImpl implements SimpleService<Contractor> {
 	}
 
 	public List<Contractor> findByFilterData(PersonFilter filterData) {
-		List<Contractor> list = null;
+		List<Contractor> list = contractorDAO.findByFilterData(filterData);
 
 		if (filterData == null) {
 			return findAllObjects();
 		}
 
-		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		/*CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Contractor> query = builder.createQuery(Contractor.class);
 		Root<Contractor> root = query.from(Contractor.class);
 
@@ -103,7 +100,7 @@ public class ContractorServiceImpl implements SimpleService<Contractor> {
 		query.where(predicate);
 		//query.orderBy(builder.desc(root.get("dateBegin")));
 
-		list = entityManager.createQuery(query).getResultList();
+		list = entityManager.createQuery(query).getResultList();*/
 
 		// https://www.baeldung.com/rest-search-language-spring-jpa-criteria
 		// http://qaru.site/questions/293915/spring-data-jpa-query-by-example

@@ -1,19 +1,13 @@
 package ua.com.vetal.service;
 
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.vetal.dao.ClientDAO;
 import ua.com.vetal.entity.Client;
 import ua.com.vetal.entity.filter.ClientFilter;
 import ua.com.vetal.repositories.ClientRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Service("clientService")
@@ -23,8 +17,10 @@ public class ClientServiceImpl implements SimpleService<Client> {
     // private static final Logger logger =
     // LoggerFactory.getLogger(UserServiceImpl.class);
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    /*@PersistenceContext
+    private EntityManager entityManager;*/
+    @Autowired
+    private ClientDAO clientDAO;
 
     @Autowired
     private ClientRepository directoryRepository;
@@ -73,11 +69,11 @@ public class ClientServiceImpl implements SimpleService<Client> {
 
     public List<Client> findByFilterData(ClientFilter filterData) {
         //https://www.baeldung.com/rest-api-search-language-spring-data-specifications
-        List<Client> list = null;
-        if (filterData == null) {
+        List<Client> list = clientDAO.findByFilterData(filterData);
+        if (list == null) {
             return findAllObjects();
         }
-
+/*
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Client> query = builder.createQuery(Client.class);
         Root<Client> root = query.from(Client.class);
@@ -96,7 +92,7 @@ public class ClientServiceImpl implements SimpleService<Client> {
 
         query.where(predicate);
         //query.orderBy(builder.desc(root.get("fullName")));
-        list = entityManager.createQuery(query).getResultList();
+        list = entityManager.createQuery(query).getResultList();*/
 
         // https://www.baeldung.com/rest-search-language-spring-jpa-criteria
         // http://qaru.site/questions/293915/spring-data-jpa-query-by-example

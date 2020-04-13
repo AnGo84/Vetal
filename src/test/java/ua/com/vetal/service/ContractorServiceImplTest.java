@@ -1,13 +1,13 @@
 package ua.com.vetal.service;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
 import ua.com.vetal.TestBuildersUtils;
+import ua.com.vetal.dao.ContractorDAO;
 import ua.com.vetal.entity.Contractor;
 import ua.com.vetal.entity.Manager;
 import ua.com.vetal.entity.filter.PersonFilter;
@@ -29,16 +29,18 @@ class ContractorServiceImplTest {
 	private ContractorServiceImpl contractorService;
 	@MockBean
 	private ContractorRepository mockContractorRepository;
+	@MockBean
+	private ContractorDAO mockContractorDAO;
 	private Manager manager;
 	private Contractor contractor;
 
 	@BeforeEach
 	public void beforeEach() {
-        manager = TestBuildersUtils.getManager(1l, "firstName", "lastName", "middleName", "email");
+		manager = TestBuildersUtils.getManager(1l, "firstName", "lastName", "middleName", "email");
 
-        contractor = TestBuildersUtils.getContractor(1l, "corpName", "shortName",
-                "firstName", "lastName", "middleName", "address",
-                "email", "phone", "siteURL");
+		contractor = TestBuildersUtils.getContractor(1l, "corpName", "shortName",
+				"firstName", "lastName", "middleName", "address",
+				"email", "phone", "siteURL");
         contractor.setManager(manager);
     }
 
@@ -198,10 +200,16 @@ class ContractorServiceImplTest {
 		assertFalse(contractorService.isCorpNameExist(contractor));
 	}
 
-	@Disabled("Disabled until refactoring filters")
+	//@Disabled("Disabled until refactoring filters")
 	@Test
 	void whenFindByFilterData() {
-		List<Contractor> filteredList = contractorService.findByFilterData(null);
+		when(mockContractorDAO.findByFilterData(any(PersonFilter.class))).thenReturn(Arrays.asList(contractor));
+		List<Contractor> objects = mockContractorDAO.findByFilterData(new PersonFilter());
+		assertNotNull(objects);
+		assertFalse(objects.isEmpty());
+		assertEquals(objects.size(), 1);
+
+		/*List<Contractor> filteredList = contractorService.findByFilterData(null);
 		assertEquals(filteredList.size(), 1);
 
 		PersonFilter filterData = new PersonFilter();
@@ -233,7 +241,7 @@ class ContractorServiceImplTest {
 		filterData = new PersonFilter();
 		filterData.setCorpName("not exist name");
 		filteredList = contractorService.findByFilterData(filterData);
-		assertEquals(0, filteredList.size());
+		assertEquals(0, filteredList.size());*/
 	}
 
 }
