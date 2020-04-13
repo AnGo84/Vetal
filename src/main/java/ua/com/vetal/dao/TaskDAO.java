@@ -1,23 +1,22 @@
 package ua.com.vetal.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.entity.Task;
-import ua.com.vetal.entity.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 @Repository
 @Transactional
 public class TaskDAO {
 
-    @Autowired
+    @PersistenceContext
     private EntityManager entityManager;
 
-    public User findTaskByAccount(String account) {
+    /*public User findTaskByAccount(String account) {
         try {
             String sql = "Select e from " + Task.class.getName() + " e " //
                     + " Where e.account = :account ";
@@ -29,7 +28,7 @@ public class TaskDAO {
         } catch (NoResultException e) {
             return null;
         }
-    }
+    }*/
 
 
     public Long getMaxID() {

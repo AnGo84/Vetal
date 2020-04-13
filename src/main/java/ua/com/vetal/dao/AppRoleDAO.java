@@ -14,6 +14,7 @@ import java.util.List;
 public class AppRoleDAO {
 
     @Autowired
+    //@PersistenceContext
     private EntityManager entityManager;
 
     public List<String> getRoleNames(Long userId) {

@@ -1,23 +1,22 @@
 package ua.com.vetal.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.entity.Stencil;
-import ua.com.vetal.entity.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 @Repository
 @Transactional
 public class StencilDAO {
 
-    @Autowired
+    @PersistenceContext
     private EntityManager entityManager;
 
-    public User findStencilByAccount(String account) {
+   /* public User findStencilByAccount(String account) {
         try {
             String sql = "Select e from " + Stencil.class.getName() + " e " //
                     + " Where e.account = :account ";
@@ -29,7 +28,7 @@ public class StencilDAO {
         } catch (NoResultException e) {
             return null;
         }
-    }
+    }*/
 
     public Long getMaxID() {
         try {

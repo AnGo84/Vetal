@@ -4,13 +4,14 @@ import lombok.Data;
 import ua.com.vetal.entity.pk.CompositeAppUserRolePK;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "USER_ROLE", //
         uniqueConstraints = { //
                 @UniqueConstraint(name = "USER_ROLE_UK", columnNames = {"User_Id", "Role_Id"})})
 @Data
-public class AppUserRole {
+public class AppUserRole implements Serializable {
 
     /*@Id
     //@GeneratedValue

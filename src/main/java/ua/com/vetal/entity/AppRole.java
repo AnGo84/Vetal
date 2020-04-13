@@ -1,12 +1,19 @@
 package ua.com.vetal.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "APP_ROLE", //
         uniqueConstraints = { //
                 @UniqueConstraint(name = "APP_ROLE_UK", columnNames = "Role_Name")})
-public class AppRole {
+@AllArgsConstructor
+@NoArgsConstructor
+
+public class AppRole implements Serializable {
 
     @Id
     //@GeneratedValue
