@@ -31,7 +31,7 @@ public class User implements Serializable {
     @Column(name = "User_Name", length = 36, nullable = false, unique = true)
     private String name;
 
-    @NotEmpty
+    //@NotEmpty
     @Size(max = 128)
     @Column(name = "Encrypted_Password", length = 128, nullable = false)
     private String encryptedPassword;

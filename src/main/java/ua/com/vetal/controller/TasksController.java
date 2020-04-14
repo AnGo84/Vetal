@@ -208,8 +208,7 @@ public class TasksController {
              */
 
             for (ObjectError error : bindingResult.getAllErrors()) {
-
-                logger.info(error.getDefaultMessage());
+                logger.error(error.getDefaultMessage());
             }
             return "taskPage";
         }

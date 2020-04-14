@@ -1,12 +1,10 @@
 package ua.com.vetal.repositories;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import ua.com.vetal.TestBuildersUtils;
@@ -139,43 +137,44 @@ class UserRepositoryTest {
         assertThrows(ConstraintViolationException.class, () -> {
             userRepository.save(user);
         });
-    }
+	}
 
 	@Test
 	public void whenSaveUserWithNameTooShortLength_thenThrowConstraintViolationException() {
-        User user = TestBuildersUtils.getUser(null, "1", "second pass", true, userRoleSet);
-        assertThrows(ConstraintViolationException.class, () -> {
-            //entityManager.persistAndFlush(user);
-            userRepository.save(user);
-        });
-    }
+		User user = TestBuildersUtils.getUser(null, "1", "second pass", true, userRoleSet);
+		assertThrows(ConstraintViolationException.class, () -> {
+			//entityManager.persistAndFlush(user);
+			userRepository.save(user);
+		});
+	}
 
+	@Disabled("Field Pass without @NotEmpty for updating validation")
 	@Test
 	public void whenSaveUserWithPassWrongLength_thenThrowConstraintViolationException() {
-        User user = TestBuildersUtils.getUser(null, "New Name", "", true, userRoleSet);
-        assertThrows(ConstraintViolationException.class, () -> {
-            //entityManager.persistAndFlush(user);
-            userRepository.saveAndFlush(user);
-        });
-    }
+		User user = TestBuildersUtils.getUser(null, "New Name", "", true, userRoleSet);
+		assertThrows(ConstraintViolationException.class, () -> {
+			//entityManager.persistAndFlush(user);
+			userRepository.save(user);
+		});
+	}
 
 	@Test
 	public void whenSaveUserWithEmailWrongLength_thenThrowConstraintViolationException() {
         User user = TestBuildersUtils.getUser(null, "New Name", "", true, userRoleSet);
         user.setEmail("Email_With_Length_More_Then_100_Symbols_Is_Too_Long_For_Saving_And_Should_be_an_error_on_saving_attempt");
         assertThrows(ConstraintViolationException.class, () -> {
-            userRepository.saveAndFlush(user);
+			userRepository.save(user);
         });
     }
 
 	@Test
-	public void whenSaveUserWithExistName_thenThrowConstraintViolationException() {
-        User user = TestBuildersUtils.getUser(null, "New Name", "", true, userRoleSet);
-        assertThrows(ConstraintViolationException.class, () -> {
-            //entityManager.persistAndFlush(user);
-            userRepository.save(user);
-        });
-    }
+	public void whenSaveUserWithExistName_thenThrowDataIntegrityViolationException() {
+		User user = TestBuildersUtils.getUser(null, "User", "", true, userRoleSet);
+		assertThrows(DataIntegrityViolationException.class, () -> {
+			//entityManager.persistAndFlush(user);
+			userRepository.save(user);
+		});
+	}
 
 
 	@Test
