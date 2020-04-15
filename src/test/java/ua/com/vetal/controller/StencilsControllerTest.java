@@ -1,7 +1,6 @@
 package ua.com.vetal.controller;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -263,7 +262,6 @@ public class StencilsControllerTest {
 	}
 
 	@Test
-	@Disabled("Fix filters")
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenFilterStencilsAsAuthorizedWithNotNullUser_thenOk() throws Exception {
 		FilterData filterData = new FilterData();
@@ -274,13 +272,11 @@ public class StencilsControllerTest {
 		)
 				//.andDo
 				.andExpect(status().isFound())
-				.andExpect(model().attributeExists("FilterDataData"))
-				.andExpect(model().attribute("FilterDataData", notNullValue()))
 				.andExpect(redirectedUrl(MAPPED_URL));
 	}
 
 	@Test
-	public void whenClearFilterStencilsAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
+	public void whenFilterStencilsAsNoAuthorized_thenRedirectToMappedURL() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/filter"))
 				//.andDo
 				.andExpect(status().isFound())
@@ -288,7 +284,6 @@ public class StencilsControllerTest {
 	}
 
 	@Test
-	@Disabled("Fix filters")
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenClearFilterStencilsAsAuthorizedWithNotNullUser_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/clearFilter"))
@@ -298,7 +293,7 @@ public class StencilsControllerTest {
 	}
 
 	@Test
-	public void whenFilterStencilsAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
+	public void whenClearFilterStencilsAsNoAuthorized_thenRedirectToMappedURL() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/clearFilter"))
 				//.andDo
 				.andExpect(status().isFound())

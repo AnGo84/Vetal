@@ -214,4 +214,35 @@ public class TestBuildersUtils {
         order.setProduction(production);
         return order;
     }
+
+
+    public static Order getOrderFromTask(Task task) {
+        Order order = new Order();
+        order.setId(task.getId());
+        order.setAmount(task.getAmountForContractor());
+        order.setClient(task.getClient());
+        order.setDateBegin(task.getDateBegin());
+        order.setDebtAmount(task.getDebtAmount());
+        order.setFullNumber(task.getFullNumber());
+        order.setManager(task.getManager());
+        order.setOrderType("task");
+        order.setPrinting(task.getPrinting());
+        order.setProduction(task.getProduction());
+        return order;
+    }
+
+    public static Order getOrderFromStencil(Stencil stencil) {
+        Order order = new Order();
+        order.setId(stencil.getId());
+        order.setAmount(stencil.getAmount());
+        order.setClient(stencil.getClient());
+        order.setDateBegin(stencil.getDateBegin());
+        order.setDebtAmount(stencil.getDebtAmount());
+        order.setFullNumber(stencil.getFullNumber());
+        order.setManager(stencil.getManager());
+        order.setOrderType("stencil");
+        order.setPrinting(stencil.getPrinting());
+        order.setProduction(stencil.getProduction());
+        return order;
+    }
 }

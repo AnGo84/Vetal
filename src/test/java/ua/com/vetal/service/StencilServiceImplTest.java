@@ -1,7 +1,6 @@
 package ua.com.vetal.service;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,12 +8,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
 import ua.com.vetal.TestDataUtils;
-import ua.com.vetal.entity.Manager;
+import ua.com.vetal.dao.StencilDAO;
 import ua.com.vetal.entity.Stencil;
 import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.repositories.StencilRepository;
 
-import javax.persistence.EntityManager;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,11 +24,11 @@ import static org.mockito.Mockito.*;
 class StencilServiceImplTest {
 
 	@Autowired
-	private EntityManager entityManager;
-	@Autowired
 	private StencilServiceImpl stencilService;
 	@MockBean
 	private StencilRepository mockStencilRepository;
+	@MockBean
+	private StencilDAO mockStencilDAO;
 	private Stencil stencil;
 
 	@BeforeEach
@@ -151,9 +149,17 @@ class StencilServiceImplTest {
 		assertTrue(stencilService.isAccountValueExist(newStencil));
 	}
 
-	@Disabled("Disabled until refactoring filters")
+	//@Disabled("Disabled until refactoring filters")
 	@Test
 	void whenFindByFilterData() {
+		when(mockStencilDAO.findByFilterData(any(FilterData.class))).thenReturn(Arrays.asList(stencil));
+		List<Stencil> objects = stencilService.findByFilterData(new FilterData());
+		assertNotNull(objects);
+		assertFalse(objects.isEmpty());
+		assertEquals(objects.size(), 1);
+
+		/*
+
 		List<Stencil> filteredList = stencilService.findByFilterData(null);
 		assertEquals(filteredList.size(), 1);
 
@@ -186,6 +192,6 @@ class StencilServiceImplTest {
 		filterData = new FilterData();
 		filterData.setAccount("not exist name");
 		filteredList = stencilService.findByFilterData(filterData);
-		assertEquals(0, filteredList.size());
+		assertEquals(0, filteredList.size());*/
 	}
 }

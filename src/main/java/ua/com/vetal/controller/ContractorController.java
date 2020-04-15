@@ -1,11 +1,5 @@
 package ua.com.vetal.controller;
 
-import java.io.IOException;
-import java.util.*;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
 import net.sf.jasperreports.engine.JRException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-
 import ua.com.vetal.entity.Contractor;
 import ua.com.vetal.entity.Manager;
 import ua.com.vetal.entity.ReportType;
@@ -25,6 +18,14 @@ import ua.com.vetal.service.ContractorServiceImpl;
 import ua.com.vetal.service.ManagerServiceImpl;
 import ua.com.vetal.service.reports.ExporterService;
 import ua.com.vetal.service.reports.JasperService;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/contractor")
@@ -164,11 +165,12 @@ public class ContractorController {
 							 Model model) {
 		logger.info("Filter: " + filterData);
 		this.personFilter = filterData;
+
 		return "redirect:/contractor";
 	}
 
 	@RequestMapping(value = "/clearFilter", method = RequestMethod.GET)
-	public String clearFilterTask() {
+	public String clearFilterTask(Model model) {
 		this.personFilter = new PersonFilter();
 		return "redirect:/contractor";
 	}

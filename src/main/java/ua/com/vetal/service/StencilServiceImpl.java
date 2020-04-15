@@ -11,12 +11,6 @@ import ua.com.vetal.entity.Stencil;
 import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.repositories.StencilRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Service("stencilService")
@@ -25,9 +19,7 @@ public class StencilServiceImpl implements SimpleService<Stencil> {
 
     private static final Logger logger = LoggerFactory.getLogger(StencilServiceImpl.class);
     @Autowired
-    StencilDAO stencilDAO;
-    @PersistenceContext
-    private EntityManager entityManager;
+    private StencilDAO stencilDAO;
     @Autowired
     private StencilRepository stencilRepository;
 
@@ -75,9 +67,13 @@ public class StencilServiceImpl implements SimpleService<Stencil> {
     }
 
     public List<Stencil> findByFilterData(FilterData filterData) {
-        List<Stencil> list = null;
+        List<Stencil> list = stencilDAO.findByFilterData(filterData);
 
         if (filterData == null) {
+            return findAllObjects();
+        }
+
+        /*if (filterData == null) {
             return findAllObjects();
         }
 
@@ -101,10 +97,10 @@ public class StencilServiceImpl implements SimpleService<Stencil> {
 
         }
 
-		/*if (filterData.getFileName() != null && !filterData.getFileName().equals("")) {
+		*//*if (filterData.getFileName() != null && !filterData.getFileName().equals("")) {
 			predicate = builder.and(predicate, builder.like(builder.lower(root.get("fileName")),
 					("%" + filterData.getFileName() + "%").toLowerCase()));
-		}*/
+		}*//*
 
         if (filterData.getClient() != null && filterData.getClient().getId() != 0) {
             predicate = builder.and(predicate, builder.equal(root.get("client"), filterData.getClient()));
@@ -139,7 +135,7 @@ public class StencilServiceImpl implements SimpleService<Stencil> {
         query.orderBy(builder.desc(root.get("dateBegin")));
 
         list = entityManager.createQuery(query).getResultList();
-
+*/
         // https://www.baeldung.com/rest-search-language-spring-jpa-criteria
         // http://qaru.site/questions/293915/spring-data-jpa-query-by-example
         return list;
@@ -149,6 +145,11 @@ public class StencilServiceImpl implements SimpleService<Stencil> {
     public boolean isObjectExist(Stencil stencil) {
         // return findByName(manager.getName()) != null;
         return findById(stencil.getId()) != null;
+    }
+
+    private Sort sortByDateBeginDesc() {
+        //return new Sort(Sort.Direction.DESC, "dateBegin");
+        return Sort.by(Sort.Direction.DESC, "dateBegin");
     }
 
     public boolean isAccountValueExist(Stencil stencil) {
@@ -171,8 +172,4 @@ public class StencilServiceImpl implements SimpleService<Stencil> {
         return stencilDAO.getMaxID();
     }
 
-    private Sort sortByDateBeginDesc() {
-        //return new Sort(Sort.Direction.DESC, "dateBegin");
-        return Sort.by(Sort.Direction.DESC, "dateBegin");
-    }
 }

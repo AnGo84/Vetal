@@ -1,7 +1,6 @@
 package ua.com.vetal.controller;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -277,7 +276,6 @@ public class TasksControllerTest {
     }
 
     @Test
-    @Disabled("Fix filters")
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenFilterTasksAsAuthorizedWithNotNullUser_thenOk() throws Exception {
         FilterData filterData = new FilterData();
@@ -288,13 +286,11 @@ public class TasksControllerTest {
         )
                 //.andDo(print())
                 .andExpect(status().isFound())
-                .andExpect(model().attributeExists("FilterDataData"))
-                .andExpect(model().attribute("FilterDataData", notNullValue()))
                 .andExpect(redirectedUrl(MAPPED_URL));
     }
 
     @Test
-    public void whenClearFilterTasksAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
+    public void whenFilterTasksAsNoAuthorized_thenRedirectToMappedURL() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/filter"))
                 //.andDo(print())
                 .andExpect(status().isFound())
@@ -302,7 +298,6 @@ public class TasksControllerTest {
     }
 
     @Test
-    @Disabled("Fix filters")
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenClearFilterTasksAsAuthorizedWithNotNullUser_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/clearFilter"))
@@ -312,7 +307,7 @@ public class TasksControllerTest {
     }
 
     @Test
-    public void whenFilterTasksAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
+    public void whenCleanFilterTasksAsNoAuthorized_thenRedirectToMappedURL() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/clearFilter"))
                 //.andDo(print())
                 .andExpect(status().isFound())

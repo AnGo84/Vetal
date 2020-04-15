@@ -1,7 +1,6 @@
 package ua.com.vetal.service;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,7 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
 import ua.com.vetal.TestDataUtils;
-import ua.com.vetal.entity.Manager;
+import ua.com.vetal.dao.TaskDAO;
 import ua.com.vetal.entity.Task;
 import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.repositories.TaskRepository;
@@ -32,6 +31,8 @@ public class TaskServiceImplTest {
     private TaskServiceImpl taskService;
     @MockBean
     private TaskRepository mockTaskRepository;
+    @MockBean
+    private TaskDAO mockTaskDAO;
     private Task task;
 
     @BeforeEach
@@ -173,10 +174,16 @@ public class TaskServiceImplTest {
     }
 
 
-    @Disabled("Disabled until refactoring filters")
+    //@Disabled("Disabled until refactoring filters")
     @Test
     void whenFindByFilterData() {
-        List<Task> filteredList = taskService.findByFilterData(null);
+        when(mockTaskDAO.findByFilterData(any(FilterData.class))).thenReturn(Arrays.asList(task));
+        List<Task> objects = taskService.findByFilterData(new FilterData());
+        assertNotNull(objects);
+        assertFalse(objects.isEmpty());
+        assertEquals(objects.size(), 1);
+
+/*        List<Task> filteredList = taskService.findByFilterData(null);
         assertEquals(filteredList.size(), 1);
 
         FilterData filterData = new FilterData();
@@ -208,6 +215,6 @@ public class TaskServiceImplTest {
         filterData = new FilterData();
         filterData.setAccount("not exist name");
         filteredList = taskService.findByFilterData(filterData);
-        assertEquals(0, filteredList.size());
+        assertEquals(0, filteredList.size());*/
     }
 }

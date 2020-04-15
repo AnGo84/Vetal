@@ -50,9 +50,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // The pages does not require login
         http.authorizeRequests()
                 .antMatchers("/", "/main", "/login", "/logout", "/forgotPassword", "/resetPassword",
-                        "/manager", "/clients", "/contractor", "/productions", "/printer", "/worker",
+                        "/manager", "/productions", "/printer", "/worker",
                         "/paper", "/chromaticity", "/laminate", "/cringle", "/format", "/stock", "/numberBases",
                         "/printingUnit", "/productionType",
+                        "/clients", "/clients/clearFilter", "/clients/Filter",
+                        "/contractor", "/contractor/clearFilter", "/contractor/Filter",
                         "/tasks/view**", "/tasks/clearFilter", "/tasks/Filter", "/tasks",
                         "/stencils/clearFilter", "/stencils/Filter", "/stencils", "/stencils/view**",
                         "/statistic/clearFilter", "/statistic/Filter", "/statistic",
@@ -67,8 +69,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/manager/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/printer/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/worker/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
-        http.authorizeRequests().antMatchers("/clients/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
-        http.authorizeRequests().antMatchers("/contractor/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+        //http.authorizeRequests().antMatchers("/clients/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/clients/add", "/clients/update", "/clients/view**", "/clients/edit**", "/clients/delete**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/contractor/add", "/contractor/update", "/contractor/view**", "/contractor/edit**", "/contractor/delete**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/productions/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/productionType/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/paper/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");

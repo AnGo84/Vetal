@@ -1,7 +1,6 @@
 package ua.com.vetal.controller;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -86,7 +85,6 @@ public class StatisticControllerTest {
     }
 
     @Test
-    @Disabled("Fix filters")
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenFilterClientsAsAuthorizedWithNotNullUser_thenOk() throws Exception {
         FilterData filterData = new FilterData();
@@ -97,13 +95,11 @@ public class StatisticControllerTest {
         )
                 //.andDo
                 .andExpect(status().isFound())
-                .andExpect(model().attributeExists("statisticFilterData"))
-                .andExpect(model().attribute("statisticFilterData", notNullValue()))
                 .andExpect(redirectedUrl(MAPPED_URL));
     }
 
     @Test
-    public void whenClearFilterClientsAsNoAuthorized_thenOk() throws Exception {
+    public void whenFilterClientsAsNoAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/filter"))
                 //.andDo
                 .andExpect(status().isFound())
@@ -111,7 +107,6 @@ public class StatisticControllerTest {
     }
 
     @Test
-    @Disabled("Fix filters")
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenClearFilterClientsAsAuthorizedWithNotNullUser_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/clearFilter"))
@@ -121,7 +116,7 @@ public class StatisticControllerTest {
     }
 
     @Test
-    public void whenFilterClientsAsNoAuthorized_thenOk() throws Exception {
+    public void whenClearFilterClientsAsNoAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/clearFilter"))
                 //.andDo
                 .andExpect(status().isFound())

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.Sort;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.TestDataServiceUtils;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.Order;
@@ -39,11 +40,11 @@ public class OrderRepositoryTest {
 
         task = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 1), testEntityManager);
         task = testEntityManager.persistAndFlush(task);
-        testEntityManager.persistAndFlush(getOrder(task));
+        testEntityManager.persistAndFlush(TestBuildersUtils.getOrderFromTask(task));
         stencil = TestDataServiceUtils.saveStencilParts(TestDataUtils.getStencil(null, 1), testEntityManager);
         stencil = testEntityManager.persistAndFlush(stencil);
 
-        testEntityManager.persistAndFlush(getOrder(stencil));
+        testEntityManager.persistAndFlush(TestBuildersUtils.getOrderFromStencil(stencil));
     }
 
     @Test
@@ -80,33 +81,4 @@ public class OrderRepositoryTest {
         assertEquals(orders.size(), 2);
     }
 
-    private Order getOrder(Task task) {
-        Order order = new Order();
-        order.setId(task.getId());
-        order.setAmount(task.getAmountForContractor());
-        order.setClient(task.getClient());
-        order.setDateBegin(task.getDateBegin());
-        order.setDebtAmount(task.getDebtAmount());
-        order.setFullNumber(task.getFullNumber());
-        order.setManager(task.getManager());
-        order.setOrderType("task");
-        order.setPrinting(task.getPrinting());
-        order.setProduction(task.getProduction());
-        return order;
-    }
-
-    private Order getOrder(Stencil stencil) {
-        Order order = new Order();
-        order.setId(stencil.getId());
-        order.setAmount(stencil.getAmount());
-        order.setClient(stencil.getClient());
-        order.setDateBegin(stencil.getDateBegin());
-        order.setDebtAmount(stencil.getDebtAmount());
-        order.setFullNumber(stencil.getFullNumber());
-        order.setManager(stencil.getManager());
-        order.setOrderType("stencil");
-        order.setPrinting(stencil.getPrinting());
-        order.setProduction(stencil.getProduction());
-        return order;
-    }
 }

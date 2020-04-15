@@ -170,7 +170,7 @@ public class ClientServiceImplTest {
     @Test
     void whenFindByFilterData() {
         when(mockClientDAO.findByFilterData(any(ClientFilter.class))).thenReturn(Arrays.asList(client));
-        List<Client> objects = mockClientDAO.findByFilterData(new ClientFilter());
+        List<Client> objects = clientService.findByFilterData(new ClientFilter());
         assertNotNull(objects);
         assertFalse(objects.isEmpty());
         assertEquals(objects.size(), 1);

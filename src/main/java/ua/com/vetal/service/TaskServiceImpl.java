@@ -12,12 +12,6 @@ import ua.com.vetal.entity.Task;
 import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.repositories.TaskRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,9 +21,7 @@ public class TaskServiceImpl implements SimpleService<Task> {
 
     private static final Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
     @Autowired
-    MessageSource messageSource;
-    @PersistenceContext
-    private EntityManager entityManager;
+    private MessageSource messageSource;
     @Autowired
     private TaskRepository taskRepository;
     @Autowired
@@ -79,11 +71,12 @@ public class TaskServiceImpl implements SimpleService<Task> {
     }
 
     public List<Task> findByFilterData(FilterData filterData) {
-        List<Task> tasks = null;
+        List<Task> tasks = taskDAO.findByFilterData(filterData);
 
         if (filterData == null) {
             return findAllObjects();
         }
+/*
 
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Task> query = builder.createQuery(Task.class);
@@ -93,11 +86,13 @@ public class TaskServiceImpl implements SimpleService<Task> {
 
         if (filterData.getAccount() != null && !filterData.getAccount().equals("")) {
             predicate = builder.and(predicate, builder.equal(root.get("account"), filterData.getAccount()));
-            /*
-             * predicate = builder.and(predicate,
-             * builder.like(builder.lower(builder.toString(root.get("account")))
-             * , ("%" + filterData.getAccount() + "%").toLowerCase()));
-             */
+            */
+        /*
+         * predicate = builder.and(predicate,
+         * builder.like(builder.lower(builder.toString(root.get("account")))
+         * , ("%" + filterData.getAccount() + "%").toLowerCase()));
+         *//*
+
             predicate = builder.and(predicate, builder.like(builder.lower(root.get("account")),
                     ("%" + filterData.getAccount() + "%").toLowerCase()));
         }
@@ -142,6 +137,7 @@ public class TaskServiceImpl implements SimpleService<Task> {
                     builder.lessThanOrEqualTo(root.get("dateBegin"), filterData.getDateBeginTill()));
         }
 
+        */
         /*
          * for (SearchCriteria param : params) { if
          * (param.getOperation().equalsIgnoreCase(">")) { predicate =
@@ -157,11 +153,13 @@ public class TaskServiceImpl implements SimpleService<Task> {
          * builder.and(predicate, builder.like(root.get(param.getKey()), "%" +
          * param.getValue() + "%")); } else { predicate = builder.and(predicate,
          * builder.equal(root.get(param.getKey()), param.getValue())); } } }
-         */
+         *//*
+
         query.where(predicate);
         query.orderBy(builder.desc(root.get("dateBegin")));
 
         tasks = entityManager.createQuery(query).getResultList();
+*/
 
         // https://www.baeldung.com/rest-search-language-spring-jpa-criteria
         // http://qaru.site/questions/293915/spring-data-jpa-query-by-example

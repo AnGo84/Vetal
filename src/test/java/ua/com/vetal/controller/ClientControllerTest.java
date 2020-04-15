@@ -1,7 +1,6 @@
 package ua.com.vetal.controller;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -190,7 +189,6 @@ public class ClientControllerTest {
     }
 
     @Test
-    @Disabled("Fix filters")
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenFilterClientsAsAuthorizedWithNotNullUser_thenOk() throws Exception {
         ClientFilter clientFilter = new ClientFilter();
@@ -201,21 +199,18 @@ public class ClientControllerTest {
 		)
 				//.andDo
 				.andExpect(status().isFound())
-				.andExpect(model().attributeExists("clientFilterData"))
-				.andExpect(model().attribute("clientFilterData", notNullValue()))
 				.andExpect(redirectedUrl(MAPPED_URL));
     }
 
     @Test
-    public void whenClearFilterClientsAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
-		mockMvc.perform(get(MAPPED_URL + "/filter"))
-				//.andDo
+    public void whenFilterClientsAsNoAuthorized_thenRedirectToMappedURL() throws Exception {
+        mockMvc.perform(get(MAPPED_URL + "/filter"))
+                //.andDo
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
+                .andExpect(redirectedUrl(MAPPED_URL));
     }
 
     @Test
-    @Disabled("Fix filters")
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenClearFilterClientsAsAuthorizedWithNotNullUser_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/clearFilter"))
@@ -225,11 +220,12 @@ public class ClientControllerTest {
     }
 
     @Test
-    public void whenFilterClientsAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
-		mockMvc.perform(get(MAPPED_URL + "/clearFilter"))
-				//.andDo
+    public void whenCleanFilterClientsAsNoAuthorized_thenRedirectToMappedURL() throws Exception {
+        mockMvc.perform(get(MAPPED_URL + "/clearFilter"))
+                //.andDo
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
+                .andExpect(redirectedUrl(MAPPED_URL));
+        //.andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
 
 

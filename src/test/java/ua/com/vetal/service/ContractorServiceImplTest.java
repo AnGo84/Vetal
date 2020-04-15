@@ -204,7 +204,7 @@ class ContractorServiceImplTest {
 	@Test
 	void whenFindByFilterData() {
 		when(mockContractorDAO.findByFilterData(any(PersonFilter.class))).thenReturn(Arrays.asList(contractor));
-		List<Contractor> objects = mockContractorDAO.findByFilterData(new PersonFilter());
+		List<Contractor> objects = contractorService.findByFilterData(new PersonFilter());
 		assertNotNull(objects);
 		assertFalse(objects.isEmpty());
 		assertEquals(objects.size(), 1);

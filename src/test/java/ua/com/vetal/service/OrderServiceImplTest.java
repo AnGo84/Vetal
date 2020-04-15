@@ -1,19 +1,20 @@
 package ua.com.vetal.service;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Sort;
 import ua.com.vetal.TestBuildersUtils;
+import ua.com.vetal.dao.OrderDAO;
 import ua.com.vetal.entity.*;
 import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.repositories.OrderRepository;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -26,9 +27,11 @@ public class OrderServiceImplTest {
     @Autowired
     private EntityManager entityManager;
     @Autowired
-    private OrderServiceImpl clientService;
+    private OrderServiceImpl orderService;
     @MockBean
     private OrderRepository mockOrderRepository;
+    @MockBean
+    private OrderDAO mockOrderDAO;
 
     private ProductionDirectory production;
     private Manager manager;
@@ -61,48 +64,20 @@ public class OrderServiceImplTest {
     @Test
     void whenFindAllObjects() {
         when(mockOrderRepository.findAll(any(Sort.class))).thenReturn(orders);
-        List<Order> objects = clientService.findAllObjects();
+        List<Order> objects = orderService.findAllObjects();
         assertNotNull(objects);
         assertFalse(objects.isEmpty());
         assertEquals(objects.size(), 2);
     }
 
-    @Disabled("Disabled until refactoring filters")
+    //@Disabled("Disabled until refactoring filters")
     @Test
     void whenFindByFilterData() {
-        List<Order> filteredList = clientService.findByFilterData(null);
-        assertEquals(filteredList.size(), 2);
-
-        FilterData filterData = new FilterData();
-        filterData.setClient(client);
-        filterData.setManager(manager);
-
-        filteredList = clientService.findByFilterData(filterData);
-        assertEquals(1, filteredList.size());
-
-        filterData = new FilterData();
-        filteredList = clientService.findByFilterData(filterData);
-        assertEquals(0, filteredList.size());
-
-        filterData = new FilterData();
-        filterData.setClient(client);
-        filteredList = clientService.findByFilterData(filterData);
-        assertEquals(1, filteredList.size());
-
-        filterData = new FilterData();
-        filterData.setManager(client.getManager());
-        filteredList = clientService.findByFilterData(filterData);
-        assertEquals(1, filteredList.size());
-
-        filterData = new FilterData();
-        filterData.setManager(new Manager());
-        filteredList = clientService.findByFilterData(filterData);
-        assertEquals(0, filteredList.size());
-
-        filterData = new FilterData();
-        filterData.setClient(new Client());
-        filteredList = clientService.findByFilterData(filterData);
-        assertEquals(0, filteredList.size());
+        when(mockOrderDAO.findByFilterData(any(FilterData.class))).thenReturn(Arrays.asList(order));
+        List<Order> objects = orderService.findByFilterData(new FilterData());
+        assertNotNull(objects);
+        assertFalse(objects.isEmpty());
+        assertEquals(objects.size(), 1);
     }
 
 }
