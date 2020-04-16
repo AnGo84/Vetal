@@ -2,97 +2,73 @@ package ua.com.vetal.service.mail;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import ua.com.vetal.entity.file.FileDataSource;
+import ua.com.vetal.email.EmailAttachment;
+import ua.com.vetal.email.EmailMessage;
 import ua.com.vetal.service.EmailService;
 
-import javax.activation.DataSource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.io.File;
 import java.util.List;
 
 @Service
 public class MailServiceImp implements EmailService {
 
-    @Qualifier("getJavaMailSender")
-    @Autowired
-    private JavaMailSender javaMailSender;
+	@Qualifier("getJavaMailSender")
+	@Autowired
+	private JavaMailSender javaMailSender;
 
-    public void sendEmail(String emailFrom, String emailTo, String subject, String message) throws Exception {
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setFrom(emailFrom);
-        mailMessage.setTo(emailTo);
+	public void sendEmail(String emailFrom, String emailTo, String subject, String message) {
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		mailMessage.setFrom(emailFrom);
+		mailMessage.setTo(emailTo);
 
-        mailMessage.setSubject(subject);
-        mailMessage.setText(message);
-        javaMailSender.send(mailMessage);
-    }
+		mailMessage.setSubject(subject);
+		mailMessage.setText(message);
+		javaMailSender.send(mailMessage);
+	}
 
-    public void sendMessageWithAttachment(
-            String from, String to, String subject, String text, String pathToAttachment) throws MessagingException {
+	public void sendMessageWithAttachment(
+			String from, String to, String subject, String text, List<EmailAttachment> attachments) throws MessagingException {
 
-        MimeMessage message = javaMailSender.createMimeMessage();
+		MimeMessage message = javaMailSender.createMimeMessage();
 
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-        helper.setFrom(from);
-        helper.setTo(to);
-        helper.setSubject(subject);
-        helper.setText(text);
+		helper.setFrom(from);
+		helper.setTo(to);
+		helper.setSubject(subject);
+		helper.setText(text);
+		if (attachments != null && !attachments.isEmpty()) {
+			for (EmailAttachment attachment : attachments) {
+				helper.addAttachment(attachment.getName(), attachment.getDataSource());
+			}
+		}
+		javaMailSender.send(message);
+	}
 
-        FileSystemResource file
-                = new FileSystemResource(new File(pathToAttachment));
-        helper.addAttachment("Invoice", file);
+	public void sendEmail(EmailMessage emailMessage) throws MessagingException {
 
-        javaMailSender.send(message);
+		MimeMessage message = javaMailSender.createMimeMessage();
 
-    }
+		MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		fillMimeMessageHelperFromEmailMessage(emailMessage, helper);
 
-    /*byte[] data;
-    DataSource source = new ByteArrayDataSource(data, "application/octet-stream");*/
+		javaMailSender.send(message);
+	}
 
-    public void sendMessageWithAttachment(
-            String from, String to, String subject, String text, DataSource attachment) throws MessagingException {
-
-        MimeMessage message = javaMailSender.createMimeMessage();
-
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-
-        helper.setFrom(from);
-        helper.setTo(to);
-        helper.setSubject(subject);
-        helper.setText(text);
-
-        helper.addAttachment("Task.pdf", attachment);
-
-        javaMailSender.send(message);
-
-    }
-
-    public void sendMessageWithAttachment(
-            String from, String to, String subject, String text, List<FileDataSource> attachments) throws MessagingException {
-
-        MimeMessage message = javaMailSender.createMimeMessage();
-
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-
-        helper.setFrom(from);
-        helper.setTo(to);
-        helper.setSubject(subject);
-        helper.setText(text);
-        if (attachments != null && !attachments.isEmpty()) {
-            for (FileDataSource attachment : attachments) {
-                helper.addAttachment(attachment.getSourceName(), attachment.getDataSource());
-            }
-        }
-
-        javaMailSender.send(message);
-
-    }
-
+	private void fillMimeMessageHelperFromEmailMessage(EmailMessage emailMessage, MimeMessageHelper helper) throws MessagingException {
+		helper.setFrom(emailMessage.getFrom());
+		helper.setTo(emailMessage.getTo());
+		helper.setSubject(emailMessage.getSubject());
+		helper.setText(emailMessage.getText());
+		if (emailMessage.getAttachments() != null && !emailMessage.getAttachments().isEmpty()) {
+			for (EmailAttachment attachment : emailMessage.getAttachments()) {
+				helper.addAttachment(attachment.getName(), attachment.getDataSource());
+			}
+		}
+	}
 }

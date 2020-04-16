@@ -187,7 +187,7 @@ public class TaskServiceImpl implements SimpleService<Task> {
         return Sort.by(Sort.Direction.DESC, "dateBegin");
     }
 
-    public String checkTaskForMailing(Task task) {
+    public String taskMailingDeclineReason(Task task) {
 
         String mailFrom = task.getManager().getEmail();
         if (mailFrom == null || mailFrom.equals("")) {

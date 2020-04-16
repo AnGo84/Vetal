@@ -353,15 +353,15 @@ public class TasksControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
     public void whenSendEmailAsAuthorized_thenOk() throws Exception {
-        when(mockTaskService.checkTaskForMailing(any())).thenReturn("");
-        mockMvc.perform(get(MAPPED_URL + "/sendEmail-" + task.getId()))
-                //.andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("title", "email"))
-                .andExpect(model().attribute("resultSuccess", notNullValue()))
-                .andExpect(model().attribute("resultSuccess", is(true)))
-                .andExpect(model().attribute("message", notNullValue()))
-                .andExpect(view().name("emailResultPage"));
+        when(mockTaskService.taskMailingDeclineReason(any())).thenReturn("");
+		mockMvc.perform(get(MAPPED_URL + "/sendEmail-" + task.getId()))
+				//.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(model().attribute("title", "email"))
+				.andExpect(model().attribute("resultSuccess", notNullValue()))
+				.andExpect(model().attribute("resultSuccess", is(true)))
+				.andExpect(model().attribute("message", notNullValue()))
+				.andExpect(view().name("emailResultPage"));
     }
 
     @Test
@@ -385,14 +385,14 @@ public class TasksControllerTest {
                 .andExpect(model().attribute("message", notNullValue()))
                 .andExpect(view().name("emailResultPage"));
 
-        when(mockTaskService.findById(anyLong())).thenReturn(task);
-        when(mockTaskService.checkTaskForMailing(any())).thenReturn("error message");
-        mockMvc.perform(get(MAPPED_URL + "/sendEmail-" + task.getId()))
-                //.andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("title", "email"))
-                .andExpect(model().attribute("resultSuccess", notNullValue()))
-                .andExpect(model().attribute("resultSuccess", is(false)))
-                .andExpect(view().name("emailResultPage"));
+		when(mockTaskService.findById(anyLong())).thenReturn(task);
+		when(mockTaskService.taskMailingDeclineReason(any())).thenReturn("error message");
+		mockMvc.perform(get(MAPPED_URL + "/sendEmail-" + task.getId()))
+				//.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(model().attribute("title", "email"))
+				.andExpect(model().attribute("resultSuccess", notNullValue()))
+				.andExpect(model().attribute("resultSuccess", is(false)))
+				.andExpect(view().name("emailResultPage"));
     }
 }

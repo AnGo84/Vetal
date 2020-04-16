@@ -154,23 +154,23 @@ public class TaskServiceImplTest {
     }
 
     @Test
-    void whenCheckTaskForMailing() {
-        String result = taskService.checkTaskForMailing(task);
-        assertTrue(StringUtils.isEmpty(result));
+    void whenGetTaskMailingDeclineReason() {
+        String taskMailingDeclineReason = taskService.taskMailingDeclineReason(task);
+        assertTrue(StringUtils.isEmpty(taskMailingDeclineReason));
 
         task.getManager().setEmail(null);
-        result = taskService.checkTaskForMailing(task);
-        assertFalse(StringUtils.isEmpty(result));
+        taskMailingDeclineReason = taskService.taskMailingDeclineReason(task);
+        assertFalse(StringUtils.isEmpty(taskMailingDeclineReason));
         task.getManager().setEmail("");
-        result = taskService.checkTaskForMailing(task);
-        assertFalse(StringUtils.isEmpty(result));
+        taskMailingDeclineReason = taskService.taskMailingDeclineReason(task);
+        assertFalse(StringUtils.isEmpty(taskMailingDeclineReason));
 
         task.getContractor().setEmail(null);
-        result = taskService.checkTaskForMailing(task);
-        assertFalse(StringUtils.isEmpty(result));
+        taskMailingDeclineReason = taskService.taskMailingDeclineReason(task);
+        assertFalse(StringUtils.isEmpty(taskMailingDeclineReason));
         task.getContractor().setEmail("");
-        result = taskService.checkTaskForMailing(task);
-        assertFalse(StringUtils.isEmpty(result));
+        taskMailingDeclineReason = taskService.taskMailingDeclineReason(task);
+        assertFalse(StringUtils.isEmpty(taskMailingDeclineReason));
     }
 
 

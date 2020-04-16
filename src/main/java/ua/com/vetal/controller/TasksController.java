@@ -20,8 +20,8 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.com.vetal.acpect.LogExecutionTime;
+import ua.com.vetal.email.EmailAttachment;
 import ua.com.vetal.entity.*;
-import ua.com.vetal.entity.file.FileDataSource;
 import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.service.*;
 import ua.com.vetal.service.mail.MailServiceImp;
@@ -324,14 +324,14 @@ public class TasksController {
 
         model.addAttribute("title", "email");
         boolean result = false;
-        String message = "";
+        String taskMailingDeclineReason = "";
 
         Task task = taskService.findById(id);
 
         //logger.info(task.toString());
         if (task != null) {
-            message = taskService.checkTaskForMailing(task);
-            if (message.equals("")) {
+            taskMailingDeclineReason = taskService.taskMailingDeclineReason(task);
+            if (taskMailingDeclineReason.equals("")) {
                 try {
                     //mailServiceImp.sendEmail(mailFrom, mailTo, "Test letter", "Test letter");
                     DataSource attachment = exporterService.getDataSource(jasperService.taskReport(task.getId()));
@@ -339,20 +339,17 @@ public class TasksController {
                     String subject = messageSource.getMessage("email.task", null, new Locale("ru"));
                     String text = messageSource.getMessage("email.new_task", null, new Locale("ru"));
 
-                    List<FileDataSource> attachments = new ArrayList<>();
+                    List<EmailAttachment> attachments = new ArrayList<>();
 
                     if (attachment != null) {
-                        attachments.add(new FileDataSource("Task.pdf", attachment));
+                        attachments.add(new EmailAttachment("Task.pdf", attachment));
                     }
                     if (task.getDbFile() != null) {
                         //DataSource source = new ByteArrayDataSource(task.getDbFile().getData(), "application/octet-stream");
                         DataSource source = new ByteArrayDataSource(task.getDbFile().getData(), task.getDbFile().getFileType());
-                        attachments.add(new FileDataSource(task.getDbFile().getFileName(), source));
+                        attachments.add(new EmailAttachment(task.getDbFile().getFileName(), source));
                     }
 
-                    /*mailServiceImp.sendMessageWithAttachment(
-                            task.getManager().getEmail(), task.getContractor().getEmail(), subject + task.getNumber(),
-                            text, attachment);*/
                     mailServiceImp.sendMessageWithAttachment(
                             task.getManager().getEmail(), task.getContractor().getEmail(), subject + task.getNumber(),
                             text, attachments);
@@ -360,24 +357,24 @@ public class TasksController {
 
                     result = true;
                     logger.info("Sent " + title + " with ID= " + id + " from " + task.getManager().getEmail() + " to " + task.getContractor().getEmail());
-                    message = messageSource.getMessage("message.email.sent_to",
+                    taskMailingDeclineReason = messageSource.getMessage("message.email.sent_to",
                             new String[]{task.getContractor().getFullName(), task.getContractor().getEmail()}, new Locale("ru"));
                 } catch (Exception e) {
                     // handle your exception when it fails to send email
                     logger.info(e.getMessage());
                     //e.printStackTrace();
-                    message = messageSource.getMessage("message.email.service_error",
+                    taskMailingDeclineReason = messageSource.getMessage("message.email.service_error",
                             null, new Locale("ru")) + ": " + e.getMessage();
                 }
             }
         } else {
-            message = messageSource.getMessage("message.email.miss_task_by_id",
+            taskMailingDeclineReason = messageSource.getMessage("message.email.miss_task_by_id",
                     new String[]{String.valueOf(id)}, new Locale("ru"));
         }
         //return "redirect:/tasks";
 
         model.addAttribute("resultSuccess", result);
-        model.addAttribute("message", message);
+        model.addAttribute("message", taskMailingDeclineReason);
 
         return "emailResultPage";
     }

@@ -135,18 +135,14 @@ public class ExporterService {
     }
 
     public void exportPdf(JasperPrint jasperPrint, OutputStream outputStream) throws JRException {
-
-        //JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
-
         JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
-
     }
 
     public DataSource getDataSource(JasperPrint jasperPrint) throws JRException {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         JasperExportManager.exportReportToPdfStream(jasperPrint, baos);
-        DataSource aAttachment = new ByteArrayDataSource(baos.toByteArray(), "application/pdf");
+        DataSource aAttachment = new ByteArrayDataSource(baos.toByteArray(), MEDIA_TYPE_PDF);
         return aAttachment;
     }
 
