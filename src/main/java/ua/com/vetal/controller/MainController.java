@@ -55,9 +55,9 @@ public class MainController {
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String adminPage(Model model, Principal principal) {
 
-        User loginedUser = (User) ((Authentication) principal).getPrincipal();
+        User loggedUser = (User) ((Authentication) principal).getPrincipal();
 
-        String userInfo = WebUtils.toString(loginedUser);
+        String userInfo = WebUtils.toString(loggedUser);
         model.addAttribute("userInfo", userInfo);
 
         return "adminPage";
@@ -82,9 +82,9 @@ public class MainController {
 
         logger.info("User Name: " + userName);
 
-        User loginedUser = (User) ((Authentication) principal).getPrincipal();
+        User loggedUser = (User) ((Authentication) principal).getPrincipal();
 
-        String userInfo = WebUtils.toString(loginedUser);
+        String userInfo = WebUtils.toString(loggedUser);
         model.addAttribute("userInfo", userInfo);
 
         return "userInfoPage";

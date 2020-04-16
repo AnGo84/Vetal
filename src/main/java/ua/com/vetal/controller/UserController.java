@@ -9,6 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,7 +19,6 @@ import ua.com.vetal.entity.User;
 import ua.com.vetal.entity.UserRole;
 import ua.com.vetal.service.UserRoleServiceImpl;
 import ua.com.vetal.service.UserServiceImpl;
-import ua.com.vetal.utils.EncrytedPasswordUtils;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -40,8 +40,8 @@ public class UserController {
 	private String userPasswordDefault;
 	@Autowired
 	private UserRoleServiceImpl userRoleService;
-/*    @Autowired
-    private PasswordResetTokenRepository tokenRepository;*/
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 
 	@Autowired
 	public UserController(UserServiceImpl userService) {
@@ -131,7 +131,7 @@ public class UserController {
 			if (user.getEncryptedPassword() == null) {
 				/*user.setEncryptedPassword(userPasswordDefault);
 				user.setEncryptedPassword(EncrytedPasswordUtils.encrytePassword(user.getEncryptedPassword()));*/
-				user.setEncryptedPassword(EncrytedPasswordUtils.encrytePassword(userPasswordDefault));
+				user.setEncryptedPassword(passwordEncoder.encode(userPasswordDefault));
 			}
 
 			userService.saveObject(user);
@@ -164,7 +164,7 @@ public class UserController {
 		model.addAttribute("user", user);
 
 		if (userService.isObjectExist(user)) {
-			user.setEncryptedPassword(EncrytedPasswordUtils.encrytePassword(userPasswordDefault));
+			user.setEncryptedPassword(passwordEncoder.encode(userPasswordDefault));
 			userService.saveObject(user);
 			return "redirect:/users/edit-" + user.getId() + "?resetSuccess";
 		}

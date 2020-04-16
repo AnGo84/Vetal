@@ -44,17 +44,12 @@ public class PasswordResetController {
     @GetMapping
     public String displayResetPasswordPage(@RequestParam(required = false) String token, Model model) {
         //logger.info("Change password for token: " + token);
-        System.out.println("!!!!!!! started");
         PasswordResetToken resetToken = tokenRepository.findByToken(token);
-        System.out.println("!!!!!!! resetToken =  " + resetToken);
         if (resetToken == null) {
-            System.out.println("!!!!!!! resetToken == null");
             model.addAttribute("error", messageSource.getMessage("non.found.token", null, new Locale("ru")));
         } else if (resetToken.isExpired()) {
-            System.out.println("!!!!!!! resetToken.isExpired()");
             model.addAttribute("error", messageSource.getMessage("non.token.hasExpired", null, new Locale("ru")));
         } else {
-            System.out.println("!!!!!!! ok");
             model.addAttribute("token", resetToken.getToken());
         }
 
