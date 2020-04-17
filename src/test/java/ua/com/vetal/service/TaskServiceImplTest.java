@@ -5,10 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.MessageSource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.dao.TaskDAO;
+import ua.com.vetal.email.EmailMessage;
 import ua.com.vetal.entity.Task;
 import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.repositories.TaskRepository;
@@ -17,6 +19,7 @@ import ua.com.vetal.utils.StringUtils;
 import javax.persistence.EntityManager;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -24,6 +27,8 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class TaskServiceImplTest {
+    @Autowired
+    private MessageSource messageSource;
 
     @Autowired
     private EntityManager entityManager;
@@ -173,8 +178,6 @@ public class TaskServiceImplTest {
         assertFalse(StringUtils.isEmpty(taskMailingDeclineReason));
     }
 
-
-    //@Disabled("Disabled until refactoring filters")
     @Test
     void whenFindByFilterData() {
         when(mockTaskDAO.findByFilterData(any(FilterData.class))).thenReturn(Arrays.asList(task));
@@ -182,39 +185,31 @@ public class TaskServiceImplTest {
         assertNotNull(objects);
         assertFalse(objects.isEmpty());
         assertEquals(objects.size(), 1);
+    }
 
-/*        List<Task> filteredList = taskService.findByFilterData(null);
-        assertEquals(filteredList.size(), 1);
+    @Test
+    void whenGetEmailMessage() {
+        String subject = messageSource.getMessage("email.task", null, new Locale("ru"));
+        String text = messageSource.getMessage("email.new_task", null, new Locale("ru"));
+        EmailMessage emailMessage = taskService.getEmailMessage(task);
+        assertNotNull(emailMessage);
+        assertEquals(task.getManager().getEmail(), emailMessage.getFrom());
+        assertEquals(task.getContractor().getEmail(), emailMessage.getTo());
+        assertEquals(task.getContractor().getEmail(), emailMessage.getTo());
+        assertTrue(emailMessage.getSubject().startsWith(subject));
+        assertEquals(text, emailMessage.getText());
+        assertNotNull(emailMessage.getAttachments());
+        assertFalse(emailMessage.getAttachments().isEmpty());
+        assertTrue(emailMessage.getAttachments().size() == 1);
 
-        FilterData filterData = new FilterData();
-        filterData.setAccount(task.getAccount());
-        filterData.setManager(task.getManager());
-
-        filteredList = taskService.findByFilterData(filterData);
-        assertEquals(1, filteredList.size());
-
-        filterData = new FilterData();
-        filteredList = taskService.findByFilterData(filterData);
-        assertEquals(0, filteredList.size());
-
-        filterData = new FilterData();
-        filterData.setAccount(task.getAccount());
-        filteredList = taskService.findByFilterData(filterData);
-        assertEquals(1, filteredList.size());
-
-        filterData = new FilterData();
-        filterData.setManager(task.getManager());
-        filteredList = taskService.findByFilterData(filterData);
-        assertEquals(1, filteredList.size());
-
-        filterData = new FilterData();
-        filterData.setManager(new Manager());
-        filteredList = taskService.findByFilterData(filterData);
-        assertEquals(0, filteredList.size());
-
-        filterData = new FilterData();
-        filterData.setAccount("not exist name");
-        filteredList = taskService.findByFilterData(filterData);
-        assertEquals(0, filteredList.size());*/
+        task.setDbFile(null);
+        emailMessage = taskService.getEmailMessage(task);
+        assertNotNull(emailMessage);
+        assertEquals(task.getManager().getEmail(), emailMessage.getFrom());
+        assertEquals(task.getContractor().getEmail(), emailMessage.getTo());
+        assertEquals(task.getContractor().getEmail(), emailMessage.getTo());
+        assertTrue(emailMessage.getSubject().startsWith(subject));
+        assertNotNull(emailMessage.getAttachments());
+        assertTrue(emailMessage.getAttachments().isEmpty());
     }
 }

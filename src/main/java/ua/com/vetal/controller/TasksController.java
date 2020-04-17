@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.com.vetal.acpect.LogExecutionTime;
 import ua.com.vetal.email.EmailAttachment;
+import ua.com.vetal.email.EmailMessage;
 import ua.com.vetal.entity.*;
 import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.service.*;
@@ -31,7 +32,6 @@ import ua.com.vetal.utils.DateUtils;
 import ua.com.vetal.utils.StringUtils;
 
 import javax.activation.DataSource;
-import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.FileNotFoundException;
@@ -333,27 +333,31 @@ public class TasksController {
             taskMailingDeclineReason = taskService.taskMailingDeclineReason(task);
             if (taskMailingDeclineReason.equals("")) {
                 try {
-                    //mailServiceImp.sendEmail(mailFrom, mailTo, "Test letter", "Test letter");
-                    DataSource attachment = exporterService.getDataSource(jasperService.taskReport(task.getId()));
-                    //mailServiceImp.sendEmail(mailFrom, mailTo, "Test letter", "Test letter");
-                    String subject = messageSource.getMessage("email.task", null, new Locale("ru"));
-                    String text = messageSource.getMessage("email.new_task", null, new Locale("ru"));
 
+                    /*String subject = messageSource.getMessage("email.task", null, new Locale("ru"));
+                    String text = messageSource.getMessage("email.new_task", null, new Locale("ru"));
                     List<EmailAttachment> attachments = new ArrayList<>();
 
-                    if (attachment != null) {
-                        attachments.add(new EmailAttachment("Task.pdf", attachment));
-                    }
                     if (task.getDbFile() != null) {
-                        //DataSource source = new ByteArrayDataSource(task.getDbFile().getData(), "application/octet-stream");
                         DataSource source = new ByteArrayDataSource(task.getDbFile().getData(), task.getDbFile().getFileType());
                         attachments.add(new EmailAttachment(task.getDbFile().getFileName(), source));
                     }
-
+                    DataSource attachment = exporterService.getDataSource(jasperService.taskReport(task.getId()));
+                    if (attachment != null) {
+                        attachments.add(new EmailAttachment("Task.pdf", attachment));
+                    }
                     mailServiceImp.sendMessageWithAttachment(
                             task.getManager().getEmail(), task.getContractor().getEmail(), subject + task.getNumber(),
                             text, attachments);
+                    */
 
+                    EmailMessage emailMessage = taskService.getEmailMessage(task);
+
+                    DataSource attachment = exporterService.getDataSource(jasperService.taskReport(task.getId()));
+                    if (attachment != null) {
+                        emailMessage.getAttachments().add(new EmailAttachment("Task.pdf", attachment));
+                    }
+                    mailServiceImp.sendEmail(emailMessage);
 
                     result = true;
                     logger.info("Sent " + title + " with ID= " + id + " from " + task.getManager().getEmail() + " to " + task.getContractor().getEmail());
@@ -361,7 +365,7 @@ public class TasksController {
                             new String[]{task.getContractor().getFullName(), task.getContractor().getEmail()}, new Locale("ru"));
                 } catch (Exception e) {
                     // handle your exception when it fails to send email
-                    logger.info(e.getMessage());
+                    logger.error("Email sanding error: {}", e.getMessage());
                     //e.printStackTrace();
                     taskMailingDeclineReason = messageSource.getMessage("message.email.service_error",
                             null, new Locale("ru")) + ": " + e.getMessage();
@@ -371,8 +375,6 @@ public class TasksController {
             taskMailingDeclineReason = messageSource.getMessage("message.email.miss_task_by_id",
                     new String[]{String.valueOf(id)}, new Locale("ru"));
         }
-        //return "redirect:/tasks";
-
         model.addAttribute("resultSuccess", result);
         model.addAttribute("message", taskMailingDeclineReason);
 
