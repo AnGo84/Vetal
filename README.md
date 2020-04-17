@@ -16,3 +16,10 @@ Also, user can filtered data and export result to Excel format.
 - MySQL database
 - Jasper report
 
+### Realise 1.0 INFO
+
+Stable version with realisation:
+- tasks: add, edit, delete, send to contractor, reports;
+- stencils: add, edit, delete, reports, calculate 'ink-prints' by days;
+- users: add, edit, delete, access by roles, password managing;
+- directories: add, edit, delete;
