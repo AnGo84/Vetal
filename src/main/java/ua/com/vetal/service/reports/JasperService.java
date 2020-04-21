@@ -43,19 +43,6 @@ public class JasperService {
 	@Autowired
 	private OrderServiceImpl orderService;
 
-	// find
-	//https://stackoverflow.com/questions/27532446/how-to-use-jasperreports-with-spring-mvc
-	//https://www.baeldung.com/spring-jasper
-	//jasperreport pdf view into controller set connection to database
-	//https://www.logicbig.com/tutorials/spring-framework/spring-web-mvc/jasper-report-view.html
-	//https://stackoverflow.com/questions/7735288/how-to-pass-the-db-connection-information-and-query-parameters-from-controller-t
-	//spring boot jasper reports set connection
-	//http://zetcode.com/articles/jasperspringbootweb/
-	//https://cashmisa.wordpress.com/2017/12/11/jasper-report-for-spring-boot-project/
-	//used
-	//https://www.stackextend.com/java/generate-pdf-document-using-jasperreports-and-spring-boot/
-	//https://steemit.com/technology/@vickyz/exporting-using-jasper-reports-pdf-excel-csv-and-doc
-
 	public JasperPrint taskReport(Long id) throws JRException {
 		logger.info("Get PDF for Task with ID= " + id);
 		Task task = taskService.findById(id);
