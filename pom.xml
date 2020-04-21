@@ -25,10 +25,12 @@
         <java.version>1.8</java.version>
         <jasperreports.version>6.7.0</jasperreports.version>
         <!--<apache.poi.version>4.0.0</apache.poi.version>-->
-        <apache.poi.version>3.15</apache.poi.version>
-        <h2.database.version>1.4.200</h2.database.version>
-        <junit.jupiter.version>5.5.2</junit.jupiter.version>
+        <apache-poi.version>3.15</apache-poi.version>
+        <h2-database.version>1.4.200</h2-database.version>
+        <junit-jupiter.version>5.5.2</junit-jupiter.version>
         <lombock.version>1.18.12</lombock.version>
+        <greenmail.version>1.5.13</greenmail.version>
+        <jsoup.version>1.13.1</jsoup.version>
 
         <!-- <springframework.version>4.1.6.RELEASE</springframework.version>
         <springsecurity.version>4.0.1.RELEASE</springsecurity.version>
@@ -101,7 +103,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>${junit.jupiter.version}</version>
+            <version>${junit-jupiter.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -122,11 +124,26 @@
             <version>2.10</version>
         </dependency>-->
 
+        <!-- https://mvnrepository.com/artifact/com.icegreen/greenmail -->
+        <dependency>
+            <groupId>com.icegreen</groupId>
+            <artifactId>greenmail</artifactId>
+            <version>${greenmail.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>${jsoup.version}</version>
+        </dependency>
+
+
         <!-- for report in xls format -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
-            <version>${apache.poi.version}</version>
+            <version>${apache-poi.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-beanutils</groupId>
@@ -147,7 +164,7 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>test</scope>
-            <version>${h2.database.version}</version>
+            <version>${h2-database.version}</version>
         </dependency>
 
         <dependency>

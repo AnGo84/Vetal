@@ -8,10 +8,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.dao.TaskDAO;
+import ua.com.vetal.email.EmailAttachment;
+import ua.com.vetal.email.EmailMessage;
 import ua.com.vetal.entity.Task;
 import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.repositories.TaskRepository;
 
+import javax.activation.DataSource;
+import javax.mail.util.ByteArrayDataSource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -200,8 +205,24 @@ public class TaskServiceImpl implements SimpleService<Task> {
             return messageSource.getMessage("message.email.miss_to_for_contractor",
                     null, new Locale("ru")) + " " + task.getManager().getFullName();
         }
-
         return "";
+    }
+
+    public EmailMessage getEmailMessage(Task task) {
+        EmailMessage emailMessage = new EmailMessage();
+        List<EmailAttachment> attachments = new ArrayList<>();
+        String subject = messageSource.getMessage("email.task", null, new Locale("ru"));
+        String text = messageSource.getMessage("email.new_task", null, new Locale("ru"));
+        if (task.getDbFile() != null) {
+            DataSource source = new ByteArrayDataSource(task.getDbFile().getData(), task.getDbFile().getFileType());
+            attachments.add(new EmailAttachment(task.getDbFile().getFileName(), source));
+        }
+        emailMessage.setFrom(task.getManager().getEmail());
+        emailMessage.setTo(task.getContractor().getEmail());
+        emailMessage.setSubject(subject + task.getNumber());
+        emailMessage.setText(text);
+        emailMessage.setAttachments(attachments);
+        return emailMessage;
     }
 
 }

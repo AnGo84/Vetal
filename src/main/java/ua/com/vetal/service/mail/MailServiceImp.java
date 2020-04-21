@@ -12,7 +12,6 @@ import ua.com.vetal.service.EmailService;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.util.List;
 
 @Service
 public class MailServiceImp implements EmailService {
@@ -31,7 +30,7 @@ public class MailServiceImp implements EmailService {
 		javaMailSender.send(mailMessage);
 	}
 
-	public void sendMessageWithAttachment(
+	/*public void sendMessageWithAttachment(
 			String from, String to, String subject, String text, List<EmailAttachment> attachments) throws MessagingException {
 
 		MimeMessage message = javaMailSender.createMimeMessage();
@@ -48,7 +47,7 @@ public class MailServiceImp implements EmailService {
 			}
 		}
 		javaMailSender.send(message);
-	}
+	}*/
 
 	public void sendEmail(EmailMessage emailMessage) throws MessagingException {
 
