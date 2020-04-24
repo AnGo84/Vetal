@@ -1,4 +1,4 @@
-package ua.com.vetal.jasperReport;
+package ua.com.vetal.report.jasperReport;
 
 import lombok.extern.slf4j.Slf4j;
 import ua.com.vetal.entity.ProductionTypeDirectory;

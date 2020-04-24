@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 @Service
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:vetal.properties")
 public class JasperService {

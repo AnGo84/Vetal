@@ -1,4 +1,4 @@
-package ua.com.vetal.jasperReport.exporter;
+package ua.com.vetal.report.jasperReport.exporter;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

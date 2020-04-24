@@ -10,8 +10,7 @@ import javax.activation.DataSource;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmailAttachment {
-    private String name;
-    private DataSource dataSource;
-
+	private String name;
+	private DataSource dataSource;
 
 }

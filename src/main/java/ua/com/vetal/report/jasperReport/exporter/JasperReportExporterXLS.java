@@ -1,32 +1,29 @@
-package ua.com.vetal.jasperReport.exporter;
+package ua.com.vetal.report.jasperReport.exporter;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public class JasperReportExporterXLSX extends JasperReportExporter {
-	public JasperReportExporterXLSX(JasperPrint jasperPrint,
-									String name,
-									HttpServletResponse response) {
-		this.type = JasperReportExporterType.XLSX;
+public class JasperReportExporterXLS extends JasperReportExporter {
+	public JasperReportExporterXLS(JasperPrint jasperPrint) {
+		this.type = JasperReportExporterType.XLS;
 		this.jasperPrint = jasperPrint;
-		this.name = name;
-		this.response = response;
 	}
 
 	@Override
-	public void exportToStream() throws JRException, IOException {
+	public void exportToResponseStream(String outputFileName, HttpServletResponse response) throws JRException, IOException {
 		// Create a JRXlsExporter instance
-		JRXlsxExporter exporter = new JRXlsxExporter();
+		JRXlsExporter exporter = new JRXlsExporter();
 		// Excel specific parameters
 		exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-		exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(getOutputStream()));
+		exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(getOutputStream(outputFileName, response)));
 		SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
 		configuration.setOnePagePerSheet(true);
 		configuration.setDetectCellType(true);
@@ -35,5 +32,10 @@ public class JasperReportExporterXLSX extends JasperReportExporter {
 		configuration.setWhitePageBackground(false);
 		exporter.setConfiguration(configuration);
 		exporter.exportReport();
+	}
+
+	@Override
+	public ByteArrayOutputStream exportToStream() throws JRException, IOException {
+		return null;
 	}
 }

@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+@Deprecated
 @Service
 public class ExporterService {
 	public static final String MEDIA_TYPE_EXCEL = "application/vnd.ms-excel";
@@ -71,6 +72,7 @@ public class ExporterService {
 
 			// Set content type
 			response.setContentType(MEDIA_TYPE_X_PDF);
+			//response.setContentType(MEDIA_TYPE_PDF);
 			//response.setContentLength(outputStream.size());
 
 			// Export to output stream
