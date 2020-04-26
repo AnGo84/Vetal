@@ -47,6 +47,6 @@ public class TaskJasperReportData implements Reportable<Task, JasperReportData, 
 
 	@Override
 	public JasperReportData getReportData(List<Task> objects, FilterData filterData) {
-		return null;
+		return getReportData(objects);
 	}
 }

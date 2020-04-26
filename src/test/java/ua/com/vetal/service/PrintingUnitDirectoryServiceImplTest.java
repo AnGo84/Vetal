@@ -75,7 +75,7 @@ public class PrintingUnitDirectoryServiceImplTest {
 	@Test
 	void whenUpdateObject_thenSuccess() {
 		directory.setName(PrintingUnitDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
-		directoryService.saveObject(directory);
+		directoryService.updateObject(directory);
 		verify(mockDirectoryRepository, times(1)).save(directory);
 	}
 

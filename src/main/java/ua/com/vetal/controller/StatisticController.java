@@ -14,15 +14,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ua.com.vetal.acpect.LogExecutionTime;
-import ua.com.vetal.entity.*;
+import ua.com.vetal.entity.Client;
+import ua.com.vetal.entity.Manager;
+import ua.com.vetal.entity.Order;
+import ua.com.vetal.entity.ProductionDirectory;
 import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.report.jasperReport.JasperReportData;
+import ua.com.vetal.report.jasperReport.exporter.JasperReportExporterType;
+import ua.com.vetal.report.jasperReport.reportdata.OrderJasperReportData;
 import ua.com.vetal.service.ClientServiceImpl;
 import ua.com.vetal.service.ManagerServiceImpl;
 import ua.com.vetal.service.OrderServiceImpl;
 import ua.com.vetal.service.ProductionDirectoryServiceImpl;
-import ua.com.vetal.service.mail.MailServiceImp;
-import ua.com.vetal.service.reports.ExporterService;
-import ua.com.vetal.service.reports.JasperService;
+import ua.com.vetal.service.reports.JasperReportService;
 import ua.com.vetal.utils.DateUtils;
 import ua.com.vetal.utils.StringUtils;
 
@@ -58,13 +62,10 @@ public class StatisticController {
 	private ProductionDirectoryServiceImpl productionService;
 	@Autowired
 	private ClientServiceImpl clientService;
-
 	@Autowired
-	private JasperService jasperService;
+	private OrderJasperReportData reportData;
 	@Autowired
-	private ExporterService exporterService;
-	@Autowired
-	private MailServiceImp mailServiceImp;
+	private JasperReportService jasperReportService;
 
 	@LogExecutionTime
 	@RequestMapping(value = {""}, method = RequestMethod.GET)
@@ -109,7 +110,12 @@ public class StatisticController {
 	@ResponseBody
 	public void exportToExcelCrossReport(HttpServletResponse response) throws JRException, IOException {
 		//logger.info("Export " + title + " to Excel");
-		exporterService.export(ReportType.XLSX, jasperService.ordersCrossTable(filterData), title, response);
+		//exporterService.export(ReportType.XLSX, jasperService.ordersCrossTable(filterData), title, response);
+
+		logger.info("Export " + title + " to Excel");
+		JasperReportData jasperReportData = reportData.getReportData(orderService.findByFilterData(filterData), filterData);
+		jasperReportService.exportToResponseStream(JasperReportExporterType.XLSX,
+				jasperReportData, title, response);
 	}
 
 	/**

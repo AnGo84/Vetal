@@ -27,10 +27,10 @@ public class JasperReportService {
 
 	private JasperReportFactory jasperReportFactory = new JasperReportFactory();
 
-	public void export(JasperReportExporterType type,
-					   JasperReportData jasperReportData,
-					   String outputFileName,
-					   HttpServletResponse response) throws JRException, IOException {
+	public void exportToResponseStream(JasperReportExporterType type,
+									   JasperReportData jasperReportData,
+									   String outputFileName,
+									   HttpServletResponse response) throws JRException, IOException {
 		log.info("Export as response stream file '{}' with type '{}'", outputFileName, type);
 		JasperPrint jasperPrint = jasperPrintData.getJasperPrint(jasperReportData);
 		JasperReportExporter jasperReportExporter =
@@ -39,10 +39,9 @@ public class JasperReportService {
 		jasperReportExporter.exportToResponseStream(outputFileName, response);
 	}
 
-	public EmailAttachment getEmailAttachment(
-			JasperReportExporterType type,
-			String attachmentFullName,
-			JasperReportData jasperReportData) throws JRException, IOException {
+	public EmailAttachment getEmailAttachment(JasperReportExporterType type,
+											  String attachmentFullName,
+											  JasperReportData jasperReportData) throws JRException, IOException {
 		log.info("Export as EmailAttachment file '{}' with type '{}'", attachmentFullName, type);
 		JasperPrint jasperPrint = jasperPrintData.getJasperPrint(jasperReportData);
 		JasperReportExporter jasperReportExporter =
@@ -50,6 +49,6 @@ public class JasperReportService {
 
 		ByteArrayOutputStream baos = jasperReportExporter.exportToStream();
 		DataSource dataSource = new ByteArrayDataSource(baos.toByteArray(), jasperReportExporter.getMediaType());
-		return new EmailAttachment(attachmentFullName, dataSource);
+		return new EmailAttachment(attachmentFullName + "." + type.getFileExtension(), dataSource);
 	}
 }

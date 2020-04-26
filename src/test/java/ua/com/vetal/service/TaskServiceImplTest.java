@@ -72,25 +72,34 @@ public class TaskServiceImplTest {
 
         assertNotNull(foundTask);
         assertNotNull(foundTask.getId());
-        assertEquals(task, foundTask);
-    }
+		assertEquals(task, foundTask);
+	}
 
-    @Test
-    void whenFindByAccount_thenReturnNull() {
-        when(mockTaskRepository.findByAccount(anyString())).thenReturn(null);
-        Task found = taskService.findByAccount("wrong name");
-        assertNull(found);
-    }
+	@Test
+	void whenFindByAccount_thenReturnNull() {
+		when(mockTaskRepository.findByAccount(anyString())).thenReturn(null);
+		Task found = taskService.findByAccount("wrong name");
+		assertNull(found);
+	}
 
-    @Test
-    void whenSaveTask_thenSuccess() {
-        Task newTask = TestDataUtils.getTask(null, 2);
-        taskService.saveObject(newTask);
-        verify(mockTaskRepository, times(1)).save(newTask);
-    }
+	@Test
+	void whenFindByName_thenReturnNull() {
+		//when(mockManagerRepository.findByName(anyString())).thenReturn(manager);
+		Task found = taskService.findByName(null);
+		assertNull(found);
+		found = taskService.findByName("wrong name");
+		assertNull(found);
+	}
 
-    @Test
-    void whenSaveTask_thenNPE() {
+	@Test
+	void whenSaveTask_thenSuccess() {
+		Task newTask = TestDataUtils.getTask(null, 2);
+		taskService.saveObject(newTask);
+		verify(mockTaskRepository, times(1)).save(newTask);
+	}
+
+	@Test
+	void whenSaveTask_thenNPE() {
         when(mockTaskRepository.save(any(Task.class))).thenThrow(NullPointerException.class);
         assertThrows(NullPointerException.class, () -> {
             taskService.saveObject(task);

@@ -55,7 +55,6 @@ public class MailServiceImp implements EmailService {
 
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		fillMimeMessageHelperFromEmailMessage(emailMessage, helper);
-
 		javaMailSender.send(message);
 	}
 

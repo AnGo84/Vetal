@@ -7,6 +7,9 @@ import net.sf.jasperreports.engine.JasperPrint;
 public class JasperReportFactory {
 	public JasperReportExporter getJasperReport(JasperReportExporterType type, JasperPrint jasperPrint) {
 		log.info("Get JasperReportExporter for type: {}", type);
+		if (type == null) {
+			throw new IllegalArgumentException("Wrong JasperReportExporter type:" + type);
+		}
 		JasperReportExporter toReturn = null;
 		switch (type) {
 			case XLS:

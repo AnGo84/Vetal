@@ -7,6 +7,9 @@ import ua.com.vetal.entity.ProductionTypeDirectory;
 public class ProductTypeAppJasperReportTypeFactory {
 	public AppJasperReportType getAppJasperReport(ProductionTypeDirectory productionType) {
 		log.info("Get AppJasperReport for ProductionType: {}", productionType);
+		if (productionType == null || productionType.getId() == null) {
+			return null;
+		}
 		AppJasperReportType toReturn = null;
 		int productionTypeId = productionType.getId().intValue();
 		switch (productionTypeId) {

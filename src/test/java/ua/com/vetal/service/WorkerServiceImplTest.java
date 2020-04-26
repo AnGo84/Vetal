@@ -54,6 +54,15 @@ public class WorkerServiceImplTest {
 	}
 
 	@Test
+	void whenFindByName_thenReturnNull() {
+		//when(mockManagerRepository.findByName(anyString())).thenReturn(manager);
+		Worker found = workerService.findByName(null);
+		assertNull(found);
+		found = workerService.findByName("wrong name");
+		assertNull(found);
+	}
+
+	@Test
 	void whenSaveObject_thenSuccess() {
 		Worker newWorker = TestBuildersUtils.getWorker(null, "firstName2", "lastName2", "middleName2", "email2");
 		workerService.saveObject(newWorker);

@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import ua.com.vetal.acpect.LogExecutionTime;
 import ua.com.vetal.entity.*;
 import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.report.jasperReport.JasperReportData;
+import ua.com.vetal.report.jasperReport.exporter.JasperReportExporterType;
+import ua.com.vetal.report.jasperReport.reportdata.StencilJasperReportData;
 import ua.com.vetal.service.*;
-import ua.com.vetal.service.reports.ExporterService;
-import ua.com.vetal.service.reports.JasperService;
+import ua.com.vetal.service.reports.JasperReportService;
 import ua.com.vetal.utils.DateUtils;
 import ua.com.vetal.utils.StringUtils;
 
@@ -74,9 +76,10 @@ public class StencilsController {
 	private PrintingUnitDirectoryServiceImpl printingUnitService;
 
 	@Autowired
-	private JasperService jasperService;
+	private StencilJasperReportData reportData;
 	@Autowired
-	private ExporterService exporterService;
+	private JasperReportService jasperReportService;
+
 	@Autowired
 	private KraskoottiskService kraskoottiskService;
 
@@ -208,16 +211,20 @@ public class StencilsController {
 	@RequestMapping(value = {"/pdfReport-{id}"}, method = RequestMethod.GET)
 	@ResponseBody
 	public void pdfReportStencil(@PathVariable Long id, HttpServletResponse response) throws JRException, IOException {
-		//logger.info("Get PDF for " + title + " with ID= " + id);
-		exporterService.export(ReportType.PDF, jasperService.stencilReport(id), title + "_" + id, response);
+		logger.info("Get PDF for {} with ID= {}", title, id);
+		Stencil stencil = stencilService.findById(id);
+		jasperReportService.exportToResponseStream(JasperReportExporterType.X_PDF,
+				reportData.getReportData(stencil), title + "_" + stencil.getFullNumber(), response);
 	}
 
 
 	@RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
 	@ResponseBody
 	public void exportToExcelReportTask(HttpServletResponse response) throws JRException, IOException {
-		//logger.info("Export " + title + " to Excel");
-		exporterService.export(ReportType.XLSX, jasperService.stencilsTable(filterData), title, response);
+		logger.info("Export " + title + " to Excel");
+		JasperReportData jasperReportData = reportData.getReportData(stencilService.findByFilterData(filterData), filterData);
+		jasperReportService.exportToResponseStream(JasperReportExporterType.XLSX,
+				jasperReportData, title, response);
 	}
 
 	/**
@@ -229,7 +236,7 @@ public class StencilsController {
 	}
 
 	@ModelAttribute("personName")
-	public String initializepersonName() {
+	public String initializePersonName() {
 		return this.personName;
 	}
 

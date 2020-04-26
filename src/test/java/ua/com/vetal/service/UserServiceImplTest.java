@@ -92,8 +92,8 @@ class UserServiceImplTest {
 	@Test
 	void whenUpdateObject_thenSuccess() {
         User newUser = TestBuildersUtils.getUser(null, "User2", "second pass", true, userRoleSet);
-        userService.saveObject(newUser);
-        verify(mockUserRepository, times(1)).save(newUser);
+        userService.updateObject(newUser);
+		verify(mockUserRepository, times(1)).save(newUser);
     }
 
 	@Test

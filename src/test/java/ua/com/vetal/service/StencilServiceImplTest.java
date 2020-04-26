@@ -74,6 +74,15 @@ class StencilServiceImplTest {
 	}
 
 	@Test
+	void whenFindByName_thenReturnNull() {
+		//when(mockManagerRepository.findByName(anyString())).thenReturn(manager);
+		Stencil found = stencilService.findByName(null);
+		assertNull(found);
+		found = stencilService.findByName("wrong name");
+		assertNull(found);
+	}
+
+	@Test
 	void whenSaveStencil_thenSuccess() {
 		Stencil newStencil = TestDataUtils.getStencil(null, 2);
 		stencilService.saveObject(newStencil);

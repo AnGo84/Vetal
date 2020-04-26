@@ -53,12 +53,22 @@ public class PrinterServiceImplTest {
 		assertNull(found);
 	}
 
+
+	@Test
+	void whenFindByName_thenReturnNull() {
+		//when(mockManagerRepository.findByName(anyString())).thenReturn(manager);
+		Printer found = printerService.findByName(null);
+		assertNull(found);
+		found = printerService.findByName("wrong name");
+		assertNull(found);
+	}
+
 	@Test
 	void whenSaveObject_thenSuccess() {
-        Printer newPrinter = TestBuildersUtils.getPrinter(null, "firstName2", "lastName2", "middleName2", "email2");
-        printerService.saveObject(newPrinter);
-        verify(mockPrinterRepository, times(1)).save(newPrinter);
-    }
+		Printer newPrinter = TestBuildersUtils.getPrinter(null, "firstName2", "lastName2", "middleName2", "email2");
+		printerService.saveObject(newPrinter);
+		verify(mockPrinterRepository, times(1)).save(newPrinter);
+	}
 
 	@Test
 	void whenSaveObject_thenNPE() {

@@ -9,10 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URLEncoder;
 
 @Getter
 public abstract class JasperReportExporter {
 	public static final String DEFAULT_FILE_NAME = "Export";
+	public static final String UTF_8 = "UTF-8";
 	protected JasperReportExporterType type;
 	protected JasperPrint jasperPrint;
 
@@ -26,7 +28,8 @@ public abstract class JasperReportExporter {
 	}
 
 	public OutputStream getOutputStream(String outputFileName, HttpServletResponse response) throws IOException {
-		response.setHeader("Content-Disposition", "inline; filename=" + prepareOutputFileName(outputFileName));
+		response.setCharacterEncoding(UTF_8);
+		response.setHeader("Content-Disposition", "inline; filename=" + URLEncoder.encode(prepareOutputFileName(outputFileName), UTF_8));
 		response.setContentType(type.getMediaType().getMediaType());
 		//response.setContentLength(outputStream.size());
 		return response.getOutputStream();

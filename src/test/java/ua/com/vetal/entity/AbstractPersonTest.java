@@ -4,21 +4,21 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class AbstractPersonTest {
-    private Contractor contractor;
+public class AbstractPersonTest {
+	private Contractor contractor;
 
-    @Test
-    void getFullName() {
-        Contractor contractor = new Contractor();
-        contractor.setCorpName("corpName");
-        contractor.setShortName("shortName");
-        contractor.setFirstName("firstName");
-        contractor.setLastName("lastName");
-        contractor.setMiddleName("middleName");
+	@Test
+	public void getFullName() {
+		Contractor contractor = new Contractor();
+		contractor.setCorpName("corpName");
+		contractor.setShortName("shortName");
+		contractor.setFirstName("firstName");
+		contractor.setLastName("lastName");
+		contractor.setMiddleName("middleName");
 
-        assertEquals(contractor.getCorpName(), contractor.getFullName());
-        contractor.setCorpName(null);
-        assertEquals("lastName firstName middleName", contractor.getFullName());
+		assertEquals(contractor.getCorpName(), contractor.getFullName());
+		contractor.setCorpName(null);
+		assertEquals("lastName firstName middleName", contractor.getFullName());
         contractor.setCorpName("");
         assertEquals("lastName firstName middleName", contractor.getFullName());
 

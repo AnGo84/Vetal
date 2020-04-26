@@ -12,9 +12,6 @@ import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.Stencil;
 import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.service.StencilServiceImpl;
-import ua.com.vetal.service.mail.MailServiceImp;
-import ua.com.vetal.service.reports.ExporterService;
-import ua.com.vetal.service.reports.JasperService;
 
 import java.util.Arrays;
 
@@ -36,12 +33,12 @@ public class StencilsControllerTest {
 	@MockBean
 	private StencilServiceImpl mockStencilService;
 
-	@MockBean
+	/*@MockBean
 	private ExporterService mockExporterService;
 	@MockBean
 	private JasperService jasperService;
 	@MockBean
-	private MailServiceImp mailServiceImp;
+	private MailServiceImp mailServiceImp;*/
 
 	private Stencil stencil;
 

@@ -87,7 +87,7 @@ class AppUserServiceImplTest {
 	@Test
 	void whenUpdateObject_thenSuccess() {
 		AppUser newUser = AppUser.builder().userName("User2").enabled(true).encryptedPassword("second pass").build();
-		appUserService.saveObject(newUser);
+		appUserService.updateObject(newUser);
 		verify(appUserRepository, times(1)).save(newUser);
 	}
 

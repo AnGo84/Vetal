@@ -33,7 +33,7 @@ public class OrderJasperReportData implements Reportable<Order, JasperReportData
 		parameters.put("orders", dataSource);
 
 		return JasperReportData.builder()
-				.reportName(AppJasperReportType.STENCILS_REPORT.getReportName())
+				.reportName(AppJasperReportType.ORDERS_REPORT.getReportName())
 				.parameters(parameters)
 				.dataSource(new JREmptyDataSource())
 				.build();
@@ -43,7 +43,9 @@ public class OrderJasperReportData implements Reportable<Order, JasperReportData
 	public JasperReportData getReportData(List<Order> objects, FilterData filterData) {
 		log.info("Get JasperReportData for objects: {}", objects);
 		log.info("Filter: {}", filterData);
-
+		if (filterData == null) {
+			filterData = new FilterData();
+		}
 		Map<String, Object> parameters = new HashMap<>();
 		parameters.put("filter", filterData);
 

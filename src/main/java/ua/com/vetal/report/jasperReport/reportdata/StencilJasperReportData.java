@@ -46,6 +46,6 @@ public class StencilJasperReportData implements Reportable<Stencil, JasperReport
 
 	@Override
 	public JasperReportData getReportData(List<Stencil> objects, FilterData filterData) {
-		return null;
+		return getReportData(objects);
 	}
 }
