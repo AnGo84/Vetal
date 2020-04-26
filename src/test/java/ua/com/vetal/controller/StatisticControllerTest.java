@@ -11,7 +11,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.Order;
 import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.report.jasperReport.reportdata.TaskJasperReportData;
 import ua.com.vetal.service.OrderServiceImpl;
+import ua.com.vetal.service.reports.JasperReportService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +32,11 @@ public class StatisticControllerTest {
 	private MockMvc mockMvc;
 	@MockBean
 	private OrderServiceImpl mockOrderService;
-    /*@MockBean
-    private ExporterService mockExporterService;
-    @MockBean
-    private JasperService jasperService;*/
+
+	@MockBean
+	private TaskJasperReportData reportData;
+	@MockBean
+	private JasperReportService mockJasperReportService;
 
 	private List<Order> orders;
 

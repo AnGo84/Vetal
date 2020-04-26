@@ -37,11 +37,6 @@ public class TasksControllerTest {
 	@MockBean
 	private TaskServiceImpl mockTaskService;
 
-/*    @MockBean
-    private ExporterService mockExporterService;
-    @MockBean
-    private JasperService jasperService;*/
-
 	@MockBean
 	private TaskJasperReportData reportData;
 	@MockBean

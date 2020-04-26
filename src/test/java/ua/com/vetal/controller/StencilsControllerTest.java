@@ -11,7 +11,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.Stencil;
 import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.report.jasperReport.reportdata.TaskJasperReportData;
 import ua.com.vetal.service.StencilServiceImpl;
+import ua.com.vetal.service.reports.JasperReportService;
 
 import java.util.Arrays;
 
@@ -33,12 +35,10 @@ public class StencilsControllerTest {
 	@MockBean
 	private StencilServiceImpl mockStencilService;
 
-	/*@MockBean
-	private ExporterService mockExporterService;
 	@MockBean
-	private JasperService jasperService;
+	private TaskJasperReportData reportData;
 	@MockBean
-	private MailServiceImp mailServiceImp;*/
+	private JasperReportService mockJasperReportService;
 
 	private Stencil stencil;
 
