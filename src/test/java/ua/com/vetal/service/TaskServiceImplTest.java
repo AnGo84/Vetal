@@ -16,7 +16,6 @@ import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.repositories.TaskRepository;
 import ua.com.vetal.utils.StringUtils;
 
-import javax.persistence.EntityManager;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -30,8 +29,6 @@ public class TaskServiceImplTest {
     @Autowired
     private MessageSource messageSource;
 
-    @Autowired
-    private EntityManager entityManager;
     @Autowired
     private TaskServiceImpl taskService;
     @MockBean

@@ -74,12 +74,46 @@ public class TestDataUtils {
 
     }
 
+    public static ViewTask getViewTask(Long id, int taskNumber) {
+        ViewTask viewTask = new ViewTask();
+        viewTask.setId(id);
+        viewTask.setNumber(taskNumber);
+        viewTask.setNumberBase(TestBuildersUtils.getNumberBaseDirectory(id, "numberBaseTask" + taskNumber));
+        viewTask.setNumberSuffix(taskNumber);
+        viewTask.setFullNumber("fullNumber" + taskNumber);
+        viewTask.setAccount("account" + taskNumber);
+        Manager manager = TestBuildersUtils.getManager(id, "managerFirstName" + taskNumber, "managerLastName" + taskNumber, "managerMiddleName" + taskNumber, "managerEmail" + taskNumber);
+        viewTask.setManager(manager);
+        viewTask.setWorkName("workName" + taskNumber);
+        viewTask.setFileName("fileName" + taskNumber);
+
+		/*ProductionTypeDirectory productionType = TestBuildersUtils.getProductionTypeDirectory(id, "Production type Task" + taskNumber);
+		ProductionDirectory production = TestBuildersUtils.getProductionDirectory(id, "fullName" + taskNumber, "shortName" + taskNumber, productionType);
+		viewTask.setProduction(production);
+		viewTask.setProductionType(productionType);*/
+
+        viewTask.setDateBegin(DateUtils.addToDate(new Date(), Calendar.DATE, -10 * taskNumber));
+        viewTask.setDateEnd(DateUtils.addToDate(new Date(), Calendar.DATE, -1 * taskNumber));
+
+        Client client = TestBuildersUtils.getClient(id, "fullName" + taskNumber, "firstName" + taskNumber, "lastName" + taskNumber, "middleName" + taskNumber, "address" + taskNumber, "email" + taskNumber, "phone" + taskNumber);
+        client.setManager(manager);
+        viewTask.setClient(client);
+
+        boolean taskTrueFalse = (taskNumber % 2) == 0;
+        viewTask.setAmount(20 * taskNumber);
+        viewTask.setState(TestBuildersUtils.getState(id, "name task" + taskNumber, "altname" + taskNumber));
+        viewTask.setPayment(TestBuildersUtils.getPayment(id, "name task" + taskNumber, "altname" + taskNumber));
+        viewTask.setDebtAmount(5 * taskNumber);
+
+        return viewTask;
+    }
+
     public static Task getTask(Long id, int taskNumber) {
         Task task = new Task();
         task.setId(id);
         task.setNumber(taskNumber);
-		task.setNumberBase(TestBuildersUtils.getNumberBaseDirectory(id, "numberBaseTask" + taskNumber));
-		task.setNumberSuffix(taskNumber);
+        task.setNumberBase(TestBuildersUtils.getNumberBaseDirectory(id, "numberBaseTask" + taskNumber));
+        task.setNumberSuffix(taskNumber);
         task.setFullNumber("fullNumber" + taskNumber);
         task.setAccount("account" + taskNumber);
         Manager manager = TestBuildersUtils.getManager(id, "managerFirstName" + taskNumber, "managerLastName" + taskNumber, "managerMiddleName" + taskNumber, "managerEmail" + taskNumber);
@@ -97,8 +131,8 @@ public class TestDataUtils {
         task.setProviderCost(8 * taskNumber);
         task.setOtherExpenses(3 * taskNumber);
 
-		ProductionTypeDirectory productionType = TestBuildersUtils.getProductionTypeDirectory(id, "Production type Task" + taskNumber);
-		ProductionDirectory production = TestBuildersUtils.getProductionDirectory(id, "fullName" + taskNumber, "shortName" + taskNumber, productionType);
+        ProductionTypeDirectory productionType = TestBuildersUtils.getProductionTypeDirectory(id, "Production type Task" + taskNumber);
+        ProductionDirectory production = TestBuildersUtils.getProductionDirectory(id, "fullName" + taskNumber, "shortName" + taskNumber, productionType);
         task.setProduction(production);
         task.setProductionType(productionType);
 
@@ -107,18 +141,18 @@ public class TestDataUtils {
 
         Client client = TestBuildersUtils.getClient(id, "fullName" + taskNumber, "firstName" + taskNumber, "lastName" + taskNumber, "middleName" + taskNumber, "address" + taskNumber, "email" + taskNumber, "phone" + taskNumber);
         client.setManager(manager);
-		task.setClient(client);
-		task.setStock(TestBuildersUtils.getStockDirectory(id, "Stock Task" + taskNumber));
-		task.setPrinting(100 * taskNumber);
-		task.setPrintingUnit(TestBuildersUtils.getPrintingUnitDirectory(id, "PrintingUnit task" + taskNumber));
-		task.setChromaticity(TestBuildersUtils.getChromaticityDirectory(id, "Chromaticity" + taskNumber));
+        task.setClient(client);
+        task.setStock(TestBuildersUtils.getStockDirectory(id, "Stock Task" + taskNumber));
+        task.setPrinting(100 * taskNumber);
+        task.setPrintingUnit(TestBuildersUtils.getPrintingUnitDirectory(id, "PrintingUnit task" + taskNumber));
+        task.setChromaticity(TestBuildersUtils.getChromaticityDirectory(id, "Chromaticity" + taskNumber));
 
         task.setFormat(TestBuildersUtils.getFormatDirectory(id, "format" + taskNumber));
         task.setPrintingFormat("printing format" + taskNumber);
 
-		task.setLaminate(TestBuildersUtils.getLaminateDirectory(id, "Laminate" + taskNumber));
-		task.setPaper(TestBuildersUtils.getPaperDirectory(id, "Paper task" + taskNumber));
-		task.setWares("wares" + taskNumber);
+        task.setLaminate(TestBuildersUtils.getLaminateDirectory(id, "Laminate" + taskNumber));
+        task.setPaper(TestBuildersUtils.getPaperDirectory(id, "Paper task" + taskNumber));
+        task.setWares("wares" + taskNumber);
         task.setCringle(TestBuildersUtils.getCringleDirectory(id, "Cringle" + taskNumber));
         boolean taskTrueFalse = (taskNumber % 2) == 0;
         task.setFillet(taskTrueFalse);
@@ -130,16 +164,16 @@ public class TestDataUtils {
         task.setPlotter(taskTrueFalse);
         task.setAssembly(taskTrueFalse);
         task.setCutting(taskTrueFalse);
-		task.setNote("Task description" + taskNumber);
-		task.setPackBox(taskTrueFalse);
-		task.setPackPellicle(taskTrueFalse);
-		task.setPackPaper(taskTrueFalse);
-		task.setPackPackage(taskTrueFalse);
-		task.setPackNP(taskTrueFalse);
-		task.setPackBy("Pack by" + taskNumber);
-		task.setNumeration(taskTrueFalse);
-		task.setNumerationStart(taskNumber + 1);
-		task.setAmount(20 * taskNumber);
+        task.setNote("Task description" + taskNumber);
+        task.setPackBox(taskTrueFalse);
+        task.setPackPellicle(taskTrueFalse);
+        task.setPackPaper(taskTrueFalse);
+        task.setPackPackage(taskTrueFalse);
+        task.setPackNP(taskTrueFalse);
+        task.setPackBy("Pack by" + taskNumber);
+        task.setNumeration(taskTrueFalse);
+        task.setNumerationStart(taskNumber + 1);
+        task.setAmount(20 * taskNumber);
 		task.setState(TestBuildersUtils.getState(id, "name task" + taskNumber, "altname" + taskNumber));
 		task.setPayment(TestBuildersUtils.getPayment(id, "name task" + taskNumber, "altname" + taskNumber));
 		task.setDebtAmount(5 * taskNumber);

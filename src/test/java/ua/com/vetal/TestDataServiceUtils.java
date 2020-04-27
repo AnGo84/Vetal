@@ -72,14 +72,56 @@ public class TestDataServiceUtils {
 		Printer printer = entityManager.persistAndFlush(stencil.getPrinter());
 		stencil.setPrinter(printer);
 
-		Worker worker = entityManager.persistAndFlush(stencil.getWorkerPrint());
-		stencil.setWorkerPrint(worker);
-		stencil.setWorkerCut(worker);
+        Worker worker = entityManager.persistAndFlush(stencil.getWorkerPrint());
+        stencil.setWorkerPrint(worker);
+        stencil.setWorkerCut(worker);
 
-		State state = entityManager.persistAndFlush(stencil.getState());
-		stencil.setState(state);
-		Payment payment = entityManager.persistAndFlush(stencil.getPayment());
-		stencil.setPayment(payment);
-		return stencil;
-	}
+        State state = entityManager.persistAndFlush(stencil.getState());
+        stencil.setState(state);
+        Payment payment = entityManager.persistAndFlush(stencil.getPayment());
+        stencil.setPayment(payment);
+        return stencil;
+    }
+
+
+    public static ViewTask saveViewTaskParts(ViewTask viewTask, TestEntityManager entityManager) {
+        NumberBaseDirectory numberBaseDirectory = entityManager.persistAndFlush(viewTask.getNumberBase());
+        viewTask.setNumberBase(numberBaseDirectory);
+        Manager manager = entityManager.persistAndFlush(viewTask.getManager());
+        viewTask.setManager(manager);
+        Contractor contractor = entityManager.persistAndFlush(viewTask.getContractor());
+        viewTask.setContractor(contractor);
+
+		/*ProductionTypeDirectory productionTypeDirectory = entityManager.persistAndFlush(viewTask.getProductionType());
+		viewTask.setProductionType(productionTypeDirectory);*/
+        ProductionTypeDirectory productionTypeDirectory = entityManager.persistAndFlush(viewTask.getProduction().getProductionType());
+        //viewTask.setProductionType(productionTypeDirectory);
+        ProductionDirectory productionDirectory = viewTask.getProduction();
+        productionDirectory.setProductionType(productionTypeDirectory);
+        productionDirectory = entityManager.persistAndFlush(productionDirectory);
+        viewTask.setProduction(productionDirectory);
+        Client client = viewTask.getClient();
+        client.setManager(manager);
+        client = entityManager.persistAndFlush(client);
+        viewTask.setClient(client);
+		/*StockDirectory stockDirectory = entityManager.persistAndFlush(viewTask.getStock());
+		viewTask.setStock(stockDirectory);
+		PrintingUnitDirectory printingUnitDirectory = entityManager.persistAndFlush(viewTask.getPrintingUnit());
+		viewTask.setPrintingUnit(printingUnitDirectory);
+		ChromaticityDirectory chromaticityDirectory = entityManager.persistAndFlush(viewTask.getChromaticity());
+		viewTask.setChromaticity(chromaticityDirectory);
+		FormatDirectory formatDirectory = entityManager.persistAndFlush(viewTask.getFormat());
+		viewTask.setFormat(formatDirectory);
+		LaminateDirectory laminateDirectory = entityManager.persistAndFlush(viewTask.getLaminate());
+		viewTask.setLaminate(laminateDirectory);
+		PaperDirectory paperDirectory = entityManager.persistAndFlush(viewTask.getPaper());
+		viewTask.setPaper(paperDirectory);
+		CringleDirectory cringleDirectory = entityManager.persistAndFlush(viewTask.getCringle());
+		viewTask.setCringle(cringleDirectory);*/
+        State state = entityManager.persistAndFlush(viewTask.getState());
+        viewTask.setState(state);
+        Payment payment = entityManager.persistAndFlush(viewTask.getPayment());
+        viewTask.setPayment(payment);
+        return viewTask;
+    }
 }
