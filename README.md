@@ -1,5 +1,6 @@
 # Vetal
 Build status: [![build_status](https://travis-ci.com/AnGo84/Vetal.svg?branch=master)](https://travis-ci.com/AnGo84/Vetal.svg)
+[![BCH compliance](https://bettercodehub.com/edge/badge/AnGo84/Vetal?branch=master)](https://bettercodehub.com/)
 - - -
 CRUD Web application for managing applications in the printing house.
 Provides separation of access to data by roles ***Administrator, Manager, Accountant***.
@@ -18,7 +19,7 @@ Also, user can filtered data and export result to Excel format.
 
 ### Realise 1.5 INFO
 In progress
-
+- test coverage;
 
 ### Realise 1.0 INFO
 
@@ -29,5 +30,5 @@ Stable version with realisation:
 - directories: add, edit, delete;
 
 ### TODO
-- Add tests;
-- Refactoring;
+- Refactoring code;
+- Change view filters logic;
