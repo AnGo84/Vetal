@@ -7,45 +7,46 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import ua.com.vetal.entity.PasswordResetToken;
 import ua.com.vetal.entity.User;
 import ua.com.vetal.entity.dto.PasswordForgotDto;
-import ua.com.vetal.handler.PasswordResetTokenHandler;
 import ua.com.vetal.repositories.PasswordResetTokenRepository;
 import ua.com.vetal.service.UserServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Locale;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/forgotPassword")
 public class PasswordForgotController {
-    static final Logger logger = LoggerFactory.getLogger(PasswordForgotController.class);
+	static final Logger logger = LoggerFactory.getLogger(PasswordForgotController.class);
 
-    @Autowired
-    MessageSource messageSource;
+	@Autowired
+	private MessageSource messageSource;
 
-    @Autowired
-    private UserServiceImpl userService;
-    @Autowired
-    private PasswordResetTokenRepository tokenRepository;
-    //@Autowired private EmailService emailService;
+	@Autowired
+	private UserServiceImpl userService;
+	@Autowired
+	private PasswordResetTokenRepository tokenRepository;
+	//@Autowired private EmailService emailService;
 
-    @ModelAttribute("forgotPasswordForm")
-    public PasswordForgotDto forgotPasswordDto() {
-        return new PasswordForgotDto();
-    }
+	@ModelAttribute("forgotPasswordForm")
+	public PasswordForgotDto forgotPasswordDto() {
+		return new PasswordForgotDto();
+	}
 
     /*@GetMapping
     public String displayForgotPasswordPage() {
         return "passwordForgotPage";
     }*/
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public String passwordResetPage(Model model) {
+	@RequestMapping(value = "", method = RequestMethod.GET)
+	public String passwordResetPage(Model model) {
         /*logger.info("Try reset Pass for User Name: " + userName);
 
 
@@ -58,34 +59,27 @@ public class PasswordForgotController {
             return "loginPage";
         }*/
 
-        model.addAttribute("title", "Forgot Password");
-        return "passwordForgotPage";
-    }
+		model.addAttribute("title", "Forgot Password");
+		return "passwordForgotPage";
+	}
 
 
+	@PostMapping
+	public String processForgotPasswordForm(@ModelAttribute("forgotPasswordForm") @Valid PasswordForgotDto form,
+											BindingResult result,
+											HttpServletRequest request) {
+		if (result.hasErrors()) {
+			return "passwordForgotPage";
+		}
+		User user = userService.findByName(form.getUserName());
+		if (user == null) {
+			result.rejectValue("userName", null, messageSource.getMessage("non.unique.field",
+					new String[]{"Login", form.getUserName()}, new Locale("ru")));
+			return "passwordForgotPage";
+		}
 
-    @PostMapping
-    public String processForgotPasswordForm(@ModelAttribute("forgotPasswordForm") @Valid PasswordForgotDto form,
-                                            BindingResult result,
-                                            HttpServletRequest request) {
-
-        if (result.hasErrors()){
-            return "passwordForgotPage";
-        }
-
-        User user = userService.findByName(form.getUserName());
-        if (user == null){
-            result.rejectValue("userName", null, messageSource.getMessage("non.unique.field",
-                    new String[] { "Login", form.getUserName() }, new Locale("ru")));
-            return "passwordForgotPage";
-        }
-
-        /*PasswordResetToken token = new PasswordResetToken();
-        token.setToken(UUID.randomUUID().toString());
-        token.setUser(user);
-        token.setExpiryDate(60); // 1 hour*/
-        PasswordResetToken token = PasswordResetTokenHandler.getPasswordResetToken(user);
-        tokenRepository.save(token);
+		PasswordResetToken token = PasswordResetToken.newBuilder().setUser(user).build();
+		tokenRepository.save(token);
 /*
 
         Mail mail = new Mail();
@@ -104,7 +98,7 @@ public class PasswordForgotController {
 
         return "redirect:/forgot-password?success";
 */
-        return "redirect:/passwordReset?token=" + token.getToken();
-    }
+		return "redirect:/passwordReset?token=" + token.getToken();
+	}
 
 }

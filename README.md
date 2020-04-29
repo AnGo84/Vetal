@@ -16,6 +16,9 @@ Also, user can filtered data and export result to Excel format.
 - MySQL database
 - Jasper report
 
+### Realise 1.5 INFO
+In progress
+
 
 ### Realise 1.0 INFO
 

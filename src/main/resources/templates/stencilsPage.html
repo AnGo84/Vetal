@@ -197,13 +197,15 @@
 
                             <th width="100" th:text="#{label.state}">State</th>
 
-                            <th class="no-sort" width="80">PDF</th>
-                            <th class="no-sort" width="80"
+                            <!--<th class="no-sort" width="80">PDF</th>-->
+                            <th class="no-sort text-center" style="vertical-align: middle;" width="50"> #</th>
+
+                            <!--<th class="no-sort" width="80"
                                 sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
                             <th class="no-sort" width="80"
                                 sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
                             <th class="no-sort" width="80"
-                                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
+                                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>-->
                         </tr>
                         </thead>
                         <tbody>
@@ -235,36 +237,72 @@
                             <td class="text-center" style="vertical-align: middle;"
                                 th:text="${stencil.state.altName}"></td>
 
-                            <td class="text-center align-self-center" style="vertical-align: middle;"><a
-                                    th:href="@{'/stencils/pdfReport-' + ${stencil.id}}"
-                                    style="width: 80px;"
-                                    class="btn btn-warning btn-sm custom-width" role="button">PDF</a></td>
+                            <td class="text-center align-self-center" style="vertical-align: middle;">
+                                <!--<a th:href="@{'/tasks/pdfReport-' + ${task.id}}"
+                                    class="btn btn-warning btn-sm" role="button" th:title="#{message.email.send}"><i class="fa fa-envelope-open"></i></a>-->
+                                <div class="btn-group btn-group-sm">
+                                    <a class="btn btn-warning btn-sm mx-sm-1"
+                                       role="button" th:href="@{'/stencils/pdfReport-' + ${stencil.id}}"
+                                       th:title="#{message.report.show}"><i class="fa fa-file-o"></i></a>
 
-                            <td class="text-center align-self-center" style="vertical-align: middle;"
-                                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"><a
-                                    th:href="@{'/stencils/edit-' + ${stencil.id}}" style="width: 80px;"
-                                    class="btn btn-success btn-sm custom-width" role="button"
-                                    th:text="#{label.edit}">Edit</a></td>
+                                </div>
+                                <div class="btn-group btn-group-sm"
+                                     sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">
+                                    <a class="btn btn-primary btn-sm"
+                                       role="button" th:href="@{'/stencils/copy-' + ${stencil.id}}"
+                                       th:title="#{message.record.clone}"><i class="fa fa-clone"></i></a>
+                                    <!--<button class="btn btn-primary btn-sm mx-sm-1"
+                                            role="button" th:href="@{'/tasks/copy-' + ${task.id}}"
+                                            th:title="#{message.record.clone}"><i class="fa fa-clone"></i></button>-->
 
-                            <td class="text-center align-self-center" style="vertical-align: middle;"
-                                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"><a
-                                    th:href="@{'/stencils/copy-' + ${stencil.id}}" style="width: 80px;"
-                                    class="btn btn-primary btn-sm custom-width" role="button"
-                                    th:text="#{label.copy_short}">Copy</a></td>
-                            <td class="text-center align-self-center" style="vertical-align: middle;"
-                                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">
-                                <form method="GET" action="#"
-                                      th:action="@{'/stencils/delete-' + ${stencil.id}}"
-                                      accept-charset="UTF-8" style="display: inline">
-                                    <button class="btn btn-sm btn-danger custom-width"
-                                            type="button" style="width: 80px;" data-toggle="modal"
-                                            data-target="#confirmDelete"
-                                            th:attr="data-title=#{label.delete_record},data-message=#{message.delete_confirm_message}"
-                                            th:text="#{label.delete}">
-                                        <i class="glyphicon glyphicon-trash"></i>Delete
-                                    </button>
-                                </form>
+                                    <a class="btn btn-success btn-sm  mx-sm-1"
+                                       role="button" th:href="@{'/stencils/edit-' + ${stencil.id}}"
+                                       th:title="#{message.record.edit}"><i class="fa fa-pencil"></i></a>
+
+                                    <form accept-charset="UTF-8" action="#"
+                                          method="GET"
+                                          style="display: inline" th:action="@{'/stencils/delete-' + ${stencil.id}}">
+                                        <button class="btn btn-sm btn-danger mx-sm-1"
+                                                data-target="#confirmDelete" data-toggle="modal"
+                                                th:title="#{message.record.delete}" type="button">
+                                            <i class="fa fa-trash-o"></i>
+                                        </button>
+                                    </form>
+
+                                </div>
                             </td>
+
+                            <!--
+                                                        <td class="text-center align-self-center" style="vertical-align: middle;"><a
+                                                                th:href="@{'/stencils/pdfReport-' + ${stencil.id}}"
+                                                                style="width: 80px;"
+                                                                class="btn btn-warning btn-sm custom-width" role="button">PDF</a></td>
+
+                                                        <td class="text-center align-self-center" style="vertical-align: middle;"
+                                                            sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"><a
+                                                                th:href="@{'/stencils/edit-' + ${stencil.id}}" style="width: 80px;"
+                                                                class="btn btn-success btn-sm custom-width" role="button"
+                                                                th:text="#{label.edit}">Edit</a></td>
+
+                                                        <td class="text-center align-self-center" style="vertical-align: middle;"
+                                                            sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"><a
+                                                                th:href="@{'/stencils/copy-' + ${stencil.id}}" style="width: 80px;"
+                                                                class="btn btn-primary btn-sm custom-width" role="button"
+                                                                th:text="#{label.copy_short}">Copy</a></td>
+                                                        <td class="text-center align-self-center" style="vertical-align: middle;"
+                                                            sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">
+                                                            <form method="GET" action="#"
+                                                                  th:action="@{'/stencils/delete-' + ${stencil.id}}"
+                                                                  accept-charset="UTF-8" style="display: inline">
+                                                                <button class="btn btn-sm btn-danger custom-width"
+                                                                        type="button" style="width: 80px;" data-toggle="modal"
+                                                                        data-target="#confirmDelete"
+                                                                        th:attr="data-title=#{label.delete_record},data-message=#{message.delete_confirm_message}"
+                                                                        th:text="#{label.delete}">
+                                                                    <i class="glyphicon glyphicon-trash"></i>Delete
+                                                                </button>
+                                                            </form>
+                                                        </td>-->
 
                         </tr>
                         </tbody>

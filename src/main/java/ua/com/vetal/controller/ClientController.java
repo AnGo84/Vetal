@@ -12,13 +12,13 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import ua.com.vetal.entity.Client;
 import ua.com.vetal.entity.Manager;
-import ua.com.vetal.entity.ReportType;
 import ua.com.vetal.entity.filter.ClientFilter;
-import ua.com.vetal.entity.filter.PersonFilter;
+import ua.com.vetal.report.jasperReport.JasperReportData;
+import ua.com.vetal.report.jasperReport.exporter.JasperReportExporterType;
+import ua.com.vetal.report.jasperReport.reportdata.ClientJasperReportData;
 import ua.com.vetal.service.ClientServiceImpl;
 import ua.com.vetal.service.ManagerServiceImpl;
-import ua.com.vetal.service.reports.ExporterService;
-import ua.com.vetal.service.reports.JasperService;
+import ua.com.vetal.service.reports.JasperReportService;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -34,13 +34,10 @@ import java.util.Locale;
 
 public class ClientController {
 	static final Logger logger = LoggerFactory.getLogger(ClientController.class);
-	private String title = "Clients";
-
-	private List<Client> clientList;
-
 	@Autowired
 	MessageSource messageSource;
-
+	private String title = "Clients";
+	private List<Client> clientList;
 	@Autowired
 	private ManagerServiceImpl managerService;
 
@@ -48,14 +45,14 @@ public class ClientController {
 	private ClientServiceImpl clientService;
 
 	@Autowired
-	private ExporterService exporterService;
+	private ClientJasperReportData reportData;
 	@Autowired
-	private JasperService jasperService;
+	private JasperReportService jasperReportService;
 
 	@Autowired
 	private ClientFilter clientFilter;
 
-	@RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"", "/list"}, method = RequestMethod.GET)
 	public String clientsList(Model model) {
 		//model.addAttribute("clientsList", clientService.findAllObjects());
 		return "clientsPage";
@@ -92,7 +89,7 @@ public class ClientController {
 		Client checkClient = clientService.findByName(client.getFullName());
 		logger.info("Checked client: " + checkClient);
 		//if ((client.getId() == null && checkClient != null) || (client.getId() != null && checkClient.getId() != null && client.getId() != checkClient.getId())) {
-		if(checkClient!=null && (client.getId()==null || !checkClient.getId().equals(client.getId()))){
+		if (checkClient != null && (client.getId() == null || !checkClient.getId().equals(client.getId()))) {
 			FieldError fieldError = new FieldError("client", "fullName", messageSource.getMessage("non.unique.field",
 					new String[]{"Название", client.getFullName()}, new Locale("ru")));
 
@@ -130,27 +127,27 @@ public class ClientController {
 
 	//Filter
 	@RequestMapping(value = "/filter", method = RequestMethod.GET)
-	public String filterTask(@ModelAttribute("clientFilterData") ClientFilter filterData, BindingResult bindingResult,
-							 Model model) {
+	public String filterClients(@ModelAttribute("clientFilterData") ClientFilter filterData, BindingResult bindingResult,
+								Model model) {
 		logger.info("Filter: " + filterData);
 		this.clientFilter = filterData;
 		return "redirect:/clients";
 	}
 
 	@RequestMapping(value = "/clearFilter", method = RequestMethod.GET)
-	public String clearFilterTask() {
+	public String clearFilterClients() {
 		this.clientFilter = new ClientFilter();
 		return "redirect:/clients";
 	}
 
 	@RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
 	@ResponseBody
-	public void exportToExcelReportTask(HttpServletResponse response) throws JRException, IOException {
-
-		exporterService.export(ReportType.XLSX, jasperService.clientsTable(clientFilter), title, response);
-
+	public void exportToExcelReportClients(HttpServletResponse response) throws JRException, IOException {
+		//exporterService.export(ReportType.XLSX, jasperService.clientsTable(clientFilter), title, response);
+		logger.info("Export " + title + " to Excel");
+		JasperReportData jasperReportData = reportData.getReportData(clientService.findByFilterData(clientFilter), clientFilter);
+		jasperReportService.exportToResponseStream(JasperReportExporterType.XLSX, jasperReportData, title, response);
 	}
-
 
 	@ModelAttribute("clientFilterData")
 	public ClientFilter getFilterData() {
@@ -168,7 +165,7 @@ public class ClientController {
 	}
 
 	@ModelAttribute("clientsList")
-	public List<Client> getViewTasksListData() {
+	public List<Client> getViewClientsListData() {
 		//logger.info("Get Filter: " + filterData);
 		clientList = clientService.findByFilterData(getFilterData());
 		// logger.info("Get TaskList : " + tasksList.size());

@@ -1,22 +1,22 @@
 <head>
-    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
 </head>
 
 <nav class="navbar navbar-expand-sm bg-info navbar-dark"
-     xmlns:th="http://www.thymeleaf.org"
-     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+     xmlns:th="http://www.thymeleaf.org">
 
     <!-- xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       bg-light navbar-light
    <a class="navbar-brand" href="#https://vetal.com.ua/">Vetal</a> 
    -->
 
-    <a class="navbar-brand" target="_blank" href="https://vetal.com.ua/">
-        <img th:src="@{/image/logo.png}" alt="Logo" style="width: 100px;">
+    <a class="navbar-brand" href="https://vetal.com.ua/" target="_blank">
+        <img alt="Logo" style="width: 100px;" th:src="@{/image/logo.png}">
     </a>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#collapsibleNavbar">
+    <button class="navbar-toggler" data-target="#collapsibleNavbar" data-toggle="collapse"
+            type="button">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
@@ -32,20 +32,25 @@
 
 
             <li class="nav-item dropdown"><a
-                    class="nav-link dropdown-toggle text-light" href="#" id="navbarPrinteryDrop"
-                    data-toggle="dropdown" th:text="#{menu.label.printery}">
+                    class="nav-link dropdown-toggle text-light" data-toggle="dropdown" href="#"
+                    id="navbarPrinteryDrop" th:text="#{menu.label.printery}">
                 Printery </a>
                 <div class="dropdown-menu">
                     <a class="dropdown-item" th:href="@{/tasks}"
-                       th:text="#{menu.label.tasks}">Tasks</a> <a
-                        class="dropdown-item" th:href="@{/stencils}"
-                        th:text="#{menu.label.stencils}">Stencils</a>
+                       th:text="#{menu.label.tasks}">Tasks</a>
+                    <a
+                            class="dropdown-item" th:href="@{/stencils}"
+                            th:text="#{menu.label.stencils}">Stencils</a>
+                    <div class="dropdown-divider"></div>
+                    <a
+                            class="dropdown-item" th:href="@{/statistic}"
+                            th:text="#{menu.label.statistic}">Statistic</a>
                 </div>
             </li>
 
             <li class="nav-item dropdown"><a
-                    class="nav-link dropdown-toggle text-light" href="#" id="navbarContactsDrop"
-                    data-toggle="dropdown" th:text="#{menu.label.contacts}">
+                    class="nav-link dropdown-toggle text-light" data-toggle="dropdown" href="#"
+                    id="navbarContactsDrop" th:text="#{menu.label.contacts}">
                 Contacts </a>
                 <div class="dropdown-menu">
                     <a class="dropdown-item" th:href="@{/clients}"
@@ -62,8 +67,8 @@
             </li>
 
             <li class="nav-item dropdown"><a
-                    class="nav-link dropdown-toggle text-light" href="#" id="navbarDirectoriesDrop"
-                    data-toggle="dropdown" th:text="#{menu.label.directories}">
+                    class="nav-link dropdown-toggle text-light" data-toggle="dropdown" href="#"
+                    id="navbarDirectoriesDrop" th:text="#{menu.label.directories}">
                 Directories </a>
                 <div class="dropdown-menu">
                     <a class="dropdown-item" th:href="@{/productions}"
@@ -92,8 +97,8 @@
 
             <!-- <sec:authorize access="hasAuthority('ROLE_ADMIN')"> th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"-->
             <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')"><a
-                    class="nav-link dropdown-toggle text-light" href="#" id="navbardrop"
-                    data-toggle="dropdown" th:text="#{menu.label.administration}">
+                    class="nav-link dropdown-toggle text-light" data-toggle="dropdown" href="#"
+                    id="navbardrop" th:text="#{menu.label.administration}">
                 Administration </a>
                 <div class="dropdown-menu">
                     <!--<a class="dropdown-item" th:href="@{/admin}">Admin</a>-->

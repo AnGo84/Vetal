@@ -1,10 +1,10 @@
 package ua.com.vetal.entity.dto;
 
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 
 public class PasswordForgotDto {
-    @NotNull
+    @NotEmpty
     private String userName;
 
     public String getUserName() {

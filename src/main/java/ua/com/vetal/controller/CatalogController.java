@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.annotation.SessionScope;
 import ua.com.vetal.entity.file.LocalFile;
 import ua.com.vetal.utils.ListFilesUtils;
-import ua.com.vetal.utils.MediaTypeUtils;
+import ua.com.vetal.web.FileMediaType;
 
 import javax.servlet.ServletContext;
 import java.io.File;
@@ -29,7 +29,6 @@ import java.util.List;
 @RequestMapping("/catalog")
 @Controller
 @SessionScope
-//@SessionAttributes({"managersFilterList", "clientFilterList", "contractorFilterList"})
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:vetal.properties")
 public class CatalogController {
     static final Logger logger = LoggerFactory.getLogger(CatalogController.class);
@@ -110,8 +109,8 @@ public class CatalogController {
     @RequestMapping("/download/{path}")
     public ResponseEntity<InputStreamResource> downloadFile1(
             @PathVariable String path) throws IOException {
-
-        MediaType mediaType = MediaTypeUtils.getMediaTypeForFileName(this.servletContext, path);
+        FileMediaType fileMediaType = new FileMediaType(servletContext);
+        MediaType mediaType = fileMediaType.getMediaTypeForFileName(path);
         System.out.println("fileName: " + path);
         System.out.println("mediaType: " + mediaType);
 

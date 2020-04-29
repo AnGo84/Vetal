@@ -1,11 +1,5 @@
 package ua.com.vetal.controller;
 
-import java.io.IOException;
-import java.util.*;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
 import net.sf.jasperreports.engine.JRException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,15 +10,23 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-
 import ua.com.vetal.entity.Contractor;
 import ua.com.vetal.entity.Manager;
-import ua.com.vetal.entity.ReportType;
 import ua.com.vetal.entity.filter.PersonFilter;
+import ua.com.vetal.report.jasperReport.JasperReportData;
+import ua.com.vetal.report.jasperReport.exporter.JasperReportExporterType;
+import ua.com.vetal.report.jasperReport.reportdata.ContractorJasperReportData;
 import ua.com.vetal.service.ContractorServiceImpl;
 import ua.com.vetal.service.ManagerServiceImpl;
-import ua.com.vetal.service.reports.ExporterService;
-import ua.com.vetal.service.reports.JasperService;
+import ua.com.vetal.service.reports.JasperReportService;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/contractor")
@@ -46,9 +48,9 @@ public class ContractorController {
 	private ContractorServiceImpl personService;
 
 	@Autowired
-	private ExporterService exporterService;
+	private ContractorJasperReportData reportData;
 	@Autowired
-	private JasperService jasperService;
+	private JasperReportService jasperReportService;
 
 	@Autowired
 	private PersonFilter personFilter;
@@ -116,7 +118,7 @@ public class ContractorController {
 		Contractor checkContractor = personService.findByName(person.getCorpName());
 		logger.info("Checked contractor: " + checkContractor);
 		//if ((client.getId() == null && checkContractor != null) || (client.getId() != null && checkContractor.getId() != null && client.getId() != checkContractor.getId())) {
-		if(checkContractor!=null && (person.getId()==null || !checkContractor.getId().equals(person.getId()))){
+		if (checkContractor != null && (person.getId() == null || !checkContractor.getId().equals(person.getId()))) {
 			FieldError fieldError = new FieldError("person", "corpName", messageSource.getMessage("non.unique.field",
 					new String[]{"Название", person.getFullName()}, new Locale("ru")));
 
@@ -144,7 +146,7 @@ public class ContractorController {
 	}
 
 	@ModelAttribute("personName")
-	public String initializepersonName() {
+	public String initializePersonName() {
 		String name = messageSource.getMessage("label.contractor", null, new Locale("ru"));
 		if (name == null || name.equals("")) {
 			return personName;
@@ -164,11 +166,12 @@ public class ContractorController {
 							 Model model) {
 		logger.info("Filter: " + filterData);
 		this.personFilter = filterData;
+
 		return "redirect:/contractor";
 	}
 
 	@RequestMapping(value = "/clearFilter", method = RequestMethod.GET)
-	public String clearFilterTask() {
+	public String clearFilterTask(Model model) {
 		this.personFilter = new PersonFilter();
 		return "redirect:/contractor";
 	}
@@ -189,9 +192,10 @@ public class ContractorController {
 	@RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
 	@ResponseBody
 	public void exportToExcelReportTask(HttpServletResponse response) throws JRException, IOException {
-
-		exporterService.export(ReportType.XLSX, jasperService.contractorsTable(personFilter), title, response);
-
+		//exporterService.export(ReportType.XLSX, jasperService.contractorsTable(personFilter), title, response);
+		logger.info("Export " + title + " to Excel");
+		JasperReportData jasperReportData = reportData.getReportData(personService.findByFilterData(personFilter), personFilter);
+		jasperReportService.exportToResponseStream(JasperReportExporterType.XLSX, jasperReportData, title, response);
 	}
 
 

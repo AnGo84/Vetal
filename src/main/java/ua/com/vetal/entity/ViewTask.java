@@ -1,13 +1,12 @@
 package ua.com.vetal.entity;
 
-import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.text.DecimalFormat;
 import java.util.Date;
 
 @Entity
@@ -34,30 +33,31 @@ public class ViewTask {
 	private int numberSuffix;
 
 	@Column(name = "Full_number")
-	private String fullNumber;
+    private String fullNumber;
 
-	@Column(name = "Account")
-	@Size(max = 50)
-	private String account;
+    @Column(name = "Account")
+    @Size(max = 50)
+    private String account;
 
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "Manager_ID")
-	private Manager manager;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "Manager_ID")
+    private Manager manager;
 
-	@NotNull
-	@Column(name = "Work_Name", nullable = false)
-	private String workName;
+    @NotEmpty
+    @Column(name = "Work_Name", nullable = false)
+    private String workName;
 
-	@Column(name = "File_Name", nullable = false)
-	private String fileName;
+    @NotEmpty
+    @Column(name = "File_Name", nullable = false)
+    private String fileName;
 
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "Contractor_ID")
-	private Contractor contractor;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "Contractor_ID")
+    private Contractor contractor;
 
-	@NotNull
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "Production_ID")
+    @NotNull
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "Production_ID")
 	private ProductionDirectory production;
 
 	@NotNull

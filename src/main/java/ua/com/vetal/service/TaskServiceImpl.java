@@ -8,16 +8,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.dao.TaskDAO;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.email.EmailAttachment;
+import ua.com.vetal.email.EmailMessage;
 import ua.com.vetal.entity.Task;
+import ua.com.vetal.entity.filter.FilterData;
 import ua.com.vetal.repositories.TaskRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.activation.DataSource;
+import javax.mail.util.ByteArrayDataSource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,9 +26,7 @@ public class TaskServiceImpl implements SimpleService<Task> {
 
     private static final Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
     @Autowired
-    MessageSource messageSource;
-    @PersistenceContext
-    private EntityManager entityManager;
+    private MessageSource messageSource;
     @Autowired
     private TaskRepository taskRepository;
     @Autowired
@@ -79,11 +76,12 @@ public class TaskServiceImpl implements SimpleService<Task> {
     }
 
     public List<Task> findByFilterData(FilterData filterData) {
-        List<Task> tasks = null;
+        List<Task> tasks = taskDAO.findByFilterData(filterData);
 
         if (filterData == null) {
             return findAllObjects();
         }
+/*
 
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Task> query = builder.createQuery(Task.class);
@@ -93,11 +91,13 @@ public class TaskServiceImpl implements SimpleService<Task> {
 
         if (filterData.getAccount() != null && !filterData.getAccount().equals("")) {
             predicate = builder.and(predicate, builder.equal(root.get("account"), filterData.getAccount()));
-            /*
-             * predicate = builder.and(predicate,
-             * builder.like(builder.lower(builder.toString(root.get("account")))
-             * , ("%" + filterData.getAccount() + "%").toLowerCase()));
-             */
+            */
+        /*
+         * predicate = builder.and(predicate,
+         * builder.like(builder.lower(builder.toString(root.get("account")))
+         * , ("%" + filterData.getAccount() + "%").toLowerCase()));
+         *//*
+
             predicate = builder.and(predicate, builder.like(builder.lower(root.get("account")),
                     ("%" + filterData.getAccount() + "%").toLowerCase()));
         }
@@ -142,6 +142,7 @@ public class TaskServiceImpl implements SimpleService<Task> {
                     builder.lessThanOrEqualTo(root.get("dateBegin"), filterData.getDateBeginTill()));
         }
 
+        */
         /*
          * for (SearchCriteria param : params) { if
          * (param.getOperation().equalsIgnoreCase(">")) { predicate =
@@ -157,11 +158,13 @@ public class TaskServiceImpl implements SimpleService<Task> {
          * builder.and(predicate, builder.like(root.get(param.getKey()), "%" +
          * param.getValue() + "%")); } else { predicate = builder.and(predicate,
          * builder.equal(root.get(param.getKey()), param.getValue())); } } }
-         */
+         *//*
+
         query.where(predicate);
         query.orderBy(builder.desc(root.get("dateBegin")));
 
         tasks = entityManager.createQuery(query).getResultList();
+*/
 
         // https://www.baeldung.com/rest-search-language-spring-jpa-criteria
         // http://qaru.site/questions/293915/spring-data-jpa-query-by-example
@@ -170,21 +173,11 @@ public class TaskServiceImpl implements SimpleService<Task> {
 
     @Override
     public boolean isObjectExist(Task task) {
-        // return findByName(manager.getName()) != null;
         return findById(task.getId()) != null;
     }
 
     public boolean isAccountValueExist(Task task) {
-
         Task findTask = findByAccount(task.getAccount());
-
-        /*
-         * System.out.println(findTask); System.out.println(findTask != null &&
-         * findTask.getId()!=null && !findTask.getId().equals(task.getId()));
-         * System.out.println((findTask != null )+": "+ (findTask.getId()!=null)
-         * +": "+ (!findTask.getId().equals(task.getId())));
-         * System.out.println(findTask.getId() +" : "+task.getId());
-         */
         return (findTask != null && findTask.getId() != null && !findTask.getId().equals(task.getId()));
 
         // return findByAccount(task.getAccount()) != null;
@@ -195,10 +188,11 @@ public class TaskServiceImpl implements SimpleService<Task> {
     }
 
     private Sort sortByDateBeginDesc() {
-        return new Sort(Sort.Direction.DESC, "dateBegin");
+        //return new Sort(Sort.Direction.DESC, "dateBegin");
+        return Sort.by(Sort.Direction.DESC, "dateBegin");
     }
 
-    public String checkTaskForMailing(Task task) {
+    public String taskMailingDeclineReason(Task task) {
 
         String mailFrom = task.getManager().getEmail();
         if (mailFrom == null || mailFrom.equals("")) {
@@ -211,8 +205,24 @@ public class TaskServiceImpl implements SimpleService<Task> {
             return messageSource.getMessage("message.email.miss_to_for_contractor",
                     null, new Locale("ru")) + " " + task.getManager().getFullName();
         }
-
         return "";
+    }
+
+    public EmailMessage getEmailMessage(Task task) {
+        EmailMessage emailMessage = new EmailMessage();
+        List<EmailAttachment> attachments = new ArrayList<>();
+        String subject = messageSource.getMessage("email.task", null, new Locale("ru"));
+        String text = messageSource.getMessage("email.new_task", null, new Locale("ru"));
+        if (task.getDbFile() != null) {
+            DataSource source = new ByteArrayDataSource(task.getDbFile().getData(), task.getDbFile().getFileType());
+            attachments.add(new EmailAttachment(task.getDbFile().getFileName(), source));
+        }
+        emailMessage.setFrom(task.getManager().getEmail());
+        emailMessage.setTo(task.getContractor().getEmail());
+        emailMessage.setSubject(subject + task.getNumber());
+        emailMessage.setText(text);
+        emailMessage.setAttachments(attachments);
+        return emailMessage;
     }
 
 }

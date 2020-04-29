@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
 
     <title th:utext="${title}"></title>
 
@@ -15,6 +15,8 @@
     <link rel="stylesheet" th:href="@{/css/bootstrap-datepicker.standalone.min.css}">
     <link rel="stylesheet" th:href="@{/css/dataTables.bootstrap4.min.css}">
     <link rel="stylesheet" th:href="@{/css/responsive.dataTables.min.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+
 
     <link rel="stylesheet" th:href="@{/css/vetal.css}">
 
@@ -48,12 +50,12 @@
             <h2><span th:text="#{label.filter}">Filter</span>:</h2>
             <div class="form-group text-center align-self-center"
                  th:if="${hasFilterData}">
-                <a th:href="@{'/tasks/clearFilter'}" style="width: 80px;"
-                   class="btn btn-danger btn-sm custom-width" role="button"
+                <a class="btn btn-danger btn-sm custom-width" role="button"
+                   style="width: 80px;" th:href="@{'/tasks/clearFilter'}"
                    th:text="#{label.clearFilter}">Clear filter</a>
             </div>
-            <form action="#" th:action="@{'/tasks/filter'}"
-                  th:object="${taskFilterData}" method="GET">
+            <form action="#" method="GET"
+                  th:action="@{'/tasks/filter'}" th:object="${taskFilterData}">
 
                 <!--<div class="form-group">
                     <label for="filterAccount"><span th:text="#{label.account}">Account</span>:</label> <input
@@ -63,47 +65,47 @@
                 </div>-->
                 <div class="form-group">
                     <label for="filterNumber"><span th:text="#{label.number}">Number</span>:</label>
-                    <input type="text" class="form-control form-control-sm" id="filterNumber"
-                           th:field="*{number}">
+                    <input class="form-control form-control-sm" id="filterNumber" th:field="*{number}"
+                           type="text">
                 </div>
 
                 <div class="form-group">
                     <label for="filterFileName"><span th:text="#{label.filename}">File Name</span>:</label> <input
-                        type="text"
-                        class="form-control form-control-sm" id="filterFileName"
-                        th:field="*{fileName}">
+                        class="form-control form-control-sm"
+                        id="filterFileName" th:field="*{fileName}"
+                        type="text">
                 </div>
 
                 <div class="form-group">
                     <label for="filterClient"><span th:text="#{label.client}">Client</span>:</label> <select
-                        id="filterClient" class="form-control form-control-sm selectpicker"
-                        data-live-search="true" th:field="*{client}">
-                    <option value="" th:text="#{label.select_choose}">Please Select</option>
-                    <option th:each="dropDownItem : ${clientList}"
-                            th:value="${dropDownItem.id}" th:text="${dropDownItem.fullName}"
-                            th:attr="data-tokens=${dropDownItem.fullName}"/>
+                        class="form-control form-control-sm selectpicker" data-live-search="true"
+                        id="filterClient" th:field="*{client}">
+                    <option th:text="#{label.select_choose}" value="">Please Select</option>
+                    <option th:attr="data-tokens=${dropDownItem.fullName}"
+                            th:each="dropDownItem : ${clientList}" th:text="${dropDownItem.fullName}"
+                            th:value="${dropDownItem.id}"/>
                 </select>
                 </div>
 
                 <div class="form-group">
                     <label for="filterContractor"><span th:text="#{label.contractor}">Contractor</span>:</label> <select
-                        id="filterContractor" class="form-control form-control-sm selectpicker"
-                        data-live-search="true" th:field="*{contractor}">
-                    <option value="" th:text="#{label.select_choose}">Please Select</option>
-                    <option th:each="dropDownItem : ${contractorList}"
-                            th:value="${dropDownItem.id}" th:text="${dropDownItem.fullName}"
-                            th:attr="data-tokens=${dropDownItem.fullName}"/>
+                        class="form-control form-control-sm selectpicker" data-live-search="true"
+                        id="filterContractor" th:field="*{contractor}">
+                    <option th:text="#{label.select_choose}" value="">Please Select</option>
+                    <option th:attr="data-tokens=${dropDownItem.fullName}"
+                            th:each="dropDownItem : ${contractorList}" th:text="${dropDownItem.fullName}"
+                            th:value="${dropDownItem.id}"/>
                 </select>
                 </div>
 
                 <div class="form-group">
                     <label for="filterManager"><span th:text="#{label.manager}">Manager</span>:</label> <select
-                        id="filterManager" class="form-control form-control-sm selectpicker"
-                        data-live-search="true" th:field="*{manager}">
-                    <option value="" th:text="#{label.select_choose}">Please Select</option>
-                    <option th:each="dropDownItem : ${managerList}"
-                            th:value="${dropDownItem.id}" th:text="${dropDownItem.fullName}"
-                            th:attr="data-tokens=${dropDownItem.fullName}"/>
+                        class="form-control form-control-sm selectpicker" data-live-search="true"
+                        id="filterManager" th:field="*{manager}">
+                    <option th:text="#{label.select_choose}" value="">Please Select</option>
+                    <option th:attr="data-tokens=${dropDownItem.fullName}"
+                            th:each="dropDownItem : ${managerList}" th:text="${dropDownItem.fullName}"
+                            th:value="${dropDownItem.id}"/>
                 </select>
                 </div>
 
@@ -121,12 +123,12 @@
                 <div class="form-group">
                     <label for="filterProduction"><span th:text="#{label.production}">Production</span>:</label>
                     <select
-                            id="filterProduction" class="form-control form-control-sm selectpicker"
-                            data-live-search="true" th:field="*{production}">
-                        <option value="" th:text="#{label.select_choose}">Please Select</option>
-                        <option th:each="dropDownItem : ${productionList}"
-                                th:value="${dropDownItem.id}" th:text="${dropDownItem.fullName}"
-                                th:attr="data-tokens=${dropDownItem.fullName}"/>
+                            class="form-control form-control-sm selectpicker" data-live-search="true"
+                            id="filterProduction" th:field="*{production}">
+                        <option th:text="#{label.select_choose}" value="">Please Select</option>
+                        <option th:attr="data-tokens=${dropDownItem.fullName}"
+                                th:each="dropDownItem : ${productionList}" th:text="${dropDownItem.fullName}"
+                                th:value="${dropDownItem.id}"/>
                     </select>
                 </div>
 
@@ -136,8 +138,8 @@
                 </div>-->
                 <div class="form-group">
                     <label for="filterDateBeginFrom"><span th:text="#{label.date_from}">Date From</span>:</label> <input
-                        id="filterDateBeginFrom" type="text" th:placeholder="dd.mm.yyyy"
-                        class="form-control form-control-sm" th:field="*{dateBeginFrom}"/>
+                        class="form-control form-control-sm" id="filterDateBeginFrom" th:field="*{dateBeginFrom}"
+                        th:placeholder="dd.mm.yyyy" type="text"/>
                 </div>
 
                 <!--<div class="form-group">
@@ -149,15 +151,15 @@
 
                 <div class="form-group">
                     <label for="filterDateBeginTill"><span th:text="#{label.date_till}">Date Till</span>:</label> <input
-                        id="filterDateBeginTill" type="text" th:placeholder="dd.mm.yyyy"
-                        class="form-control form-control-sm" th:field="*{dateBeginTill}"/>
+                        class="form-control form-control-sm" id="filterDateBeginTill" th:field="*{dateBeginTill}"
+                        th:placeholder="dd.mm.yyyy" type="text"/>
                 </div>
 
                 <hr class="d-sm-none">
 
                 <div class="form-group text-center align-self-center">
-                    <input type="submit" style="width: 100px;"
-                           class="btn btn-info btn-sm" value="On" th:value="#{label.on}"/>
+                    <input class="btn btn-info btn-sm" style="width: 100px;"
+                           th:value="#{label.on}" type="submit" value="On"/>
                 </div>
             </form>
 
@@ -179,64 +181,78 @@
                 <div class="col-sm-1"></div>
                 <!-- align-self-center float-right -->
                 <div class="col-sm-1">
-                    <a th:href="@{/tasks/add}"
-                       class="btn btn-primary btn-sm custom-width float-right "
-                       style="width: 100px;" role="button"
-                       sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')" th:text="#{label.new}">New</a>
+                    <a class="btn btn-primary btn-sm custom-width float-right "
+                       role="button"
+                       sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')" style="width: 100px;"
+                       th:href="@{/tasks/add}" th:text="#{label.new}">New</a>
                 </div>
             </div>
             <!-- Table PART -->
             <div th:if="${not #lists.isEmpty(tasksList)}">
                 <div class="table-responsive">
-                    <table id="tasksTable" class="table table-sm table-bordered table-hover display compact">
+                    <table class="table table-sm table-bordered table-hover display compact" id="tasksTable">
                         <thead>
                         <tr class="text-center">
-                            <th width="50" th:text="#{label.id}">Id</th>
+                            <th style="vertical-align: middle;" th:text="#{label.id}" width="50">Id</th>
                             <!--<th width="100" th:text="#{label.account}">Account</th>-->
                             <!--<th width="50">№</th>-->
-                            <th width="100" th:text="#{label.number}">Number</th>
-                            <th th:text="#{label.work}">Work name</th>
-                            <th th:text="#{label.client}">Client</th>
-                            <th th:text="#{label.manager}">Manager</th>
-                            <th th:text="#{label.contractor}">Contractor</th>
+                            <th class="text-center" style="vertical-align: middle;" th:text="#{label.number}"
+                                width="100">Number
+                            </th>
+                            <th class="text-center" style="vertical-align: middle;" th:text="#{label.work}">Work name
+                            </th>
+                            <th class="text-center" style="vertical-align: middle;" th:text="#{label.client}">Client
+                            </th>
+                            <th class="text-center" style="vertical-align: middle;" th:text="#{label.manager}">Manager
+                            </th>
+                            <th class="text-center" style="vertical-align: middle;" th:text="#{label.contractor}">
+                                Contractor
+                            </th>
                             <!--<th width="100" th:text="#{label.amount}">Amount</th>-->
-                            <th width="100" th:text="#{label.task_date}">Date Begin</th>
+                            <th class="text-center" style="vertical-align: middle;" th:text="#{label.task_date}"
+                                width="100">Date Begin
+                            </th>
 
-                            <th width="100" th:text="#{label.state}">State</th>
+                            <th class="text-center" style="vertical-align: middle;" th:text="#{label.state}"
+                                width="100">State
+                            </th>
 
-                            <th class="no-sort" width="80">PDF</th>
+                            <!--<th class="no-sort" width="80">PDF</th>-->
+                            <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+
+                            <th class="no-sort text-center" style="vertical-align: middle;" width="50"> #</th>
                             <!--<th class="no-sort" width="80"
                                 sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>-->
-                            <th class="no-sort" width="80"
-                                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
-                            <th class="no-sort" width="80"
-                                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
-                            <th class="no-sort" width="80"
-                                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>
+                            <!--<th class="no-sort" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"
+                                width="80"></th>
+                            <th class="no-sort" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"
+                                width="80"></th>
+                            <th class="no-sort" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"
+                                width="80"></th>-->
                         </tr>
                         </thead>
                         <tbody>
                         <!-- align-items-center -->
 
                         <!--th:class="${task.state.id == 3} ? 'table-success' : (${task.state.id == 2} ? 'table-danger': 'table-warning')"-->
-                        <tr th:each="task : ${tasksList}"
-                            th:class="${task.payment.id==1 or task.debtAmount!=0} ? 'table-danger':
+                        <tr th:class="${task.payment.id==1 or task.debtAmount!=0} ? 'table-danger':
                                     (${task.state.id == 1} ? 'table-warning' :
                                      (${task.state.id == 2} ? 'table-active' :
                                       (${task.state.id == 3} ? 'table-info':
                                        (${task.state.id == 4} ? 'table-success':
                                         ''))))"
-                        >
-                            <td class="text-center" th:text="${task.id}"></td>
+                            th:each="task : ${tasksList}">
+                            <td class="text-center" style="vertical-align: middle;" th:text="${task.id}"></td>
                             <!--<td><a th:href="@{'/tasks/view-' + ${task.id}}"
                                    th:text="${task.account}"></a></td>-->
                             <!--<td class="text-center" th:text="${task.number}"></td>-->
-                            <td><a th:href="@{'/tasks/view-' + ${task.id}}"
-                                   th:text="${task.fullNumber}"></a></td>
-                            <td th:text="${task.workName}"></td>
-                            <td th:text="${task.client.fullName}"></td>
-                            <td th:text="${task.manager.fullName}"></td>
-                            <td th:text="${task.contractor.fullName}"></td>
+                            <td class="text-center" style="vertical-align: middle;"><a
+                                    th:href="@{'/tasks/view-' + ${task.id}}"
+                                    th:text="${task.fullNumber}"></a></td>
+                            <td style="vertical-align: middle;" th:text="${task.workName}"></td>
+                            <td style="vertical-align: middle;" th:text="${task.client.fullName}"></td>
+                            <td style="vertical-align: middle;" th:text="${task.manager.fullName}"></td>
+                            <td style="vertical-align: middle;" th:text="${task.contractor.fullName}"></td>
                             <!--<td class="text-right" style="vertical-align: middle;"
                                 th:text="${#numbers.formatDecimal(task.amount, 1, 'COMMA', 2, 'POINT')}"></td>-->
                             <!-- th:text="${task.amount}"  -->
@@ -246,10 +262,55 @@
                             <td class="text-center" style="vertical-align: middle;"
                                 th:text="${task.state.altName}"></td>
 
-                            <td class="text-center align-self-center" style="vertical-align: middle;"><a
-                                    th:href="@{'/tasks/pdfReport-' + ${task.id}}"
-                                    style="width: 80px;"
-                                    class="btn btn-warning btn-sm custom-width" role="button">PDF</a></td>
+                            <!--<td class="text-center align-self-center" style="vertical-align: middle;"><a
+                                    class="btn btn-warning btn-sm custom-width"
+                                    role="button"
+                                    style="width: 80px;" th:href="@{'/tasks/pdfReport-' + ${task.id}}">PDF</a>
+                            </td>-->
+                            <td class="text-center align-self-center" style="vertical-align: middle;">
+                                <!--<a th:href="@{'/tasks/pdfReport-' + ${task.id}}"
+                                    class="btn btn-warning btn-sm" role="button" th:title="#{message.email.send}"><i class="fa fa-envelope-open"></i></a>-->
+                                <div class="btn-group btn-group-sm">
+                                    <a class="btn btn-warning btn-sm mx-sm-1"
+                                       role="button" th:href="@{'/tasks/pdfReport-' + ${task.id}}"
+                                       th:title="#{message.report.show}"><i class="fa fa-file-o"></i></a>
+
+                                </div>
+                                <div class="btn-group btn-group-sm"
+                                     sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">
+                                    <a class="btn btn-primary btn-sm"
+                                       role="button" th:href="@{'/tasks/copy-' + ${task.id}}"
+                                       th:title="#{message.record.clone}"><i class="fa fa-clone"></i></a>
+                                    <!--<button class="btn btn-primary btn-sm mx-sm-1"
+                                            role="button" th:href="@{'/tasks/copy-' + ${task.id}}"
+                                            th:title="#{message.record.clone}"><i class="fa fa-clone"></i></button>-->
+
+                                    <a class="btn btn-success btn-sm  mx-sm-1"
+                                       role="button" th:href="@{'/tasks/edit-' + ${task.id}}"
+                                       th:title="#{message.record.edit}"><i class="fa fa-pencil"></i></a>
+
+                                    <!--<button class="btn btn-success btn-sm mx-sm-1"
+                                            role="button" th:href="@{'/tasks/edit-' + ${task.id}}"
+                                            th:title="#{message.record.edit}"><i class="fa fa-pencil"></i></button>-->
+
+                                    <!--<a class="btn btn-danger btn-sm  mx-sm-1"
+                                       role="button" th:href="@{'/tasks/delete-' + ${task.id}}"
+                                       th:title="#{message.record.delete}"><i class="fa fa-trash-o"></i></a>-->
+
+                                    <form accept-charset="UTF-8" action="#"
+                                          method="GET"
+                                          style="display: inline" th:action="@{'/tasks/delete-' + ${task.id}}">
+                                        <button class="btn btn-sm btn-danger mx-sm-1"
+                                                data-target="#confirmDelete" data-toggle="modal"
+                                                th:title="#{message.record.delete}" type="button">
+                                            <i class="fa fa-trash-o"></i>
+                                        </button>
+                                        <!--data-title="Delete Record"
+                                        data-message="Are you sure you want to delete this Record?"-->
+                                    </form>
+
+                                </div>
+                            </td>
 
                             <!--<td class="text-center align-self-center" style="vertical-align: middle;"
                                 sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">
@@ -257,36 +318,39 @@
                                    class="btn btn-info btn-sm custom-width" role="button">Email</a>
                             </td>-->
 
-                            <td class="text-center align-self-center" style="vertical-align: middle;"
-                                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">
+                            <!--<td class="text-center align-self-center"
+                                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"
+                                style="vertical-align: middle;">
 
-                                <a th:href="@{'/tasks/edit-' + ${task.id}}" style="width: 80px;"
-                                   class="btn btn-success btn-sm custom-width" role="button"
+                                <a class="btn btn-success btn-sm custom-width" role="button"
+                                   style="width: 80px;" th:href="@{'/tasks/edit-' + ${task.id}}"
                                    th:text="#{label.edit}">Edit</a>
 
                             </td>
-                            <td class="text-center align-self-center" style="vertical-align: middle;"
-                                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">
+                            <td class="text-center align-self-center"
+                                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"
+                                style="vertical-align: middle;">
 
-                                <a th:href="@{'/tasks/copy-' + ${task.id}}" style="width: 80px;"
-                                   class="btn btn-primary btn-sm custom-width" role="button"
+                                <a class="btn btn-primary btn-sm custom-width" role="button"
+                                   style="width: 80px;" th:href="@{'/tasks/copy-' + ${task.id}}"
                                    th:text="#{label.copy_short}">Copy</a>
 
                             </td>
-                            <td class="text-center align-self-center" style="vertical-align: middle;"
-                                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">
-                                <form method="GET" action="#"
-                                      th:action="@{'/tasks/delete-' + ${task.id}}"
-                                      accept-charset="UTF-8" style="display: inline">
+                            <td class="text-center align-self-center"
+                                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"
+                                style="vertical-align: middle;">
+                                <form accept-charset="UTF-8" action="#"
+                                      method="GET"
+                                      style="display: inline" th:action="@{'/tasks/delete-' + ${task.id}}">
                                     <button class="btn btn-sm btn-danger custom-width"
-                                            type="button" style="width: 80px;" data-toggle="modal"
-                                            data-target="#confirmDelete" th:text="#{label.delete}">
+                                            data-target="#confirmDelete" data-toggle="modal" style="width: 80px;"
+                                            th:text="#{label.delete}" type="button">
                                         <i class="glyphicon glyphicon-trash"></i>Delete
                                     </button>
-                                    <!--data-title="Delete Record"
-                                    data-message="Are you sure you want to delete this Record?"-->
+                                    &lt;!&ndash;data-title="Delete Record"
+                                    data-message="Are you sure you want to delete this Record?"&ndash;&gt;
                                 </form>
-                            </td>
+                            </td>-->
 
                         </tr>
                         </tbody>
@@ -305,8 +369,8 @@
 
             <h2><span th:text="#{label.reports}">Reports</span>:</h2>
             <div class="form-group text-center align-self-center">
-                <a th:href="@{'/tasks/excelExport'}" style="width: 80px;"
-                   class="btn btn-success btn-sm custom-width" role="button"
+                <a class="btn btn-success btn-sm custom-width" role="button"
+                   style="width: 80px;" th:href="@{'/tasks/excelExport'}"
                    th:text="#{label.excelExport}">Excel</a>
             </div>
 

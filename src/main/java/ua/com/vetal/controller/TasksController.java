@@ -20,20 +20,22 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.com.vetal.acpect.LogExecutionTime;
+import ua.com.vetal.email.EmailAttachment;
+import ua.com.vetal.email.EmailMessage;
 import ua.com.vetal.entity.*;
-import ua.com.vetal.entity.file.FileDataSource;
 import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.report.jasperReport.JasperReportData;
+import ua.com.vetal.report.jasperReport.exporter.JasperReportExporterType;
+import ua.com.vetal.report.jasperReport.reportdata.TaskJasperReportData;
 import ua.com.vetal.service.*;
 import ua.com.vetal.service.mail.MailServiceImp;
-import ua.com.vetal.service.reports.ExporterService;
-import ua.com.vetal.service.reports.JasperService;
+import ua.com.vetal.service.reports.JasperReportService;
 import ua.com.vetal.utils.DateUtils;
 import ua.com.vetal.utils.StringUtils;
 
-import javax.activation.DataSource;
-import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -101,14 +103,14 @@ public class TasksController {
 	private DBFileStorageService dbFileStorageService;
 
 	@Autowired
-	private JasperService jasperService;
+	private TaskJasperReportData reportData;
 	@Autowired
-	private ExporterService exporterService;
+	private JasperReportService jasperReportService;
 	@Autowired
 	private MailServiceImp mailServiceImp;
 
 	@LogExecutionTime
-	@RequestMapping(value = {""}, method = RequestMethod.GET)
+	@RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
 	public String taskList(Model model) {
 		logger.info("Get Filter: " + filterData);
 		model.addAttribute("title", title);
@@ -157,12 +159,15 @@ public class TasksController {
 	public String copyTask(@PathVariable Long id, Model model) {
 		logger.info("Copy " + title + " with ID= " + id);
 
-		Task task = (taskService.findById(id)).getCopy();
-		task.setNumber((int) (taskService.getMaxID() + 1));
-		logger.info("Copy task:" + task.toString());
+		Task task = taskService.findById(id);
+		logger.info("Get task:" + task.toString());
+		Task taskCopy = task.getCopy();
+		int taskCopyId = (int) (taskService.getMaxID() + 1);
+		taskCopy.setNumber(taskCopyId);
+		logger.info("Copy task:" + taskCopy.toString());
 
 		model.addAttribute("readOnly", false);
-		model.addAttribute("task", task);
+		model.addAttribute("task", taskCopy);
 		return "taskPage";
 	}
 
@@ -172,7 +177,7 @@ public class TasksController {
 		logger.info("View " + title + " with ID= " + id);
 
 		Task task = taskService.findById(id);
-		//logger.info(task.toString());
+		logger.info(task.toString());
 
 		// model.addAttribute("title", "Edit user");
 		// model.addAttribute("userRolesList",
@@ -204,8 +209,7 @@ public class TasksController {
 			 */
 
 			for (ObjectError error : bindingResult.getAllErrors()) {
-
-				logger.info(error.getDefaultMessage());
+				logger.error(error.getDefaultMessage());
 			}
 			return "taskPage";
 		}
@@ -222,7 +226,7 @@ public class TasksController {
 		if (uploadFile != null && !uploadFile.isEmpty()) {
 			logger.info("uploadFile is not NULL");
 			try {
-				DBFile dbFile = dbFileStorageService.storeFile(uploadFile);
+				DBFile dbFile = dbFileStorageService.storeMultipartFile(uploadFile);
 				logger.info("Saved dbFile: " + dbFile);
 
 				if (task.getDbFile() != null) {
@@ -230,8 +234,8 @@ public class TasksController {
 					//dbFileStorageService.deleteFile(task.getDbFile().getId());
 				}
 				task.setDbFile(dbFile);
-			} catch (FileUploadException e) {
-				logger.info(e.getMessage());
+			} catch (FileUploadException | FileNotFoundException e) {
+				logger.error(e.getMessage());
 				return "taskPage";
 			}
 		} else {
@@ -239,14 +243,15 @@ public class TasksController {
 			//logger.info("Is DBFile null: " + task.getDbFile() ) ;
 			//logger.info("Is FILENAME null: " + (task.getFileName() == null || task.getFileName().equals(""))) ;
 			if (task.getDbFile() != null && (task.getFileName() == null || task.getFileName().equals(""))) {
-				logger.info("Delete dbFile by ID= " + task.getDbFile().getId());
+
 				fileId = task.getDbFile().getId();
 				task.setDbFile(null);
 			}
 		}
 		taskService.saveObject(task);
 		if (fileId != null) {
-			dbFileStorageService.deleteFile(fileId);
+			logger.info("Delete dbFile by ID= " + fileId);
+			dbFileStorageService.deleteById(fileId);
 		}
 
 		return "redirect:/tasks";
@@ -263,54 +268,21 @@ public class TasksController {
 	@RequestMapping(value = {"/pdfReport-{id}"}, method = RequestMethod.GET)
 	@ResponseBody
 	public void pdfReportTask(@PathVariable Long id, HttpServletResponse response) throws JRException, IOException {
-		//logger.info("Get PDF for " + title + " with ID= " + id);
-		//JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-
-		//response.setContentType("application/x-pdf");
-		//response.setHeader("Content-disposition", "inline; filename=" + title + "_" + id + ".pdf");
-
-		//final OutputStream outStream = response.getOutputStream();
-		//JasperExportManager.exportReportToPdfStream(jasperService.taskReport(id), outStream);
-		//exporterService.export(ReportType.PDF, jasperService.taskReport(id),title + "_" + id,response,outStream);
-		exporterService.export(ReportType.PDF, jasperService.taskReport(id), title + "_" + id, response);
+		//exporterService.export(ReportType.PDF, jasperService.taskReport(id), title + "_" + id, response);
+		logger.info("Get PDF for {} with ID= {}", title, id);
+		Task task = taskService.findById(id);
+		jasperReportService.exportToResponseStream(JasperReportExporterType.X_PDF,
+				reportData.getReportData(task), title + "_" + task.getFullNumber(), response);
 	}
 
 	@RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
 	@ResponseBody
 	public void exportToExcelReportTask(HttpServletResponse response) throws JRException, IOException {
-        /*logger.info("Export " + title + " to Excel");
-        File pdfFile = File.createTempFile("my-invoice", ".pdf");
-
-        JasperPrint jasperPrint = jasperService.tasksTable(filterData);
-
-        //response.setContentType("application/x-pdf");
-        response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Content-disposition", "inline; filename=" + title + ".xlsx");
-
-
-        final OutputStream outputStream = response.getOutputStream();
-        //JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
-
-
-        //response.setContentLength(4096);//too small
-        //outputStream = response.getOutputStream();
-        JRXlsxExporter exporter = new JRXlsxExporter();
-        //exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-        //exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outputStream);
-        //exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, "Tasks.xlsx");
-
-
-        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outputStream));
-        SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
-        configuration.setOnePagePerSheet(true);
-        configuration.setDetectCellType(true);
-        configuration.setCollapseRowSpan(false);
-        exporter.setConfiguration(configuration);
-
-        exporter.exportReport();
-        */
-		exporterService.export(ReportType.XLSX, jasperService.tasksTable(filterData), title, response);
+		//exporterService.export(ReportType.XLSX, jasperService.tasksTable(filterData), title, response);
+		logger.info("Export " + title + " to Excel");
+		JasperReportData jasperReportData = reportData.getReportData(taskService.findByFilterData(filterData), filterData);
+		jasperReportService.exportToResponseStream(JasperReportExporterType.XLSX,
+				jasperReportData, title, response);
 
 	}
 
@@ -320,61 +292,45 @@ public class TasksController {
 
 		model.addAttribute("title", "email");
 		boolean result = false;
-		String message = "";
+		String taskMailingDeclineReason = "";
 
 		Task task = taskService.findById(id);
 
 		//logger.info(task.toString());
 		if (task != null) {
-			message = taskService.checkTaskForMailing(task);
-			if (message.equals("")) {
+			taskMailingDeclineReason = taskService.taskMailingDeclineReason(task);
+			if (taskMailingDeclineReason.equals("")) {
 				try {
-					//mailServiceImp.sendEmail(mailFrom, mailTo, "Test letter", "Test letter");
-					DataSource attachment = exporterService.getDataSource(jasperService.taskReport(task.getId()));
-					//mailServiceImp.sendEmail(mailFrom, mailTo, "Test letter", "Test letter");
-					String subject = messageSource.getMessage("email.task", null, new Locale("ru"));
-					String text = messageSource.getMessage("email.new_task", null, new Locale("ru"));
-
-					List<FileDataSource> attachments = new ArrayList<>();
-
-					if (attachment != null) {
-						attachments.add(new FileDataSource("Task.pdf", attachment));
+					EmailMessage emailMessage = taskService.getEmailMessage(task);
+                    /*DataSource attachment = exporterService.getDataSource(jasperService.taskReport(task.getId()));
+                    if (attachment != null) {
+                        emailMessage.getAttachments().add(new EmailAttachment("Task.pdf", attachment));
+                    }*/
+					EmailAttachment reportAttachment = jasperReportService.getEmailAttachment(
+							JasperReportExporterType.PDF, title + "_" + task.getFullNumber(), reportData.getReportData(task));
+					if (reportAttachment != null) {
+						emailMessage.getAttachments().add(reportAttachment);
 					}
-					if (task.getDbFile() != null) {
-						//DataSource source = new ByteArrayDataSource(task.getDbFile().getData(), "application/octet-stream");
-						DataSource source = new ByteArrayDataSource(task.getDbFile().getData(), task.getDbFile().getFileType());
-						attachments.add(new FileDataSource(task.getDbFile().getFileName(), source));
-					}
-
-                    /*mailServiceImp.sendMessageWithAttachment(
-                            task.getManager().getEmail(), task.getContractor().getEmail(), subject + task.getNumber(),
-                            text, attachment);*/
-					mailServiceImp.sendMessageWithAttachment(
-							task.getManager().getEmail(), task.getContractor().getEmail(), subject + task.getNumber(),
-							text, attachments);
-
+					mailServiceImp.sendEmail(emailMessage);
 
 					result = true;
 					logger.info("Sent " + title + " with ID= " + id + " from " + task.getManager().getEmail() + " to " + task.getContractor().getEmail());
-					message = messageSource.getMessage("message.email.sent_to",
+					taskMailingDeclineReason = messageSource.getMessage("message.email.sent_to",
 							new String[]{task.getContractor().getFullName(), task.getContractor().getEmail()}, new Locale("ru"));
 				} catch (Exception e) {
 					// handle your exception when it fails to send email
-					logger.info(e.getMessage());
+					logger.error("Email sanding error: {}", e.getMessage());
 					//e.printStackTrace();
-					message = messageSource.getMessage("message.email.service_error",
+					taskMailingDeclineReason = messageSource.getMessage("message.email.service_error",
 							null, new Locale("ru")) + ": " + e.getMessage();
 				}
 			}
 		} else {
-			message = messageSource.getMessage("message.email.miss_task_by_id",
+			taskMailingDeclineReason = messageSource.getMessage("message.email.miss_task_by_id",
 					new String[]{String.valueOf(id)}, new Locale("ru"));
-
 		}
-		//return "redirect:/tasks";
-
 		model.addAttribute("resultSuccess", result);
-		model.addAttribute("message", message);
+		model.addAttribute("message", taskMailingDeclineReason);
 
 		return "emailResultPage";
 	}

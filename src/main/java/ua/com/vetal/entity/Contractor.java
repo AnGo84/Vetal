@@ -2,7 +2,6 @@ package ua.com.vetal.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -15,6 +14,13 @@ public class Contractor extends AbstractPerson {
     private String address;
 
     private String siteURL;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    public Long getId() {
+        return id;
+    }
 
     @ManyToOne
     @JoinColumn(name = "manager_id")
@@ -48,12 +54,6 @@ public class Contractor extends AbstractPerson {
         this.siteURL = siteURL;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    public Long getId() {
-        return id;
-    }
 
     @NotEmpty
     @Size(min = 0, max = 250)

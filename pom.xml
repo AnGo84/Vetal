@@ -5,7 +5,7 @@
 
     <groupId>ua.com.vetal</groupId>
     <artifactId>Vetal</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.5.0-SNAPSHOT</version>
     <!--<packaging>jar</packaging>-->
     <packaging>${artifact-packaging}</packaging>
 
@@ -15,7 +15,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.3.RELEASE</version>
+        <version>2.2.6.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -25,10 +25,17 @@
         <java.version>1.8</java.version>
         <jasperreports.version>6.7.0</jasperreports.version>
         <!--<apache.poi.version>4.0.0</apache.poi.version>-->
-        <apache.poi.version>3.15</apache.poi.version>
+        <apache-poi.version>3.15</apache-poi.version>
+        <h2-database.version>1.4.200</h2-database.version>
+        <junit-jupiter.version>5.5.2</junit-jupiter.version>
+        <lombock.version>1.18.12</lombock.version>
+        <greenmail.version>1.5.13</greenmail.version>
+        <jsoup.version>1.13.1</jsoup.version>
 
-        <!-- <springframework.version>4.1.6.RELEASE</springframework.version> <springsecurity.version>4.0.1.RELEASE</springsecurity.version>
-            <hibernate.version>4.3.6.Final</hibernate.version> <mysql.version>5.1.31</mysql.version> -->
+        <!-- <springframework.version>4.1.6.RELEASE</springframework.version>
+        <springsecurity.version>4.0.1.RELEASE</springsecurity.version>
+            <hibernate.version>4.3.6.Final</hibernate.version>
+            <mysql.version>5.1.31</mysql.version> -->
         <start-class>ua.com.vetal.VetalApplication</start-class>
     </properties>
 
@@ -49,7 +56,7 @@
 
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
-            <artifactId>thymeleaf-extras-springsecurity4</artifactId>
+            <artifactId>thymeleaf-extras-springsecurity5</artifactId>
             <!-- <version>2.1.2.RELEASE</version> -->
         </dependency>
 
@@ -74,6 +81,17 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+            <!-- exclude junit 4 -->
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -81,11 +99,18 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- junit 5 -->
         <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit-jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--<dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-support</artifactId>
-            <version>2.0.8</version>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
@@ -99,11 +124,26 @@
             <version>2.10</version>
         </dependency>-->
 
+        <!-- https://mvnrepository.com/artifact/com.icegreen/greenmail -->
+        <dependency>
+            <groupId>com.icegreen</groupId>
+            <artifactId>greenmail</artifactId>
+            <version>${greenmail.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>${jsoup.version}</version>
+        </dependency>
+
+
         <!-- for report in xls format -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
-            <version>${apache.poi.version}</version>
+            <version>${apache-poi.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-beanutils</groupId>
@@ -119,6 +159,20 @@
         </dependency>
 
         <!-- Jasper Report Specific Jars END -->
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+            <version>${h2-database.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombock.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
     </dependencies>
 
@@ -140,7 +194,22 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M4</version>
+                <!--<dependencies>
+                    <dependency>
+                        <groupId>org.junit.platform</groupId>
+                        <artifactId>junit-platform-surefire-provider</artifactId>
+                        <version>1.3.2</version>
+                    </dependency>
+                </dependencies>-->
+            </plugin>
+
         </plugins>
+
     </build>
 
     <profiles>

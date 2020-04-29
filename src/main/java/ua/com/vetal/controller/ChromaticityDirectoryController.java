@@ -1,9 +1,5 @@
 package ua.com.vetal.controller;
 
-import java.util.Locale;
-
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +12,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import ua.com.vetal.entity.ChromaticityDirectory;
 import ua.com.vetal.service.ChromaticityDirectoryServiceImpl;
+
+import javax.validation.Valid;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/chromaticity")
@@ -44,7 +42,7 @@ public class ChromaticityDirectoryController {
 	 * this.userService = userService; }
 	 */
 
-	@RequestMapping(value = { "", "list" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "", "/list" }, method = RequestMethod.GET)
 	public String directoryList(Model model) {
 		model.addAttribute("directoryList", directoryService.findAllObjects());
 		return "directoryPage";
@@ -96,8 +94,9 @@ public class ChromaticityDirectoryController {
 		}
 
 		if (directoryService.isObjectExist(directory)) {
+			System.out.println("error");
 			FieldError fieldError = new FieldError("directory", "name", messageSource.getMessage("non.unique.field",
-					new String[] { "Название", directory.getName() }, new Locale("ru")));
+					new String[]{"Название", directory.getName()}, new Locale("ru")));
 			bindingResult.addError(fieldError);
 			return "directoryRecordPage";
 		}

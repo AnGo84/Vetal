@@ -1,9 +1,5 @@
 package ua.com.vetal.controller;
 
-import java.util.Locale;
-
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +12,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import ua.com.vetal.entity.FormatDirectory;
 import ua.com.vetal.service.FormatDirectoryServiceImpl;
+
+import javax.validation.Valid;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/format")
@@ -42,13 +40,13 @@ public class FormatDirectoryController {
 	 * this.userService = userService; }
 	 */
 
-	@RequestMapping(value = { "", "list" }, method = RequestMethod.GET)
+	@RequestMapping(value = {"", "/list"}, method = RequestMethod.GET)
 	public String directoryList(Model model) {
 		model.addAttribute("directoryList", directoryService.findAllObjects());
 		return "directoryPage";
 	}
 
-	@RequestMapping(value = { "/add" }, method = RequestMethod.GET)
+	@RequestMapping(value = {"/add"}, method = RequestMethod.GET)
 	public String showAddRecordPage(Model model) {
 		logger.info("Add new " + title + " record");
 		FormatDirectory directory = new FormatDirectory();

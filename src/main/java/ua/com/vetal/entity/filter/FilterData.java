@@ -48,6 +48,10 @@ public class FilterData {
     private boolean cutting;
     private String note;
     private double amount;
+    private Double debtAmount;
+    private Double debtAmountFrom;
+    private Double debtAmountTill;
+
 
     public Long getId() {
         return id;
@@ -254,6 +258,30 @@ public class FilterData {
         this.amount = amount;
     }
 
+    public Double getDebtAmount() {
+        return debtAmount;
+    }
+
+    public void setDebtAmount(Double debtAmount) {
+        this.debtAmount = debtAmount;
+    }
+
+    public Double getDebtAmountFrom() {
+        return debtAmountFrom;
+    }
+
+    public void setDebtAmountFrom(Double debtAmountFrom) {
+        this.debtAmountFrom = debtAmountFrom;
+    }
+
+    public Double getDebtAmountTill() {
+        return debtAmountTill;
+    }
+
+    public void setDebtAmountTill(Double debtAmountTill) {
+        this.debtAmountTill = debtAmountTill;
+    }
+
     public boolean hasData() {
         if (account != null) {
             return true;
@@ -280,6 +308,10 @@ public class FilterData {
         } else if (dateBeginFrom != null) {
             return true;
         } else if (dateBeginTill != null) {
+            return true;
+        } else if (debtAmountFrom != null) {
+            return true;
+        } else if (debtAmountTill != null) {
             return true;
         }
         return false;
@@ -313,6 +345,9 @@ public class FilterData {
         sb.append(", cutting=").append(cutting);
         sb.append(", note='").append(note).append('\'');
         sb.append(", amount=").append(amount);
+        sb.append(", debtAmount=").append(debtAmount);
+        sb.append(", debtAmountFrom=").append(debtAmountFrom);
+        sb.append(", debtAmountTill=").append(debtAmountTill);
         sb.append('}');
         return sb.toString();
     }

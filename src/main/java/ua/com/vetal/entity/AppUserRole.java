@@ -1,27 +1,38 @@
 package ua.com.vetal.entity;
 
+import lombok.Data;
+import ua.com.vetal.entity.pk.CompositeAppUserRolePK;
+
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "USER_ROLE", //
         uniqueConstraints = { //
                 @UniqueConstraint(name = "USER_ROLE_UK", columnNames = {"User_Id", "Role_Id"})})
-public class AppUserRole {
+@Data
+public class AppUserRole implements Serializable {
 
-    @Id
-    @GeneratedValue
+    /*@Id
+    //@GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id", nullable = false)
-    private Long id;
+    private Long id;*/
 
+    @EmbeddedId
+    private CompositeAppUserRolePK appUserRoleID;
+
+    @MapsId("appUserID")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "User_Id", nullable = false)
     private AppUser appUser;
 
+    @MapsId("appUserRoleID")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Role_Id", nullable = false)
     private AppRole appRole;
 
-    public Long getId() {
+    /*public Long getId() {
         return id;
     }
 
@@ -43,6 +54,6 @@ public class AppUserRole {
 
     public void setAppRole(AppRole appRole) {
         this.appRole = appRole;
-    }
+    }*/
 
 }

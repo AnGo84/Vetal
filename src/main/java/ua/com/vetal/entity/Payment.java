@@ -1,6 +1,7 @@
 package ua.com.vetal.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "Payments", //
@@ -9,10 +10,11 @@ import javax.persistence.*;
 public class Payment {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @NotEmpty
     @Column(name = "name", length = 30, nullable = false)
     private String name;
     @Column(name = "altname", length = 45)

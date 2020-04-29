@@ -19,6 +19,14 @@ public class Kraskoottisk {
     @Column(name = "amount")
     private double amount;
 
+    public Kraskoottisk() {
+    }
+
+    public Kraskoottisk(double amount) {
+        this.amount = amount;
+    }
+
+
     public double getAmount() {
         return amount;
     }

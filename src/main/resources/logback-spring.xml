@@ -1,5 +1,6 @@
 <configuration>
-
+    <!-- https://mkyong.com/spring-boot/spring-boot-slf4j-logging-example/ -->
+    <!-- https://www.baeldung.com/spring-boot-logging -->
     <property name="LOGS" value="./logs"/>
 
     <appender name="Console"
@@ -40,9 +41,13 @@
     </root>
 
     <!-- LOG "com.baeldung*" at TRACE level -->
-    <logger name="com.baeldung" level="trace" additivity="false">
+    <!--<logger name="com.baeldung" level="trace" additivity="false">
         <appender-ref ref="RollingFile"/>
         <appender-ref ref="Console"/>
-    </logger>
-
+    </logger>-->
+    <!--<logger name="org.hibernate" >
+        <level value="error"/>
+        <appender-ref ref="RollingFile"/>
+        <appender-ref ref="Console"/>
+    </logger>-->
 </configuration>

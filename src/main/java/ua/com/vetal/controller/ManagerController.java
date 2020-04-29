@@ -31,7 +31,7 @@ public class ManagerController {
     @Autowired
     private ManagerServiceImpl personService;
 
-    @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"", "/list"}, method = RequestMethod.GET)
     public String personList(Model model) {
         model.addAttribute("personList", personService.findAllObjects());
         return "personsPage";
@@ -110,7 +110,7 @@ public class ManagerController {
     }
 
     @ModelAttribute("personName")
-    public String initializepersonName() {
+    public String initializePersonName() {
         String name = messageSource.getMessage("label.manager", null, new Locale("ru"));
         if (name == null || name.equals("")) {
             return personName;

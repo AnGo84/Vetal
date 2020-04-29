@@ -55,8 +55,7 @@ public class PrinterServiceImpl implements SimpleService<Printer> {
 
     @Override
     public boolean isObjectExist(Printer person) {
-        // return findByName(manager.getName()) != null;
-        return false;
+        return findById(person.getId()) != null;
     }
 
 }

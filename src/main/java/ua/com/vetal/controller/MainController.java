@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -55,9 +53,9 @@ public class MainController {
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String adminPage(Model model, Principal principal) {
 
-        User loginedUser = (User) ((Authentication) principal).getPrincipal();
+        User loggedUser = (User) ((Authentication) principal).getPrincipal();
 
-        String userInfo = WebUtils.toString(loginedUser);
+        String userInfo = WebUtils.toString(loggedUser);
         model.addAttribute("userInfo", userInfo);
 
         return "adminPage";
@@ -82,9 +80,9 @@ public class MainController {
 
         logger.info("User Name: " + userName);
 
-        User loginedUser = (User) ((Authentication) principal).getPrincipal();
+        User loggedUser = (User) ((Authentication) principal).getPrincipal();
 
-        String userInfo = WebUtils.toString(loginedUser);
+        String userInfo = WebUtils.toString(loggedUser);
         model.addAttribute("userInfo", userInfo);
 
         return "userInfoPage";
@@ -225,27 +223,5 @@ public class MainController {
     public List<Link> initializeFolders() {
         return linkService.findByLinkTypeId((long) 3);
     }
-
-    private String getPrincipal() {
-        String userName = null;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (principal instanceof UserDetails) {
-            userName = ((UserDetails) principal).getUsername();
-        } else {
-            userName = principal.toString();
-        }
-        return userName;
-    }
-
-    /*
-     * @RequestMapping(value = "/production", method = RequestMethod.GET) public
-     * String productionDirectory(Model model, Principal principal) {
-     *
-     * if (principal != null) { } model.addAttribute("directoryList",
-     * productionDirectoryService.findAllObjects());
-     *
-     * return "directoryPage"; }
-     */
 
 }

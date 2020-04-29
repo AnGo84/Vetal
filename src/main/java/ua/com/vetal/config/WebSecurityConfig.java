@@ -17,6 +17,8 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    // replace all AppUser* classes with User's classes
+    // https://medium.com/@gustavo.ponce.ch/spring-boot-spring-mvc-spring-security-mysql-a5d8545d837d
     @Autowired
     private AppUserDetailsServiceImpl appUserDetailsService;
 
@@ -48,29 +50,41 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // The pages does not require login
         http.authorizeRequests()
                 .antMatchers("/", "/main", "/login", "/logout", "/forgotPassword", "/resetPassword",
-                        "/user/**",
-                        "/manager", "/clients", "/contractor", "/production", "/printer", "/worker",
-                        "/paper", "/chromaticity", "/laminate", "/cringle", "/format", "/stock", "/tasks/view**",
-                        "/tasks", "/stencils", "/stencils/view**", "/folder**", "/file**", "/catalog**")
+                        "/manager", "/productions", "/printer", "/worker",
+                        "/paper", "/chromaticity", "/laminate", "/cringle", "/format", "/stock", "/numberBases",
+                        "/printingUnit", "/productionType",
+                        "/clients", "/clients/clearFilter", "/clients/Filter",
+                        "/contractor", "/contractor/clearFilter", "/contractor/Filter",
+                        "/tasks/view**", "/tasks/clearFilter", "/tasks/Filter", "/tasks",
+                        "/stencils/clearFilter", "/stencils/Filter", "/stencils", "/stencils/view**",
+                        "/statistic/clearFilter", "/statistic/Filter", "/statistic",
+                        "/folder**", "/file**", "/catalog**")
                 .permitAll();
 
         // /userInfo page requires login as ROLE_USER or ROLE_ADMIN.
         // If no login, it will redirect to /login page.
         // ROLE_ACCOUNTANT ROLE_ADMIN ROLE_MANAGER
+        http.authorizeRequests().antMatchers("/user/**").authenticated();
         http.authorizeRequests().antMatchers("/userInfo").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/manager/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
-        http.authorizeRequests().antMatchers("/clients/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
-        http.authorizeRequests().antMatchers("/contractor/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
-        http.authorizeRequests().antMatchers("/production/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/printer/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/worker/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+        //http.authorizeRequests().antMatchers("/clients/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/clients/add", "/clients/update", "/clients/view**", "/clients/edit**", "/clients/delete**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/contractor/add", "/contractor/update", "/contractor/view**", "/contractor/edit**", "/contractor/delete**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/productions/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/productionType/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/paper/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/printingUnit/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/chromaticity/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/laminate/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/cringle/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/format/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/stock/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
-        http.authorizeRequests().antMatchers("/tasks/add", "/tasks/update", "/tasks/edit**", "/tasks/delete**", "/tasks/sendEmail**")
+        http.authorizeRequests().antMatchers("/numberBases/**").access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/tasks/add", "/tasks/update", "/tasks/edit**", "/tasks/delete**", "/tasks/sendEmail**", "/tasks/copy**")
                 .access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
-        http.authorizeRequests().antMatchers("/stencils/add", "/stencils/update", "/stencils/edit**", "/stencils/delete**")
+        http.authorizeRequests().antMatchers("/stencils/add", "/stencils/update", "/stencils/edit**", "/stencils/delete**", "/stencils/copy**")
                 .access("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')");
 
         // For ADMIN only.
