@@ -4,7 +4,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.entity.Contractor;
-import ua.com.vetal.entity.filter.PersonFilter;
+import ua.com.vetal.entity.filter.PersonViewFilter;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,20 +18,20 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class ContractorDAO {
 
-	@PersistenceContext
-	private EntityManager entityManager;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-	public List<Contractor> findByFilterData(PersonFilter filterData) {
-		//https://www.baeldung.com/rest-api-search-language-spring-data-specifications
-		List<Contractor> list = null;
+    public List<Contractor> findByFilterData(PersonViewFilter filterData) {
+        //https://www.baeldung.com/rest-api-search-language-spring-data-specifications
+        List<Contractor> list = null;
 
-		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Contractor> query = builder.createQuery(Contractor.class);
-		Root<Contractor> root = query.from(Contractor.class);
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Contractor> query = builder.createQuery(Contractor.class);
+        Root<Contractor> root = query.from(Contractor.class);
 
-		Predicate predicate = builder.conjunction();
-		if (filterData != null) {
-			if (!Strings.isBlank(filterData.getCorpName())) {
+        Predicate predicate = builder.conjunction();
+        if (filterData != null) {
+            if (!Strings.isBlank(filterData.getCorpName())) {
 				predicate = builder.and(predicate, builder.like(builder.lower(root.get("corpName")),
 						("%" + filterData.getCorpName() + "%").toLowerCase()));
 			}

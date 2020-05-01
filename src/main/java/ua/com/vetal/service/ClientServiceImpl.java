@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.dao.ClientDAO;
 import ua.com.vetal.entity.Client;
-import ua.com.vetal.entity.filter.ClientFilter;
+import ua.com.vetal.entity.filter.ClientViewFilter;
 import ua.com.vetal.repositories.ClientRepository;
 
 import java.util.List;
@@ -67,7 +67,7 @@ public class ClientServiceImpl implements SimpleService<Client> {
         return findByName(directory.getFullName()) != null;
     }
 
-    public List<Client> findByFilterData(ClientFilter filterData) {
+    public List<Client> findByFilterData(ClientViewFilter filterData) {
         //https://www.baeldung.com/rest-api-search-language-spring-data-specifications
         List<Client> list = clientDAO.findByFilterData(filterData);
         if (list == null) {

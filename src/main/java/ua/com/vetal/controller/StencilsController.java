@@ -1,10 +1,8 @@
 package ua.com.vetal.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,13 +11,13 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import ua.com.vetal.acpect.LogExecutionTime;
 import ua.com.vetal.entity.*;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
+import ua.com.vetal.entity.filter.ViewFilter;
 import ua.com.vetal.report.jasperReport.JasperReportData;
 import ua.com.vetal.report.jasperReport.exporter.JasperReportExporterType;
 import ua.com.vetal.report.jasperReport.reportdata.StencilJasperReportData;
 import ua.com.vetal.service.*;
 import ua.com.vetal.service.reports.JasperReportService;
-import ua.com.vetal.utils.DateUtils;
 import ua.com.vetal.utils.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -27,20 +25,15 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/stencils")
-// @SessionAttributes({ "managersList", "pageName" })
-
-// @SessionAttributes({"stencilFilterData"})
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:vetal.properties")
-public class StencilsController {
-	static final Logger logger = LoggerFactory.getLogger(StencilsController.class);
-	@Autowired
-	MessageSource messageSource;
+@Slf4j
+public class StencilsController extends BaseController {
 
 	private String title = "Stencils";
 	private String personName = "Stencils";
@@ -48,8 +41,6 @@ public class StencilsController {
 	@Autowired
 	private StencilServiceImpl stencilService;
 
-	@Autowired
-	private FilterData filterData;
 	private List<Stencil> stencilList;
 
 	@Autowired
@@ -83,6 +74,11 @@ public class StencilsController {
 	@Autowired
 	private KraskoottiskService kraskoottiskService;
 
+	public StencilsController(Map<String, ViewFilter> viewFilters) {
+		super("StencilsController", viewFilters);
+		initViewFilter(new OrderViewFilter());
+	}
+
 	@LogExecutionTime
 	@RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
 	public String stencilList(Model model) {
@@ -97,12 +93,10 @@ public class StencilsController {
 	@LogExecutionTime
 	@RequestMapping(value = {"/add"}, method = RequestMethod.GET)
 	public String showAddStencilPage(Model model) {
-		logger.info("Add new " + title + " record");
+		log.info("Add new {} record", title);
 		Stencil stencil = new Stencil();
-
 		//stencil.setAccount(String.valueOf(stencilDAO.getMaxID()+1));
 		stencil.setNumber((int) (stencilService.getMaxID() + 1));
-
 		// model.addAttribute("edit", false);
 		model.addAttribute("readOnly", false);
 		model.addAttribute("stencil", stencil);
@@ -113,7 +107,7 @@ public class StencilsController {
 	@LogExecutionTime
 	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
 	public String editStencil(@PathVariable Long id, Model model) {
-		logger.info("Edit " + title + " with ID= " + id);
+		log.info("Edit {} with ID= {}", title, id);
 
 		Stencil stencil = stencilService.findById(id);
 		// logger.info(task.toString());
@@ -128,14 +122,11 @@ public class StencilsController {
 	@LogExecutionTime
 	@RequestMapping(value = "/copy-{id}", method = RequestMethod.GET)
 	public String copyStencil(@PathVariable Long id, Model model) {
-		logger.info("Copy " + title + " with ID= " + id);
+		log.info("Copy {} with ID= ", title, id);
 
 		Stencil stencil = (stencilService.findById(id)).getCopy();
-		//stencil.setAccount(String.valueOf(stencilDAO.getMaxID()+1));
 		stencil.setNumber((int) (stencilService.getMaxID() + 1));
-
-		logger.info("Copy stencil:" + stencil.toString());
-
+		//log.info("Copy stencil: {}", stencil.toString());
 		model.addAttribute("readOnly", false);
 		model.addAttribute("stencil", stencil);
 		return "stencilPage";
@@ -144,11 +135,10 @@ public class StencilsController {
 	@LogExecutionTime
 	@RequestMapping(value = "/view-{id}", method = RequestMethod.GET)
 	public String viewStencil(@PathVariable Long id, Model model) {
-		logger.info("View " + title + " with ID= " + id);
+		log.info("View {} with ID= {}", title, id);
 
 		Stencil stencil = stencilService.findById(id);
-		logger.info(stencil.toString());
-
+		//log.info(stencil.toString());
 		// model.addAttribute("title", "Edit user");
 		// model.addAttribute("userRolesList",
 		// userRoleService.findAllObjects());
@@ -161,24 +151,21 @@ public class StencilsController {
 	@LogExecutionTime
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String updateStencil(@Valid @ModelAttribute("stencil") Stencil stencil, BindingResult bindingResult, Model model) {
-		logger.info("Update " + title + ": " + stencil);
+		log.info("Update {}: ", stencil);
 		if (bindingResult.hasErrors()) {
 			for (ObjectError error : bindingResult.getAllErrors()) {
-				logger.info(error.getDefaultMessage());
+				log.info("    {}", error.getDefaultMessage());
 			}
 			return "stencilPage";
 		}
-
 		/*if (stencilService.isAccountValueExist(stencil)) {
-
 			FieldError fieldError = new FieldError("stencil", "account", messageSource.getMessage("non.unique.field",
 					new String[] { "Счёт", stencil.getAccount().toString() }, new Locale("ru")));
 			// Locale.getDefault()
 			bindingResult.addError(fieldError);
 			return "stencilPage";
-		}
-*/
-		stencilService.saveObject(stencil);
+		}*/
+		stencilService.updateObject(stencil);
 
 		return "redirect:/stencils";
 	}
@@ -186,32 +173,28 @@ public class StencilsController {
 	@LogExecutionTime
 	@RequestMapping(value = {"/delete-{id}"}, method = RequestMethod.GET)
 	public String deleteStencil(@PathVariable Long id) {
-		logger.info("Delete " + title + " with ID= " + id);
+		log.info("Delete {} with ID= {}", title, id);
 		stencilService.deleteById(id);
 		return "redirect:/stencils";
 	}
 
 	@RequestMapping(value = "/filter", method = RequestMethod.GET)
-	public String updateStencil(@ModelAttribute("stencilFilterData") FilterData filterData, BindingResult bindingResult,
-								Model model) {
-		// logger.info("FilterData: " + filterData);
-		this.filterData = filterData;
-
+	public String filterStencils(@ModelAttribute("stencilFilterData") OrderViewFilter orderViewFilter, BindingResult bindingResult,
+								 Model model) {
+		updateViewFilter(orderViewFilter);
 		return "redirect:/stencils";
 	}
 
 	@RequestMapping(value = "/clearFilter", method = RequestMethod.GET)
-	//public String clearFilterTask(WebRequest request) {
-	public String clearFilterTask() {
-		this.filterData = new FilterData();
-		//request.removeAttribute("taskFilterData", WebRequest.SCOPE_SESSION);
+	public String clearStencilsViewFilter() {
+		updateViewFilter(new OrderViewFilter());
 		return "redirect:/stencils";
 	}
 
 	@RequestMapping(value = {"/pdfReport-{id}"}, method = RequestMethod.GET)
 	@ResponseBody
 	public void pdfReportStencil(@PathVariable Long id, HttpServletResponse response) throws JRException, IOException {
-		logger.info("Get PDF for {} with ID= {}", title, id);
+		log.info("Get PDF for {} with ID= {}", title, id);
 		Stencil stencil = stencilService.findById(id);
 		jasperReportService.exportToResponseStream(JasperReportExporterType.X_PDF,
 				reportData.getReportData(stencil), title + "_" + stencil.getFullNumber(), response);
@@ -221,8 +204,8 @@ public class StencilsController {
 	@RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
 	@ResponseBody
 	public void exportToExcelReportTask(HttpServletResponse response) throws JRException, IOException {
-		logger.info("Export " + title + " to Excel");
-		JasperReportData jasperReportData = reportData.getReportData(stencilService.findByFilterData(filterData), filterData);
+		log.info("Export {} to Excel", title);
+		JasperReportData jasperReportData = reportData.getReportData(stencilService.findByFilterData(getStencilViewFilterData()), getStencilViewFilterData());
 		jasperReportService.exportToResponseStream(JasperReportExporterType.XLSX,
 				jasperReportData, title, response);
 	}
@@ -400,31 +383,20 @@ public class StencilsController {
 	}
 
 	@ModelAttribute("stencilFilterData")
-	public FilterData getFilterData() {
-		if (filterData == null) {
-			filterData = new FilterData();
-			filterData.setDateBeginFrom(DateUtils.firstDayOfMonth(new Date()));
-		}
-		logger.info("Get FilterDate: " + filterData);
-		return filterData;
+	public OrderViewFilter getStencilViewFilterData() {
+		log.info("Get ViewFilter: {}", getViewFilter());
+		return (OrderViewFilter) getViewFilter();
 	}
 
 	@ModelAttribute("hasFilterData")
-	public boolean hasFilterData() {
-		//logger.info("Get Filter: " + filterData);
-		return getFilterData().hasData();
+	public boolean isViewFilterHasData() {
+		//log.info("Get Filter: {}", filterData);
+		return getViewFilter().hasData();
 	}
 
 	@ModelAttribute("stencilsList")
 	public List<Stencil> getStencilsListData() {
-		/*
-		 * if (stencilList == null || stencilList.isEmpty()) { stencilList =
-		 * stencilService.findAllObjects(); }
-		 */
-		// stencilList = stencilService.findAllObjects();
-		stencilList = stencilService.findByFilterData(getFilterData());
-		// logger.info("Get TaskList : " + stencilList.size());
-
+		stencilList = stencilService.findByFilterData(getStencilViewFilterData());
 		return stencilList;
 	}
 
@@ -435,60 +407,8 @@ public class StencilsController {
 		if (list != null && !list.isEmpty()) {
 			amount = list.get(0).getAmount();
 		}
-		logger.info("Kraskoottisk amount: " + amount);
+		log.info("Kraskoottisk amount: {}", amount);
 		return amount;
 	}
-/*
-	@ModelAttribute("clientFilterList")
-	public List<ClientDirectory> getClientsFilterList() {
-		List<ClientDirectory> resultList = clientService.findAllObjects();
-
-		final ClientDirectory client = new ClientDirectory();
-		client.setName("");
-
-		resultList.add(0, client);
-
-		Collections.sort(resultList, new Comparator<ClientDirectory>() {
-			@Override
-			public int compare(ClientDirectory m1, ClientDirectory m2) {
-				return m1.getName().compareTo(m2.getName());
-			}
-		});
-
-		return resultList;
-	}
-
-	@ModelAttribute("managerFilterList")
-	public List<Manager> getManagersFilterList() {
-		List<Manager> resultList = managerService.findAllObjects();
-
-		final Manager manager = new Manager();
-		resultList.add(0, manager);
-
-		Collections.sort(resultList, new Comparator<Manager>() {
-			@Override
-			public int compare(Manager m1, Manager m2) {
-				return m1.getFullName().compareTo(m2.getFullName());
-			}
-		});
-
-		return resultList;
-	}
-	@ModelAttribute("printerFilterList")
-	public List<Printer> getPrinterFilterList() {
-		List<Printer> resultList = printerService.findAllObjects();
-
-		final Printer printer = new Printer();
-		resultList.add(0, printer);
-
-		Collections.sort(resultList, new Comparator<Printer>() {
-			@Override
-			public int compare(Printer m1, Printer m2) {
-				return m1.getFullName().compareTo(m2.getFullName());
-			}
-		});
-
-		return resultList;
-	}*/
 
 }

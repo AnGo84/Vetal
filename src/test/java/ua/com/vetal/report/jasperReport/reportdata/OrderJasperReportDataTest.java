@@ -4,7 +4,7 @@ import net.sf.jasperreports.engine.JREmptyDataSource;
 import org.junit.jupiter.api.Test;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.Order;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.report.jasperReport.AppJasperReportType;
 import ua.com.vetal.report.jasperReport.JasperReportData;
 import ua.com.vetal.utils.DateUtils;
@@ -52,55 +52,55 @@ public class OrderJasperReportDataTest {
 		assertTrue(jasperReportData.getParameters().containsKey("filter"));
 		assertNotNull(jasperReportData.getParameters().get("filter"));
 
-		assertTrue(jasperReportData.getParameters().containsKey("date_From"));
-		assertNotNull(jasperReportData.getParameters().get("date_From"));
-		assertEquals("", jasperReportData.getParameters().get("date_From"));
-		assertTrue(jasperReportData.getParameters().containsKey("date_Till"));
-		assertNotNull(jasperReportData.getParameters().get("date_Till"));
-		assertEquals("", jasperReportData.getParameters().get("date_Till"));
-		assertNotNull(jasperReportData.getDataSource());
-		assertTrue(jasperReportData.getDataSource().getClass() == JREmptyDataSource.class);
+        assertTrue(jasperReportData.getParameters().containsKey("date_From"));
+        assertNotNull(jasperReportData.getParameters().get("date_From"));
+        assertEquals("", jasperReportData.getParameters().get("date_From"));
+        assertTrue(jasperReportData.getParameters().containsKey("date_Till"));
+        assertNotNull(jasperReportData.getParameters().get("date_Till"));
+        assertEquals("", jasperReportData.getParameters().get("date_Till"));
+        assertNotNull(jasperReportData.getDataSource());
+        assertTrue(jasperReportData.getDataSource().getClass() == JREmptyDataSource.class);
 
-		jasperReportData = reportData.getReportData(orderList, new FilterData());
-		assertEquals(AppJasperReportType.ORDERS_REPORT.getReportName(), jasperReportData.getReportName());
-		assertNotNull(jasperReportData.getParameters());
-		assertEquals(4, jasperReportData.getParameters().size());
-		assertTrue(jasperReportData.getParameters().containsKey("orders"));
-		assertNotNull(jasperReportData.getParameters().get("orders"));
-		assertTrue(jasperReportData.getParameters().containsKey("filter"));
-		assertNotNull(jasperReportData.getParameters().get("filter"));
+        jasperReportData = reportData.getReportData(orderList, new OrderViewFilter());
+        assertEquals(AppJasperReportType.ORDERS_REPORT.getReportName(), jasperReportData.getReportName());
+        assertNotNull(jasperReportData.getParameters());
+        assertEquals(4, jasperReportData.getParameters().size());
+        assertTrue(jasperReportData.getParameters().containsKey("orders"));
+        assertNotNull(jasperReportData.getParameters().get("orders"));
+        assertTrue(jasperReportData.getParameters().containsKey("filter"));
+        assertNotNull(jasperReportData.getParameters().get("filter"));
 
-		assertTrue(jasperReportData.getParameters().containsKey("date_From"));
-		assertNotNull(jasperReportData.getParameters().get("date_From"));
-		assertEquals("", jasperReportData.getParameters().get("date_From"));
-		assertTrue(jasperReportData.getParameters().containsKey("date_Till"));
-		assertNotNull(jasperReportData.getParameters().get("date_Till"));
-		assertEquals("", jasperReportData.getParameters().get("date_Till"));
-		assertNotNull(jasperReportData.getDataSource());
-		assertTrue(jasperReportData.getDataSource().getClass() == JREmptyDataSource.class);
+        assertTrue(jasperReportData.getParameters().containsKey("date_From"));
+        assertNotNull(jasperReportData.getParameters().get("date_From"));
+        assertEquals("", jasperReportData.getParameters().get("date_From"));
+        assertTrue(jasperReportData.getParameters().containsKey("date_Till"));
+        assertNotNull(jasperReportData.getParameters().get("date_Till"));
+        assertEquals("", jasperReportData.getParameters().get("date_Till"));
+        assertNotNull(jasperReportData.getDataSource());
+        assertTrue(jasperReportData.getDataSource().getClass() == JREmptyDataSource.class);
 
-		FilterData filterData = new FilterData();
-		filterData.setDateBeginFrom(new Date());
-		filterData.setDateBeginTill(new Date());
-		jasperReportData = reportData.getReportData(orderList, filterData);
-		assertEquals(AppJasperReportType.ORDERS_REPORT.getReportName(), jasperReportData.getReportName());
-		assertNotNull(jasperReportData.getParameters());
-		assertEquals(4, jasperReportData.getParameters().size());
-		assertTrue(jasperReportData.getParameters().containsKey("orders"));
-		assertNotNull(jasperReportData.getParameters().get("orders"));
-		assertTrue(jasperReportData.getParameters().containsKey("filter"));
-		assertNotNull(jasperReportData.getParameters().get("filter"));
-		assertTrue(jasperReportData.getParameters().containsKey("date_From"));
-		assertNotNull(jasperReportData.getParameters().get("date_From"));
-		assertEquals(DateUtils.SIMPLE_DATE_FORMAT.format(filterData.getDateBeginFrom()), jasperReportData.getParameters().get("date_From"));
+        OrderViewFilter orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setDateBeginFrom(new Date());
+        orderViewFilter.setDateBeginTill(new Date());
+        jasperReportData = reportData.getReportData(orderList, orderViewFilter);
+        assertEquals(AppJasperReportType.ORDERS_REPORT.getReportName(), jasperReportData.getReportName());
+        assertNotNull(jasperReportData.getParameters());
+        assertEquals(4, jasperReportData.getParameters().size());
+        assertTrue(jasperReportData.getParameters().containsKey("orders"));
+        assertNotNull(jasperReportData.getParameters().get("orders"));
+        assertTrue(jasperReportData.getParameters().containsKey("filter"));
+        assertNotNull(jasperReportData.getParameters().get("filter"));
+        assertTrue(jasperReportData.getParameters().containsKey("date_From"));
+        assertNotNull(jasperReportData.getParameters().get("date_From"));
+        assertEquals(DateUtils.SIMPLE_DATE_FORMAT.format(orderViewFilter.getDateBeginFrom()), jasperReportData.getParameters().get("date_From"));
 
-		assertTrue(jasperReportData.getParameters().containsKey("date_Till"));
-		assertNotNull(jasperReportData.getParameters().get("date_Till"));
-		assertEquals(DateUtils.SIMPLE_DATE_FORMAT.format(filterData.getDateBeginTill()), jasperReportData.getParameters().get("date_Till"));
+        assertTrue(jasperReportData.getParameters().containsKey("date_Till"));
+        assertNotNull(jasperReportData.getParameters().get("date_Till"));
+        assertEquals(DateUtils.SIMPLE_DATE_FORMAT.format(orderViewFilter.getDateBeginTill()), jasperReportData.getParameters().get("date_Till"));
 
-		assertNotNull(jasperReportData.getDataSource());
+        assertNotNull(jasperReportData.getDataSource());
 
-		assertTrue(jasperReportData.getDataSource().getClass() == JREmptyDataSource.class);
-	}
+        assertTrue(jasperReportData.getDataSource().getClass() == JREmptyDataSource.class);
+    }
 
 }

@@ -10,7 +10,7 @@ import ua.com.vetal.TestDataServiceUtils;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.Manager;
 import ua.com.vetal.entity.Stencil;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.repositories.StencilRepository;
 import ua.com.vetal.utils.DateUtils;
 
@@ -55,66 +55,66 @@ public class StencilDAOTest {
         List<Stencil> filteredList = stencilDAO.findByFilterData(null);
         assertEquals(allRecords, filteredList.size());
 
-        FilterData filterData = new FilterData();
-        filteredList = stencilDAO.findByFilterData(filterData);
+        OrderViewFilter orderViewFilter = new OrderViewFilter();
+        filteredList = stencilDAO.findByFilterData(orderViewFilter);
         assertEquals(allRecords, filteredList.size());
 
-        filterData = new FilterData();
-        filterData.setAccount(stencil.getAccount());
-        filteredList = stencilDAO.findByFilterData(filterData);
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setAccount(stencil.getAccount());
+        filteredList = stencilDAO.findByFilterData(orderViewFilter);
         assertEquals(1, filteredList.size());
 
-        filterData = new FilterData();
-        filterData.setNumber(stencil.getFullNumber());
-        filteredList = stencilDAO.findByFilterData(filterData);
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setNumber(stencil.getFullNumber());
+        filteredList = stencilDAO.findByFilterData(orderViewFilter);
         assertEquals(1, filteredList.size());
 
 
-        filterData = new FilterData();
-        filterData.setClient(stencil.getClient());
-        filteredList = stencilDAO.findByFilterData(filterData);
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setClient(stencil.getClient());
+        filteredList = stencilDAO.findByFilterData(orderViewFilter);
         assertEquals(1, filteredList.size());
 
-        filterData = new FilterData();
-        filterData.setPrinter(stencil.getPrinter());
-        filteredList = stencilDAO.findByFilterData(filterData);
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setPrinter(stencil.getPrinter());
+        filteredList = stencilDAO.findByFilterData(orderViewFilter);
         assertEquals(1, filteredList.size());
 
-        filterData = new FilterData();
-        filterData.setManager(stencil.getManager());
-        filteredList = stencilDAO.findByFilterData(filterData);
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setManager(stencil.getManager());
+        filteredList = stencilDAO.findByFilterData(orderViewFilter);
         assertEquals(1, filteredList.size());
 
-        filterData = new FilterData();
-        filterData.setManager(new Manager());
-        filteredList = stencilDAO.findByFilterData(filterData);
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setManager(new Manager());
+        filteredList = stencilDAO.findByFilterData(orderViewFilter);
         assertEquals(allRecords, filteredList.size());
 
-        filterData = new FilterData();
+        orderViewFilter = new OrderViewFilter();
         Manager newManager = new Manager();
         newManager.setId(1021L);
-        filterData.setManager(newManager);
-        filteredList = stencilDAO.findByFilterData(filterData);
+        orderViewFilter.setManager(newManager);
+        filteredList = stencilDAO.findByFilterData(orderViewFilter);
         assertEquals(0, filteredList.size());
 
-        filterData = new FilterData();
-        filterData.setAccount("not exist");
-        filteredList = stencilDAO.findByFilterData(filterData);
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setAccount("not exist");
+        filteredList = stencilDAO.findByFilterData(orderViewFilter);
         assertEquals(0, filteredList.size());
 
-        filterData = new FilterData();
-        filterData.setNumber("not exist");
-        filteredList = stencilDAO.findByFilterData(filterData);
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setNumber("not exist");
+        filteredList = stencilDAO.findByFilterData(orderViewFilter);
         assertEquals(0, filteredList.size());
 
-        filterData = new FilterData();
-        filterData.setPaper(stencil.getPaper());
-        filteredList = stencilDAO.findByFilterData(filterData);
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setPaper(stencil.getPaper());
+        filteredList = stencilDAO.findByFilterData(orderViewFilter);
         assertEquals(1, filteredList.size());
 
-        filterData = new FilterData();
-        filterData.setProduction(stencil.getProduction());
-        filteredList = stencilDAO.findByFilterData(filterData);
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setProduction(stencil.getProduction());
+        filteredList = stencilDAO.findByFilterData(orderViewFilter);
         assertEquals(1, filteredList.size());
 
 
@@ -122,20 +122,20 @@ public class StencilDAOTest {
         Date dateTill = DateUtils.addToDate(new Date(), Calendar.DATE, -5);
 
 
-        filterData = new FilterData();
-        filterData.setDateBeginFrom(dateFrom);
-        filteredList = stencilDAO.findByFilterData(filterData);
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setDateBeginFrom(dateFrom);
+        filteredList = stencilDAO.findByFilterData(orderViewFilter);
         assertEquals(1, filteredList.size());
 
-        filterData = new FilterData();
-        filterData.setDateBeginTill(dateTill);
-        filteredList = stencilDAO.findByFilterData(filterData);
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setDateBeginTill(dateTill);
+        filteredList = stencilDAO.findByFilterData(orderViewFilter);
         assertEquals(allRecords, filteredList.size());
 
-        filterData = new FilterData();
-        filterData.setDateBeginFrom(dateFrom);
-        filterData.setDateBeginTill(dateTill);
-        filteredList = stencilDAO.findByFilterData(filterData);
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setDateBeginFrom(dateFrom);
+        orderViewFilter.setDateBeginTill(dateTill);
+        filteredList = stencilDAO.findByFilterData(orderViewFilter);
         assertEquals(1, filteredList.size());
 
     }

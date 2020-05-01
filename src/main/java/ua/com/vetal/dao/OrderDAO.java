@@ -3,7 +3,7 @@ package ua.com.vetal.dao;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.entity.Order;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,7 +20,7 @@ public class OrderDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public List<Order> findByFilterData(FilterData filterData) {
+    public List<Order> findByFilterData(OrderViewFilter orderViewFilter) {
         List<Order> list = null;
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Order> query = builder.createQuery(Order.class);
@@ -28,38 +28,38 @@ public class OrderDAO {
 
         Predicate predicate = builder.conjunction();
 
-        if (filterData != null) {
+        if (orderViewFilter != null) {
 
-            if (filterData.getClient() != null && filterData.getClient().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("client"), filterData.getClient()));
+            if (orderViewFilter.getClient() != null && orderViewFilter.getClient().getId() != null) {
+                predicate = builder.and(predicate, builder.equal(root.get("client"), orderViewFilter.getClient()));
             }
 
-            if (filterData.getManager() != null && filterData.getManager().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("manager"), filterData.getManager()));
+            if (orderViewFilter.getManager() != null && orderViewFilter.getManager().getId() != null) {
+                predicate = builder.and(predicate, builder.equal(root.get("manager"), orderViewFilter.getManager()));
             }
 
-            if (filterData.getProduction() != null && filterData.getProduction().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("production"), filterData.getProduction()));
+            if (orderViewFilter.getProduction() != null && orderViewFilter.getProduction().getId() != null) {
+                predicate = builder.and(predicate, builder.equal(root.get("production"), orderViewFilter.getProduction()));
             }
-            if (filterData.getDateBeginFrom() != null) {
+            if (orderViewFilter.getDateBeginFrom() != null) {
                 predicate = builder.and(predicate,
-                        builder.greaterThanOrEqualTo(root.get("dateBegin"), filterData.getDateBeginFrom()));
+                        builder.greaterThanOrEqualTo(root.get("dateBegin"), orderViewFilter.getDateBeginFrom()));
             }
 
-            if (filterData.getDateBeginTill() != null) {
+            if (orderViewFilter.getDateBeginTill() != null) {
                 predicate = builder.and(predicate,
-                        builder.lessThanOrEqualTo(root.get("dateBegin"), filterData.getDateBeginTill()));
+                        builder.lessThanOrEqualTo(root.get("dateBegin"), orderViewFilter.getDateBeginTill()));
             }
 
 
-            if (filterData.getDebtAmountFrom() != null) {
+            if (orderViewFilter.getDebtAmountFrom() != null) {
                 predicate = builder.and(predicate,
-                        builder.greaterThanOrEqualTo(root.get("debtAmount"), filterData.getDebtAmountFrom()));
+                        builder.greaterThanOrEqualTo(root.get("debtAmount"), orderViewFilter.getDebtAmountFrom()));
             }
 
-            if (filterData.getDebtAmountTill() != null) {
+            if (orderViewFilter.getDebtAmountTill() != null) {
                 predicate = builder.and(predicate,
-                        builder.lessThanOrEqualTo(root.get("debtAmount"), filterData.getDebtAmountTill()));
+                        builder.lessThanOrEqualTo(root.get("debtAmount"), orderViewFilter.getDebtAmountTill()));
             }
 
         }

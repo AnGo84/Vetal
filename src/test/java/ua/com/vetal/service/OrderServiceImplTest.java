@@ -9,7 +9,7 @@ import org.springframework.data.domain.Sort;
 import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.dao.OrderDAO;
 import ua.com.vetal.entity.*;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.repositories.OrderRepository;
 
 import javax.persistence.EntityManager;
@@ -73,8 +73,8 @@ public class OrderServiceImplTest {
     //@Disabled("Disabled until refactoring filters")
     @Test
     void whenFindByFilterData() {
-        when(mockOrderDAO.findByFilterData(any(FilterData.class))).thenReturn(Arrays.asList(order));
-        List<Order> objects = orderService.findByFilterData(new FilterData());
+        when(mockOrderDAO.findByFilterData(any(OrderViewFilter.class))).thenReturn(Arrays.asList(order));
+        List<Order> objects = orderService.findByFilterData(new OrderViewFilter());
         assertNotNull(objects);
         assertFalse(objects.isEmpty());
         assertEquals(objects.size(), 1);

@@ -10,7 +10,7 @@ import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.dao.ContractorDAO;
 import ua.com.vetal.entity.Contractor;
 import ua.com.vetal.entity.Manager;
-import ua.com.vetal.entity.filter.PersonFilter;
+import ua.com.vetal.entity.filter.PersonViewFilter;
 import ua.com.vetal.repositories.ContractorRepository;
 
 import javax.persistence.EntityManager;
@@ -203,11 +203,11 @@ class ContractorServiceImplTest {
 	//@Disabled("Disabled until refactoring filters")
 	@Test
 	void whenFindByFilterData() {
-		when(mockContractorDAO.findByFilterData(any(PersonFilter.class))).thenReturn(Arrays.asList(contractor));
-		List<Contractor> objects = contractorService.findByFilterData(new PersonFilter());
-		assertNotNull(objects);
-		assertFalse(objects.isEmpty());
-		assertEquals(objects.size(), 1);
+        when(mockContractorDAO.findByFilterData(any(PersonViewFilter.class))).thenReturn(Arrays.asList(contractor));
+        List<Contractor> objects = contractorService.findByFilterData(new PersonViewFilter());
+        assertNotNull(objects);
+        assertFalse(objects.isEmpty());
+        assertEquals(objects.size(), 1);
 
 		/*List<Contractor> filteredList = contractorService.findByFilterData(null);
 		assertEquals(filteredList.size(), 1);

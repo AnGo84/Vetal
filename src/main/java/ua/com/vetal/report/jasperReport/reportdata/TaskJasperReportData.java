@@ -5,7 +5,7 @@ import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.stereotype.Component;
 import ua.com.vetal.entity.Task;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.report.Reportable;
 import ua.com.vetal.report.jasperReport.AppJasperReportType;
 import ua.com.vetal.report.jasperReport.JasperReportData;
@@ -18,17 +18,17 @@ import java.util.Map;
 
 @Component
 @Slf4j
-public class TaskJasperReportData implements Reportable<Task, JasperReportData, FilterData> {
-	@Override
-	public JasperReportData getReportData(Task object) {
-		log.info("Get JasperReportData for: {}", object);
-		ProductTypeAppJasperReportTypeFactory reportTypeFactory = new ProductTypeAppJasperReportTypeFactory();
-		List<Task> objects = Arrays.asList(object);
-		return JasperReportData.builder()
-				.reportName(reportTypeFactory.getAppJasperReport(object.getProductionType()).getReportName())
-				.parameters(null)
-				.dataSource(new JRBeanCollectionDataSource(objects))
-				.build();
+public class TaskJasperReportData implements Reportable<Task, JasperReportData, OrderViewFilter> {
+    @Override
+    public JasperReportData getReportData(Task object) {
+        log.info("Get JasperReportData for: {}", object);
+        ProductTypeAppJasperReportTypeFactory reportTypeFactory = new ProductTypeAppJasperReportTypeFactory();
+        List<Task> objects = Arrays.asList(object);
+        return JasperReportData.builder()
+                .reportName(reportTypeFactory.getAppJasperReport(object.getProductionType()).getReportName())
+                .parameters(null)
+                .dataSource(new JRBeanCollectionDataSource(objects))
+                .build();
 	}
 
 	@Override
@@ -45,8 +45,8 @@ public class TaskJasperReportData implements Reportable<Task, JasperReportData, 
 				.build();
 	}
 
-	@Override
-	public JasperReportData getReportData(List<Task> objects, FilterData filterData) {
-		return getReportData(objects);
-	}
+    @Override
+    public JasperReportData getReportData(List<Task> objects, OrderViewFilter orderViewFilter) {
+        return getReportData(objects);
+    }
 }

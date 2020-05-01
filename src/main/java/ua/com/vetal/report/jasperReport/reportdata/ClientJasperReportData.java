@@ -5,7 +5,7 @@ import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.stereotype.Component;
 import ua.com.vetal.entity.Client;
-import ua.com.vetal.entity.filter.ClientFilter;
+import ua.com.vetal.entity.filter.ClientViewFilter;
 import ua.com.vetal.report.Reportable;
 import ua.com.vetal.report.jasperReport.AppJasperReportType;
 import ua.com.vetal.report.jasperReport.JasperReportData;
@@ -16,16 +16,16 @@ import java.util.Map;
 
 @Component
 @Slf4j
-public class ClientJasperReportData implements Reportable<Client, JasperReportData, ClientFilter> {
-	@Override
-	public JasperReportData getReportData(Client object) {
-		log.info("Get JasperReportData for: {}", object);
-		return null;
-	}
+public class ClientJasperReportData implements Reportable<Client, JasperReportData, ClientViewFilter> {
+    @Override
+    public JasperReportData getReportData(Client object) {
+        log.info("Get JasperReportData for: {}", object);
+        return null;
+    }
 
-	@Override
-	public JasperReportData getReportData(List<Client> objects) {
-		log.info("Get JasperReportData for objects: {}", objects);
+    @Override
+    public JasperReportData getReportData(List<Client> objects) {
+        log.info("Get JasperReportData for objects: {}", objects);
 
 		Map<String, Object> parameters = new HashMap<>();
 		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(objects);
@@ -38,11 +38,11 @@ public class ClientJasperReportData implements Reportable<Client, JasperReportDa
 				.build();
 	}
 
-	@Override
-	public JasperReportData getReportData(List<Client> objects, ClientFilter filterData) {
-		log.info("Get JasperReportData for objects: {}", objects);
-		log.info("Filter: {}", filterData);
+    @Override
+    public JasperReportData getReportData(List<Client> objects, ClientViewFilter filterData) {
+        log.info("Get JasperReportData for objects: {}", objects);
+        log.info("Filter: {}", filterData);
 
-		return getReportData(objects);
-	}
+        return getReportData(objects);
+    }
 }

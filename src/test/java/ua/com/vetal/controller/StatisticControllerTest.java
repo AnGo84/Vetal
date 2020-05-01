@@ -10,7 +10,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.Order;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.report.jasperReport.reportdata.TaskJasperReportData;
 import ua.com.vetal.service.OrderServiceImpl;
 import ua.com.vetal.service.reports.JasperReportService;
@@ -88,11 +88,11 @@ public class StatisticControllerTest {
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenFilterClientsAsAuthorizedWithNotNullUser_thenOk() throws Exception {
-		FilterData filterData = new FilterData();
-		filterData.setClient(orders.get(0).getClient());
-		filterData.setManager(orders.get(0).getManager());
+		OrderViewFilter orderViewFilter = new OrderViewFilter();
+		orderViewFilter.setClient(orders.get(0).getClient());
+		orderViewFilter.setManager(orders.get(0).getManager());
 		mockMvc.perform(get(MAPPED_URL + "/filter")
-				.param("statisticFilterData", filterData.toString())
+				.param("statisticFilterData", orderViewFilter.toString())
 		)
 				//.andDo
 				.andExpect(status().isFound())

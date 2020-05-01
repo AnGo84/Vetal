@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.Contractor;
 import ua.com.vetal.entity.Manager;
-import ua.com.vetal.entity.filter.PersonFilter;
+import ua.com.vetal.entity.filter.PersonViewFilter;
 import ua.com.vetal.service.ContractorServiceImpl;
 
 import java.util.Arrays;
@@ -145,9 +145,6 @@ public class ContractorControllerTest {
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenUpdateContractorAsAuthorizedWithNotNullContractor_thenOk() throws Exception {
-		//doNothing().when(mockUserService).updateObject(any(User.class));
-		mockContractorService.updateObject(contractor);
-
 		mockMvc.perform(post(MAPPED_URL + "/update")
 				.param("id", String.valueOf(contractor.getId()))
 				.param("corpName", contractor.getCorpName())
@@ -163,7 +160,6 @@ public class ContractorControllerTest {
 		)
 				//.andDo
 				.andExpect(status().isFound())
-
 				.andExpect(redirectedUrl(MAPPED_URL));
 		verify(mockContractorService, times(1)).updateObject(contractor);
 	}
@@ -200,11 +196,11 @@ public class ContractorControllerTest {
 	//@Disabled("Fix filters")
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenFilterContractorsAsAuthorizedWithNotNullUser_thenOk() throws Exception {
-		PersonFilter personFilter = new PersonFilter();
-		personFilter.setCorpName("corpName");
-		personFilter.setManager(manager);
+		PersonViewFilter personViewFilter = new PersonViewFilter();
+		personViewFilter.setCorpName("corpName");
+		personViewFilter.setManager(manager);
 		mockMvc.perform(get(MAPPED_URL + "/filter")
-				.param("personFilterData", personFilter.toString())
+				.param("personFilterData", personViewFilter.toString())
 		)
 				.andDo(print())
 				.andExpect(status().isFound())

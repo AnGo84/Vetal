@@ -10,7 +10,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.Task;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.report.jasperReport.reportdata.TaskJasperReportData;
 import ua.com.vetal.service.TaskServiceImpl;
 import ua.com.vetal.service.mail.MailServiceImp;
@@ -279,16 +279,16 @@ public class TasksControllerTest {
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenFilterTasksAsAuthorizedWithNotNullUser_thenOk() throws Exception {
-		FilterData filterData = new FilterData();
-		filterData.setAccount("account");
-		filterData.setManager(filterData.getManager());
-		mockMvc.perform(get(MAPPED_URL + "/filter")
-				.param("FilterDataData", filterData.toString())
-		)
-				//.andDo(print())
-				.andExpect(status().isFound())
-				.andExpect(redirectedUrl(MAPPED_URL));
-	}
+        OrderViewFilter orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setAccount("account");
+        orderViewFilter.setManager(orderViewFilter.getManager());
+        mockMvc.perform(get(MAPPED_URL + "/filter")
+                .param("FilterDataData", orderViewFilter.toString())
+        )
+                //.andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl(MAPPED_URL));
+    }
 
 	@Test
 	public void whenFilterTasksAsNoAuthorized_thenRedirectToMappedURL() throws Exception {

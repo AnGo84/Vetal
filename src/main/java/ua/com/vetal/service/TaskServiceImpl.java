@@ -11,7 +11,7 @@ import ua.com.vetal.dao.TaskDAO;
 import ua.com.vetal.email.EmailAttachment;
 import ua.com.vetal.email.EmailMessage;
 import ua.com.vetal.entity.Task;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.repositories.TaskRepository;
 
 import javax.activation.DataSource;
@@ -75,10 +75,10 @@ public class TaskServiceImpl implements SimpleService<Task> {
         return taskRepository.findByAccount(account);
     }
 
-    public List<Task> findByFilterData(FilterData filterData) {
-        List<Task> tasks = taskDAO.findByFilterData(filterData);
+    public List<Task> findByFilterData(OrderViewFilter orderViewFilter) {
+        List<Task> tasks = taskDAO.findByFilterData(orderViewFilter);
 
-        if (filterData == null) {
+        if (orderViewFilter == null) {
             return findAllObjects();
         }
 /*

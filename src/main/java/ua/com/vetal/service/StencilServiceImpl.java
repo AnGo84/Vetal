@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.dao.StencilDAO;
 import ua.com.vetal.entity.Stencil;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.repositories.StencilRepository;
 
 import java.util.List;
@@ -66,10 +66,10 @@ public class StencilServiceImpl implements SimpleService<Stencil> {
         return stencilRepository.findByAccount(account);
     }
 
-    public List<Stencil> findByFilterData(FilterData filterData) {
-        List<Stencil> list = stencilDAO.findByFilterData(filterData);
+    public List<Stencil> findByFilterData(OrderViewFilter orderViewFilter) {
+        List<Stencil> list = stencilDAO.findByFilterData(orderViewFilter);
 
-        if (filterData == null) {
+        if (orderViewFilter == null) {
             return findAllObjects();
         }
 

@@ -5,7 +5,7 @@ import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.stereotype.Component;
 import ua.com.vetal.entity.Stencil;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.report.Reportable;
 import ua.com.vetal.report.jasperReport.AppJasperReportType;
 import ua.com.vetal.report.jasperReport.JasperReportData;
@@ -17,17 +17,17 @@ import java.util.Map;
 
 @Component
 @Slf4j
-public class StencilJasperReportData implements Reportable<Stencil, JasperReportData, FilterData> {
-	@Override
-	public JasperReportData getReportData(Stencil object) {
-		log.info("Get JasperReportData for: {}", object);
-		List<Stencil> objects = Arrays.asList(object);
+public class StencilJasperReportData implements Reportable<Stencil, JasperReportData, OrderViewFilter> {
+    @Override
+    public JasperReportData getReportData(Stencil object) {
+        log.info("Get JasperReportData for: {}", object);
+        List<Stencil> objects = Arrays.asList(object);
 
-		return JasperReportData.builder()
-				.reportName(AppJasperReportType.STENCIL_REPORT.getReportName())
-				.parameters(null)
-				.dataSource(new JRBeanCollectionDataSource(objects))
-				.build();
+        return JasperReportData.builder()
+                .reportName(AppJasperReportType.STENCIL_REPORT.getReportName())
+                .parameters(null)
+                .dataSource(new JRBeanCollectionDataSource(objects))
+                .build();
 	}
 
 	@Override
@@ -44,8 +44,8 @@ public class StencilJasperReportData implements Reportable<Stencil, JasperReport
 				.build();
 	}
 
-	@Override
-	public JasperReportData getReportData(List<Stencil> objects, FilterData filterData) {
-		return getReportData(objects);
-	}
+    @Override
+    public JasperReportData getReportData(List<Stencil> objects, OrderViewFilter orderViewFilter) {
+        return getReportData(objects);
+    }
 }

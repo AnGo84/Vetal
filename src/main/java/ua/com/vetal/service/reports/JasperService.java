@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 import ua.com.vetal.entity.ProductionTypeDirectory;
 import ua.com.vetal.entity.Stencil;
 import ua.com.vetal.entity.Task;
-import ua.com.vetal.entity.filter.ClientFilter;
-import ua.com.vetal.entity.filter.FilterData;
-import ua.com.vetal.entity.filter.PersonFilter;
+import ua.com.vetal.entity.filter.ClientViewFilter;
+import ua.com.vetal.entity.filter.OrderViewFilter;
+import ua.com.vetal.entity.filter.PersonViewFilter;
 import ua.com.vetal.service.*;
 import ua.com.vetal.utils.DateUtils;
 
@@ -84,16 +84,16 @@ public class JasperService {
 		stencils.add(stencilService.findById(id));
 
 		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(stencils);*/
-		List<Stencil> stencils = Arrays.asList(stencilService.findById(id));
+        List<Stencil> stencils = Arrays.asList(stencilService.findById(id));
 
-		return getJasperPrint("/jasperReport/StencilReport.jasper",
-				null, new JRBeanCollectionDataSource(stencils));
+        return getJasperPrint("/jasperReport/StencilReport.jasper",
+                null, new JRBeanCollectionDataSource(stencils));
 
-		//return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-	}
+        //return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+    }
 
-	public JasperPrint tasksTable(FilterData filterData) throws JRException {
-		logger.info("Export Tasks to table");
+    public JasperPrint tasksTable(OrderViewFilter orderViewFilter) throws JRException {
+        logger.info("Export Tasks to table");
 		/*InputStream jasperStream = this.getClass().getResourceAsStream("/jasperReport/TaskTableReport.jasper");
 		InputStream logoIS = this.getClass().getResourceAsStream(imageLogo);
 		Map<String, Object> parameters = new HashMap<>();
@@ -106,15 +106,15 @@ public class JasperService {
 		return getJasperPrint("/jasperReport/TaskTableReport.jasper", null, new JREmptyDataSource());
 		//return JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
 		 */
-		Map<String, Object> parameters = new HashMap<>();
-		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(taskService.findByFilterData(filterData));
-		parameters.put("tasks", dataSource);
-		return getJasperPrint("/jasperReport/TaskTableReport.jasper", parameters,
-				new JREmptyDataSource());
-	}
+        Map<String, Object> parameters = new HashMap<>();
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(taskService.findByFilterData(orderViewFilter));
+        parameters.put("tasks", dataSource);
+        return getJasperPrint("/jasperReport/TaskTableReport.jasper", parameters,
+                new JREmptyDataSource());
+    }
 
-	public JasperPrint stencilsTable(FilterData filterData) throws JRException {
-		logger.info("Export Stencils to table");
+    public JasperPrint stencilsTable(OrderViewFilter orderViewFilter) throws JRException {
+        logger.info("Export Stencils to table");
 		/*InputStream jasperStream = this.getClass().getResourceAsStream("/jasperReport/StencilTableReport.jasper");
 		InputStream logoIS = this.getClass().getResourceAsStream(imageLogo);
 		Map<String, Object> parameters = new HashMap<>();
@@ -128,16 +128,16 @@ public class JasperService {
 		parameters.put("stencils", dataSource);
 
 		return JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());*/
-		Map<String, Object> parameters = new HashMap<>();
-		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(stencilService.findByFilterData(filterData));
-		parameters.put("stencils", dataSource);
-		return getJasperPrint("/jasperReport/StencilTableReport.jasper", parameters,
-				new JREmptyDataSource());
-	}
+        Map<String, Object> parameters = new HashMap<>();
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(stencilService.findByFilterData(orderViewFilter));
+        parameters.put("stencils", dataSource);
+        return getJasperPrint("/jasperReport/StencilTableReport.jasper", parameters,
+                new JREmptyDataSource());
+    }
 
 
-	public JasperPrint contractorsTable(PersonFilter filterData) throws JRException {
-		logger.info("Export Contractors to table");
+    public JasperPrint contractorsTable(PersonViewFilter filterData) throws JRException {
+        logger.info("Export Contractors to table");
 		/*InputStream jasperStream = this.getClass().getResourceAsStream("/jasperReport/ContractorsTableReport.jasper");
 		InputStream logoIS = this.getClass().getResourceAsStream(imageLogo);
 		Map<String, Object> parameters = new HashMap<>();
@@ -151,15 +151,15 @@ public class JasperService {
 		parameters.put("contractors", dataSource);
 
 		return JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());*/
-		Map<String, Object> parameters = new HashMap<>();
-		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(contractorService.findByFilterData(filterData));
-		parameters.put("contractors", dataSource);
-		return getJasperPrint("/jasperReport/ContractorsTableReport.jasper", parameters,
-				new JREmptyDataSource());
-	}
+        Map<String, Object> parameters = new HashMap<>();
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(contractorService.findByFilterData(filterData));
+        parameters.put("contractors", dataSource);
+        return getJasperPrint("/jasperReport/ContractorsTableReport.jasper", parameters,
+                new JREmptyDataSource());
+    }
 
-	public JasperPrint clientsTable(ClientFilter filterData) throws JRException {
-		logger.info("Export Clients to table");
+    public JasperPrint clientsTable(ClientViewFilter filterData) throws JRException {
+        logger.info("Export Clients to table");
 		/*InputStream jasperStream = this.getClass().getResourceAsStream("/jasperReport/ClientsTableReport.jasper");
 		logger.info("JasperStream is null: " + (jasperStream == null));
 		InputStream logoIS = this.getClass().getResourceAsStream(imageLogo);
@@ -174,15 +174,15 @@ public class JasperService {
 		parameters.put("clients", dataSource);
 
 		return JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());*/
-		Map<String, Object> parameters = new HashMap<>();
-		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(clientService.findByFilterData(filterData));
-		parameters.put("clients", dataSource);
-		return getJasperPrint("/jasperReport/ClientsTableReport.jasper", parameters,
-				new JREmptyDataSource());
-	}
+        Map<String, Object> parameters = new HashMap<>();
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(clientService.findByFilterData(filterData));
+        parameters.put("clients", dataSource);
+        return getJasperPrint("/jasperReport/ClientsTableReport.jasper", parameters,
+                new JREmptyDataSource());
+    }
 
-	public JasperPrint ordersCrossTable(FilterData filterData) throws JRException {
-		logger.info("Export Orders to Cross table");
+    public JasperPrint ordersCrossTable(OrderViewFilter orderViewFilter) throws JRException {
+        logger.info("Export Orders to Cross table");
 		/*InputStream jasperStream = this.getClass().getResourceAsStream("/jasperReport/OrdersCrossReport.jasper");
 		logger.info("JasperStream is null: " + (jasperStream == null));
 		InputStream logoIS = this.getClass().getResourceAsStream(imageLogo);
@@ -209,25 +209,25 @@ public class JasperService {
 		parameters.put("orders", dataSource);
 
 		return JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());*/
-		Map<String, Object> parameters = new HashMap<>();
-		parameters.put("filter", filterData);
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("filter", orderViewFilter);
 
-		String date = "";
-		if (filterData.getDateBeginFrom() != null) {
-			date = DateUtils.SIMPLE_DATE_FORMAT.format(filterData.getDateBeginFrom());
-		}
-		parameters.put("date_From", date);
-		date = "";
-		if (filterData.getDateBeginTill() != null) {
-			date = DateUtils.SIMPLE_DATE_FORMAT.format(filterData.getDateBeginTill());
-		}
-		parameters.put("date_Till", date);
+        String date = "";
+        if (orderViewFilter.getDateBeginFrom() != null) {
+            date = DateUtils.SIMPLE_DATE_FORMAT.format(orderViewFilter.getDateBeginFrom());
+        }
+        parameters.put("date_From", date);
+        date = "";
+        if (orderViewFilter.getDateBeginTill() != null) {
+            date = DateUtils.SIMPLE_DATE_FORMAT.format(orderViewFilter.getDateBeginTill());
+        }
+        parameters.put("date_Till", date);
 
-		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(orderService.findByFilterData(filterData));
-		parameters.put("orders", dataSource);
-		return getJasperPrint("/jasperReport/OrdersCrossReport.jasper", parameters,
-				new JREmptyDataSource());
-	}
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(orderService.findByFilterData(orderViewFilter));
+        parameters.put("orders", dataSource);
+        return getJasperPrint("/jasperReport/OrdersCrossReport.jasper", parameters,
+                new JREmptyDataSource());
+    }
 
 	public JasperPrint getJasperPrint(String reportName, Map<String, Object> parameters, JRRewindableDataSource dataSource) throws JRException {
 		logger.info("Jasper Report '{}' with params: {}", reportName, parameters);

@@ -4,7 +4,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.entity.Client;
-import ua.com.vetal.entity.filter.ClientFilter;
+import ua.com.vetal.entity.filter.ClientViewFilter;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -21,7 +21,7 @@ public class ClientDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public List<Client> findByFilterData(ClientFilter filterData) {
+    public List<Client> findByFilterData(ClientViewFilter filterData) {
         //https://www.baeldung.com/rest-api-search-language-spring-data-specifications
         List<Client> list = null;
 

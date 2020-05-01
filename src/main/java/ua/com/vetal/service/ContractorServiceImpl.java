@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.dao.ContractorDAO;
 import ua.com.vetal.entity.Contractor;
-import ua.com.vetal.entity.filter.PersonFilter;
+import ua.com.vetal.entity.filter.PersonViewFilter;
 import ua.com.vetal.repositories.ContractorRepository;
 
 import java.util.List;
@@ -72,7 +72,7 @@ public class ContractorServiceImpl implements SimpleService<Contractor> {
 		return findByName(person.getCorpName()) != null;
 	}
 
-	public List<Contractor> findByFilterData(PersonFilter filterData) {
+	public List<Contractor> findByFilterData(PersonViewFilter filterData) {
 		List<Contractor> list = contractorDAO.findByFilterData(filterData);
 
 		if (filterData == null) {

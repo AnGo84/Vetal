@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ua.com.vetal.dao.OrderDAO;
 import ua.com.vetal.entity.Order;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.repositories.OrderRepository;
 
 import java.util.List;
@@ -31,18 +31,18 @@ public class OrderServiceImpl {
 		return getList;
 	}
 
-	/**
-	 * https://www.baeldung.com/rest-search-language-spring-jpa-criteria
-	 * http://qaru.site/questions/293915/spring-data-jpa-query-by-example
-	 */
-	public List<Order> findByFilterData(FilterData filterData) {
-		List<Order> list = orderDAO.findByFilterData(filterData);
+    /**
+     * https://www.baeldung.com/rest-search-language-spring-jpa-criteria
+     * http://qaru.site/questions/293915/spring-data-jpa-query-by-example
+     */
+    public List<Order> findByFilterData(OrderViewFilter orderViewFilter) {
+        List<Order> list = orderDAO.findByFilterData(orderViewFilter);
 
-		if (filterData == null) {
-			return findAllObjects();
-		}
-		return list;
-	}
+        if (orderViewFilter == null) {
+            return findAllObjects();
+        }
+        return list;
+    }
 
 	private Sort sortByDateBegin(Sort.Direction direction) {
 		//return new Sort(direction, "dateBegin");

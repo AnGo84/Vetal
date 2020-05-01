@@ -1,9 +1,8 @@
 package ua.com.vetal.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRException;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
@@ -23,14 +22,14 @@ import ua.com.vetal.acpect.LogExecutionTime;
 import ua.com.vetal.email.EmailAttachment;
 import ua.com.vetal.email.EmailMessage;
 import ua.com.vetal.entity.*;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
+import ua.com.vetal.entity.filter.ViewFilter;
 import ua.com.vetal.report.jasperReport.JasperReportData;
 import ua.com.vetal.report.jasperReport.exporter.JasperReportExporterType;
 import ua.com.vetal.report.jasperReport.reportdata.TaskJasperReportData;
 import ua.com.vetal.service.*;
 import ua.com.vetal.service.mail.MailServiceImp;
 import ua.com.vetal.service.reports.JasperReportService;
-import ua.com.vetal.utils.DateUtils;
 import ua.com.vetal.utils.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -42,353 +41,313 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/tasks")
-// @SessionAttributes({ "managersList", "pageName" })
-// @SessionAttributes({"taskFilterData"})
-
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:vetal.properties")
-public class TasksController {
-	static final Logger logger = LoggerFactory.getLogger(TasksController.class);
-	@Autowired
-	MessageSource messageSource;
-	// private Collator collator = Collator.getInstance(Locale.);
+@Slf4j
+public class TasksController extends BaseController {
+    private final String title = "Tasks";
+    private final String personName = "Tasks";
+    private final String pageName = "/tasks";
+    @Autowired
+    private MessageSource messageSource;
+    @Autowired
+    private ApplicationContext appContext;
+    @Autowired
+    private TaskServiceImpl taskService;
+    @Autowired
+    private ViewTaskServiceImpl viewTaskService;
 
-	@Autowired
-	private ApplicationContext appContext;
-	private String title = "Tasks";
-	private String personName = "Tasks";
-	private String pageName = "/tasks";
-	@Autowired
-	private TaskServiceImpl taskService;
-	@Autowired
-	private ViewTaskServiceImpl viewTaskService;
+	/*@Autowired
+	private OrderViewFilter orderViewFilter;*/
 
-	@Autowired
-	private FilterData filterData;
+    //private List<Task> tasksList;
+    private List<ViewTask> tasksList;
 
-	//private List<Task> tasksList;
-	private List<ViewTask> tasksList;
+    @Autowired
+    private StateServiceImpl stateService;
+    @Autowired
+    private PaymentServiceImpl paymentService;
+    @Autowired
+    private ManagerServiceImpl managerService;
+    @Autowired
+    private ContractorServiceImpl contractorService;
+    @Autowired
+    private ProductionDirectoryServiceImpl productionService;
+    @Autowired
+    private ProductionTypeDirectoryServiceImpl productionTypeService;
+    @Autowired
+    private ClientServiceImpl clientService;
+    @Autowired
+    private StockDirectoryServiceImpl stockService;
+    @Autowired
+    private ChromaticityDirectoryServiceImpl chromaticityService;
+    @Autowired
+    private FormatDirectoryServiceImpl formatService;
+    @Autowired
+    private LaminateDirectoryServiceImpl laminateService;
+    @Autowired
+    private PaperDirectoryServiceImpl paperService;
+    @Autowired
+    private CringleDirectoryServiceImpl cringleService;
+    @Autowired
+    private NumberBaseDirectoryServiceImpl numberBaseService;
+    @Autowired
+    private PrintingUnitDirectoryServiceImpl printingUnitService;
 
-	@Autowired
-	private StateServiceImpl stateService;
-	@Autowired
-	private PaymentServiceImpl paymentService;
-	@Autowired
-	private ManagerServiceImpl managerService;
-	@Autowired
-	private ContractorServiceImpl contractorService;
-	@Autowired
-	private ProductionDirectoryServiceImpl productionService;
-	@Autowired
-	private ProductionTypeDirectoryServiceImpl productionTypeService;
-	@Autowired
-	private ClientServiceImpl clientService;
-	@Autowired
-	private StockDirectoryServiceImpl stockService;
-	@Autowired
-	private ChromaticityDirectoryServiceImpl chromaticityService;
-	@Autowired
-	private FormatDirectoryServiceImpl formatService;
-	@Autowired
-	private LaminateDirectoryServiceImpl laminateService;
-	@Autowired
-	private PaperDirectoryServiceImpl paperService;
-	@Autowired
-	private CringleDirectoryServiceImpl cringleService;
-	@Autowired
-	private NumberBaseDirectoryServiceImpl numberBaseService;
-	@Autowired
-	private PrintingUnitDirectoryServiceImpl printingUnitService;
+    @Autowired
+    private DBFileStorageService dbFileStorageService;
 
-	@Autowired
-	private DBFileStorageService dbFileStorageService;
+    @Autowired
+    private TaskJasperReportData reportData;
+    @Autowired
+    private JasperReportService jasperReportService;
+    @Autowired
+    private MailServiceImp mailServiceImp;
 
-	@Autowired
-	private TaskJasperReportData reportData;
-	@Autowired
-	private JasperReportService jasperReportService;
-	@Autowired
-	private MailServiceImp mailServiceImp;
+    public TasksController(Map<String, ViewFilter> viewFilters) {
+        super("TasksController", viewFilters);
+        initViewFilter(new OrderViewFilter());
+    }
 
-	@LogExecutionTime
-	@RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
-	public String taskList(Model model) {
-		logger.info("Get Filter: " + filterData);
-		model.addAttribute("title", title);
-		//model.addAttribute("tasksList", taskService.findByFilterData(filterData));
+    @LogExecutionTime
+    @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
+    public String taskList(Model model) {
+        model.addAttribute("title", title);
+        //model.addAttribute("tasksList", taskService.findByFilterData(filterData));
 
-		return "tasksPage";
-	}
+        return "tasksPage";
+    }
 
-	@LogExecutionTime
-	@RequestMapping(value = {"/add"}, method = RequestMethod.GET)
-	public String showAddTaskPage(Model model) {
-		logger.info("Add new " + title + " record");
-		Task task = new Task();
-		task.setNumber((int) (taskService.getMaxID() + 1));
+    @LogExecutionTime
+    @RequestMapping(value = {"/add"}, method = RequestMethod.GET)
+    public String showAddTaskPage(Model model) {
+        log.info("Add new {} record", title);
+        Task task = new Task();
+        task.setNumber((int) (taskService.getMaxID() + 1));
 
-		// model.addAttribute("edit", false);
-		model.addAttribute("readOnly", false);
-		model.addAttribute("task", task);
-		return "taskPage";
-	}
+        // model.addAttribute("edit", false);
+        model.addAttribute("readOnly", false);
+        model.addAttribute("task", task);
+        return "taskPage";
+    }
 
-	/*
-	 * @RequestMapping(value = "/add", method = RequestMethod.POST) public
-	 * String saveNewUser(Model model, @ModelAttribute("user") User user) {
-	 *
-	 * userService.saveObject(user); return "redirect:/usersPage"; }
-	 */
+    @LogExecutionTime
+    @RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
+    public String editTask(@PathVariable Long id, Model model) {
+        log.info("Edit {} with ID= {}", title, id);
 
-	@LogExecutionTime
-	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
-	public String editTask(@PathVariable Long id, Model model) {
-		logger.info("Edit " + title + " with ID= " + id);
+        Task task = taskService.findById(id);
+        // logger.info(task.toString());
 
-		Task task = taskService.findById(id);
-		// logger.info(task.toString());
+        // model.addAttribute("title", "Edit user");
+        // model.addAttribute("edit", true);
+        model.addAttribute("readOnly", false);
+        task.setFileName(task.getDBFileName());
+        model.addAttribute("task", task);
+        return "taskPage";
+    }
 
-		// model.addAttribute("title", "Edit user");
-		// model.addAttribute("edit", true);
-		model.addAttribute("readOnly", false);
-		task.setFileName(task.getDBFileName());
-		model.addAttribute("task", task);
-		return "taskPage";
-	}
+    @RequestMapping(value = "/copy-{id}", method = RequestMethod.GET)
+    public String copyTask(@PathVariable Long id, Model model) {
+        log.info("Copy {} with ID= {}", title, id);
 
-	@RequestMapping(value = "/copy-{id}", method = RequestMethod.GET)
-	public String copyTask(@PathVariable Long id, Model model) {
-		logger.info("Copy " + title + " with ID= " + id);
+        Task task = taskService.findById(id);
+        Task taskCopy = task.getCopy();
+        int taskCopyId = (int) (taskService.getMaxID() + 1);
+        taskCopy.setNumber(taskCopyId);
+        model.addAttribute("readOnly", false);
+        model.addAttribute("task", taskCopy);
+        return "taskPage";
+    }
 
-		Task task = taskService.findById(id);
-		logger.info("Get task:" + task.toString());
-		Task taskCopy = task.getCopy();
-		int taskCopyId = (int) (taskService.getMaxID() + 1);
-		taskCopy.setNumber(taskCopyId);
-		logger.info("Copy task:" + taskCopy.toString());
+    @LogExecutionTime
+    @RequestMapping(value = "/view-{id}", method = RequestMethod.GET)
+    public String viewTask(@PathVariable Long id, Model model) {
+        log.info("View {} with ID= {}", title, id);
 
-		model.addAttribute("readOnly", false);
-		model.addAttribute("task", taskCopy);
-		return "taskPage";
-	}
+        Task task = taskService.findById(id);
+        // model.addAttribute("title", "Edit user");
+        // model.addAttribute("userRolesList",
+        // userRoleService.findAllObjects());
+        // model.addAttribute("edit", true);
+        model.addAttribute("readOnly", true);
+        task.setFileName(task.getDBFileName());
+        model.addAttribute("task", task);
+        return "taskPage";
+    }
 
-	@LogExecutionTime
-	@RequestMapping(value = "/view-{id}", method = RequestMethod.GET)
-	public String viewTask(@PathVariable Long id, Model model) {
-		logger.info("View " + title + " with ID= " + id);
+    @LogExecutionTime
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public String updateTask(@Valid @ModelAttribute("task") Task task, BindingResult bindingResult,
+                             @RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile) {
+        log.info("Update " + title + ": " + task);
+        if (bindingResult.hasErrors()) {
 
-		Task task = taskService.findById(id);
-		logger.info(task.toString());
-
-		// model.addAttribute("title", "Edit user");
-		// model.addAttribute("userRolesList",
-		// userRoleService.findAllObjects());
-		// model.addAttribute("edit", true);
-		model.addAttribute("readOnly", true);
-		task.setFileName(task.getDBFileName());
-		model.addAttribute("task", task);
-		return "taskPage";
-	}
-
-	/*
-	 * @RequestMapping(value = "/edit-{id}", method = RequestMethod.POST) public
-	 * String saveUpdateUser(Model model, @ModelAttribute("user") User user) {
-	 * userService.saveObject(user); return "redirect:/usersPage"; }
-	 */
-
-	@LogExecutionTime
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String updateTask(@Valid @ModelAttribute("task") Task task, BindingResult bindingResult,
-							 @RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile) {
-		logger.info("Update " + title + ": " + task);
-		if (bindingResult.hasErrors()) {
-			// model.addAttribute("title", title);
-			/*
-			 * logger.info("BINDING RESULT ERROR"); logger.info("Date Begin: " +
-			 * task.getDateBegin()); logger.info("Date End: " +
-			 * task.getDateEnd());
-			 */
-
-			for (ObjectError error : bindingResult.getAllErrors()) {
-				logger.error(error.getDefaultMessage());
-			}
-			return "taskPage";
-		}
-
+            for (ObjectError error : bindingResult.getAllErrors()) {
+                log.error(error.getDefaultMessage());
+            }
+            return "taskPage";
+        }
         /*if (taskService.isAccountValueExist(task)) {
-
             FieldError fieldError = new FieldError("task", "account", messageSource.getMessage("non.unique.field",
                     new String[]{"Счёт", task.getAccount().toString()}, new Locale("ru")));
             // Locale.getDefault()
             bindingResult.addError(fieldError);
             return "taskPage";
         }*/
-		Long fileId = null;
-		if (uploadFile != null && !uploadFile.isEmpty()) {
-			logger.info("uploadFile is not NULL");
-			try {
-				DBFile dbFile = dbFileStorageService.storeMultipartFile(uploadFile);
-				logger.info("Saved dbFile: " + dbFile);
+        Long fileId = null;
+        if (uploadFile != null && !uploadFile.isEmpty()) {
+            log.info("uploadFile is not NULL");
+            try {
+                DBFile dbFile = dbFileStorageService.storeMultipartFile(uploadFile);
+                log.info("Saved dbFile: " + dbFile);
+                if (task.getDbFile() != null) {
+                    fileId = task.getDbFile().getId();
+                    //dbFileStorageService.deleteFile(task.getDbFile().getId());
+                }
+                task.setDbFile(dbFile);
+            } catch (FileUploadException | FileNotFoundException e) {
+                log.error(e.getMessage());
+                return "taskPage";
+            }
+        } else {
+            log.info("uploadFile is NULL");
+            //logger.info("Is DBFile null: " + task.getDbFile() ) ;
+            //logger.info("Is FILENAME null: " + (task.getFileName() == null || task.getFileName().equals(""))) ;
+            if (task.getDbFile() != null && (task.getFileName() == null || task.getFileName().equals(""))) {
+                fileId = task.getDbFile().getId();
+                task.setDbFile(null);
+            }
+        }
+        taskService.updateObject(task);
+        if (fileId != null) {
+            log.info("Delete dbFile by ID= " + fileId);
+            dbFileStorageService.deleteById(fileId);
+        }
+        return "redirect:/tasks";
+    }
 
-				if (task.getDbFile() != null) {
-					fileId = task.getDbFile().getId();
-					//dbFileStorageService.deleteFile(task.getDbFile().getId());
-				}
-				task.setDbFile(dbFile);
-			} catch (FileUploadException | FileNotFoundException e) {
-				logger.error(e.getMessage());
-				return "taskPage";
-			}
-		} else {
-			logger.info("uploadFile is NULL");
-			//logger.info("Is DBFile null: " + task.getDbFile() ) ;
-			//logger.info("Is FILENAME null: " + (task.getFileName() == null || task.getFileName().equals(""))) ;
-			if (task.getDbFile() != null && (task.getFileName() == null || task.getFileName().equals(""))) {
+    @LogExecutionTime
+    @RequestMapping(value = {"/delete-{id}"}, method = RequestMethod.GET)
+    public String deleteTask(@PathVariable Long id) {
+        log.info("Delete {} with ID= {}", title, id);
+        taskService.deleteById(id);
+        return "redirect:/tasks";
+    }
 
-				fileId = task.getDbFile().getId();
-				task.setDbFile(null);
-			}
-		}
-		taskService.saveObject(task);
-		if (fileId != null) {
-			logger.info("Delete dbFile by ID= " + fileId);
-			dbFileStorageService.deleteById(fileId);
-		}
+    @RequestMapping(value = {"/pdfReport-{id}"}, method = RequestMethod.GET)
+    @ResponseBody
+    public void pdfReportTask(@PathVariable Long id, HttpServletResponse response) throws JRException, IOException {
+        //exporterService.export(ReportType.PDF, jasperService.taskReport(id), title + "_" + id, response);
+        log.info("Get PDF for {} with ID= {}", title, id);
+        Task task = taskService.findById(id);
+        jasperReportService.exportToResponseStream(JasperReportExporterType.X_PDF,
+                reportData.getReportData(task), title + "_" + task.getFullNumber(), response);
+    }
 
-		return "redirect:/tasks";
-	}
+    @RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
+    @ResponseBody
+    public void exportToExcelReportTask(HttpServletResponse response) throws JRException, IOException {
+        //exporterService.export(ReportType.XLSX, jasperService.tasksTable(filterData), title, response);
+        log.info("Export {} to Excel", title);
+        JasperReportData jasperReportData = reportData.getReportData(taskService.findByFilterData(getTaskViewFilter()), getTaskViewFilter());
+        jasperReportService.exportToResponseStream(JasperReportExporterType.XLSX,
+                jasperReportData, title, response);
 
-	@LogExecutionTime
-	@RequestMapping(value = {"/delete-{id}"}, method = RequestMethod.GET)
-	public String deleteTask(@PathVariable Long id) {
-		logger.info("Delete " + title + " with ID= " + id);
-		taskService.deleteById(id);
-		return "redirect:/tasks";
-	}
+    }
 
-	@RequestMapping(value = {"/pdfReport-{id}"}, method = RequestMethod.GET)
-	@ResponseBody
-	public void pdfReportTask(@PathVariable Long id, HttpServletResponse response) throws JRException, IOException {
-		//exporterService.export(ReportType.PDF, jasperService.taskReport(id), title + "_" + id, response);
-		logger.info("Get PDF for {} with ID= {}", title, id);
-		Task task = taskService.findById(id);
-		jasperReportService.exportToResponseStream(JasperReportExporterType.X_PDF,
-				reportData.getReportData(task), title + "_" + task.getFullNumber(), response);
-	}
+    @RequestMapping(value = {"/sendEmail-{id}"}, method = RequestMethod.GET)
+    public String sendEmail(Model model, @PathVariable Long id, HttpServletResponse response) throws JRException, IOException {
+        log.info("Send {} with ID= {}", title, id);
 
-	@RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
-	@ResponseBody
-	public void exportToExcelReportTask(HttpServletResponse response) throws JRException, IOException {
-		//exporterService.export(ReportType.XLSX, jasperService.tasksTable(filterData), title, response);
-		logger.info("Export " + title + " to Excel");
-		JasperReportData jasperReportData = reportData.getReportData(taskService.findByFilterData(filterData), filterData);
-		jasperReportService.exportToResponseStream(JasperReportExporterType.XLSX,
-				jasperReportData, title, response);
+        model.addAttribute("title", "email");
+        boolean result = false;
+        String taskMailingDeclineReason = "";
 
-	}
+        Task task = taskService.findById(id);
 
-	@RequestMapping(value = {"/sendEmail-{id}"}, method = RequestMethod.GET)
-	public String sendEmail(Model model, @PathVariable Long id, HttpServletResponse response) throws JRException, IOException {
-		logger.info("Send " + title + " with ID= " + id);
+        //logger.info(task.toString());
+        if (task != null) {
+            taskMailingDeclineReason = taskService.taskMailingDeclineReason(task);
+            if (taskMailingDeclineReason.equals("")) {
+                try {
+                    EmailMessage emailMessage = taskService.getEmailMessage(task);
 
-		model.addAttribute("title", "email");
-		boolean result = false;
-		String taskMailingDeclineReason = "";
+                    EmailAttachment reportAttachment = jasperReportService.getEmailAttachment(
+                            JasperReportExporterType.PDF, title + "_" + task.getFullNumber(), reportData.getReportData(task));
+                    if (reportAttachment != null) {
+                        emailMessage.getAttachments().add(reportAttachment);
+                    }
+                    mailServiceImp.sendEmail(emailMessage);
 
-		Task task = taskService.findById(id);
+                    result = true;
+                    log.info("Sent {} with ID= {} from {} to {}", title, id, task.getManager().getEmail(), task.getContractor().getEmail());
+                    taskMailingDeclineReason = messageSource.getMessage("message.email.sent_to",
+                            new String[]{task.getContractor().getFullName(), task.getContractor().getEmail()}, new Locale("ru"));
+                } catch (Exception e) {
+                    log.error("Email sanding error: {}", e.getMessage());
+                    //e.printStackTrace();
+                    taskMailingDeclineReason = messageSource.getMessage("message.email.service_error",
+                            null, new Locale("ru")) + ": " + e.getMessage();
+                }
+            }
+        } else {
+            taskMailingDeclineReason = messageSource.getMessage("message.email.miss_task_by_id",
+                    new String[]{String.valueOf(id)}, new Locale("ru"));
+        }
+        model.addAttribute("resultSuccess", result);
+        model.addAttribute("message", taskMailingDeclineReason);
 
-		//logger.info(task.toString());
-		if (task != null) {
-			taskMailingDeclineReason = taskService.taskMailingDeclineReason(task);
-			if (taskMailingDeclineReason.equals("")) {
-				try {
-					EmailMessage emailMessage = taskService.getEmailMessage(task);
-                    /*DataSource attachment = exporterService.getDataSource(jasperService.taskReport(task.getId()));
-                    if (attachment != null) {
-                        emailMessage.getAttachments().add(new EmailAttachment("Task.pdf", attachment));
-                    }*/
-					EmailAttachment reportAttachment = jasperReportService.getEmailAttachment(
-							JasperReportExporterType.PDF, title + "_" + task.getFullNumber(), reportData.getReportData(task));
-					if (reportAttachment != null) {
-						emailMessage.getAttachments().add(reportAttachment);
-					}
-					mailServiceImp.sendEmail(emailMessage);
+        return "emailResultPage";
+    }
 
-					result = true;
-					logger.info("Sent " + title + " with ID= " + id + " from " + task.getManager().getEmail() + " to " + task.getContractor().getEmail());
-					taskMailingDeclineReason = messageSource.getMessage("message.email.sent_to",
-							new String[]{task.getContractor().getFullName(), task.getContractor().getEmail()}, new Locale("ru"));
-				} catch (Exception e) {
-					// handle your exception when it fails to send email
-					logger.error("Email sanding error: {}", e.getMessage());
-					//e.printStackTrace();
-					taskMailingDeclineReason = messageSource.getMessage("message.email.service_error",
-							null, new Locale("ru")) + ": " + e.getMessage();
-				}
-			}
-		} else {
-			taskMailingDeclineReason = messageSource.getMessage("message.email.miss_task_by_id",
-					new String[]{String.valueOf(id)}, new Locale("ru"));
-		}
-		model.addAttribute("resultSuccess", result);
-		model.addAttribute("message", taskMailingDeclineReason);
-
-		return "emailResultPage";
-	}
-
-	@GetMapping("/downloadFile-{taskId}")
-	//https://www.callicoder.com/spring-boot-file-upload-download-jpa-hibernate-mysql-database-example/
-	public ResponseEntity<Resource> downloadFile(@PathVariable Long taskId) {
-		// Load file from database
-		Task task = taskService.findById(taskId);
-		DBFile dbFile = task.getDbFile();
-		//if (dbFile!=null && dbFile.getData()!=null) {
-		return ResponseEntity.ok()
-				.contentType(MediaType.parseMediaType(dbFile.getFileType()))
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + dbFile.getFileName() + "\"")
-				.body(new ByteArrayResource(dbFile.getData()));
-		//}
-	}
+    @GetMapping("/downloadFile-{taskId}")
+    //https://www.callicoder.com/spring-boot-file-upload-download-jpa-hibernate-mysql-database-example/
+    public ResponseEntity<Resource> downloadFile(@PathVariable Long taskId) {
+        // Load file from database
+        Task task = taskService.findById(taskId);
+        DBFile dbFile = task.getDbFile();
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(dbFile.getFileType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + dbFile.getFileName() + "\"")
+                .body(new ByteArrayResource(dbFile.getData()));
+    }
 
 
-	@RequestMapping(value = "/filter", method = RequestMethod.GET)
-	public String filterTask(@ModelAttribute("taskFilterData") FilterData filterData, BindingResult bindingResult,
-							 Model model) {
-		// logger.info("FilterData: " + filterData);
-		this.filterData = filterData;
+    @RequestMapping(value = "/filter", method = RequestMethod.GET)
+    public String filterTask(@ModelAttribute("taskFilterData") OrderViewFilter orderViewFilter, BindingResult bindingResult,
+                             Model model) {
+        updateViewFilter(orderViewFilter);
+        return "redirect:/tasks";
+    }
 
-		return "redirect:/tasks";
-	}
+    @RequestMapping(value = "/clearFilter", method = RequestMethod.GET)
+    public String clearFilterTask() {
+        updateViewFilter(new OrderViewFilter());
+        return "redirect:/tasks";
+    }
 
-	@RequestMapping(value = "/clearFilter", method = RequestMethod.GET)
-	//public String clearFilterTask(WebRequest request) {
-	public String clearFilterTask() {
-		this.filterData = new FilterData();
-		//request.removeAttribute("taskFilterData", WebRequest.SCOPE_SESSION);
-		return "redirect:/tasks";
-	}
+    /**
+     * This methods will provide lists and fields to views
+     */
+    @ModelAttribute("title")
+    public String initializeTitle() {
+        return this.title;
+    }
 
-	/**
-	 * This methods will provide lists and fields to views
-	 */
-	@ModelAttribute("title")
-	public String initializeTitle() {
-		return this.title;
-	}
+    @ModelAttribute("personName")
+    public String initializepersonName() {
+        return this.personName;
+    }
 
-	@ModelAttribute("personName")
-	public String initializepersonName() {
-		return this.personName;
-	}
-
-	@ModelAttribute("pageName")
-	public String initializePageName() {
-		return this.pageName;
-	}
+    @ModelAttribute("pageName")
+    public String initializePageName() {
+        return this.pageName;
+    }
 
 
-	@ModelAttribute("stateList")
-	public List<State> getStatesList() {
-		List<State> resultList = stateService.findAllObjects();
+    @ModelAttribute("stateList")
+    public List<State> getStatesList() {
+        List<State> resultList = stateService.findAllObjects();
         /*Collections.sort(resultList, new Comparator<Worker>() {
             @Override
             public int compare(Worker m1, Worker m2) {
@@ -396,37 +355,37 @@ public class TasksController {
             }
         });*/
 
-		return resultList;
-	}
+        return resultList;
+    }
 
-	@ModelAttribute("paymentList")
-	public List<Payment> getPaymentsList() {
-		List<Payment> resultList = paymentService.findAllObjects();
+    @ModelAttribute("paymentList")
+    public List<Payment> getPaymentsList() {
+        List<Payment> resultList = paymentService.findAllObjects();
         /*Collections.sort(resultList, new Comparator<Worker>() {
             @Override
             public int compare(Worker m1, Worker m2) {
                 return m1.getFullName().compareTo(m2.getFullName());
             }
         });*/
-		return resultList;
-	}
+        return resultList;
+    }
 
-	@ModelAttribute("managerList")
-	public List<Manager> getManagersList() {
-		List<Manager> resultList = managerService.findAllObjects();
-		Collections.sort(resultList, new Comparator<Manager>() {
-			@Override
-			public int compare(Manager m1, Manager m2) {
-				return m1.getFullName().compareTo(m2.getFullName());
-			}
-		});
+    @ModelAttribute("managerList")
+    public List<Manager> getManagersList() {
+        List<Manager> resultList = managerService.findAllObjects();
+        Collections.sort(resultList, new Comparator<Manager>() {
+            @Override
+            public int compare(Manager m1, Manager m2) {
+                return m1.getFullName().compareTo(m2.getFullName());
+            }
+        });
 
-		return resultList;
-	}
+        return resultList;
+    }
 
-	@ModelAttribute("contractorList")
-	public List<Contractor> getContractorsList() {
-		List<Contractor> resultList = contractorService.findAllObjects();
+    @ModelAttribute("contractorList")
+    public List<Contractor> getContractorsList() {
+        List<Contractor> resultList = contractorService.findAllObjects();
 		/*Collections.sort(resultList, new Comparator<Contractor>() {
 			@Override
 			public int compare(Contractor m1, Contractor m2) {
@@ -436,48 +395,48 @@ public class TasksController {
 		return resultList;
 		*/
 
-		List<Contractor> result = resultList.stream()           // convert list to stream
-				.filter(contractor -> !StringUtils.isEmpty(contractor.getCorpName())
-						&& contractor.getManager() != null && !StringUtils.isEmpty(contractor.getLastName())
-						&& !StringUtils.isEmpty(contractor.getFirstName()) && !StringUtils.isEmpty(contractor.getEmail())
-						&& !StringUtils.isEmpty(contractor.getPhone()) && !StringUtils.isEmpty(contractor.getAddress())
-				)
-				.sorted(Comparator.comparing(Contractor::getFullName))
-				.collect(Collectors.toList());
+        List<Contractor> result = resultList.stream()           // convert list to stream
+                .filter(contractor -> !StringUtils.isEmpty(contractor.getCorpName())
+                        && contractor.getManager() != null && !StringUtils.isEmpty(contractor.getLastName())
+                        && !StringUtils.isEmpty(contractor.getFirstName()) && !StringUtils.isEmpty(contractor.getEmail())
+                        && !StringUtils.isEmpty(contractor.getPhone()) && !StringUtils.isEmpty(contractor.getAddress())
+                )
+                .sorted(Comparator.comparing(Contractor::getFullName))
+                .collect(Collectors.toList());
 
-		return result;
-	}
+        return result;
+    }
 
-	@ModelAttribute("productionList")
-	public List<ProductionDirectory> getProductionsList() {
-		List<ProductionDirectory> resultList = productionService.findAllObjects();
-		Collections.sort(resultList, new Comparator<ProductionDirectory>() {
-			@Override
-			public int compare(ProductionDirectory m1, ProductionDirectory m2) {
-				return m1.getFullName().compareTo(m2.getFullName());
-			}
-		});
+    @ModelAttribute("productionList")
+    public List<ProductionDirectory> getProductionsList() {
+        List<ProductionDirectory> resultList = productionService.findAllObjects();
+        Collections.sort(resultList, new Comparator<ProductionDirectory>() {
+            @Override
+            public int compare(ProductionDirectory m1, ProductionDirectory m2) {
+                return m1.getFullName().compareTo(m2.getFullName());
+            }
+        });
 
-		return resultList;
-	}
+        return resultList;
+    }
 
-	@ModelAttribute("productionTypesList")
-	public List<ProductionTypeDirectory> initializeProductionTypes() {
-		return productionTypeService.findAllObjects();
-	}
+    @ModelAttribute("productionTypesList")
+    public List<ProductionTypeDirectory> initializeProductionTypes() {
+        return productionTypeService.findAllObjects();
+    }
 
-	@ModelAttribute("clientList")
-	public List<Client> getClientsList() {
-		List<Client> resultList = clientService.findAllObjects();
+    @ModelAttribute("clientList")
+    public List<Client> getClientsList() {
+        List<Client> resultList = clientService.findAllObjects();
 
-		List<Client> result = resultList.stream()           // convert list to stream
-				.filter(client -> !StringUtils.isEmpty(client.getFullName())
-						&& client.getManager() != null && !StringUtils.isEmpty(client.getLastName())
-						&& !StringUtils.isEmpty(client.getFirstName()) && !StringUtils.isEmpty(client.getEmail())
-						&& !StringUtils.isEmpty(client.getPhone()) && !StringUtils.isEmpty(client.getAddress())
-				)
-				.sorted(Comparator.comparing(Client::getFullName))
-				.collect(Collectors.toList());
+        List<Client> result = resultList.stream()           // convert list to stream
+                .filter(client -> !StringUtils.isEmpty(client.getFullName())
+                        && client.getManager() != null && !StringUtils.isEmpty(client.getLastName())
+                        && !StringUtils.isEmpty(client.getFirstName()) && !StringUtils.isEmpty(client.getEmail())
+                        && !StringUtils.isEmpty(client.getPhone()) && !StringUtils.isEmpty(client.getAddress())
+                )
+                .sorted(Comparator.comparing(Client::getFullName))
+                .collect(Collectors.toList());
 
 		/*Collections.sort(resultList, new Comparator<Client>() {
 			@Override
@@ -487,148 +446,130 @@ public class TasksController {
 		});
 		return resultList;
 		*/
-		return result;
-	}
+        return result;
+    }
 
-	@ModelAttribute("stockList")
-	public List<StockDirectory> getStocksList() {
-		List<StockDirectory> resultList = stockService.findAllObjects();
-		Collections.sort(resultList, new Comparator<StockDirectory>() {
-			@Override
-			public int compare(StockDirectory m1, StockDirectory m2) {
-				return m1.getName().compareTo(m2.getName());
-			}
-		});
+    @ModelAttribute("stockList")
+    public List<StockDirectory> getStocksList() {
+        List<StockDirectory> resultList = stockService.findAllObjects();
+        Collections.sort(resultList, new Comparator<StockDirectory>() {
+            @Override
+            public int compare(StockDirectory m1, StockDirectory m2) {
+                return m1.getName().compareTo(m2.getName());
+            }
+        });
 
-		return resultList;
-	}
+        return resultList;
+    }
 
-	@ModelAttribute("chromaticityList")
-	public List<ChromaticityDirectory> getChromaticityList() {
-		List<ChromaticityDirectory> resultList = chromaticityService.findAllObjects();
-		Collections.sort(resultList, new Comparator<ChromaticityDirectory>() {
-			@Override
-			public int compare(ChromaticityDirectory m1, ChromaticityDirectory m2) {
-				return m1.getName().compareTo(m2.getName());
-			}
-		});
+    @ModelAttribute("chromaticityList")
+    public List<ChromaticityDirectory> getChromaticityList() {
+        List<ChromaticityDirectory> resultList = chromaticityService.findAllObjects();
+        Collections.sort(resultList, new Comparator<ChromaticityDirectory>() {
+            @Override
+            public int compare(ChromaticityDirectory m1, ChromaticityDirectory m2) {
+                return m1.getName().compareTo(m2.getName());
+            }
+        });
 
-		return resultList;
-	}
+        return resultList;
+    }
 
-	@ModelAttribute("formatList")
-	public List<FormatDirectory> getFormatsList() {
-		List<FormatDirectory> resultList = formatService.findAllObjects();
-		Collections.sort(resultList, new Comparator<FormatDirectory>() {
-			@Override
-			public int compare(FormatDirectory m1, FormatDirectory m2) {
-				return m1.getName().compareTo(m2.getName());
-			}
-		});
+    @ModelAttribute("formatList")
+    public List<FormatDirectory> getFormatsList() {
+        List<FormatDirectory> resultList = formatService.findAllObjects();
+        Collections.sort(resultList, new Comparator<FormatDirectory>() {
+            @Override
+            public int compare(FormatDirectory m1, FormatDirectory m2) {
+                return m1.getName().compareTo(m2.getName());
+            }
+        });
 
-		return resultList;
-	}
+        return resultList;
+    }
 
-	@ModelAttribute("laminateList")
-	public List<LaminateDirectory> getLaminatesList() {
-		List<LaminateDirectory> resultList = laminateService.findAllObjects();
-		Collections.sort(resultList, new Comparator<LaminateDirectory>() {
-			@Override
-			public int compare(LaminateDirectory m1, LaminateDirectory m2) {
-				return m1.getName().compareTo(m2.getName());
-			}
-		});
+    @ModelAttribute("laminateList")
+    public List<LaminateDirectory> getLaminatesList() {
+        List<LaminateDirectory> resultList = laminateService.findAllObjects();
+        Collections.sort(resultList, new Comparator<LaminateDirectory>() {
+            @Override
+            public int compare(LaminateDirectory m1, LaminateDirectory m2) {
+                return m1.getName().compareTo(m2.getName());
+            }
+        });
 
-		return resultList;
-	}
+        return resultList;
+    }
 
-	@ModelAttribute("paperList")
-	public List<PaperDirectory> getPapersList() {
-		List<PaperDirectory> resultList = paperService.findAllObjects();
-		Collections.sort(resultList, new Comparator<PaperDirectory>() {
-			@Override
-			public int compare(PaperDirectory m1, PaperDirectory m2) {
-				return m1.getName().compareTo(m2.getName());
-			}
-		});
+    @ModelAttribute("paperList")
+    public List<PaperDirectory> getPapersList() {
+        List<PaperDirectory> resultList = paperService.findAllObjects();
+        Collections.sort(resultList, new Comparator<PaperDirectory>() {
+            @Override
+            public int compare(PaperDirectory m1, PaperDirectory m2) {
+                return m1.getName().compareTo(m2.getName());
+            }
+        });
 
-		return resultList;
-	}
+        return resultList;
+    }
 
-	@ModelAttribute("cringleList")
-	public List<CringleDirectory> getCringlesList() {
-		List<CringleDirectory> resultList = cringleService.findAllObjects();
-		Collections.sort(resultList, new Comparator<CringleDirectory>() {
-			@Override
-			public int compare(CringleDirectory m1, CringleDirectory m2) {
-				return m1.getName().compareTo(m2.getName());
-			}
-		});
+    @ModelAttribute("cringleList")
+    public List<CringleDirectory> getCringlesList() {
+        List<CringleDirectory> resultList = cringleService.findAllObjects();
+        Collections.sort(resultList, new Comparator<CringleDirectory>() {
+            @Override
+            public int compare(CringleDirectory m1, CringleDirectory m2) {
+                return m1.getName().compareTo(m2.getName());
+            }
+        });
 
-		return resultList;
-	}
+        return resultList;
+    }
 
 
-	@ModelAttribute("printingUnitList")
-	public List<PrintingUnitDirectory> getPrintingUnitList() {
-		List<PrintingUnitDirectory> resultList = printingUnitService.findAllObjects();
-		Collections.sort(resultList, new Comparator<PrintingUnitDirectory>() {
-			@Override
-			public int compare(PrintingUnitDirectory m1, PrintingUnitDirectory m2) {
-				return m1.getName().compareTo(m2.getName());
-			}
-		});
+    @ModelAttribute("printingUnitList")
+    public List<PrintingUnitDirectory> getPrintingUnitList() {
+        List<PrintingUnitDirectory> resultList = printingUnitService.findAllObjects();
+        Collections.sort(resultList, new Comparator<PrintingUnitDirectory>() {
+            @Override
+            public int compare(PrintingUnitDirectory m1, PrintingUnitDirectory m2) {
+                return m1.getName().compareTo(m2.getName());
+            }
+        });
 
-		return resultList;
-	}
+        return resultList;
+    }
 
-	@ModelAttribute("numberBaseList")
-	public List<NumberBaseDirectory> getNumberBaseList() {
-		List<NumberBaseDirectory> resultList = numberBaseService.findAllObjects();
-		Collections.sort(resultList, new Comparator<NumberBaseDirectory>() {
-			@Override
-			public int compare(NumberBaseDirectory m1, NumberBaseDirectory m2) {
-				return m1.getName().compareTo(m2.getName());
-			}
-		});
+    @ModelAttribute("numberBaseList")
+    public List<NumberBaseDirectory> getNumberBaseList() {
+        List<NumberBaseDirectory> resultList = numberBaseService.findAllObjects();
+        Collections.sort(resultList, new Comparator<NumberBaseDirectory>() {
+            @Override
+            public int compare(NumberBaseDirectory m1, NumberBaseDirectory m2) {
+                return m1.getName().compareTo(m2.getName());
+            }
+        });
 
-		return resultList;
-	}
+        return resultList;
+    }
 
-	@ModelAttribute("taskFilterData")
-	public FilterData getFilterData() {
-		//logger.info("Get Filter: " + filterData);
-		if (filterData == null) {
-			filterData = new FilterData();
-			filterData.setDateBeginFrom(DateUtils.firstDayOfMonth(new Date()));
-		}
-		return filterData;
-	}
+    @ModelAttribute("taskFilterData")
+    public OrderViewFilter getTaskViewFilter() {
+        log.info("Get Filter: {}", getViewFilter());
 
-	@ModelAttribute("hasFilterData")
-	public boolean hasFilterData() {
-		//logger.info("Get Filter: " + filterData);
-		return getFilterData().hasData();
-	}
+        return (OrderViewFilter) getViewFilter();
+    }
 
-	/*
-	@ModelAttribute("tasksList")
-	public List<Task> getTasksListData() {
-		//logger.info("Get Filter: " + filterData);
-		tasksList = taskService.findByFilterData(getFilterData());
-		// logger.info("Get TaskList : " + tasksList.size());
+    @ModelAttribute("hasFilterData")
+    public boolean isViewFilterHasData() {
+        return getViewFilter().hasData();
+    }
 
-		return tasksList;
-	}
-	*/
-
-	@ModelAttribute("tasksList")
-	public List<ViewTask> getViewTasksListData() {
-		//logger.info("Get Filter: " + filterData);
-		tasksList = viewTaskService.findByFilterData(getFilterData());
-		// logger.info("Get TaskList : " + tasksList.size());
-
-		return tasksList;
-	}
+    @ModelAttribute("tasksList")
+    public List<ViewTask> getViewTasksListData() {
+        tasksList = viewTaskService.findByFilterData(getTaskViewFilter());
+        return tasksList;
+    }
 
 }

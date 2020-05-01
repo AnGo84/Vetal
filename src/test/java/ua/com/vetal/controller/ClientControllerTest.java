@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.Client;
 import ua.com.vetal.entity.Manager;
-import ua.com.vetal.entity.filter.ClientFilter;
+import ua.com.vetal.entity.filter.ClientViewFilter;
 import ua.com.vetal.service.ClientServiceImpl;
 
 import java.util.Arrays;
@@ -191,15 +191,15 @@ public class ClientControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenFilterClientsAsAuthorizedWithNotNullUser_thenOk() throws Exception {
-        ClientFilter clientFilter = new ClientFilter();
-        clientFilter.setFullName("fullName");
-		clientFilter.setManager(manager);
-		mockMvc.perform(get(MAPPED_URL + "/filter")
-				.param("clientFilterData", clientFilter.toString())
-		)
-				//.andDo
-				.andExpect(status().isFound())
-				.andExpect(redirectedUrl(MAPPED_URL));
+        ClientViewFilter clientViewFilter = new ClientViewFilter();
+        clientViewFilter.setFullName("fullName");
+        clientViewFilter.setManager(manager);
+        mockMvc.perform(get(MAPPED_URL + "/filter")
+                .param("clientFilterData", clientViewFilter.toString())
+        )
+                //.andDo
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl(MAPPED_URL));
     }
 
     @Test

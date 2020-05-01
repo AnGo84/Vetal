@@ -10,7 +10,7 @@ import org.springframework.data.domain.Sort;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.dao.StencilDAO;
 import ua.com.vetal.entity.Stencil;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.repositories.StencilRepository;
 
 import java.util.Arrays;
@@ -161,11 +161,11 @@ class StencilServiceImplTest {
 	//@Disabled("Disabled until refactoring filters")
 	@Test
 	void whenFindByFilterData() {
-		when(mockStencilDAO.findByFilterData(any(FilterData.class))).thenReturn(Arrays.asList(stencil));
-		List<Stencil> objects = stencilService.findByFilterData(new FilterData());
-		assertNotNull(objects);
-		assertFalse(objects.isEmpty());
-		assertEquals(objects.size(), 1);
+        when(mockStencilDAO.findByFilterData(any(OrderViewFilter.class))).thenReturn(Arrays.asList(stencil));
+        List<Stencil> objects = stencilService.findByFilterData(new OrderViewFilter());
+        assertNotNull(objects);
+        assertFalse(objects.isEmpty());
+        assertEquals(objects.size(), 1);
 
 		/*
 

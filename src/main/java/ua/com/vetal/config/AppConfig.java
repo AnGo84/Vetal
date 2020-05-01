@@ -4,20 +4,25 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-import ua.com.vetal.entity.filter.FilterData;
+import org.springframework.web.context.annotation.SessionScope;
+import ua.com.vetal.entity.filter.OrderViewFilter;
+import ua.com.vetal.entity.filter.ViewFilter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 public class AppConfig {
-    /*    @Bean
-        @Primary
-        @ConfigurationProperties(prefix = "spring.datasource")
-        public DataSource primaryDataSource() {
-            return DataSourceBuilder.create().build();
-        }*/
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    public FilterData filterDataBean() {
-        return new FilterData();
+    public OrderViewFilter filterDataBean() {
+        return new OrderViewFilter();
+    }
+
+    @Bean
+    @SessionScope
+    public Map<String, ViewFilter> getViewFilters() {
+        return new HashMap<>();
     }
 }

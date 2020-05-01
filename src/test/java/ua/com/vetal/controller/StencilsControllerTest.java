@@ -10,7 +10,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.Stencil;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.report.jasperReport.reportdata.TaskJasperReportData;
 import ua.com.vetal.service.StencilServiceImpl;
 import ua.com.vetal.service.reports.JasperReportService;
@@ -261,11 +261,11 @@ public class StencilsControllerTest {
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenFilterStencilsAsAuthorizedWithNotNullUser_thenOk() throws Exception {
-		FilterData filterData = new FilterData();
-		filterData.setAccount("account");
-		filterData.setManager(filterData.getManager());
+		OrderViewFilter orderViewFilter = new OrderViewFilter();
+		orderViewFilter.setAccount("account");
+		orderViewFilter.setManager(orderViewFilter.getManager());
 		mockMvc.perform(get(MAPPED_URL + "/filter")
-				.param("FilterDataData", filterData.toString())
+				.param("FilterDataData", orderViewFilter.toString())
 		)
 				//.andDo
 				.andExpect(status().isFound())

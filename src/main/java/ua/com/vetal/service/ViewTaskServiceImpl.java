@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.dao.ViewTaskDAO;
 import ua.com.vetal.entity.ViewTask;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.repositories.ViewTaskRepository;
 
 import java.util.List;
@@ -38,10 +38,10 @@ public class ViewTaskServiceImpl {
         return getList;
     }
 
-    public List<ViewTask> findByFilterData(FilterData filterData) {
-        List<ViewTask> viewTasks = viewTaskDAO.findByFilterData(filterData);
+    public List<ViewTask> findByFilterData(OrderViewFilter orderViewFilter) {
+        List<ViewTask> viewTasks = viewTaskDAO.findByFilterData(orderViewFilter);
 
-        if (filterData == null) {
+        if (orderViewFilter == null) {
             return findAllObjects();
         }
 

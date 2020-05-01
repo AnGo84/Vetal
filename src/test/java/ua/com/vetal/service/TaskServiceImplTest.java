@@ -12,7 +12,7 @@ import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.dao.TaskDAO;
 import ua.com.vetal.email.EmailMessage;
 import ua.com.vetal.entity.Task;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.repositories.TaskRepository;
 import ua.com.vetal.utils.StringUtils;
 
@@ -186,8 +186,8 @@ public class TaskServiceImplTest {
 
     @Test
     void whenFindByFilterData() {
-        when(mockTaskDAO.findByFilterData(any(FilterData.class))).thenReturn(Arrays.asList(task));
-        List<Task> objects = taskService.findByFilterData(new FilterData());
+        when(mockTaskDAO.findByFilterData(any(OrderViewFilter.class))).thenReturn(Arrays.asList(task));
+        List<Task> objects = taskService.findByFilterData(new OrderViewFilter());
         assertNotNull(objects);
         assertFalse(objects.isEmpty());
         assertEquals(objects.size(), 1);

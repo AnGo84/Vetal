@@ -3,7 +3,7 @@ package ua.com.vetal.dao;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.entity.Stencil;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -51,7 +51,7 @@ public class StencilDAO {
         }
     }
 
-    public List<Stencil> findByFilterData(FilterData filterData) {
+    public List<Stencil> findByFilterData(OrderViewFilter orderViewFilter) {
         List<Stencil> list = null;
 
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
@@ -60,17 +60,17 @@ public class StencilDAO {
 
         Predicate predicate = builder.conjunction();
 
-        if (filterData != null) {
-            if (filterData.getAccount() != null && !filterData.getAccount().equals("")) {
+        if (orderViewFilter != null) {
+            if (orderViewFilter.getAccount() != null && !orderViewFilter.getAccount().equals("")) {
 //			predicate = builder.and(predicate, builder.equal(root.get("account"), filterData.getAccount()));
                 predicate = builder.and(predicate, builder.like(builder.lower(root.get("account")),
-                        ("%" + filterData.getAccount() + "%").toLowerCase()));
+                        ("%" + orderViewFilter.getAccount() + "%").toLowerCase()));
 
             }
 
-            if (filterData.getNumber() != null && !filterData.getNumber().equals("")) {
+            if (orderViewFilter.getNumber() != null && !orderViewFilter.getNumber().equals("")) {
                 predicate = builder.and(predicate, builder.like(builder.lower(root.get("fullNumber")),
-                        ("%" + filterData.getNumber() + "%").toLowerCase()));
+                        ("%" + orderViewFilter.getNumber() + "%").toLowerCase()));
 
             }
 
@@ -79,33 +79,33 @@ public class StencilDAO {
 					("%" + filterData.getFileName() + "%").toLowerCase()));
 		}*/
 
-            if (filterData.getClient() != null && filterData.getClient().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("client"), filterData.getClient()));
+            if (orderViewFilter.getClient() != null && orderViewFilter.getClient().getId() != null) {
+                predicate = builder.and(predicate, builder.equal(root.get("client"), orderViewFilter.getClient()));
             }
 
-            if (filterData.getPrinter() != null && filterData.getPrinter().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("printer"), filterData.getPrinter()));
+            if (orderViewFilter.getPrinter() != null && orderViewFilter.getPrinter().getId() != null) {
+                predicate = builder.and(predicate, builder.equal(root.get("printer"), orderViewFilter.getPrinter()));
             }
 
-            if (filterData.getManager() != null && filterData.getManager().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("manager"), filterData.getManager()));
+            if (orderViewFilter.getManager() != null && orderViewFilter.getManager().getId() != null) {
+                predicate = builder.and(predicate, builder.equal(root.get("manager"), orderViewFilter.getManager()));
             }
 
-            if (filterData.getPaper() != null && filterData.getPaper().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("paper"), filterData.getPaper()));
+            if (orderViewFilter.getPaper() != null && orderViewFilter.getPaper().getId() != null) {
+                predicate = builder.and(predicate, builder.equal(root.get("paper"), orderViewFilter.getPaper()));
             }
 
-            if (filterData.getProduction() != null && filterData.getProduction().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("production"), filterData.getProduction()));
+            if (orderViewFilter.getProduction() != null && orderViewFilter.getProduction().getId() != null) {
+                predicate = builder.and(predicate, builder.equal(root.get("production"), orderViewFilter.getProduction()));
             }
-            if (filterData.getDateBeginFrom() != null) {
+            if (orderViewFilter.getDateBeginFrom() != null) {
                 predicate = builder.and(predicate,
-                        builder.greaterThanOrEqualTo(root.get("dateBegin"), filterData.getDateBeginFrom()));
+                        builder.greaterThanOrEqualTo(root.get("dateBegin"), orderViewFilter.getDateBeginFrom()));
             }
 
-            if (filterData.getDateBeginTill() != null) {
+            if (orderViewFilter.getDateBeginTill() != null) {
                 predicate = builder.and(predicate,
-                        builder.lessThanOrEqualTo(root.get("dateBegin"), filterData.getDateBeginTill()));
+                        builder.lessThanOrEqualTo(root.get("dateBegin"), orderViewFilter.getDateBeginTill()));
             }
         }
         query.where(predicate);

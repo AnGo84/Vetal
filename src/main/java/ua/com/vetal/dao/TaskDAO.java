@@ -3,7 +3,7 @@ package ua.com.vetal.dao;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.entity.Task;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -53,7 +53,7 @@ public class TaskDAO {
     }
 
 
-    public List<Task> findByFilterData(FilterData filterData) {
+    public List<Task> findByFilterData(OrderViewFilter orderViewFilter) {
         List<Task> list = null;
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Task> query = builder.createQuery(Task.class);
@@ -61,57 +61,57 @@ public class TaskDAO {
 
         Predicate predicate = builder.conjunction();
 
-        if (filterData != null) {
+        if (orderViewFilter != null) {
 
-            if (filterData.getAccount() != null && !filterData.getAccount().equals("")) {
-                predicate = builder.and(predicate, builder.equal(root.get("account"), filterData.getAccount()));
+            if (orderViewFilter.getAccount() != null && !orderViewFilter.getAccount().equals("")) {
+                predicate = builder.and(predicate, builder.equal(root.get("account"), orderViewFilter.getAccount()));
                 /*
                  * predicate = builder.and(predicate,
                  * builder.like(builder.lower(builder.toString(root.get("account")))
                  * , ("%" + filterData.getAccount() + "%").toLowerCase()));
                  */
                 predicate = builder.and(predicate, builder.like(builder.lower(root.get("account")),
-                        ("%" + filterData.getAccount() + "%").toLowerCase()));
+                        ("%" + orderViewFilter.getAccount() + "%").toLowerCase()));
             }
 
 
-            if (filterData.getNumber() != null && !filterData.getNumber().equals("")) {
+            if (orderViewFilter.getNumber() != null && !orderViewFilter.getNumber().equals("")) {
                 predicate = builder.and(predicate, builder.like(builder.lower(root.get("fullNumber")),
-                        ("%" + filterData.getNumber() + "%").toLowerCase()));
+                        ("%" + orderViewFilter.getNumber() + "%").toLowerCase()));
 
             }
 
-            if (filterData.getFileName() != null && !filterData.getFileName().equals("")) {
+            if (orderViewFilter.getFileName() != null && !orderViewFilter.getFileName().equals("")) {
                 predicate = builder.and(predicate, builder.like(builder.lower(root.get("fileName")),
-                        ("%" + filterData.getFileName() + "%").toLowerCase()));
+                        ("%" + orderViewFilter.getFileName() + "%").toLowerCase()));
             }
 
-            if (filterData.getClient() != null && filterData.getClient().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("client"), filterData.getClient()));
+            if (orderViewFilter.getClient() != null && orderViewFilter.getClient().getId() != null) {
+                predicate = builder.and(predicate, builder.equal(root.get("client"), orderViewFilter.getClient()));
             }
 
-            if (filterData.getContractor() != null && filterData.getContractor().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("contractor"), filterData.getContractor()));
+            if (orderViewFilter.getContractor() != null && orderViewFilter.getContractor().getId() != null) {
+                predicate = builder.and(predicate, builder.equal(root.get("contractor"), orderViewFilter.getContractor()));
             }
 
-            if (filterData.getManager() != null && filterData.getManager().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("manager"), filterData.getManager()));
+            if (orderViewFilter.getManager() != null && orderViewFilter.getManager().getId() != null) {
+                predicate = builder.and(predicate, builder.equal(root.get("manager"), orderViewFilter.getManager()));
             }
-            if (filterData.getPaper() != null && filterData.getPaper().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("paper"), filterData.getPaper()));
+            if (orderViewFilter.getPaper() != null && orderViewFilter.getPaper().getId() != null) {
+                predicate = builder.and(predicate, builder.equal(root.get("paper"), orderViewFilter.getPaper()));
             }
-            if (filterData.getProduction() != null && filterData.getProduction().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("production"), filterData.getProduction()));
+            if (orderViewFilter.getProduction() != null && orderViewFilter.getProduction().getId() != null) {
+                predicate = builder.and(predicate, builder.equal(root.get("production"), orderViewFilter.getProduction()));
             }
 
-            if (filterData.getDateBeginFrom() != null) {
+            if (orderViewFilter.getDateBeginFrom() != null) {
                 predicate = builder.and(predicate,
-                        builder.greaterThanOrEqualTo(root.get("dateBegin"), filterData.getDateBeginFrom()));
+                        builder.greaterThanOrEqualTo(root.get("dateBegin"), orderViewFilter.getDateBeginFrom()));
             }
 
-            if (filterData.getDateBeginTill() != null) {
+            if (orderViewFilter.getDateBeginTill() != null) {
                 predicate = builder.and(predicate,
-                        builder.lessThanOrEqualTo(root.get("dateBegin"), filterData.getDateBeginTill()));
+                        builder.lessThanOrEqualTo(root.get("dateBegin"), orderViewFilter.getDateBeginTill()));
             }
 
             /*
