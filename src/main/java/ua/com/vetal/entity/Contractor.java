@@ -8,7 +8,6 @@ import javax.validation.constraints.Size;
 @Table(name = "contractors")
 public class Contractor extends AbstractPerson {
 
-
     private Manager manager;
 
     private String address;

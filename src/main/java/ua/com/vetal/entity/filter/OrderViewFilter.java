@@ -90,7 +90,7 @@ public class OrderViewFilter implements ViewFilter {
     @Override
     public ViewFilter getDefault() {
         OrderViewFilter orderViewFilter = new OrderViewFilter();
-        orderViewFilter.setDateBeginFrom(DateUtils.firstDayOfMonth(new Date()));
+        orderViewFilter.setDateBeginFrom(DateUtils.firstDayOfMonth(DateUtils.addToDate(new Date(), 2, -1)));
         return orderViewFilter;
     }
 

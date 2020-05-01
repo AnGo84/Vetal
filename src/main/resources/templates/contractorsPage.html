@@ -100,15 +100,19 @@
                             <th th:text="#{label.id}" width="100">Id</th>
                             <th th:text="#{label.corpName}">CorpName</th>
                             <th th:text="#{label.manager}">Manager</th>
-                            <th th:text="#{label.lastname}">LastName</th>
+                            <th th:text="#{label.person.full_name}">Full name</th>
+                            <!--<th th:text="#{label.lastname}">LastName</th>
                             <th th:text="#{label.firstname}">FirstName</th>
-                            <th th:text="#{label.middlename}">MiddleName</th>
+                            <th th:text="#{label.middlename}">MiddleName</th>-->
                             <th th:text="#{label.email}">Email</th>
                             <th th:text="#{label.phone}">Phone</th>
-                            <th class="no-sort" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"
-                                width="90"></th>
-                            <th class="no-sort" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"
-                                width="90"></th>
+
+                            <th class="no-sort text-center"
+                                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"
+                                style="vertical-align: middle;" width="50"> #
+                            </th>
+                            <!--<th class="no-sort text-center" style="vertical-align: middle;" width="50"
+                                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"></th>-->
                         </tr>
                         </thead>
                         <tbody>
@@ -117,33 +121,44 @@
                             <td th:text="${person.id}"></td>
                             <td th:text="${person.fullName}"></td>
                             <td th:text="${person?.manager?.fullName}"></td>
-                            <td th:text="${person.lastName}"></td>
+                            <td th:text="${person.getPersonFullName()}"></td>
+                            <!--<td th:text="${person.lastName}"></td>
                             <td th:text="${person.firstName}"></td>
-                            <td th:text="${person.middleName}"></td>
+                            <td th:text="${person.middleName}"></td>-->
                             <td th:text="${person.email}"></td>
                             <td th:text="${person.phone}"></td>
 
                             <td class="text-center align-self-center"
-                                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"><a
-                                    class="btn btn-success btn-sm custom-width"
-                                    role="button" style="width: 100px;"
-                                    th:href="@{${pageName}+'/edit-' + ${person.id}}" th:text="#{label.edit}">Edit</a>
-                            </td>
-                            <td class="text-center align-self-center"
-                                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">
+                                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"
+                                style="vertical-align: middle;">
+                                <div class="btn-group btn-group-sm">
+                                    <!--<td class="text-center align-self-center"
+                                        sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">-->
+                                    <!--<a class="btn btn-success btn-sm custom-width" role="button" style="width: 100px;"
+                                        th:href="@{${pageName}+'/edit-' + ${person.id}}" th:text="#{label.edit}">Edit</a>-->
+                                    <a class="btn btn-success btn-sm mx-sm-1"
+                                       role="button" th:href="@{${pageName}+'/edit-' + ${person.id}}"
+                                       th:title="#{message.record.edit}"><i class="fa fa-pencil"></i></a>
+                                    <!--</td>
+                                         <td class="text-center align-self-center"
+                                                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">-->
 
-                                <form accept-charset="UTF-8" action="#"
-                                      method="GET"
-                                      style="display: inline" th:action="@{${pageName}+'/delete-' + ${person.id}}">
-                                    <button class="btn btn-sm btn-danger custom-width" data-target="#confirmDelete"
-                                            data-toggle="modal" style="width: 100px;"
-                                            th:attr="data-title=#{label.delete_record},data-message=#{message.delete_confirm_message}"
-                                            th:text="#{label.delete}"
-                                            type="button">
-                                        <i class="glyphicon glyphicon-trash"></i>Delete
-                                    </button>
-                                </form>
-
+                                    <form accept-charset="UTF-8" action="#"
+                                          method="GET"
+                                          style="display: inline" th:action="@{${pageName}+'/delete-' + ${person.id}}">
+                                        <!--<button class="btn btn-sm btn-danger custom-width" data-target="#confirmDelete"
+                                                data-toggle="modal" style="width: 100px;"
+                                                th:attr="data-title=#{label.delete_record},data-message=#{message.delete_confirm_message}"
+                                                th:text="#{label.delete}" type="button">
+                                            <i class="glyphicon glyphicon-trash"></i>Delete
+                                        </button>-->
+                                        <button class="btn btn-sm btn-danger mx-sm-1"
+                                                data-target="#confirmDelete" data-toggle="modal"
+                                                th:title="#{message.record.delete}" type="button">
+                                            <i class="fa fa-trash-o"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                             <!-- <td><button type="button" class="btn btn-danger custom-width">Remove</button></td> -->
                         </tr>
