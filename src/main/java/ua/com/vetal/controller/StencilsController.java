@@ -75,8 +75,8 @@ public class StencilsController extends BaseController {
 	private KraskoottiskService kraskoottiskService;
 
 	public StencilsController(Map<String, ViewFilter> viewFilters) {
-		super("StencilsController", viewFilters);
-		initViewFilter(new OrderViewFilter());
+		super("StencilsController", viewFilters, new OrderViewFilter());
+		//initViewFilter(new OrderViewFilter());
 	}
 
 	@LogExecutionTime

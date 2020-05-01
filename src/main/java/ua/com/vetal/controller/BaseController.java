@@ -11,12 +11,13 @@ import java.util.Map;
 public class BaseController {
     private final String controllerName;
     private final Map<String, ViewFilter> viewFilterMap;
-    private ViewFilter viewFilter;
+    private final ViewFilter defaultFilter;
+    //private ViewFilter viewFilter;
 
     public ViewFilter getViewFilter() {
-        viewFilter = viewFilterMap.get(controllerName);
+        ViewFilter viewFilter = viewFilterMap.get(controllerName);
         if (viewFilter == null) {
-            viewFilter = viewFilter.getDefault();
+            viewFilter = defaultFilter.getDefault();
             viewFilterMap.put(controllerName, viewFilter);
         }
         return viewFilter;
@@ -24,12 +25,13 @@ public class BaseController {
 
     public ViewFilter updateViewFilter(ViewFilter viewFilter) {
         viewFilter = viewFilterMap.put(controllerName, viewFilter);
+
         return viewFilter;
     }
 
-    public void initViewFilter(ViewFilter viewFilter) {
+    /*public void initViewFilter(ViewFilter viewFilter) {
         if (!viewFilterMap.containsKey(controllerName)) {
             viewFilterMap.put(controllerName, viewFilter);
         }
-    }
+    }*/
 }

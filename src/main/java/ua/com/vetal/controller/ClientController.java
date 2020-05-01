@@ -45,8 +45,8 @@ public class ClientController extends BaseController {
     private JasperReportService jasperReportService;
 
     public ClientController(Map<String, ViewFilter> viewFilters) {
-        super("ClientController", viewFilters);
-        initViewFilter(new ClientViewFilter());
+        super("ClientController", viewFilters, new ClientViewFilter());
+        //initViewFilter(new ClientViewFilter());
     }
 
     @RequestMapping(value = {"", "/list"}, method = RequestMethod.GET)

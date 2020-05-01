@@ -47,8 +47,8 @@ public class ContractorController extends BaseController {
     private JasperReportService jasperReportService;
 
     public ContractorController(Map<String, ViewFilter> viewFilters) {
-        super("ContractorController", viewFilters);
-        initViewFilter(new PersonViewFilter());
+        super("ContractorController", viewFilters, new PersonViewFilter());
+        //initViewFilter(new PersonViewFilter());
     }
 
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)

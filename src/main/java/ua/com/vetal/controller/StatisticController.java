@@ -61,8 +61,8 @@ public class StatisticController extends BaseController {
     private JasperReportService jasperReportService;
 
     public StatisticController(Map<String, ViewFilter> viewFilters) {
-        super("StatisticController", viewFilters);
-        initViewFilter(new OrderViewFilter());
+        super("StatisticController", viewFilters, new OrderViewFilter());
+        //initViewFilter(new OrderViewFilter());
     }
 
     @LogExecutionTime

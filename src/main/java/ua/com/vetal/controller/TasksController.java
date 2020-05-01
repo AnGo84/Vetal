@@ -104,8 +104,8 @@ public class TasksController extends BaseController {
     private MailServiceImp mailServiceImp;
 
     public TasksController(Map<String, ViewFilter> viewFilters) {
-        super("TasksController", viewFilters);
-        initViewFilter(new OrderViewFilter());
+        super("TasksController", viewFilters, new OrderViewFilter());
+        //initViewFilter(new OrderViewFilter());
     }
 
     @LogExecutionTime
