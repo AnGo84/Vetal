@@ -1,7 +1,6 @@
 package ua.com.vetal.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -14,31 +13,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import ua.com.vetal.entity.FormatDirectory;
 import ua.com.vetal.service.FormatDirectoryServiceImpl;
+import ua.com.vetal.utils.LoggerUtils;
 
 import javax.validation.Valid;
 import java.util.Locale;
 
 @Controller
 @RequestMapping("/format")
-// @SessionAttributes({ "title", "directoryName", "pageName" })
-
+@Slf4j
 public class FormatDirectoryController {
-	static final Logger logger = LoggerFactory.getLogger(FormatDirectoryController.class);
 
 	private String title = "Format";
 	private String directoryName = "Format";
 	private String pageName = "/format";
 
 	@Autowired
-	MessageSource messageSource;
+	private MessageSource messageSource;
 
 	@Autowired
 	private FormatDirectoryServiceImpl directoryService;
-
-	/*
-	 * @Autowired public UserController(UserServiceImpl userService) {
-	 * this.userService = userService; }
-	 */
 
 	@RequestMapping(value = {"", "/list"}, method = RequestMethod.GET)
 	public String directoryList(Model model) {
@@ -48,7 +41,7 @@ public class FormatDirectoryController {
 
 	@RequestMapping(value = {"/add"}, method = RequestMethod.GET)
 	public String showAddRecordPage(Model model) {
-		logger.info("Add new " + title + " record");
+		log.info("Add new " + title + " record");
 		FormatDirectory directory = new FormatDirectory();
 
 		model.addAttribute("edit", false);
@@ -57,43 +50,27 @@ public class FormatDirectoryController {
 
 	}
 
-	/*
-	 * @RequestMapping(value = "/add", method = RequestMethod.POST) public
-	 * String saveNewUser(Model model, @ModelAttribute("user") User user) {
-	 * 
-	 * userService.saveObject(user); return "redirect:/usersPage"; }
-	 */
 
 	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
 	public String editRecord(@PathVariable Long id, Model model) {
-		logger.info("Edit " + title + " with ID= " + id);
-		// model.addAttribute("title", "Edit user");
-		// model.addAttribute("userRolesList",
-		// userRoleService.findAllObjects());
+		log.info("Edit " + title + " with ID= " + id);
 		model.addAttribute("edit", true);
 		model.addAttribute("directory", directoryService.findById(id));
 		return "directoryRecordPage";
 	}
 
-	/*
-	 * @RequestMapping(value = "/edit-{id}", method = RequestMethod.POST) public
-	 * String saveUpdateUser(Model model, @ModelAttribute("user") User user) {
-	 * userService.saveObject(user); return "redirect:/usersPage"; }
-	 */
-
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String updateRecord(@Valid @ModelAttribute("directory") FormatDirectory directory,
 			BindingResult bindingResult, Model model) {
-		logger.info("Update " + title + ": " + directory);
+		log.info("Update " + title + ": " + directory);
 		if (bindingResult.hasErrors()) {
-			// model.addAttribute("title", title);
-			// logger.info("BINDING RESULT ERROR");
+			LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
 			return "directoryRecordPage";
 		}
 
 		if (directoryService.isObjectExist(directory)) {
 			FieldError fieldError = new FieldError("directory", "name", messageSource.getMessage("non.unique.field",
-					new String[] { "Название", directory.getName() }, new Locale("ru")));
+					new String[]{"Название", directory.getName()}, new Locale("ru")));
 			bindingResult.addError(fieldError);
 			return "directoryRecordPage";
 		}
@@ -104,7 +81,7 @@ public class FormatDirectoryController {
 
 	@RequestMapping(value = { "/delete-{id}" }, method = RequestMethod.GET)
 	public String deleteRecord(@PathVariable Long id) {
-		logger.info("Delete " + title + " with ID= " + id);
+		log.info("Delete " + title + " with ID= " + id);
 		directoryService.deleteById(id);
 		return "redirect:" + pageName;
 	}
@@ -124,7 +101,6 @@ public class FormatDirectoryController {
 			return directoryName;
 		}
 		return name;
-		// return this.directoryName;
 	}
 
 	@ModelAttribute("pageName")

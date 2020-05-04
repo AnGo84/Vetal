@@ -7,7 +7,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import ua.com.vetal.acpect.LogExecutionTime;
 import ua.com.vetal.entity.*;
@@ -18,6 +17,7 @@ import ua.com.vetal.report.jasperReport.exporter.JasperReportExporterType;
 import ua.com.vetal.report.jasperReport.reportdata.StencilJasperReportData;
 import ua.com.vetal.service.*;
 import ua.com.vetal.service.reports.JasperReportService;
+import ua.com.vetal.utils.LoggerUtils;
 import ua.com.vetal.utils.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -76,7 +76,6 @@ public class StencilsController extends BaseController {
 
 	public StencilsController(Map<String, ViewFilter> viewFilters) {
 		super("StencilsController", viewFilters, new OrderViewFilter());
-		//initViewFilter(new OrderViewFilter());
 	}
 
 	@LogExecutionTime
@@ -84,8 +83,6 @@ public class StencilsController extends BaseController {
 	public String stencilList(Model model) {
 
 		model.addAttribute("title", title);
-		//model.addAttribute("stencilsList", getStencilsListData());
-		// model.addAttribute("stencilList", stencilService.findAllObjects());
 
 		return "stencilsPage";
 	}
@@ -95,9 +92,7 @@ public class StencilsController extends BaseController {
 	public String showAddStencilPage(Model model) {
 		log.info("Add new {} record", title);
 		Stencil stencil = new Stencil();
-		//stencil.setAccount(String.valueOf(stencilDAO.getMaxID()+1));
 		stencil.setNumber((int) (stencilService.getMaxID() + 1));
-		// model.addAttribute("edit", false);
 		model.addAttribute("readOnly", false);
 		model.addAttribute("stencil", stencil);
 		return "stencilPage";
@@ -110,10 +105,6 @@ public class StencilsController extends BaseController {
 		log.info("Edit {} with ID= {}", title, id);
 
 		Stencil stencil = stencilService.findById(id);
-		// logger.info(task.toString());
-
-		// model.addAttribute("title", "Edit user");
-		// model.addAttribute("edit", true);
 		model.addAttribute("readOnly", false);
 		model.addAttribute("stencil", stencil);
 		return "stencilPage";
@@ -126,7 +117,6 @@ public class StencilsController extends BaseController {
 
 		Stencil stencil = (stencilService.findById(id)).getCopy();
 		stencil.setNumber((int) (stencilService.getMaxID() + 1));
-		//log.info("Copy stencil: {}", stencil.toString());
 		model.addAttribute("readOnly", false);
 		model.addAttribute("stencil", stencil);
 		return "stencilPage";
@@ -138,11 +128,6 @@ public class StencilsController extends BaseController {
 		log.info("View {} with ID= {}", title, id);
 
 		Stencil stencil = stencilService.findById(id);
-		//log.info(stencil.toString());
-		// model.addAttribute("title", "Edit user");
-		// model.addAttribute("userRolesList",
-		// userRoleService.findAllObjects());
-		// model.addAttribute("edit", true);
 		model.addAttribute("readOnly", true);
 		model.addAttribute("stencil", stencilService.findById(id));
 		return "stencilPage";
@@ -153,18 +138,9 @@ public class StencilsController extends BaseController {
 	public String updateStencil(@Valid @ModelAttribute("stencil") Stencil stencil, BindingResult bindingResult, Model model) {
 		log.info("Update {}: ", stencil);
 		if (bindingResult.hasErrors()) {
-			for (ObjectError error : bindingResult.getAllErrors()) {
-				log.info("    {}", error.getDefaultMessage());
-			}
+			LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
 			return "stencilPage";
 		}
-		/*if (stencilService.isAccountValueExist(stencil)) {
-			FieldError fieldError = new FieldError("stencil", "account", messageSource.getMessage("non.unique.field",
-					new String[] { "Счёт", stencil.getAccount().toString() }, new Locale("ru")));
-			// Locale.getDefault()
-			bindingResult.addError(fieldError);
-			return "stencilPage";
-		}*/
 		stencilService.updateObject(stencil);
 
 		return "redirect:/stencils";
@@ -244,13 +220,6 @@ public class StencilsController extends BaseController {
 	@ModelAttribute("stateList")
 	public List<State> getStatesList() {
 		List<State> resultList = stateService.findAllObjects();
-        /*Collections.sort(resultList, new Comparator<Worker>() {
-            @Override
-            public int compare(Worker m1, Worker m2) {
-                return m1.getFullName().compareTo(m2.getFullName());
-            }
-        });*/
-
 		return resultList;
 	}
 

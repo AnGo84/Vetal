@@ -200,7 +200,6 @@ class ContractorServiceImplTest {
 		assertFalse(contractorService.isCorpNameExist(contractor));
 	}
 
-	//@Disabled("Disabled until refactoring filters")
 	@Test
 	void whenFindByFilterData() {
         when(mockContractorDAO.findByFilterData(any(PersonViewFilter.class))).thenReturn(Arrays.asList(contractor));
@@ -208,40 +207,6 @@ class ContractorServiceImplTest {
         assertNotNull(objects);
         assertFalse(objects.isEmpty());
         assertEquals(objects.size(), 1);
-
-		/*List<Contractor> filteredList = contractorService.findByFilterData(null);
-		assertEquals(filteredList.size(), 1);
-
-		PersonFilter filterData = new PersonFilter();
-		filterData.setCorpName(contractor.getCorpName());
-		filterData.setManager(contractor.getManager());
-
-		filteredList = contractorService.findByFilterData(filterData);
-		assertEquals(1, filteredList.size());
-
-		filterData = new PersonFilter();
-		filteredList = contractorService.findByFilterData(filterData);
-		assertEquals(0, filteredList.size());
-
-		filterData = new PersonFilter();
-		filterData.setCorpName(contractor.getCorpName());
-		filteredList = contractorService.findByFilterData(filterData);
-		assertEquals(1, filteredList.size());
-
-		filterData = new PersonFilter();
-		filterData.setManager(contractor.getManager());
-		filteredList = contractorService.findByFilterData(filterData);
-		assertEquals(1, filteredList.size());
-
-		filterData = new PersonFilter();
-		filterData.setManager(new Manager());
-		filteredList = contractorService.findByFilterData(filterData);
-		assertEquals(0, filteredList.size());
-
-		filterData = new PersonFilter();
-		filterData.setCorpName("not exist name");
-		filteredList = contractorService.findByFilterData(filterData);
-		assertEquals(0, filteredList.size());*/
 	}
 
 }

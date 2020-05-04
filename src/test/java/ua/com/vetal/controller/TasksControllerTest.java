@@ -49,17 +49,11 @@ public class TasksControllerTest {
 
 	@BeforeEach
 	public void beforeEach() {
-        /*manager = TestBuildersUtils.getManager(1l,"firstName", "lastName", "middleName", "email");
-
-        Task = TestBuildersUtils.getTask(1l, "fullName", "firstName", "lastName", "middleName", "address", "email", "phone");
-        Task.setManager(manager);*/
-
 		task = TestDataUtils.getTask(1l, 1);
 		System.out.println("Create TASK: " + task);
 		when(mockTaskService.findAllObjects()).thenReturn(Arrays.asList(task));
 		when(mockTaskService.findById(anyLong())).thenReturn(task);
 		when(mockTaskService.findByAccount(anyString())).thenReturn(task);
-
 	}
 
 
@@ -210,7 +204,6 @@ public class TasksControllerTest {
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenUpdateTaskAsAuthorizedWithNotNullTask_thenOk() throws Exception {
-		//doNothing().when(mockUserService).updateObject(any(User.class));
 		mockTaskService.updateObject(task);
 
 		mockMvc.perform(post(MAPPED_URL + "/update")
@@ -319,7 +312,6 @@ public class TasksControllerTest {
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
 	public void whenExportToExcelReportTaskAsAuthorized_thenOk() throws Exception {
-		//when(mockExporterService.export(any(ReportType.class), any(), anyString(), any()).thenReturn(null);
 		mockMvc.perform(get(MAPPED_URL + "/excelExport"))
 				//.andDo(print())
 				.andExpect(status().isOk());
@@ -328,7 +320,6 @@ public class TasksControllerTest {
 
 	@Test
 	public void whenExportToExcelReportTaskAsNoAuthorized_thenOk() throws Exception {
-
 		mockMvc.perform(get(MAPPED_URL + "/excelExport"))
 				//.andDo(print())
 				.andExpect(status().isOk());
@@ -337,7 +328,6 @@ public class TasksControllerTest {
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
 	public void whenPdfReportTaskAsAuthorized_thenOk() throws Exception {
-		//when(mockExporterService.export(any(ReportType.class), any(), anyString(), any()).thenReturn(null);
 		mockMvc.perform(get(MAPPED_URL + "/pdfReport-" + task.getId()))
 				//.andDo(print())
 				.andExpect(status().isOk());

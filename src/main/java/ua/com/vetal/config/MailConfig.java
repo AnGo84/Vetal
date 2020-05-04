@@ -42,26 +42,6 @@ public class MailConfig {
         return javaMailSender;
     }
 
-
-/*   @Bean
-    public JavaMailSender getJavaMailSender() {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
-
-        mailSender.setUsername("my.gmail@gmail.com");
-        mailSender.setPassword("password");
-
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", smtpAuth);
-        props.put("mail.smtp.starttls.enable", starttls);
-        props.put("mail.debug", "true");
-
-        return mailSender;
-    }*/
-
-
     private Properties getMailProperties() {
         Properties properties = new Properties();
         properties.setProperty("mail.transport.protocol", "smtp");

@@ -22,24 +22,9 @@ public class StencilDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-   /* public User findStencilByAccount(String account) {
-        try {
-            String sql = "Select e from " + Stencil.class.getName() + " e " //
-                    + " Where e.account = :account ";
-            System.out.println(sql);
-            Query query = entityManager.createQuery(sql, User.class);
-            query.setParameter("account", account);
-
-            return (User) query.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
-    }*/
-
     public Long getMaxID() {
         try {
             String sql = "Select max(e.id) from " + Stencil.class.getName() + " e ";
-            //System.out.println(sql);
             Query query = entityManager.createQuery(sql);
             Long nom = (Long) query.getSingleResult();
             if (nom == null) {
@@ -62,7 +47,6 @@ public class StencilDAO {
 
         if (orderViewFilter != null) {
             if (orderViewFilter.getAccount() != null && !orderViewFilter.getAccount().equals("")) {
-//			predicate = builder.and(predicate, builder.equal(root.get("account"), filterData.getAccount()));
                 predicate = builder.and(predicate, builder.like(builder.lower(root.get("account")),
                         ("%" + orderViewFilter.getAccount() + "%").toLowerCase()));
 
@@ -73,12 +57,6 @@ public class StencilDAO {
                         ("%" + orderViewFilter.getNumber() + "%").toLowerCase()));
 
             }
-
-		/*if (filterData.getFileName() != null && !filterData.getFileName().equals("")) {
-			predicate = builder.and(predicate, builder.like(builder.lower(root.get("fileName")),
-					("%" + filterData.getFileName() + "%").toLowerCase()));
-		}*/
-
             if (orderViewFilter.getClient() != null && orderViewFilter.getClient().getId() != null) {
                 predicate = builder.and(predicate, builder.equal(root.get("client"), orderViewFilter.getClient()));
             }
@@ -112,9 +90,6 @@ public class StencilDAO {
         query.orderBy(builder.desc(root.get("dateBegin")));
 
         list = entityManager.createQuery(query).getResultList();
-
-        // https://www.baeldung.com/rest-search-language-spring-jpa-criteria
-        // http://qaru.site/questions/293915/spring-data-jpa-query-by-example
         return list;
     }
 }

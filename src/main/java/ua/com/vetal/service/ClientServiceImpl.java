@@ -14,11 +14,6 @@ import java.util.List;
 @Transactional
 public class ClientServiceImpl implements SimpleService<Client> {
 
-    // private static final Logger logger =
-    // LoggerFactory.getLogger(UserServiceImpl.class);
-
-    /*@PersistenceContext
-    private EntityManager entityManager;*/
     @Autowired
     private ClientDAO clientDAO;
 
@@ -27,10 +22,6 @@ public class ClientServiceImpl implements SimpleService<Client> {
 
     @Override
     public Client findById(Long id) {
-        /*
-         * Optional<User> optinalEntity = userRepository.findById(id); User user
-         * = optinalEntity.get(); return user;
-         */
         return directoryRepository.getOne(id);
     }
 
@@ -68,35 +59,10 @@ public class ClientServiceImpl implements SimpleService<Client> {
     }
 
     public List<Client> findByFilterData(ClientViewFilter filterData) {
-        //https://www.baeldung.com/rest-api-search-language-spring-data-specifications
         List<Client> list = clientDAO.findByFilterData(filterData);
         if (list == null) {
             return findAllObjects();
         }
-/*
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Client> query = builder.createQuery(Client.class);
-        Root<Client> root = query.from(Client.class);
-
-        Predicate predicate = builder.conjunction();
-
-        if (!Strings.isBlank(filterData.getFullName())) {
-//			predicate = builder.and(predicate, builder.equal(root.get("account"), filterData.getAccount()));
-            predicate = builder.and(predicate, builder.like(builder.lower(root.get("fullName")),
-                    ("%" + filterData.getFullName() + "%").toLowerCase()));
-        }
-
-        if (filterData.getManager() != null && filterData.getManager().getId() != 0) {
-            predicate = builder.and(predicate, builder.equal(root.get("manager"), filterData.getManager()));
-        }
-
-        query.where(predicate);
-        //query.orderBy(builder.desc(root.get("fullName")));
-        list = entityManager.createQuery(query).getResultList();*/
-
-        // https://www.baeldung.com/rest-search-language-spring-jpa-criteria
-        // http://qaru.site/questions/293915/spring-data-jpa-query-by-example
         return list;
     }
-
 }

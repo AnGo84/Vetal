@@ -1,11 +1,6 @@
 package ua.com.vetal.controller;
 
-import java.util.Locale;
-
-import javax.validation.Valid;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -16,31 +11,27 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import ua.com.vetal.entity.LaminateDirectory;
 import ua.com.vetal.service.LaminateDirectoryServiceImpl;
+import ua.com.vetal.utils.LoggerUtils;
+
+import javax.validation.Valid;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/laminate")
-// @SessionAttributes({ "title", "directoryName", "pageName" })
-
+@Slf4j
 public class LaminateDirectoryController {
-	static final Logger logger = LoggerFactory.getLogger(LaminateDirectoryController.class);
 
 	private String title = "Laminate";
 	private String directoryName = "Laminate";
 	private String pageName = "/laminate";
 
 	@Autowired
-	MessageSource messageSource;
+	private MessageSource messageSource;
 
 	@Autowired
 	private LaminateDirectoryServiceImpl directoryService;
-
-	/*
-	 * @Autowired public UserController(UserServiceImpl userService) {
-	 * this.userService = userService; }
-	 */
 
 	@RequestMapping(value = { "", "list" }, method = RequestMethod.GET)
 	public String directoryList(Model model) {
@@ -50,7 +41,7 @@ public class LaminateDirectoryController {
 
 	@RequestMapping(value = { "/add" }, method = RequestMethod.GET)
 	public String showAddRecordPage(Model model) {
-		logger.info("Add new " + title + " record");
+		log.info("Add new " + title + " record");
 		LaminateDirectory directory = new LaminateDirectory();
 
 		model.addAttribute("edit", false);
@@ -59,43 +50,26 @@ public class LaminateDirectoryController {
 
 	}
 
-	/*
-	 * @RequestMapping(value = "/add", method = RequestMethod.POST) public
-	 * String saveNewUser(Model model, @ModelAttribute("user") User user) {
-	 * 
-	 * userService.saveObject(user); return "redirect:/usersPage"; }
-	 */
-
 	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
 	public String editRecord(@PathVariable Long id, Model model) {
-		logger.info("Edit " + title + " with ID= " + id);
-		// model.addAttribute("title", "Edit user");
-		// model.addAttribute("userRolesList",
-		// userRoleService.findAllObjects());
+		log.info("Edit " + title + " with ID= " + id);
 		model.addAttribute("edit", true);
 		model.addAttribute("directory", directoryService.findById(id));
 		return "directoryRecordPage";
 	}
 
-	/*
-	 * @RequestMapping(value = "/edit-{id}", method = RequestMethod.POST) public
-	 * String saveUpdateUser(Model model, @ModelAttribute("user") User user) {
-	 * userService.saveObject(user); return "redirect:/usersPage"; }
-	 */
-
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String updateRecord(@Valid @ModelAttribute("directory") LaminateDirectory directory,
 			BindingResult bindingResult, Model model) {
-		logger.info("Update " + title + ": " + directory);
+		log.info("Update " + title + ": " + directory);
 		if (bindingResult.hasErrors()) {
-			// model.addAttribute("title", title);
-			// logger.info("BINDING RESULT ERROR");
+			LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
 			return "directoryRecordPage";
 		}
 
 		if (directoryService.isObjectExist(directory)) {
 			FieldError fieldError = new FieldError("directory", "name", messageSource.getMessage("non.unique.field",
-					new String[] { "Название", directory.getName() }, new Locale("ru")));
+					new String[]{"Название", directory.getName()}, new Locale("ru")));
 			bindingResult.addError(fieldError);
 			return "directoryRecordPage";
 		}
@@ -106,7 +80,7 @@ public class LaminateDirectoryController {
 
 	@RequestMapping(value = { "/delete-{id}" }, method = RequestMethod.GET)
 	public String deleteRecord(@PathVariable Long id) {
-		logger.info("Delete " + title + " with ID= " + id);
+		log.info("Delete " + title + " with ID= " + id);
 		directoryService.deleteById(id);
 		return "redirect:" + pageName;
 	}
@@ -126,7 +100,6 @@ public class LaminateDirectoryController {
 			return directoryName;
 		}
 		return name;
-		// return this.directoryName;
 	}
 
 	@ModelAttribute("pageName")

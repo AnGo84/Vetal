@@ -19,6 +19,7 @@ import ua.com.vetal.report.jasperReport.reportdata.ClientJasperReportData;
 import ua.com.vetal.service.ClientServiceImpl;
 import ua.com.vetal.service.ManagerServiceImpl;
 import ua.com.vetal.service.reports.JasperReportService;
+import ua.com.vetal.utils.LoggerUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -46,7 +47,6 @@ public class ClientController extends BaseController {
 
     public ClientController(Map<String, ViewFilter> viewFilters) {
         super("ClientController", viewFilters, new ClientViewFilter());
-        //initViewFilter(new ClientViewFilter());
     }
 
     @RequestMapping(value = {"", "/list"}, method = RequestMethod.GET)
@@ -77,6 +77,7 @@ public class ClientController extends BaseController {
     public String updateClient(@Valid @ModelAttribute("client") Client client, BindingResult bindingResult, Model model) {
         log.info("Update Client: {}", client);
         if (bindingResult.hasErrors()) {
+            LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
             return "clientPage";
         }
         Client checkClient = clientService.findByName(client.getFullName());
@@ -142,13 +143,11 @@ public class ClientController extends BaseController {
 
     @ModelAttribute("hasFilterData")
     public boolean isViewFilterHasData() {
-        //log.info("Get Filter: " + filterData);
         return getViewFilter().hasData();
     }
 
     @ModelAttribute("clientsList")
     public List<Client> getViewClientsListData() {
-        //log.info("Get Filter: " + filterData);
         clientList = clientService.findByFilterData(getViewFilterData());
         return clientList;
     }

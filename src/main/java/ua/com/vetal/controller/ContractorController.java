@@ -19,6 +19,7 @@ import ua.com.vetal.report.jasperReport.reportdata.ContractorJasperReportData;
 import ua.com.vetal.service.ContractorServiceImpl;
 import ua.com.vetal.service.ManagerServiceImpl;
 import ua.com.vetal.service.reports.JasperReportService;
+import ua.com.vetal.utils.LoggerUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -48,12 +49,10 @@ public class ContractorController extends BaseController {
 
     public ContractorController(Map<String, ViewFilter> viewFilters) {
         super("ContractorController", viewFilters, new PersonViewFilter());
-        //initViewFilter(new PersonViewFilter());
     }
 
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String personList(Model model) {
-        //model.addAttribute("personList", personService.findAllObjects());
         return "contractorsPage";
     }
 
@@ -70,9 +69,6 @@ public class ContractorController extends BaseController {
     @RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
     public String editPerson(@PathVariable Long id, Model model) {
         log.info("Edit {} with ID= {}", title, id);
-        // model.addAttribute("title", "Edit user");
-        // model.addAttribute("userRolesList",
-        // userRoleService.findAllObjects());
         model.addAttribute("edit", true);
         model.addAttribute("person", personService.findById(id));
         return "contractorRecordPage";
@@ -83,21 +79,12 @@ public class ContractorController extends BaseController {
                                Model model) {
         log.info("Update {}: {}", title, person);
         if (bindingResult.hasErrors()) {
-            // model.addAttribute("title", title);
-            // logger.info("BINDING RESULT ERROR");
+            LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
             return "contractorRecordPage";
         }
-		/*if (person != null && (person.getFullName() == null || person.getFullName().equals(""))) {
-			FieldError fieldError =
-					new FieldError("person", "corpName",
-							messageSource.getMessage("NotEmpty.field", new String[]{messageSource.getMessage("label.corpName", null, Locale.getDefault())}, Locale.getDefault()));
-			bindingResult.addError(fieldError);
-			return "contractorRecordPage";
-		}*/
 
         Contractor checkContractor = personService.findByName(person.getCorpName());
         log.info("Checked contractor: {}", checkContractor);
-        //if ((client.getId() == null && checkContractor != null) || (client.getId() != null && checkContractor.getId() != null && client.getId() != checkContractor.getId())) {
         if (checkContractor != null && (person.getId() == null || !checkContractor.getId().equals(person.getId()))) {
             FieldError fieldError = new FieldError("person", "corpName", messageSource.getMessage("non.unique.field",
                     new String[]{"Название", person.getFullName()}, new Locale("ru")));
@@ -170,7 +157,6 @@ public class ContractorController extends BaseController {
     @RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
     @ResponseBody
     public void exportToExcelReportContractor(HttpServletResponse response) throws JRException, IOException {
-        //exporterService.export(ReportType.XLSX, jasperService.contractorsTable(personFilter), title, response);
         log.info("Export {} to Excel", title);
         JasperReportData jasperReportData = reportData.getReportData(personService.findByFilterData(getViewFilterData()), getViewFilterData());
         jasperReportService.exportToResponseStream(JasperReportExporterType.XLSX, jasperReportData, title, response);
@@ -185,16 +171,12 @@ public class ContractorController extends BaseController {
 
     @ModelAttribute("hasFilterData")
     public boolean isViewFilterHasData() {
-        //log.info("Get Filter: " + filterData);
         return getViewFilter().hasData();
     }
 
     @ModelAttribute("personList")
     public List<Contractor> getViewContractorsListData() {
         contractorList = personService.findByFilterData(getViewFilterData());
-        // log.info("Get TaskList : " + tasksList.size());
-
         return contractorList;
     }
-
 }

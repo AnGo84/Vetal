@@ -1,7 +1,6 @@
 package ua.com.vetal.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -14,16 +13,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import ua.com.vetal.entity.ChromaticityDirectory;
 import ua.com.vetal.service.ChromaticityDirectoryServiceImpl;
+import ua.com.vetal.utils.LoggerUtils;
 
 import javax.validation.Valid;
 import java.util.Locale;
 
 @Controller
 @RequestMapping("/chromaticity")
-// @SessionAttributes({ "title", "directoryName", "pageName" })
+@Slf4j
 
 public class ChromaticityDirectoryController {
-	static final Logger logger = LoggerFactory.getLogger(ChromaticityDirectoryController.class);
 
 	private String title = "Chromaticity";
 
@@ -50,7 +49,7 @@ public class ChromaticityDirectoryController {
 
 	@RequestMapping(value = { "/add" }, method = RequestMethod.GET)
 	public String showAddRecordPage(Model model) {
-		logger.info("Add new Chronomaticity record");
+		log.info("Add new Chronomaticity record");
 		ChromaticityDirectory chronomaticity = new ChromaticityDirectory();
 
 		model.addAttribute("edit", false);
@@ -68,7 +67,7 @@ public class ChromaticityDirectoryController {
 
 	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
 	public String editRecord(@PathVariable Long id, Model model) {
-		logger.info("Edit Chromaticity with ID= " + id);
+		log.info("Edit Chromaticity with ID= {}");
 		// model.addAttribute("title", "Edit user");
 		// model.addAttribute("userRolesList",
 		// userRoleService.findAllObjects());
@@ -86,10 +85,9 @@ public class ChromaticityDirectoryController {
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String updateRecord(@Valid @ModelAttribute("directory") ChromaticityDirectory directory,
 			BindingResult bindingResult, Model model) {
-		logger.info("Update Chromaticity: " + directory);
+		log.info("Update Chromaticity: {}");
 		if (bindingResult.hasErrors()) {
-			// model.addAttribute("title", title);
-			// logger.info("BINDING RESULT ERROR");
+			LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
 			return "directoryRecordPage";
 		}
 
@@ -107,7 +105,7 @@ public class ChromaticityDirectoryController {
 
 	@RequestMapping(value = { "/delete-{id}" }, method = RequestMethod.GET)
 	public String deleteRecord(@PathVariable Long id) {
-		logger.info("Delete Chromaticity with ID= " + id);
+		log.info("Delete Chromaticity with ID= {}", id);
 		directoryService.deleteById(id);
 		return "redirect:" + pageName;
 	}

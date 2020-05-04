@@ -22,25 +22,9 @@ public class TaskDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-    /*public User findTaskByAccount(String account) {
-        try {
-            String sql = "Select e from " + Task.class.getName() + " e " //
-                    + " Where e.account = :account ";
-            System.out.println(sql);
-            Query query = entityManager.createQuery(sql, User.class);
-            query.setParameter("account", account);
-
-            return (User) query.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
-    }*/
-
-
     public Long getMaxID() {
         try {
             String sql = "Select max(e.id) from " + Task.class.getName() + " e ";
-            //System.out.println(sql);
             Query query = entityManager.createQuery(sql);
             Long nom = (Long) query.getSingleResult();
             if (nom == null) {
@@ -51,7 +35,6 @@ public class TaskDAO {
             return 0L;
         }
     }
-
 
     public List<Task> findByFilterData(OrderViewFilter orderViewFilter) {
         List<Task> list = null;

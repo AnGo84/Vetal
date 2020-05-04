@@ -43,11 +43,9 @@ public class PasswordResetControllerTest {
 		user = TestBuildersUtils.getUser(1l, "New Name", "", true, null);
 		user.setUserRoles(new HashSet<>(Arrays.asList(TestBuildersUtils.getUserRole(1l, "ROLE_ADMIN"))));
 		token = PasswordResetToken.newBuilder().setUser(user).build();
-		//when(mockUserService.findByName(anyString())).thenReturn(user);
 	}
 
 	@Test
-	//@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenGetDisplayResetPasswordPage_thenOk() throws Exception {
 		when(mockTokenRepository.findByToken(anyString())).thenReturn(token);
 
@@ -60,10 +58,7 @@ public class PasswordResetControllerTest {
 	}
 
 	@Test
-	//@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenGetDisplayResetPasswordPageWhenTokenNull_thenError() throws Exception {
-		//when(mockTokenRepository.findByToken(anyString())).thenReturn(token);
-
 		mockMvc.perform(get(MAPPED_URL))
 				//.andDo
 				.andExpect(status().isOk())
@@ -72,7 +67,6 @@ public class PasswordResetControllerTest {
 	}
 
 	@Test
-	//@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenGetDisplayResetPasswordPageWhenTokenNotFound_thenError() throws Exception {
 		when(mockTokenRepository.findByToken(anyString())).thenReturn(token);
 
@@ -84,7 +78,6 @@ public class PasswordResetControllerTest {
 	}
 
 	@Test
-	//@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenGetDisplayResetPasswordPageWhenTokenExpired_thenError() throws Exception {
 		token.setExpiryDate(-60);
 		when(mockTokenRepository.findByToken(anyString())).thenReturn(token);
@@ -97,7 +90,6 @@ public class PasswordResetControllerTest {
 	}
 
 	@Test
-	//@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenGetDisplayResetPasswordPageWhenTokenExpiredFound_thenError() throws Exception {
 		token.setExpiryDate(-60);
 		when(mockTokenRepository.findByToken(anyString())).thenReturn(token);
@@ -110,7 +102,6 @@ public class PasswordResetControllerTest {
 	}
 
 	@Test
-	//@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenHandlePasswordReset_thenOk() throws Exception {
 		when(mockTokenRepository.findByToken(anyString())).thenReturn(token);
 
@@ -126,7 +117,6 @@ public class PasswordResetControllerTest {
 	}
 
 	@Test
-	//@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenHandlePasswordResetWithoutParams_thenError() throws Exception {
 		when(mockTokenRepository.findByToken(anyString())).thenReturn(token);
 
@@ -137,7 +127,6 @@ public class PasswordResetControllerTest {
 	}
 
 	@Test
-	//@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenHandlePasswordResetWithOutPassword_thenError() throws Exception {
 		when(mockTokenRepository.findByToken(anyString())).thenReturn(token);
 
@@ -161,7 +150,6 @@ public class PasswordResetControllerTest {
 	}
 
 	@Test
-	//@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenHandlePasswordResetWithOutConfirmPassword_thenError() throws Exception {
 		when(mockTokenRepository.findByToken(anyString())).thenReturn(token);
 
@@ -185,7 +173,6 @@ public class PasswordResetControllerTest {
 	}
 
 	@Test
-	//@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenHandlePasswordResetPasswordsNorEqual_thenError() throws Exception {
 		when(mockTokenRepository.findByToken(anyString())).thenReturn(token);
 

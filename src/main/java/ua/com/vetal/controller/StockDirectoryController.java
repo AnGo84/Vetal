@@ -1,11 +1,6 @@
 package ua.com.vetal.controller;
 
-import java.util.Locale;
-
-import javax.validation.Valid;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -16,23 +11,23 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import ua.com.vetal.entity.StockDirectory;
 import ua.com.vetal.service.StockDirectoryServiceImpl;
+import ua.com.vetal.utils.LoggerUtils;
+
+import javax.validation.Valid;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/stock")
-// @SessionAttributes({ "title", "directoryName", "pageName" })
-
+@Slf4j
 public class StockDirectoryController {
-	static final Logger logger = LoggerFactory.getLogger(StockDirectoryController.class);
-
 	private String title = "Stock";
 	private String directoryName = "Stock";
 	private String pageName = "/stock";
 
 	@Autowired
-	MessageSource messageSource;
+	private MessageSource messageSource;
 
 	@Autowired
 	private StockDirectoryServiceImpl directoryService;
@@ -45,7 +40,7 @@ public class StockDirectoryController {
 
 	@RequestMapping(value = { "/add" }, method = RequestMethod.GET)
 	public String showAddRecordPage(Model model) {
-		logger.info("Add new paper record");
+		log.info("Add new paper record");
 		StockDirectory paper = new StockDirectory();
 
 		model.addAttribute("edit", false);
@@ -54,43 +49,26 @@ public class StockDirectoryController {
 
 	}
 
-	/*
-	 * @RequestMapping(value = "/add", method = RequestMethod.POST) public
-	 * String saveNewUser(Model model, @ModelAttribute("user") User user) {
-	 * 
-	 * userService.saveObject(user); return "redirect:/usersPage"; }
-	 */
-
 	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
 	public String editRecord(@PathVariable Long id, Model model) {
-		logger.info("Edit paper with ID= " + id);
-		// model.addAttribute("title", "Edit user");
-		// model.addAttribute("userRolesList",
-		// userRoleService.findAllObjects());
+		log.info("Edit paper with ID= " + id);
 		model.addAttribute("edit", true);
 		model.addAttribute("directory", directoryService.findById(id));
 		return "directoryRecordPage";
 	}
 
-	/*
-	 * @RequestMapping(value = "/edit-{id}", method = RequestMethod.POST) public
-	 * String saveUpdateUser(Model model, @ModelAttribute("user") User user) {
-	 * userService.saveObject(user); return "redirect:/usersPage"; }
-	 */
-
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String updateRecord(@Valid @ModelAttribute("directory") StockDirectory directory,
 			BindingResult bindingResult, Model model) {
-		logger.info("Update Paper: " + directory);
+		log.info("Update Paper: " + directory);
 		if (bindingResult.hasErrors()) {
-			// model.addAttribute("title", title);
-			// logger.info("BINDING RESULT ERROR");
+			LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
 			return "directoryRecordPage";
 		}
 
 		if (directoryService.isObjectExist(directory)) {
 			FieldError fieldError = new FieldError("directory", "name", messageSource.getMessage("non.unique.field",
-					new String[] { "Название", directory.getName() }, new Locale("ru")));
+					new String[]{"Название", directory.getName()}, new Locale("ru")));
 			bindingResult.addError(fieldError);
 			return "directoryRecordPage";
 		}
@@ -101,7 +79,7 @@ public class StockDirectoryController {
 
 	@RequestMapping(value = { "/delete-{id}" }, method = RequestMethod.GET)
 	public String deleteRecord(@PathVariable Long id) {
-		logger.info("Delete Paper with ID= " + id);
+		log.info("Delete Paper with ID= " + id);
 		directoryService.deleteById(id);
 		return "redirect:" + pageName;
 	}

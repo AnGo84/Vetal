@@ -41,7 +41,6 @@ class StencilServiceImplTest {
 		when(mockStencilRepository.getOne(1L)).thenReturn(stencil);
 		long id = 1;
 		Stencil foundStencil = stencilService.findById(id);
-
 		// then
 		assertNotNull(foundStencil);
 		assertNotNull(foundStencil.getId());
@@ -75,7 +74,6 @@ class StencilServiceImplTest {
 
 	@Test
 	void whenFindByName_thenReturnNull() {
-		//when(mockManagerRepository.findByName(anyString())).thenReturn(manager);
 		Stencil found = stencilService.findByName(null);
 		assertNull(found);
 		found = stencilService.findByName("wrong name");
@@ -158,7 +156,6 @@ class StencilServiceImplTest {
 		assertTrue(stencilService.isAccountValueExist(newStencil));
 	}
 
-	//@Disabled("Disabled until refactoring filters")
 	@Test
 	void whenFindByFilterData() {
         when(mockStencilDAO.findByFilterData(any(OrderViewFilter.class))).thenReturn(Arrays.asList(stencil));
@@ -166,41 +163,5 @@ class StencilServiceImplTest {
         assertNotNull(objects);
         assertFalse(objects.isEmpty());
         assertEquals(objects.size(), 1);
-
-		/*
-
-		List<Stencil> filteredList = stencilService.findByFilterData(null);
-		assertEquals(filteredList.size(), 1);
-
-		FilterData filterData = new FilterData();
-		filterData.setAccount(stencil.getAccount());
-		filterData.setManager(stencil.getManager());
-
-		filteredList = stencilService.findByFilterData(filterData);
-		assertEquals(1, filteredList.size());
-
-		filterData = new FilterData();
-		filteredList = stencilService.findByFilterData(filterData);
-		assertEquals(0, filteredList.size());
-
-		filterData = new FilterData();
-		filterData.setAccount(stencil.getAccount());
-		filteredList = stencilService.findByFilterData(filterData);
-		assertEquals(1, filteredList.size());
-
-		filterData = new FilterData();
-		filterData.setManager(stencil.getManager());
-		filteredList = stencilService.findByFilterData(filterData);
-		assertEquals(1, filteredList.size());
-
-		filterData = new FilterData();
-		filterData.setManager(new Manager());
-		filteredList = stencilService.findByFilterData(filterData);
-		assertEquals(0, filteredList.size());
-
-		filterData = new FilterData();
-		filterData.setAccount("not exist name");
-		filteredList = stencilService.findByFilterData(filterData);
-		assertEquals(0, filteredList.size());*/
 	}
 }

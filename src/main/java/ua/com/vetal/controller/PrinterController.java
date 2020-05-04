@@ -1,7 +1,6 @@
 package ua.com.vetal.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -13,18 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import ua.com.vetal.entity.Printer;
 import ua.com.vetal.service.PrinterServiceImpl;
+import ua.com.vetal.utils.LoggerUtils;
 
 import javax.validation.Valid;
 import java.util.Locale;
 
 @Controller
 @RequestMapping("/printer")
-// @SessionAttributes({ "title", "personName", "pageName" })
-
+@Slf4j
 public class PrinterController {
-    static final Logger logger = LoggerFactory.getLogger(PrinterController.class);
     @Autowired
-    MessageSource messageSource;
+    private MessageSource messageSource;
     private String title = "Printer";
     private String personName = "Printer";
     private String pageName = "/printer";
@@ -39,7 +37,7 @@ public class PrinterController {
 
     @RequestMapping(value = {"/add"}, method = RequestMethod.GET)
     public String showAddPersonPage(Model model) {
-        logger.info("Add new " + title + " record");
+        log.info("Add new " + title + " record");
         Printer person = new Printer();
 
         model.addAttribute("edit", false);
@@ -48,47 +46,22 @@ public class PrinterController {
 
     }
 
-    /*
-     * @RequestMapping(value = "/add", method = RequestMethod.POST) public
-     * String saveNewUser(Model model, @ModelAttribute("user") User user) {
-     *
-     * userService.saveObject(user); return "redirect:/usersPage"; }
-     */
-
     @RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
     public String editPerson(@PathVariable Long id, Model model) {
-        logger.info("Edit " + title + " with ID= " + id);
-        // model.addAttribute("title", "Edit user");
-        // model.addAttribute("userRolesList",
-        // userRoleService.findAllObjects());
+        log.info("Edit " + title + " with ID= " + id);
         model.addAttribute("edit", true);
         model.addAttribute("person", personService.findById(id));
         return "personRecordPage";
     }
 
-    /*
-     * @RequestMapping(value = "/edit-{id}", method = RequestMethod.POST) public
-     * String saveUpdateUser(Model model, @ModelAttribute("user") User user) {
-     * userService.saveObject(user); return "redirect:/usersPage"; }
-     */
-
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String updatePerson(@Valid @ModelAttribute("person") Printer person, BindingResult bindingResult,
                                Model model) {
-        logger.info("Update " + title + ": " + person);
+        log.info("Update " + title + ": " + person);
         if (bindingResult.hasErrors()) {
-            // model.addAttribute("title", title);
-            // logger.info("BINDING RESULT ERROR");
+            LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
             return "personRecordPage";
         }
-
-        /*
-         * if (personService.isObjectExist(person)) { FieldError fieldError =
-         * new FieldError("person", "name",
-         * messageSource.getMessage("non.unique.name", new String[] {
-         * person.getName() }, Locale.getDefault()));
-         * bindingResult.addError(fieldError); return "personRecordPage"; }
-         */
 
         personService.saveObject(person);
         return "redirect:" + pageName;
@@ -96,7 +69,7 @@ public class PrinterController {
 
     @RequestMapping(value = {"/delete-{id}"}, method = RequestMethod.GET)
     public String deletePerson(@PathVariable Long id) {
-        logger.info("Delete " + title + " with ID= " + id);
+        log.info("Delete " + title + " with ID= " + id);
         personService.deleteById(id);
         return "redirect:" + pageName;
     }
@@ -116,7 +89,6 @@ public class PrinterController {
             return personName;
         }
         return name;
-        // return this.personName;
     }
 
     @ModelAttribute("pageName")

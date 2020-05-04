@@ -33,14 +33,11 @@ public class Task {
 
 	@NotNull
 	@Column(name = "Number_Suffix", nullable = false)
-	//@Size(max = 5)
 	private int numberSuffix;
 
 	@Column(name = "Full_number")
 	private String fullNumber;
 
-    //@NotNull
-    //@Column(name = "Account", nullable = false, unique = true)
     @Column(name = "Account")
     @Size(max = 50)
     private String account;
@@ -53,7 +50,6 @@ public class Task {
     @Column(name = "Work_Name", nullable = false)
     private String workName;
 
-    //@NotNull
     @Column(name = "File_Name", nullable = false)
     private String fileName;
 
@@ -101,14 +97,12 @@ public class Task {
 	@NotNull
 	@Column(name = "Date_BEGIN", nullable = false)
 	@Temporal(TemporalType.DATE)
-	// @DateTimeFormat(pattern = "dd-MM-yyyy")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateBegin;
 
 	@NotNull
 	@Column(name = "Date_END", nullable = false)
 	@Temporal(TemporalType.DATE)
-	// @DateTimeFormat(pattern = "dd-MM-yyyy")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateEnd;
 
@@ -136,7 +130,6 @@ public class Task {
 	@JoinColumn(name = "Chromaticity_ID", nullable = false)
 	private ChromaticityDirectory chromaticity;
 
-	//@NotNull
 	@ManyToOne()
 	@JoinColumn(name = "Format_ID")
 	private FormatDirectory format;
@@ -251,7 +244,6 @@ public class Task {
 
 	public Task getCopy() {
 
-		//System.out.println("Copy From task:" + this);
 		Task task = new Task();
 
 		task.manager = this.manager;
@@ -299,7 +291,6 @@ public class Task {
 
 		task.amount = this.amount;
 
-		//System.out.println("Copy Return task:" + task);
 		return task;
 	}
 
@@ -375,13 +366,6 @@ public class Task {
 		return fileName;
 	}
 
-	/*public String getFileName() {
-		if(dbFile==null){
-			return "";
-		}
-		return dbFile.getFileName();
-	}
-*/
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
@@ -754,16 +738,11 @@ public class Task {
 		this.otherExpenses = otherExpenses;
 	}
 
-	/*public boolean hasDebt() {
-		return debtAmount > 0;
-	}*/
 
 	public String getDBFileName() {
 		if (dbFile == null || dbFile.getFileName() == null) {
 			return "";
 		}
-		//return dbFile.toShortString();
-		//return dbFile.getFullFileName();
 		return dbFile.getFileName();
 	}
 

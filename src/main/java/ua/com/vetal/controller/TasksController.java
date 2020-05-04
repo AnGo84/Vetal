@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.com.vetal.acpect.LogExecutionTime;
@@ -30,6 +29,7 @@ import ua.com.vetal.report.jasperReport.reportdata.TaskJasperReportData;
 import ua.com.vetal.service.*;
 import ua.com.vetal.service.mail.MailServiceImp;
 import ua.com.vetal.service.reports.JasperReportService;
+import ua.com.vetal.utils.LoggerUtils;
 import ua.com.vetal.utils.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -55,9 +55,6 @@ public class TasksController extends BaseController {
     private TaskServiceImpl taskService;
     @Autowired
     private ViewTaskServiceImpl viewTaskService;
-
-	/*@Autowired
-	private OrderViewFilter orderViewFilter;*/
 
     //private List<Task> tasksList;
     private List<ViewTask> tasksList;
@@ -105,15 +102,12 @@ public class TasksController extends BaseController {
 
     public TasksController(Map<String, ViewFilter> viewFilters) {
         super("TasksController", viewFilters, new OrderViewFilter());
-        //initViewFilter(new OrderViewFilter());
     }
 
     @LogExecutionTime
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String taskList(Model model) {
         model.addAttribute("title", title);
-        //model.addAttribute("tasksList", taskService.findByFilterData(filterData));
-
         return "tasksPage";
     }
 
@@ -123,8 +117,6 @@ public class TasksController extends BaseController {
         log.info("Add new {} record", title);
         Task task = new Task();
         task.setNumber((int) (taskService.getMaxID() + 1));
-
-        // model.addAttribute("edit", false);
         model.addAttribute("readOnly", false);
         model.addAttribute("task", task);
         return "taskPage";
@@ -134,12 +126,7 @@ public class TasksController extends BaseController {
     @RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
     public String editTask(@PathVariable Long id, Model model) {
         log.info("Edit {} with ID= {}", title, id);
-
         Task task = taskService.findById(id);
-        // logger.info(task.toString());
-
-        // model.addAttribute("title", "Edit user");
-        // model.addAttribute("edit", true);
         model.addAttribute("readOnly", false);
         task.setFileName(task.getDBFileName());
         model.addAttribute("task", task);
@@ -165,10 +152,6 @@ public class TasksController extends BaseController {
         log.info("View {} with ID= {}", title, id);
 
         Task task = taskService.findById(id);
-        // model.addAttribute("title", "Edit user");
-        // model.addAttribute("userRolesList",
-        // userRoleService.findAllObjects());
-        // model.addAttribute("edit", true);
         model.addAttribute("readOnly", true);
         task.setFileName(task.getDBFileName());
         model.addAttribute("task", task);
@@ -181,19 +164,9 @@ public class TasksController extends BaseController {
                              @RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile) {
         log.info("Update " + title + ": " + task);
         if (bindingResult.hasErrors()) {
-
-            for (ObjectError error : bindingResult.getAllErrors()) {
-                log.error(error.getDefaultMessage());
-            }
+            LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
             return "taskPage";
         }
-        /*if (taskService.isAccountValueExist(task)) {
-            FieldError fieldError = new FieldError("task", "account", messageSource.getMessage("non.unique.field",
-                    new String[]{"Счёт", task.getAccount().toString()}, new Locale("ru")));
-            // Locale.getDefault()
-            bindingResult.addError(fieldError);
-            return "taskPage";
-        }*/
         Long fileId = null;
         if (uploadFile != null && !uploadFile.isEmpty()) {
             log.info("uploadFile is not NULL");
@@ -211,8 +184,6 @@ public class TasksController extends BaseController {
             }
         } else {
             log.info("uploadFile is NULL");
-            //logger.info("Is DBFile null: " + task.getDbFile() ) ;
-            //logger.info("Is FILENAME null: " + (task.getFileName() == null || task.getFileName().equals(""))) ;
             if (task.getDbFile() != null && (task.getFileName() == null || task.getFileName().equals(""))) {
                 fileId = task.getDbFile().getId();
                 task.setDbFile(null);
@@ -237,7 +208,6 @@ public class TasksController extends BaseController {
     @RequestMapping(value = {"/pdfReport-{id}"}, method = RequestMethod.GET)
     @ResponseBody
     public void pdfReportTask(@PathVariable Long id, HttpServletResponse response) throws JRException, IOException {
-        //exporterService.export(ReportType.PDF, jasperService.taskReport(id), title + "_" + id, response);
         log.info("Get PDF for {} with ID= {}", title, id);
         Task task = taskService.findById(id);
         jasperReportService.exportToResponseStream(JasperReportExporterType.X_PDF,
@@ -247,7 +217,6 @@ public class TasksController extends BaseController {
     @RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
     @ResponseBody
     public void exportToExcelReportTask(HttpServletResponse response) throws JRException, IOException {
-        //exporterService.export(ReportType.XLSX, jasperService.tasksTable(filterData), title, response);
         log.info("Export {} to Excel", title);
         JasperReportData jasperReportData = reportData.getReportData(taskService.findByFilterData(getTaskViewFilter()), getTaskViewFilter());
         jasperReportService.exportToResponseStream(JasperReportExporterType.XLSX,
@@ -301,9 +270,7 @@ public class TasksController extends BaseController {
     }
 
     @GetMapping("/downloadFile-{taskId}")
-    //https://www.callicoder.com/spring-boot-file-upload-download-jpa-hibernate-mysql-database-example/
     public ResponseEntity<Resource> downloadFile(@PathVariable Long taskId) {
-        // Load file from database
         Task task = taskService.findById(taskId);
         DBFile dbFile = task.getDbFile();
         return ResponseEntity.ok()

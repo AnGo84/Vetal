@@ -36,7 +36,6 @@ class UserRepositoryTest {
 	@BeforeAll
 	public static void beforeAll() {
 
-		//new HashSet<>(Arrays.asList(userRole));
 	}
 
 	@BeforeEach
@@ -45,13 +44,10 @@ class UserRepositoryTest {
         UserRole userRole = TestBuildersUtils.getUserRole(null, "USER");
         entityManager.persistAndFlush(userRole);
         userRoleSet = new HashSet<>(userRoleRepository.findAll());
-
         // given
-
         user = TestBuildersUtils.getUser(null, "User", "password", true, userRoleSet);
 
         entityManager.persistAndFlush(user);
-        //entityManager.flush();
     }
 	@AfterEach
 	public void afterEach(){
@@ -63,7 +59,6 @@ class UserRepositoryTest {
 	public void whenFindByUserName_thenReturnUser() {
 		// when
 		User foundUser = userRepository.findByName(user.getName());
-
 		// then
 		assertNotNull(foundUser);
 		assertNotNull(foundUser.getId());
@@ -143,7 +138,6 @@ class UserRepositoryTest {
 	public void whenSaveUserWithNameTooShortLength_thenThrowConstraintViolationException() {
 		User user = TestBuildersUtils.getUser(null, "1", "second pass", true, userRoleSet);
 		assertThrows(ConstraintViolationException.class, () -> {
-			//entityManager.persistAndFlush(user);
 			userRepository.save(user);
 		});
 	}
@@ -153,7 +147,6 @@ class UserRepositoryTest {
 	public void whenSaveUserWithPassWrongLength_thenThrowConstraintViolationException() {
 		User user = TestBuildersUtils.getUser(null, "New Name", "", true, userRoleSet);
 		assertThrows(ConstraintViolationException.class, () -> {
-			//entityManager.persistAndFlush(user);
 			userRepository.save(user);
 		});
 	}
@@ -171,7 +164,6 @@ class UserRepositoryTest {
 	public void whenSaveUserWithExistName_thenThrowDataIntegrityViolationException() {
 		User user = TestBuildersUtils.getUser(null, "User", "", true, userRoleSet);
 		assertThrows(DataIntegrityViolationException.class, () -> {
-			//entityManager.persistAndFlush(user);
 			userRepository.save(user);
 		});
 	}

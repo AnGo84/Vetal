@@ -55,30 +55,13 @@ public class UserViewController {
 	public String changeUserPassword(@PathVariable Long id, Model model) {
 		logger.info("Change Pass for user with ID= " + id);
 		User user = userService.findById(id);
-		//logger.info("Find User= " + user);
 		if (!userService.isObjectExist(user)) {
+			logger.error("Cannot change password for user id '{}'. User not exist.", id);
 			return "error";
-			//throw new RuntimeException("User error");
 		}
 		PasswordResetToken token = PasswordResetToken.newBuilder().setUser(user).build();
 		tokenRepository.save(token);
-/*
-        Mail mail = new Mail();
-        mail.setFrom("no-reply@memorynotfound.com");
-        mail.setTo(user.getEmail());
-        mail.setSubject("Password reset request");
 
-        Map<String, Object> model = new HashMap<>();
-        model.put("token", token);
-        model.put("user", user);
-        model.put("signature", "https://memorynotfound.com");
-        String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-        model.put("resetUrl", url + "/reset-password?token=" + token.getToken());
-        mail.setModel(model);
-        emailService.sendEmail(mail);
-
-        return "redirect:/forgot-password?success";
-*/
 		logger.error("Test token: " + token.getToken());
 		return "redirect:/passwordReset?token=" + token.getToken();
 	}

@@ -14,7 +14,6 @@ public class ListFilesUtils {
         //Windows directory example
         final String directoryWindows = "M://AnGo";
         File directory = new File(directoryWindows);
-        //listFilesUtil.listFiles(directoryLinuxMac);
         listFilesUtil.listFilesAndFolders(directoryWindows);
         System.out.println("New:");
         List<LocalFile> list = listFilesUtil.listFilesAndFoldersWithParent(directoryWindows);
@@ -46,19 +45,6 @@ public class ListFilesUtils {
                 }
             }
         }
-        /*File rootFile= null;
-        if (resultDirectoriesList!=null && !resultDirectoriesList.isEmpty()){
-            //rootFile = new File(resultDirectoriesList.get(0).getFile().getParent());
-            rootFile = resultDirectoriesList.get(0).getFile().getParentFile();
-        }else if(resultFilesList!=null && !resultFilesList.isEmpty()){
-            //rootFile = new File(resultFilesList.get(0).getFile().getParent());
-            rootFile = resultFilesList.get(0).getFile().getParentFile();
-        }else {
-            rootFile = directory;
-        }
-        System.out.println("Root Directory for " + directoryName+ " is " + rootFile);
-
-        resultList.add(new LocalFile("..", rootFile, true));*/
         resultList.addAll(resultDirectoriesList);
         resultList.addAll(resultFilesList);
         return resultList;
@@ -68,7 +54,6 @@ public class ListFilesUtils {
         if (localFiles == null || localFiles.isEmpty() || name == null || name.equals("")) {
             return null;
         }
-        //LocalFile findFile= null;
         for (LocalFile file : localFiles) {
             if (file.getDisplayName().equals(name)) {
                 return file;

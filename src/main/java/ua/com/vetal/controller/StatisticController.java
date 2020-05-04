@@ -62,13 +62,11 @@ public class StatisticController extends BaseController {
 
     public StatisticController(Map<String, ViewFilter> viewFilters) {
         super("StatisticController", viewFilters, new OrderViewFilter());
-        //initViewFilter(new OrderViewFilter());
     }
 
     @LogExecutionTime
     @RequestMapping(value = {""}, method = RequestMethod.GET)
     public String ordersList(Model model) {
-        //log.info("Get Filter: {}", orderViewFilter);
         model.addAttribute("title", title);
         model.addAttribute("ordersList", getOrdersListData());
 
@@ -96,15 +94,12 @@ public class StatisticController extends BaseController {
 
     @ModelAttribute("hasFilterData")
     public boolean isViewFilterHasData() {
-        //logger.info("Get Filter: " + filterData);
         return getOrderViewFilter().hasData();
     }
 
     @RequestMapping(value = {"/crossReport"}, method = RequestMethod.GET)
     @ResponseBody
     public void exportToExcelCrossReport(HttpServletResponse response) throws JRException, IOException {
-        //log.info("Export " + title + " to Excel");
-
         log.info("Export {} to Excel", title);
         JasperReportData jasperReportData = reportData.getReportData(
                 orderService.findByFilterData(getOrderViewFilter()), getOrderViewFilter());

@@ -1,7 +1,6 @@
 package ua.com.vetal.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -19,6 +18,7 @@ import ua.com.vetal.entity.User;
 import ua.com.vetal.entity.UserRole;
 import ua.com.vetal.service.UserRoleServiceImpl;
 import ua.com.vetal.service.UserServiceImpl;
+import ua.com.vetal.utils.LoggerUtils;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -27,10 +27,9 @@ import java.util.Locale;
 @Controller
 @RequestMapping("/users")
 @SessionAttributes({"userRolesList"})
-
+@Slf4j
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:vetal.properties")
 public class UserController {
-	static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	@Autowired
 	private final UserServiceImpl userService;
 	@Autowired
@@ -56,88 +55,37 @@ public class UserController {
 
 	@RequestMapping(value = {"/add"}, method = RequestMethod.GET)
 	public String showAddUserPage(Model model) {
-		logger.info("Add new user");
+		log.info("Add new user");
 		User user = new User();
 		user.setEnabled(true);
-		//title = "New user";
-		//model.addAttribute("title", title);
-		// model.addAttribute("userRolesList",
-		// userRoleService.findAllObjects());
 		model.addAttribute("edit", false);
 		model.addAttribute("user", user);
 		return "userPage";
 	}
-//
-//    @RequestMapping(value = {"/view"}, method = RequestMethod.GET)
-//    public String showUserViewPage(Model model) {
-//        logger.info("View user");
-//        User user = userService.findByName(getPrincipal());
-//        if (userService.isObjectExist(user)) {
-//            model.addAttribute("user", user);
-//            return "userViewPage";
-//        }
-//        return "mainPage";
-//    }
-
-	/*
-	 * @RequestMapping(value = "/add", method = RequestMethod.POST) public
-	 * String saveNewUser(Model model, @ModelAttribute("user") User user) {
-	 *
-	 * userService.saveObject(user); return "redirect:/usersPage"; }
-	 */
 
 	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
 	public String editUser(@PathVariable Long id, Model model) {
-		logger.info("Edit user with ID= " + id);
-		//title = "Edit user";
-		//model.addAttribute("title", title);
-		// model.addAttribute("userRolesList",
-		// userRoleService.findAllObjects());
+		log.info("Edit user with ID= " + id);
 		model.addAttribute("edit", true);
 		model.addAttribute("user", userService.findById(id));
 		return "userPage";
 	}
 
-	/*
-	 * @RequestMapping(value = "/edit-{id}", method = RequestMethod.POST) public
-	 * String saveUpdateUser(Model model, @ModelAttribute("user") User user) {
-	 * userService.saveObject(user); return "redirect:/usersPage"; }
-	 */
-
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	//@Transactional
 	public String updateUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
-		logger.info("Update User: " + user);
+		log.info("Update User: " + user);
 		if (bindingResult.hasErrors()) {
-			// model.addAttribute("title", title);
-			List<FieldError> errors = bindingResult.getFieldErrors();
-			for (FieldError error : errors) {
-				logger.error(error.getObjectName() +
-						" - " + error.getField() +
-						" - " + error.getDefaultMessage() +
-						" - " + error.getCode());
-			}
+			LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
 			return "userPage";
 		}
 
-		//if (userService.isObjectExist(user)) {
-        /*if (!userService.isCurrentObject(user)) {
-            FieldError ssoError = new FieldError("user", "name", messageSource.getMessage("non.unique.field",
-                    new String[]{"Login", user.getName()}, new Locale("ru")));
-            bindingResult.addError(ssoError);
-            return "userPage";
-        }*/
 		try {
 			if (user.getEncryptedPassword() == null) {
-				/*user.setEncryptedPassword(userPasswordDefault);
-				user.setEncryptedPassword(EncrytedPasswordUtils.encrytePassword(user.getEncryptedPassword()));*/
 				user.setEncryptedPassword(passwordEncoder.encode(userPasswordDefault));
 			}
-
 			userService.saveObject(user);
 
 		} catch (DataIntegrityViolationException e) {
-			//System.out.println("history already exist");
 			FieldError ssoError = new FieldError("user", "name", messageSource.getMessage("non.unique.field",
 					new String[]{"Login", user.getName()}, new Locale("ru")));
 			bindingResult.addError(ssoError);
@@ -149,16 +97,15 @@ public class UserController {
 
 	@RequestMapping(value = {"/delete-{id}"}, method = RequestMethod.GET)
 	public String deleteUser(@PathVariable Long id) {
-		logger.info("Delete user with ID= " + id);
+		log.info("Delete user with ID= {}", id);
 		userService.deleteById(id);
 		return "redirect:/users";
 	}
 
 	@RequestMapping(value = "/resetPassword-{id}", method = RequestMethod.GET)
 	public String resetUserPassword(@PathVariable Long id, Model model) {
-		logger.info("Reset Pass for user with ID= " + id);
+		log.info("Reset Pass for user with ID= {}", id);
 		User user = userService.findById(id);
-		//logger.info("Find User= " + user);
 
 		model.addAttribute("edit", true);
 		model.addAttribute("user", user);

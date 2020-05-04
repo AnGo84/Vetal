@@ -1,7 +1,6 @@
 package ua.com.vetal.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -16,6 +15,7 @@ import ua.com.vetal.entity.Link;
 import ua.com.vetal.entity.LinkType;
 import ua.com.vetal.service.LinkServiceImpl;
 import ua.com.vetal.service.LinkTypeServiceImpl;
+import ua.com.vetal.utils.LoggerUtils;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -23,11 +23,9 @@ import java.util.Locale;
 
 @RequestMapping("/links")
 @Controller
-//@SessionAttributes({"managersFilterList", "clientFilterList", "contractorFilterList"})
+@Slf4j
 
 public class LinksController {
-    static final Logger logger = LoggerFactory.getLogger(LinksController.class);
-
     @Autowired
     private MessageSource messageSource;
 
@@ -46,7 +44,7 @@ public class LinksController {
 
     @RequestMapping(value = {"/add"}, method = RequestMethod.GET)
     public String showAddLinkPage(Model model) {
-        logger.info("Add new link record");
+        log.info("Add new link record");
         Link link = new Link();
 
         model.addAttribute("edit", false);
@@ -57,7 +55,7 @@ public class LinksController {
 
     @RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
     public String editLink(@PathVariable Long id, Model model) {
-        logger.info("Edit link with ID= " + id);
+        log.info("Edit link with ID= " + id);
         model.addAttribute("edit", true);
         model.addAttribute("link", linkService.findById(id));
         return "linkPage";
@@ -66,10 +64,9 @@ public class LinksController {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String updateLink(@Valid @ModelAttribute("link") Link link, BindingResult bindingResult,
                              Model model) {
-        logger.info("Update link: " + link);
+        log.info("Update link: " + link);
         if (bindingResult.hasErrors()) {
-            // model.addAttribute("title", title);
-            // logger.info("BINDING RESULT ERROR");
+            LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
             return "linkPage";
         }
 
@@ -88,7 +85,7 @@ public class LinksController {
 
     @RequestMapping(value = {"/delete-{id}"}, method = RequestMethod.GET)
     public String deleteLink(@PathVariable Long id) {
-        logger.info("Delete link with ID= " + id);
+        log.info("Delete link with ID= " + id);
         linkService.deleteById(id);
         return "redirect:/links";
     }
