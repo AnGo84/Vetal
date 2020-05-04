@@ -15,7 +15,6 @@ import ua.com.vetal.entity.PasswordResetToken;
 import ua.com.vetal.entity.User;
 import ua.com.vetal.entity.dto.PasswordResetDto;
 import ua.com.vetal.repositories.PasswordResetTokenRepository;
-import ua.com.vetal.service.UserServiceImpl;
 
 import javax.validation.Valid;
 import java.util.Locale;
@@ -28,8 +27,8 @@ public class PasswordResetController {
     @Autowired
     private MessageSource messageSource;
 
-    @Autowired
-    private UserServiceImpl userService;
+    /*@Autowired
+    private UserServiceImpl userService;*/
     @Autowired
     private PasswordResetTokenRepository tokenRepository;
     @Autowired

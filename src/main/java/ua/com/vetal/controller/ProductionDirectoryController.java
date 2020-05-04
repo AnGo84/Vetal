@@ -11,13 +11,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import ua.com.vetal.entity.ProductionDirectory;
-import ua.com.vetal.entity.ProductionTypeDirectory;
 import ua.com.vetal.service.ProductionDirectoryServiceImpl;
 import ua.com.vetal.service.ProductionTypeDirectoryServiceImpl;
 import ua.com.vetal.utils.LoggerUtils;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Locale;
 
 @Controller
@@ -103,8 +101,9 @@ public class ProductionDirectoryController {
     /**
      * This method will provide LinkType list to views
      */
-    @ModelAttribute("productionTypesList")
+    /*@ModelAttribute("productionTypesList")
     public List<ProductionTypeDirectory> initializeProductionTypes() {
         return productionTypeService.findAllObjects();
     }
+*/
 }

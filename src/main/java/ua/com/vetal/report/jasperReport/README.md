@@ -19,3 +19,6 @@
 
 ### Exporting using jasper reports - PDF, Excel, CSV and Doc
 - https://steemit.com/technology/@vickyz/exporting-using-jasper-reports-pdf-excel-csv-and-doc
+
+### Cross table
+-https://community.jaspersoft.com/documentation/tibco-jaspersoft-studio-user-guide/v630/working-crosstabs

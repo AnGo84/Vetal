@@ -9,25 +9,23 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ua.com.vetal.acpect.LogExecutionTime;
-import ua.com.vetal.entity.*;
+import ua.com.vetal.entity.Kraskoottisk;
+import ua.com.vetal.entity.Stencil;
 import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.entity.filter.ViewFilter;
 import ua.com.vetal.report.jasperReport.JasperReportData;
 import ua.com.vetal.report.jasperReport.exporter.JasperReportExporterType;
 import ua.com.vetal.report.jasperReport.reportdata.StencilJasperReportData;
-import ua.com.vetal.service.*;
+import ua.com.vetal.service.KraskoottiskService;
+import ua.com.vetal.service.StencilServiceImpl;
 import ua.com.vetal.service.reports.JasperReportService;
 import ua.com.vetal.utils.LoggerUtils;
-import ua.com.vetal.utils.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/stencils")
@@ -43,7 +41,7 @@ public class StencilsController extends BaseController {
 
 	private List<Stencil> stencilList;
 
-	@Autowired
+	/*@Autowired
 	private PaymentServiceImpl paymentService;
 	@Autowired
 	private ManagerServiceImpl managerService;
@@ -64,7 +62,7 @@ public class StencilsController extends BaseController {
 	@Autowired
 	private PaperDirectoryServiceImpl paperService;
 	@Autowired
-	private PrintingUnitDirectoryServiceImpl printingUnitService;
+	private PrintingUnitDirectoryServiceImpl printingUnitService;*/
 
 	@Autowired
 	private StencilJasperReportData reportData;
@@ -203,7 +201,7 @@ public class StencilsController extends BaseController {
 	public String initializePageName() {
 		return this.pageName;
 	}
-
+/*
 	@ModelAttribute("numberBaseList")
 	public List<NumberBaseDirectory> getNumberBaseList() {
 		List<NumberBaseDirectory> resultList = numberBaseService.findAllObjects();
@@ -226,12 +224,12 @@ public class StencilsController extends BaseController {
 	@ModelAttribute("paymentList")
 	public List<Payment> getPaymentsList() {
 		List<Payment> resultList = paymentService.findAllObjects();
-        /*Collections.sort(resultList, new Comparator<Worker>() {
+        *//*Collections.sort(resultList, new Comparator<Worker>() {
             @Override
             public int compare(Worker m1, Worker m2) {
                 return m1.getFullName().compareTo(m2.getFullName());
             }
-        });*/
+        });*//*
 		return resultList;
 	}
 
@@ -300,14 +298,14 @@ public class StencilsController extends BaseController {
 				.sorted(Comparator.comparing(Client::getFullName))
 				.collect(Collectors.toList());
 
-		/*Collections.sort(resultList, new Comparator<Client>() {
+		*//*Collections.sort(resultList, new Comparator<Client>() {
 			@Override
 			public int compare(Client m1, Client m2) {
 				return m1.getFullName().compareTo(m2.getFullName());
 			}
 		});
 		return resultList;
-		*/
+		*//*
 		return result;
 	}
 
@@ -349,7 +347,7 @@ public class StencilsController extends BaseController {
 		});
 
 		return resultList;
-	}
+	}*/
 
 	@ModelAttribute("stencilFilterData")
 	public OrderViewFilter getStencilViewFilterData() {

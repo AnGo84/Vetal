@@ -10,21 +10,21 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import ua.com.vetal.entity.Contractor;
-import ua.com.vetal.entity.Manager;
 import ua.com.vetal.entity.filter.PersonViewFilter;
 import ua.com.vetal.entity.filter.ViewFilter;
 import ua.com.vetal.report.jasperReport.JasperReportData;
 import ua.com.vetal.report.jasperReport.exporter.JasperReportExporterType;
 import ua.com.vetal.report.jasperReport.reportdata.ContractorJasperReportData;
 import ua.com.vetal.service.ContractorServiceImpl;
-import ua.com.vetal.service.ManagerServiceImpl;
 import ua.com.vetal.service.reports.JasperReportService;
 import ua.com.vetal.utils.LoggerUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/contractor")
@@ -34,10 +34,10 @@ public class ContractorController extends BaseController {
     private final String personName = "Contractor";
     private final String pageName = "/contractor";
     @Autowired
-    MessageSource messageSource;
+    private MessageSource messageSource;
     private List<Contractor> contractorList;
-    @Autowired
-    private ManagerServiceImpl managerService;
+    /*@Autowired
+    private ManagerServiceImpl managerService;*/
 
     @Autowired
     private ContractorServiceImpl personService;
@@ -140,7 +140,7 @@ public class ContractorController extends BaseController {
         updateViewFilter(new PersonViewFilter());
         return "redirect:/contractor";
     }
-
+/*
     @ModelAttribute("managerList")
     public List<Manager> getManagersList() {
         List<Manager> resultList = managerService.findAllObjects();
@@ -152,7 +152,7 @@ public class ContractorController extends BaseController {
         });
 
         return resultList;
-    }
+    }*/
 
     @RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
     @ResponseBody

@@ -28,7 +28,7 @@ public class CringleDirectoryController {
 	private String pageName = "/cringle";
 
 	@Autowired
-	MessageSource messageSource;
+	private MessageSource messageSource;
 
 	@Autowired
 	private CringleDirectoryServiceImpl directoryService;

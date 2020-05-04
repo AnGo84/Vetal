@@ -58,4 +58,8 @@ public class Order {
 	@Digits(integer = 8, fraction = 2)
 	@Column(name = "Debt_amount")
 	private double debtAmount;
+
+	public String getLinkPrefix() {
+		return ("task".equals(orderType) ? "/tasks" : "/stencils");
+	}
 }

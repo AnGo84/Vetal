@@ -5,6 +5,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import ua.com.vetal.entity.*;
 import ua.com.vetal.utils.DateUtils;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -23,11 +25,11 @@ public class OrderViewFilter implements ViewFilter {
     private Contractor contractor;
     private ProductionDirectory production;
     private Printer printer;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateBeginFrom;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateBeginTill;
 
     private Client client;

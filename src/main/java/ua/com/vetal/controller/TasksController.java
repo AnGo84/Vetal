@@ -20,24 +20,28 @@ import org.springframework.web.multipart.MultipartFile;
 import ua.com.vetal.acpect.LogExecutionTime;
 import ua.com.vetal.email.EmailAttachment;
 import ua.com.vetal.email.EmailMessage;
-import ua.com.vetal.entity.*;
+import ua.com.vetal.entity.DBFile;
+import ua.com.vetal.entity.Task;
+import ua.com.vetal.entity.ViewTask;
 import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.entity.filter.ViewFilter;
 import ua.com.vetal.report.jasperReport.JasperReportData;
 import ua.com.vetal.report.jasperReport.exporter.JasperReportExporterType;
 import ua.com.vetal.report.jasperReport.reportdata.TaskJasperReportData;
-import ua.com.vetal.service.*;
+import ua.com.vetal.service.DBFileStorageService;
+import ua.com.vetal.service.TaskServiceImpl;
+import ua.com.vetal.service.ViewTaskServiceImpl;
 import ua.com.vetal.service.mail.MailServiceImp;
 import ua.com.vetal.service.reports.JasperReportService;
 import ua.com.vetal.utils.LoggerUtils;
-import ua.com.vetal.utils.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/tasks")
@@ -59,7 +63,7 @@ public class TasksController extends BaseController {
     //private List<Task> tasksList;
     private List<ViewTask> tasksList;
 
-    @Autowired
+    /*@Autowired
     private StateServiceImpl stateService;
     @Autowired
     private PaymentServiceImpl paymentService;
@@ -88,7 +92,7 @@ public class TasksController extends BaseController {
     @Autowired
     private NumberBaseDirectoryServiceImpl numberBaseService;
     @Autowired
-    private PrintingUnitDirectoryServiceImpl printingUnitService;
+    private PrintingUnitDirectoryServiceImpl printingUnitService;*/
 
     @Autowired
     private DBFileStorageService dbFileStorageService;
@@ -302,7 +306,7 @@ public class TasksController extends BaseController {
     }
 
     @ModelAttribute("personName")
-    public String initializepersonName() {
+    public String initializePersonName() {
         return this.personName;
     }
 
@@ -312,15 +316,15 @@ public class TasksController extends BaseController {
     }
 
 
-    @ModelAttribute("stateList")
+    /*@ModelAttribute("stateList")
     public List<State> getStatesList() {
         List<State> resultList = stateService.findAllObjects();
-        /*Collections.sort(resultList, new Comparator<Worker>() {
+        *//*Collections.sort(resultList, new Comparator<Worker>() {
             @Override
             public int compare(Worker m1, Worker m2) {
                 return m1.getFullName().compareTo(m2.getFullName());
             }
-        });*/
+        });*//*
 
         return resultList;
     }
@@ -328,16 +332,16 @@ public class TasksController extends BaseController {
     @ModelAttribute("paymentList")
     public List<Payment> getPaymentsList() {
         List<Payment> resultList = paymentService.findAllObjects();
-        /*Collections.sort(resultList, new Comparator<Worker>() {
+        *//*Collections.sort(resultList, new Comparator<Worker>() {
             @Override
             public int compare(Worker m1, Worker m2) {
                 return m1.getFullName().compareTo(m2.getFullName());
             }
-        });*/
+        });*//*
         return resultList;
-    }
+    }*/
 
-    @ModelAttribute("managerList")
+    /*@ModelAttribute("managerList")
     public List<Manager> getManagersList() {
         List<Manager> resultList = managerService.findAllObjects();
         Collections.sort(resultList, new Comparator<Manager>() {
@@ -348,19 +352,19 @@ public class TasksController extends BaseController {
         });
 
         return resultList;
-    }
-
+    }*/
+/*
     @ModelAttribute("contractorList")
     public List<Contractor> getContractorsList() {
         List<Contractor> resultList = contractorService.findAllObjects();
-		/*Collections.sort(resultList, new Comparator<Contractor>() {
+		*//*Collections.sort(resultList, new Comparator<Contractor>() {
 			@Override
 			public int compare(Contractor m1, Contractor m2) {
 				return m1.getFullName().compareTo(m2.getFullName());
 			}
 		});
 		return resultList;
-		*/
+		*//*
 
         List<Contractor> result = resultList.stream()           // convert list to stream
                 .filter(contractor -> !StringUtils.isEmpty(contractor.getCorpName())
@@ -405,14 +409,14 @@ public class TasksController extends BaseController {
                 .sorted(Comparator.comparing(Client::getFullName))
                 .collect(Collectors.toList());
 
-		/*Collections.sort(resultList, new Comparator<Client>() {
+		*//*Collections.sort(resultList, new Comparator<Client>() {
 			@Override
 			public int compare(Client m1, Client m2) {
 				return m1.getFullName().compareTo(m2.getFullName());
 			}
 		});
 		return resultList;
-		*/
+		*//*
         return result;
     }
 
@@ -519,7 +523,7 @@ public class TasksController extends BaseController {
         });
 
         return resultList;
-    }
+    }*/
 
     @ModelAttribute("taskFilterData")
     public OrderViewFilter getTaskViewFilter() {

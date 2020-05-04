@@ -36,11 +36,6 @@ public class ChromaticityDirectoryController {
 	@Autowired
 	private ChromaticityDirectoryServiceImpl directoryService;
 
-	/*
-	 * @Autowired public UserController(UserServiceImpl userService) {
-	 * this.userService = userService; }
-	 */
-
 	@RequestMapping(value = { "", "/list" }, method = RequestMethod.GET)
 	public String directoryList(Model model) {
 		model.addAttribute("directoryList", directoryService.findAllObjects());
@@ -58,13 +53,6 @@ public class ChromaticityDirectoryController {
 
 	}
 
-	/*
-	 * @RequestMapping(value = "/add", method = RequestMethod.POST) public
-	 * String saveNewUser(Model model, @ModelAttribute("user") User user) {
-	 * 
-	 * userService.saveObject(user); return "redirect:/usersPage"; }
-	 */
-
 	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
 	public String editRecord(@PathVariable Long id, Model model) {
 		log.info("Edit Chromaticity with ID= {}");
@@ -75,12 +63,6 @@ public class ChromaticityDirectoryController {
 		model.addAttribute("directory", directoryService.findById(id));
 		return "directoryRecordPage";
 	}
-
-	/*
-	 * @RequestMapping(value = "/edit-{id}", method = RequestMethod.POST) public
-	 * String saveUpdateUser(Model model, @ModelAttribute("user") User user) {
-	 * userService.saveObject(user); return "redirect:/usersPage"; }
-	 */
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String updateRecord(@Valid @ModelAttribute("directory") ChromaticityDirectory directory,

@@ -10,21 +10,21 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import ua.com.vetal.entity.Client;
-import ua.com.vetal.entity.Manager;
 import ua.com.vetal.entity.filter.ClientViewFilter;
 import ua.com.vetal.entity.filter.ViewFilter;
 import ua.com.vetal.report.jasperReport.JasperReportData;
 import ua.com.vetal.report.jasperReport.exporter.JasperReportExporterType;
 import ua.com.vetal.report.jasperReport.reportdata.ClientJasperReportData;
 import ua.com.vetal.service.ClientServiceImpl;
-import ua.com.vetal.service.ManagerServiceImpl;
 import ua.com.vetal.service.reports.JasperReportService;
 import ua.com.vetal.utils.LoggerUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/clients")
@@ -34,8 +34,8 @@ public class ClientController extends BaseController {
     @Autowired
     private MessageSource messageSource;
     private List<Client> clientList;
-    @Autowired
-    private ManagerServiceImpl managerService;
+    /*@Autowired
+    private ManagerServiceImpl managerService;*/
 
     @Autowired
     private ClientServiceImpl clientService;
@@ -101,7 +101,7 @@ public class ClientController extends BaseController {
         return "redirect:/clients";
     }
 
-    @ModelAttribute("managerList")
+    /*@ModelAttribute("managerList")
     public List<Manager> getManagersList() {
         List<Manager> resultList = managerService.findAllObjects();
         Collections.sort(resultList, new Comparator<Manager>() {
@@ -112,7 +112,7 @@ public class ClientController extends BaseController {
         });
 
         return resultList;
-    }
+    }*/
 
     //Filter
     @RequestMapping(value = "/filter", method = RequestMethod.GET)
