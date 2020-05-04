@@ -4,6 +4,10 @@ import lombok.Data;
 import org.apache.logging.log4j.util.Strings;
 import ua.com.vetal.entity.Manager;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 @Data
 public class PersonViewFilter implements ViewFilter {
     private String corpName;
@@ -22,5 +26,17 @@ public class PersonViewFilter implements ViewFilter {
     @Override
     public ViewFilter getDefault() {
         return new PersonViewFilter();
+    }
+
+    @Override
+    public Predicate getPredicate(CriteriaBuilder builder, Root root, Predicate predicate) {
+        if (!Strings.isBlank(this.getCorpName())) {
+            predicate = builder.and(predicate, builder.like(builder.lower(root.get("corpName")),
+                    ("%" + this.getCorpName() + "%").toLowerCase()));
+        }
+        if (this.getManager() != null && this.getManager().getId() != null) {
+            predicate = builder.and(predicate, builder.equal(root.get("manager"), this.getManager()));
+        }
+        return predicate;
     }
 }

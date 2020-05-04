@@ -28,40 +28,8 @@ public class OrderDAO {
 
         Predicate predicate = builder.conjunction();
 
-        if (orderViewFilter != null) {
-
-            if (orderViewFilter.getClient() != null && orderViewFilter.getClient().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("client"), orderViewFilter.getClient()));
-            }
-
-            if (orderViewFilter.getManager() != null && orderViewFilter.getManager().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("manager"), orderViewFilter.getManager()));
-            }
-
-            if (orderViewFilter.getProduction() != null && orderViewFilter.getProduction().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("production"), orderViewFilter.getProduction()));
-            }
-            if (orderViewFilter.getDateBeginFrom() != null) {
-                predicate = builder.and(predicate,
-                        builder.greaterThanOrEqualTo(root.get("dateBegin"), orderViewFilter.getDateBeginFrom()));
-            }
-
-            if (orderViewFilter.getDateBeginTill() != null) {
-                predicate = builder.and(predicate,
-                        builder.lessThanOrEqualTo(root.get("dateBegin"), orderViewFilter.getDateBeginTill()));
-            }
-
-
-            if (orderViewFilter.getDebtAmountFrom() != null) {
-                predicate = builder.and(predicate,
-                        builder.greaterThanOrEqualTo(root.get("debtAmount"), orderViewFilter.getDebtAmountFrom()));
-            }
-
-            if (orderViewFilter.getDebtAmountTill() != null) {
-                predicate = builder.and(predicate,
-                        builder.lessThanOrEqualTo(root.get("debtAmount"), orderViewFilter.getDebtAmountTill()));
-            }
-
+        if (orderViewFilter != null && orderViewFilter.hasData()) {
+            predicate = orderViewFilter.getPredicate(builder, root, predicate);
         }
         query.where(predicate);
         query.orderBy(builder.desc(root.get("dateBegin")));

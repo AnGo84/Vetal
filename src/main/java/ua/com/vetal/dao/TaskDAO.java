@@ -44,84 +44,13 @@ public class TaskDAO {
 
         Predicate predicate = builder.conjunction();
 
-        if (orderViewFilter != null) {
-
-            if (orderViewFilter.getAccount() != null && !orderViewFilter.getAccount().equals("")) {
-                predicate = builder.and(predicate, builder.equal(root.get("account"), orderViewFilter.getAccount()));
-                /*
-                 * predicate = builder.and(predicate,
-                 * builder.like(builder.lower(builder.toString(root.get("account")))
-                 * , ("%" + filterData.getAccount() + "%").toLowerCase()));
-                 */
-                predicate = builder.and(predicate, builder.like(builder.lower(root.get("account")),
-                        ("%" + orderViewFilter.getAccount() + "%").toLowerCase()));
-            }
-
-
-            if (orderViewFilter.getNumber() != null && !orderViewFilter.getNumber().equals("")) {
-                predicate = builder.and(predicate, builder.like(builder.lower(root.get("fullNumber")),
-                        ("%" + orderViewFilter.getNumber() + "%").toLowerCase()));
-
-            }
-
-            if (orderViewFilter.getFileName() != null && !orderViewFilter.getFileName().equals("")) {
-                predicate = builder.and(predicate, builder.like(builder.lower(root.get("fileName")),
-                        ("%" + orderViewFilter.getFileName() + "%").toLowerCase()));
-            }
-
-            if (orderViewFilter.getClient() != null && orderViewFilter.getClient().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("client"), orderViewFilter.getClient()));
-            }
-
-            if (orderViewFilter.getContractor() != null && orderViewFilter.getContractor().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("contractor"), orderViewFilter.getContractor()));
-            }
-
-            if (orderViewFilter.getManager() != null && orderViewFilter.getManager().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("manager"), orderViewFilter.getManager()));
-            }
-            if (orderViewFilter.getPaper() != null && orderViewFilter.getPaper().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("paper"), orderViewFilter.getPaper()));
-            }
-            if (orderViewFilter.getProduction() != null && orderViewFilter.getProduction().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("production"), orderViewFilter.getProduction()));
-            }
-
-            if (orderViewFilter.getDateBeginFrom() != null) {
-                predicate = builder.and(predicate,
-                        builder.greaterThanOrEqualTo(root.get("dateBegin"), orderViewFilter.getDateBeginFrom()));
-            }
-
-            if (orderViewFilter.getDateBeginTill() != null) {
-                predicate = builder.and(predicate,
-                        builder.lessThanOrEqualTo(root.get("dateBegin"), orderViewFilter.getDateBeginTill()));
-            }
-
-            /*
-             * for (SearchCriteria param : params) { if
-             * (param.getOperation().equalsIgnoreCase(">")) { predicate =
-             * builder.and(predicate,
-             * builder.greaterThanOrEqualTo(root.get(param.getKey()),
-             * param.getValue().toString())); } else if
-             * (param.getOperation().equalsIgnoreCase("<")) { predicate =
-             * builder.and(predicate,
-             * builder.lessThanOrEqualTo(root.get(param.getKey()),
-             * param.getValue().toString())); } else if
-             * (param.getOperation().equalsIgnoreCase(":")) { if
-             * (r.get(param.getKey()).getJavaType() == String.class) { predicate =
-             * builder.and(predicate, builder.like(root.get(param.getKey()), "%" +
-             * param.getValue() + "%")); } else { predicate = builder.and(predicate,
-             * builder.equal(root.get(param.getKey()), param.getValue())); } } }
-             */
-
+        if (orderViewFilter != null && orderViewFilter.hasData()) {
+            predicate = orderViewFilter.getPredicate(builder, root, predicate);
         }
         query.where(predicate);
         query.orderBy(builder.desc(root.get("dateBegin")));
 
         list = entityManager.createQuery(query).getResultList();
-
-        // https://www.baeldung.com/rest-search-language-spring-jpa-criteria
-        // http://qaru.site/questions/293915/spring-data-jpa-query-by-example
         return list;
     }
 

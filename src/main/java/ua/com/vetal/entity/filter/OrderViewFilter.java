@@ -5,6 +5,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import ua.com.vetal.entity.*;
 import ua.com.vetal.utils.DateUtils;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.Date;
 
 @Data
@@ -21,11 +24,9 @@ public class OrderViewFilter implements ViewFilter {
     private ProductionDirectory production;
     private Printer printer;
 
-    // @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateBeginFrom;
 
-    // @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateBeginTill;
 
@@ -53,7 +54,7 @@ public class OrderViewFilter implements ViewFilter {
 
     @Override
     public boolean hasData() {
-        if (account != null) {
+        if (account != null && !account.equals("")) {
             return true;
         } else if (number != null && !number.equals("")) {
             return true;
@@ -73,18 +74,13 @@ public class OrderViewFilter implements ViewFilter {
             return true;
         } else if (fileName != null && !fileName.equals("")) {
             return true;
-        } else if (number != null && !number.equals("")) {
-            return true;
         } else if (dateBeginFrom != null) {
             return true;
         } else if (dateBeginTill != null) {
             return true;
         } else if (debtAmountFrom != null) {
             return true;
-        } else if (debtAmountTill != null) {
-            return true;
-        }
-        return false;
+        } else return debtAmountTill != null;
     }
 
     @Override
@@ -92,6 +88,65 @@ public class OrderViewFilter implements ViewFilter {
         OrderViewFilter orderViewFilter = new OrderViewFilter();
         orderViewFilter.setDateBeginFrom(DateUtils.firstDayOfMonth(DateUtils.addToDate(new Date(), 2, -1)));
         return orderViewFilter;
+    }
+
+    @Override
+    public Predicate getPredicate(CriteriaBuilder builder, Root root, Predicate predicate) {
+
+        if (this.getAccount() != null && !this.getAccount().equals("")) {
+            predicate = builder.and(predicate, builder.like(builder.lower(root.get("account")),
+                    ("%" + this.getAccount() + "%").toLowerCase()));
+        }
+        if (this.getNumber() != null && !this.getNumber().equals("")) {
+            predicate = builder.and(predicate, builder.like(builder.lower(root.get("fullNumber")),
+                    ("%" + this.getNumber() + "%").toLowerCase()));
+        }
+
+        if (this.getFileName() != null && !this.getFileName().equals("")) {
+            predicate = builder.and(predicate, builder.like(builder.lower(root.get("fileName")),
+                    ("%" + this.getFileName() + "%").toLowerCase()));
+        }
+
+        if (this.getClient() != null && this.getClient().getId() != null) {
+            predicate = builder.and(predicate, builder.equal(root.get("client"), this.getClient()));
+        }
+
+        if (this.getContractor() != null && this.getContractor().getId() != null) {
+            predicate = builder.and(predicate, builder.equal(root.get("contractor"), this.getContractor()));
+        }
+
+        if (this.getManager() != null && this.getManager().getId() != null) {
+            predicate = builder.and(predicate, builder.equal(root.get("manager"), this.getManager()));
+        }
+
+        if (this.getPrinter() != null && this.getPrinter().getId() != null) {
+            predicate = builder.and(predicate, builder.equal(root.get("printer"), this.getPrinter()));
+        }
+
+        if (this.getPaper() != null && this.getPaper().getId() != null) {
+            predicate = builder.and(predicate, builder.equal(root.get("paper"), this.getPaper()));
+        }
+
+        if (this.getProduction() != null && this.getProduction().getId() != null) {
+            predicate = builder.and(predicate, builder.equal(root.get("production"), this.getProduction()));
+        }
+        if (this.getDateBeginFrom() != null) {
+            predicate = builder.and(predicate,
+                    builder.greaterThanOrEqualTo(root.get("dateBegin"), this.getDateBeginFrom()));
+        }
+        if (this.getDateBeginTill() != null) {
+            predicate = builder.and(predicate,
+                    builder.lessThanOrEqualTo(root.get("dateBegin"), this.getDateBeginTill()));
+        }
+        if (this.getDebtAmountFrom() != null) {
+            predicate = builder.and(predicate,
+                    builder.greaterThanOrEqualTo(root.get("debtAmount"), this.getDebtAmountFrom()));
+        }
+        if (this.getDebtAmountTill() != null) {
+            predicate = builder.and(predicate,
+                    builder.lessThanOrEqualTo(root.get("debtAmount"), this.getDebtAmountTill()));
+        }
+        return predicate;
     }
 
     @Override

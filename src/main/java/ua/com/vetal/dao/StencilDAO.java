@@ -45,46 +45,8 @@ public class StencilDAO {
 
         Predicate predicate = builder.conjunction();
 
-        if (orderViewFilter != null) {
-            if (orderViewFilter.getAccount() != null && !orderViewFilter.getAccount().equals("")) {
-                predicate = builder.and(predicate, builder.like(builder.lower(root.get("account")),
-                        ("%" + orderViewFilter.getAccount() + "%").toLowerCase()));
-
-            }
-
-            if (orderViewFilter.getNumber() != null && !orderViewFilter.getNumber().equals("")) {
-                predicate = builder.and(predicate, builder.like(builder.lower(root.get("fullNumber")),
-                        ("%" + orderViewFilter.getNumber() + "%").toLowerCase()));
-
-            }
-            if (orderViewFilter.getClient() != null && orderViewFilter.getClient().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("client"), orderViewFilter.getClient()));
-            }
-
-            if (orderViewFilter.getPrinter() != null && orderViewFilter.getPrinter().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("printer"), orderViewFilter.getPrinter()));
-            }
-
-            if (orderViewFilter.getManager() != null && orderViewFilter.getManager().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("manager"), orderViewFilter.getManager()));
-            }
-
-            if (orderViewFilter.getPaper() != null && orderViewFilter.getPaper().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("paper"), orderViewFilter.getPaper()));
-            }
-
-            if (orderViewFilter.getProduction() != null && orderViewFilter.getProduction().getId() != null) {
-                predicate = builder.and(predicate, builder.equal(root.get("production"), orderViewFilter.getProduction()));
-            }
-            if (orderViewFilter.getDateBeginFrom() != null) {
-                predicate = builder.and(predicate,
-                        builder.greaterThanOrEqualTo(root.get("dateBegin"), orderViewFilter.getDateBeginFrom()));
-            }
-
-            if (orderViewFilter.getDateBeginTill() != null) {
-                predicate = builder.and(predicate,
-                        builder.lessThanOrEqualTo(root.get("dateBegin"), orderViewFilter.getDateBeginTill()));
-            }
+        if (orderViewFilter != null && orderViewFilter.hasData()) {
+            predicate = orderViewFilter.getPredicate(builder, root, predicate);
         }
         query.where(predicate);
         query.orderBy(builder.desc(root.get("dateBegin")));
