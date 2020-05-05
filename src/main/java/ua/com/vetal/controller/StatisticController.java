@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ua.com.vetal.acpect.LogExecutionTime;
-import ua.com.vetal.entity.Order;
+import ua.com.vetal.entity.StatisticOrder;
 import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.entity.filter.ViewFilter;
 import ua.com.vetal.report.jasperReport.JasperReportData;
@@ -40,7 +40,7 @@ public class StatisticController extends BaseController {
     @Autowired
     private OrderServiceImpl orderService;
 
-    private List<Order> orderList;
+    private List<StatisticOrder> statisticOrderList;
 
     @Autowired
     private ManagerServiceImpl managerService;
@@ -105,9 +105,9 @@ public class StatisticController extends BaseController {
      */
 
     @ModelAttribute("ordersList")
-    public List<Order> getOrdersListData() {
-        orderList = orderService.findByFilterData(getOrderViewFilter());
-        log.info("Get OrdersList: " + orderList.size());
-        return orderList;
+    public List<StatisticOrder> getOrdersListData() {
+        statisticOrderList = orderService.findByFilterData(getOrderViewFilter());
+        log.info("Get OrdersList: " + statisticOrderList.size());
+        return statisticOrderList;
     }
 }

@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.stereotype.Component;
-import ua.com.vetal.entity.Order;
+import ua.com.vetal.entity.StatisticOrder;
 import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.report.Reportable;
 import ua.com.vetal.report.jasperReport.AppJasperReportType;
@@ -17,16 +17,16 @@ import java.util.Map;
 
 @Component
 @Slf4j
-public class OrderJasperReportData implements Reportable<Order, JasperReportData, OrderViewFilter> {
-    @Override
-    public JasperReportData getReportData(Order object) {
-        log.info("Get JasperReportData for: {}", object);
-        return null;
-    }
+public class OrderJasperReportData implements Reportable<StatisticOrder, JasperReportData, OrderViewFilter> {
+	@Override
+	public JasperReportData getReportData(StatisticOrder object) {
+		log.info("Get JasperReportData for: {}", object);
+		return null;
+	}
 
-    @Override
-    public JasperReportData getReportData(List<Order> objects) {
-        log.info("Get JasperReportData for objects: {}", objects);
+	@Override
+	public JasperReportData getReportData(List<StatisticOrder> objects) {
+		log.info("Get JasperReportData for objects: {}", objects);
 
 		Map<String, Object> parameters = new HashMap<>();
 		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(objects);
@@ -39,18 +39,18 @@ public class OrderJasperReportData implements Reportable<Order, JasperReportData
 				.build();
 	}
 
-    @Override
-    public JasperReportData getReportData(List<Order> objects, OrderViewFilter orderViewFilter) {
-        log.info("Get JasperReportData for objects: {}", objects);
-        log.info("Filter: {}", orderViewFilter);
-        if (orderViewFilter == null) {
-            orderViewFilter = new OrderViewFilter();
-        }
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("filter", orderViewFilter);
+	@Override
+	public JasperReportData getReportData(List<StatisticOrder> objects, OrderViewFilter orderViewFilter) {
+		log.info("Get JasperReportData for objects: {}", objects);
+		log.info("Filter: {}", orderViewFilter);
+		if (orderViewFilter == null) {
+			orderViewFilter = new OrderViewFilter();
+		}
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("filter", orderViewFilter);
 
-        String date = "";
-        if (orderViewFilter.getDateBeginFrom() != null) {
+		String date = "";
+		if (orderViewFilter.getDateBeginFrom() != null) {
             date = DateUtils.SIMPLE_DATE_FORMAT.format(orderViewFilter.getDateBeginFrom());
         }
         parameters.put("date_From", date);

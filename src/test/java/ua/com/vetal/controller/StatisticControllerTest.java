@@ -9,7 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ua.com.vetal.TestDataUtils;
-import ua.com.vetal.entity.Order;
+import ua.com.vetal.entity.StatisticOrder;
 import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.report.jasperReport.reportdata.TaskJasperReportData;
 import ua.com.vetal.service.OrderServiceImpl;
@@ -38,15 +38,15 @@ public class StatisticControllerTest {
 	@MockBean
 	private JasperReportService mockJasperReportService;
 
-	private List<Order> orders;
+	private List<StatisticOrder> statisticOrders;
 
 	@BeforeEach
 	public void beforeEach() {
-		orders = new ArrayList<>();
+		statisticOrders = new ArrayList<>();
 
-		orders.add(TestDataUtils.getOrder(1l));
-		orders.add(TestDataUtils.getOrder(2l));
-		when(mockOrderService.findAllObjects()).thenReturn(orders);
+		statisticOrders.add(TestDataUtils.getOrder(1l));
+		statisticOrders.add(TestDataUtils.getOrder(2l));
+		when(mockOrderService.findAllObjects()).thenReturn(statisticOrders);
 	}
 
 	@Test
@@ -89,8 +89,8 @@ public class StatisticControllerTest {
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenFilterClientsAsAuthorizedWithNotNullUser_thenOk() throws Exception {
 		OrderViewFilter orderViewFilter = new OrderViewFilter();
-		orderViewFilter.setClient(orders.get(0).getClient());
-		orderViewFilter.setManager(orders.get(0).getManager());
+		orderViewFilter.setClient(statisticOrders.get(0).getClient());
+		orderViewFilter.setManager(statisticOrders.get(0).getManager());
 		mockMvc.perform(get(MAPPED_URL + "/filter")
 				.param("statisticFilterData", orderViewFilter.toString())
 		)

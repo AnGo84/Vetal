@@ -3,63 +3,58 @@ package ua.com.vetal.entity;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
+import ua.com.vetal.entity.attributeConverter.MoneyConverter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.text.DecimalFormat;
 import java.util.Date;
 
 @Entity
 @Table(name = "stencils")
 @Data
-public class Stencil {
+public class Stencil extends Order {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+    /* @Id
+	 @GeneratedValue(strategy = GenerationType.IDENTITY)
+	 @Column(name = "id", nullable = false)
+	 private Long id;
 
-    @NotNull
-    @Column(name = "Number", nullable = false)
-    private int number;
+	 @NotNull
+	 @Column(name = "Number", nullable = false)
+	 private int number;
 
+	 @NotNull
+	 @ManyToOne(optional = false)
+	 @JoinColumn(name = "Number_Base_ID")
+	 private NumberBaseDirectory numberBase;
 
-    @NotNull
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "Number_Base_ID")
-    private NumberBaseDirectory numberBase;
+	 @NotNull
+	 @Column(name = "Number_Suffix", nullable = false)
+	 private int numberSuffix;
 
-    @NotNull
-    @Column(name = "Number_Suffix", nullable = false)
-    //@Size(max = 5)
-    private int numberSuffix;
+	 @Column(name = "Full_number")
+	 private String fullNumber;
 
-    @Column(name = "Full_number")
-    private String fullNumber;
+	 @Column(name = "Account")
+	 @Size(max = 50)
+	 private String account;
 
-    //@NotNull
-    //@Column(name = "Account", nullable = false, unique = true)
-    @Column(name = "Account")
-    @Size(max = 50)
-    private String account;
-
-    @NotNull
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "Client_ID")
-    private Client client;
-
+	 @NotNull
+	 @ManyToOne(optional = false)
+	 @JoinColumn(name = "Client_ID")
+	 private Client client;
+ */
     @NotEmpty
     @Column(name = "Order_Name", nullable = false)
     private String orderName;
 
-    @ManyToOne(optional = false)
+    /*@ManyToOne(optional = false)
     @JoinColumn(name = "Manager_ID")
-    private Manager manager;
+    private Manager manager;*/
 
-    @NotNull
+    /*@NotNull
     @Column(name = "Date_BEGIN", nullable = false)
     @Temporal(TemporalType.DATE)
     // @DateTimeFormat(pattern = "dd-MM-yyyy")
@@ -92,14 +87,15 @@ public class Stencil {
     @JoinColumn(name = "Printing_unit_id", nullable = false)
     private PrintingUnitDirectory printingUnit;
 
-    //@NotNull
+     */
+
     @Column(name = "Adjustment")
     private String adjustment;
 
-	@NotNull
+	/*@NotNull
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "Paper_ID")
-	private PaperDirectory paper;
+	private PaperDirectory paper;*/
 
     @NotNull
     @Column(name = "Paper_format", nullable = false)
@@ -129,7 +125,7 @@ public class Stencil {
     @ManyToOne(optional = true)
     @JoinColumn(name = "Worker_cut_ID")
     private Worker workerCut;
-
+    /*
     @Column(name = "Fillet", nullable = false)
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean fillet;
@@ -184,13 +180,12 @@ public class Stencil {
 
     @NotNull
     @Column(name = "Numeration_start")
-    private int numerationStart;
+    private int numerationStart;*/
 
     @Column(name = "Cut_ribbon", nullable = false)
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean cutRibbon;
 
-    //@NotNull
     @Column(name = "Ribbon_length", nullable = true)
     private int ribbonLength;
 
@@ -199,7 +194,7 @@ public class Stencil {
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean sticker;
 
-    @NotNull
+    /*@NotNull
     @Digits(integer = 8, fraction = 2)
     @Column(name = "Amount", nullable = true)
     private double amount;
@@ -214,22 +209,24 @@ public class Stencil {
 
     @Digits(integer = 8, fraction = 2)
     @Column(name = "Debt_amount", nullable = true)
-    private double debtAmount;
+    private double debtAmount;*/
 
     @Column(name = "kraskoottisk")
     private int kraskoottisk;
 
-    @Digits(integer = 8, fraction = 2)
+    //@Digits(integer = 8, fraction = 2)
     @Column(name = "cost_of_materials", nullable = true)
-    private double costOfMaterials;
+    @Convert(converter = MoneyConverter.class)
+    private Double costOfMaterials;
 
-    @Digits(integer = 8, fraction = 2)
+    /*@Digits(integer = 8, fraction = 2)
     @Column(name = "other_expenses", nullable = true)
-    private double otherExpenses;
+    private double otherExpenses;*/
 
-    @Digits(integer = 8, fraction = 2)
+    //@Digits(integer = 8, fraction = 2)
     @Column(name = "cost_of_printing", nullable = true)
-    private double costOfPrinting;
+    @Convert(converter = MoneyConverter.class)
+    private Double costOfPrinting;
 
     public Stencil getCopy() {
 
@@ -289,7 +286,7 @@ public class Stencil {
         return task;
     }
 
-    public Long getId() {
+    /*public Long getId() {
         return id;
     }
 
@@ -687,10 +684,10 @@ public class Stencil {
 
     public void setCostOfPrinting(double costOfPrinting) {
         this.costOfPrinting = costOfPrinting;
-    }
+    }*/
 
-    public String getStringAmount() {
+    /*public String getStringAmount() {
         return new DecimalFormat("#,##0.00").format(amount / 100) + " грн";
-    }
+    }*/
 
 }

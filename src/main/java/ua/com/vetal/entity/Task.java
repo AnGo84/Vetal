@@ -2,22 +2,19 @@ package ua.com.vetal.entity;
 
 import lombok.Data;
 import org.hibernate.annotations.Type;
-import org.springframework.format.annotation.DateTimeFormat;
+import ua.com.vetal.entity.attributeConverter.MoneyConverter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.text.DecimalFormat;
-import java.util.Date;
 
 @Entity
 @Table(name = "tasks")
 @Data
-public class Task {
+public class Task extends Order {
 
-	@Id
+	/*@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
 	private Long id;
@@ -44,7 +41,7 @@ public class Task {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "Manager_ID")
-    private Manager manager;
+    private Manager manager;*/
 
     @NotEmpty
     @Column(name = "Work_Name", nullable = false)
@@ -55,7 +52,7 @@ public class Task {
 
     @OneToOne
     @JoinColumn(name = "file_id")
-    private DBFile dbFile;
+	private DBFile dbFile;
 
 
 	@ManyToOne(optional = false)
@@ -65,36 +62,39 @@ public class Task {
 	@Column(name = "Contractor_number")
 	private String contractorNumber;
 
-	@Digits(integer = 8, fraction = 2)
+	//@Digits(integer = 8, fraction = 2)
 	@Column(name = "Amount_for_Contractor", nullable = true)
-	private double amountForContractor;
+	@Convert(converter = MoneyConverter.class)
+	private Double amountForContractor;
 
-	@Digits(integer = 8, fraction = 2)
+	//@Digits(integer = 8, fraction = 2)
 	@Column(name = "Contractor_Amount", nullable = true)
-	private double contractorAmount;
+	@Convert(converter = MoneyConverter.class)
+	private Double contractorAmount;
 
 	@Column(name = "provider")
 	private String provider;
 
-	@Digits(integer = 8, fraction = 2)
+	//@Digits(integer = 8, fraction = 2)
 	@Column(name = "provider_cost", nullable = true)
-	private double providerCost;
+	@Convert(converter = MoneyConverter.class)
+	private Double providerCost;
 
-	@Digits(integer = 8, fraction = 2)
+	/*@Digits(integer = 8, fraction = 2)
 	@Column(name = "other_expenses", nullable = true)
 	private double otherExpenses;
 
 	@NotNull
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "Production_ID")
-	private ProductionDirectory production;
+	private ProductionDirectory production;*/
 
 	@NotNull
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "Production_Type_ID")
 	private ProductionTypeDirectory productionType;
 
-	@NotNull
+	/*@NotNull
 	@Column(name = "Date_BEGIN", nullable = false)
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -104,9 +104,9 @@ public class Task {
 	@Column(name = "Date_END", nullable = false)
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date dateEnd;
+	private Date dateEnd;*/
 
-	@NotNull
+	/*@NotNull
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "Client_ID", nullable = false)
 	private Client client;
@@ -124,7 +124,7 @@ public class Task {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "Printing_unit_id", nullable = false)
 	private PrintingUnitDirectory printingUnit;
-
+*/
 	@NotNull
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "Chromaticity_ID", nullable = false)
@@ -142,10 +142,10 @@ public class Task {
 	@JoinColumn(name = "Laminate_ID")
 	private LaminateDirectory laminate;
 
-	@NotNull
+	/*@NotNull
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "Paper_ID")
-	private PaperDirectory paper;
+	private PaperDirectory paper;*/
 
 	@Column(name = "Wares")
 	private String wares;
@@ -154,7 +154,7 @@ public class Task {
 	@JoinColumn(name = "Cringle_ID")
 	private CringleDirectory cringle;
 
-	@Column(name = "Fillet", nullable = false)
+	/*@Column(name = "Fillet", nullable = false)
 	@Type(type = "org.hibernate.type.NumericBooleanType")
 	private boolean fillet;
 
@@ -180,7 +180,7 @@ public class Task {
 
 	@Column(name = "Plotter", nullable = false)
 	@Type(type = "org.hibernate.type.NumericBooleanType")
-	private boolean plotter;
+	private boolean plotter;*/
 
 	@Column(name = "assembly", nullable = false)
 	@Type(type = "org.hibernate.type.NumericBooleanType")
@@ -194,7 +194,7 @@ public class Task {
 	@Size(max = 1000)
 	private String note;
 
-	@Column(name = "PackBox", nullable = false)
+	/*@Column(name = "PackBox", nullable = false)
 	@Type(type = "org.hibernate.type.NumericBooleanType")
 	private boolean packBox;
 
@@ -212,12 +212,12 @@ public class Task {
 
 	@Column(name = "PackNP", nullable = false)
 	@Type(type = "org.hibernate.type.NumericBooleanType")
-	private boolean packNP;
+	private boolean packNP;*/
 
 	@Column(name = "PackBy")
 	private String packBy;
 
-	@Column(name = "Numeration", nullable = false)
+	/*@Column(name = "Numeration", nullable = false)
 	@Type(type = "org.hibernate.type.NumericBooleanType")
 	private boolean numeration;
 
@@ -240,7 +240,7 @@ public class Task {
 
 	@Digits(integer = 8, fraction = 2)
 	@Column(name = "Debt_amount", nullable = true)
-	private double debtAmount;
+	private double debtAmount;*/
 
 	public Task getCopy() {
 
@@ -294,7 +294,7 @@ public class Task {
 		return task;
 	}
 
-	public Long getId() {
+	/*public Long getId() {
 		return id;
 	}
 
@@ -708,12 +708,9 @@ public class Task {
 
 	public void setContractorAmount(double contractorAmount) {
 		this.contractorAmount = contractorAmount;
-	}
+	}*/
 
-	public String getStringAmount() {
-		return new DecimalFormat("#,##0.00").format(amount / 100) + " грн";
-	}
-
+/*
 	public String getProvider() {
 		return provider;
 	}
@@ -737,7 +734,7 @@ public class Task {
 	public void setOtherExpenses(double otherExpenses) {
 		this.otherExpenses = otherExpenses;
 	}
-
+*/
 
 	public String getDBFileName() {
 		if (dbFile == null || dbFile.getFileName() == null) {

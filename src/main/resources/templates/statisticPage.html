@@ -226,32 +226,33 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:class="${order.orderType=='task'} ? 'table-success' : 'table-danger'"
-                            th:each="order : ${ordersList}">
-                            <td class="text-center" th:text="${order.id}"></td>
-                            <td><a th:href="  @{${order.linkPrefix} + '/view-' + ${order.id}}"
-                                   th:text="${order.fullNumber}"></a></td>
-                            <td th:text="${order.orderType}=='task' ? #{label.task}:#{label.stencil}"></td>
-                            <td th:text="${order.manager.fullName}"></td>
-                            <td th:text="${order.client.fullName}"></td>
-                            <td th:text="${order.production.fullName}"></td>
+                        <tr th:class="${statisticOrder.orderType=='task'} ? 'table-success' : 'table-danger'"
+                            th:each="statisticOrder : ${ordersList}">
+                            <td class="text-center" th:text="${statisticOrder.id}"></td>
+                            <td><a th:href="  @{${statisticOrder.linkPrefix} + '/view-' + ${statisticOrder.id}}"
+                                   th:text="${statisticOrder.fullNumber}"></a></td>
+                            <td th:text="${statisticOrder.orderType}=='task' ? #{label.task}:#{label.stencil}"></td>
+                            <td th:text="${statisticOrder.manager.fullName}"></td>
+                            <td th:text="${statisticOrder.client.fullName}"></td>
+                            <td th:text="${statisticOrder.production.fullName}"></td>
                             <td class="text-center" style="vertical-align: middle;"
-                                th:text="${#dates.format(order.dateBegin, 'dd.MM.yyyy')}"></td>
+                                th:text="${#dates.format(statisticOrder.dateBegin, 'dd.MM.yyyy')}"></td>
 
                             <td class="text-right" style="vertical-align: middle;"
-                                th:text="${#numbers.formatDecimal(order.amount, 1, 'COMMA', 2, 'POINT')}"></td>
+                                th:text="${#numbers.formatDecimal(statisticOrder.amount, 1, 'COMMA', 2, 'POINT')}"></td>
                             <td class="text-right" style="vertical-align: middle;"
-                                th:text="${#numbers.formatDecimal(order.debtAmount, 1, 'COMMA', 2, 'POINT')}"></td>
+                                th:text="${#numbers.formatDecimal(statisticOrder.debtAmount, 1, 'COMMA', 2, 'POINT')}"></td>
                             <!-- th:text="${task.amount}"  -->
 
                             <!--<td class="text-center align-self-center" style="vertical-align: middle;"><a
                                     class="btn btn-warning btn-sm custom-width"
                                     role="button"
-                                    style="width: 50px;" th:href="@{${order.linkPrefix} + '/pdfReport-' + ${order.id}}">PDF</a>
+                                    style="width: 50px;" th:href="@{${statisticOrder.linkPrefix} + '/pdfReport-' + ${statisticOrder.id}}">PDF</a>
                             </td>-->
                             <td class="text-center align-self-center" style="vertical-align: middle;">
                                 <a class="btn btn-warning btn-sm mx-sm-1"
-                                   role="button" th:href="@{${order.linkPrefix} + '/pdfReport-' + ${order.id}}"
+                                   role="button"
+                                   th:href="@{${statisticOrder.linkPrefix} + '/pdfReport-' + ${statisticOrder.id}}"
                                    th:title="#{message.report.show}"><i class="fa fa-file-o"></i></a>
 
                             </td>

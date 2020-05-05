@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.Manager;
-import ua.com.vetal.entity.Order;
 import ua.com.vetal.entity.PaperDirectory;
+import ua.com.vetal.entity.StatisticOrder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -102,17 +102,17 @@ public class OrderViewFilterTest {
     @Test
     public void onGetPredicate() {
 
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Order> query = builder.createQuery(Order.class);
-        Root<Order> root = query.from(Order.class);
-        Predicate predicate = builder.conjunction();
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<StatisticOrder> query = builder.createQuery(StatisticOrder.class);
+		Root<StatisticOrder> root = query.from(StatisticOrder.class);
+		Predicate predicate = builder.conjunction();
 
-        OrderViewFilter orderViewFilter = new OrderViewFilter();
-        orderViewFilter.setAccount("TestAccount");
-        orderViewFilter.setManager(TestDataUtils.getManager(1l));
-        predicate = orderViewFilter.getPredicate(builder, root, predicate);
-        assertNotNull(predicate);
+		OrderViewFilter orderViewFilter = new OrderViewFilter();
+		orderViewFilter.setAccount("TestAccount");
+		orderViewFilter.setManager(TestDataUtils.getManager(1l));
+		predicate = orderViewFilter.getPredicate(builder, root, predicate);
+		assertNotNull(predicate);
 
-    }
+	}
 
 }

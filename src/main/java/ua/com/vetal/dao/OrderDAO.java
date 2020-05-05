@@ -2,7 +2,7 @@ package ua.com.vetal.dao;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ua.com.vetal.entity.Order;
+import ua.com.vetal.entity.StatisticOrder;
 import ua.com.vetal.entity.filter.OrderViewFilter;
 
 import javax.persistence.EntityManager;
@@ -17,24 +17,24 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class OrderDAO {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+	@PersistenceContext
+	private EntityManager entityManager;
 
-    public List<Order> findByFilterData(OrderViewFilter orderViewFilter) {
-        List<Order> list = null;
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Order> query = builder.createQuery(Order.class);
-        Root<Order> root = query.from(Order.class);
+	public List<StatisticOrder> findByFilterData(OrderViewFilter orderViewFilter) {
+		List<StatisticOrder> list = null;
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<StatisticOrder> query = builder.createQuery(StatisticOrder.class);
+		Root<StatisticOrder> root = query.from(StatisticOrder.class);
 
-        Predicate predicate = builder.conjunction();
+		Predicate predicate = builder.conjunction();
 
-        if (orderViewFilter != null && orderViewFilter.hasData()) {
-            predicate = orderViewFilter.getPredicate(builder, root, predicate);
-        }
-        query.where(predicate);
-        query.orderBy(builder.desc(root.get("dateBegin")));
+		if (orderViewFilter != null && orderViewFilter.hasData()) {
+			predicate = orderViewFilter.getPredicate(builder, root, predicate);
+		}
+		query.where(predicate);
+		query.orderBy(builder.desc(root.get("dateBegin")));
 
-        list = entityManager.createQuery(query).getResultList();
+		list = entityManager.createQuery(query).getResultList();
 
         return list;
     }

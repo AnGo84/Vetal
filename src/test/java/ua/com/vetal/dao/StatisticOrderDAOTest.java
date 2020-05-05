@@ -10,7 +10,7 @@ import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.TestDataServiceUtils;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.Manager;
-import ua.com.vetal.entity.Order;
+import ua.com.vetal.entity.StatisticOrder;
 import ua.com.vetal.entity.Stencil;
 import ua.com.vetal.entity.Task;
 import ua.com.vetal.entity.filter.OrderViewFilter;
@@ -27,21 +27,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 @ComponentScan("ua.com.vetal.dao")
-public class OrderDAOTest {
-    @Autowired
-    private TestEntityManager testEntityManager;
-    @Autowired
-    private OrderDAO orderDAO;
-    @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
-    private TaskRepository taskRepository;
-    @Autowired
-    private StencilRepository stencilRepository;
+public class StatisticOrderDAOTest {
+	@Autowired
+	private TestEntityManager testEntityManager;
+	@Autowired
+	private OrderDAO orderDAO;
+	@Autowired
+	private OrderRepository orderRepository;
+	@Autowired
+	private TaskRepository taskRepository;
+	@Autowired
+	private StencilRepository stencilRepository;
 
     private Task task;
-    private Stencil stencil;
-    private Order p;
+	private Stencil stencil;
+	private StatisticOrder p;
 
     @BeforeEach
     public void beforeEach() {
@@ -65,8 +65,8 @@ public class OrderDAOTest {
 
     @Test
     void whenFindByFilterData() {
-        int allRecords = 4;
-        List<Order> filteredList = orderDAO.findByFilterData(null);
+		int allRecords = 4;
+		List<StatisticOrder> filteredList = orderDAO.findByFilterData(null);
         assertEquals(allRecords, filteredList.size());
 
         OrderViewFilter orderViewFilter = new OrderViewFilter();
