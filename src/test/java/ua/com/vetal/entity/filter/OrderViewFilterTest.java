@@ -105,12 +105,11 @@ public class OrderViewFilterTest {
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<StatisticOrder> query = builder.createQuery(StatisticOrder.class);
 		Root<StatisticOrder> root = query.from(StatisticOrder.class);
-		Predicate predicate = builder.conjunction();
 
 		OrderViewFilter orderViewFilter = new OrderViewFilter();
 		orderViewFilter.setAccount("TestAccount");
 		orderViewFilter.setManager(TestDataUtils.getManager(1l));
-		predicate = orderViewFilter.getPredicate(builder, root, predicate);
+        Predicate predicate = orderViewFilter.getPredicate(builder, root);
 		assertNotNull(predicate);
 
 	}

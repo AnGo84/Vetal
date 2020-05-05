@@ -9,5 +9,5 @@ public interface ViewFilter {
 
     ViewFilter getDefault();
 
-    Predicate getPredicate(CriteriaBuilder builder, Root root, Predicate predicate);
+    Predicate getPredicate(CriteriaBuilder builder, Root root);
 }

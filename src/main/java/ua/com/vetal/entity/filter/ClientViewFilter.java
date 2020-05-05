@@ -31,7 +31,11 @@ public class ClientViewFilter implements ViewFilter {
     }
 
     @Override
-    public Predicate getPredicate(CriteriaBuilder builder, Root root, Predicate predicate) {
+    public Predicate getPredicate(CriteriaBuilder builder, Root root) {
+        Predicate predicate = builder.conjunction();
+        if (this == null || !this.hasData()) {
+            return predicate;
+        }
         if (!Strings.isBlank(this.getFullName())) {
             predicate = builder.and(predicate, builder.like(builder.lower(root.get("fullName")),
                     ("%" + this.getFullName() + "%").toLowerCase()));

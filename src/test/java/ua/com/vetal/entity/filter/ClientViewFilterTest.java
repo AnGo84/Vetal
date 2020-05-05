@@ -58,26 +58,25 @@ public class ClientViewFilterTest {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Client> query = builder.createQuery(Client.class);
         Root<Client> root = query.from(Client.class);
-        Predicate predicate = builder.conjunction();
 
         ClientViewFilter clientViewFilter = new ClientViewFilter();
         clientViewFilter.setFullName("TestFullName");
         clientViewFilter.setManager(TestDataUtils.getManager(1l));
-        predicate = clientViewFilter.getPredicate(builder, root, predicate);
+        Predicate predicate = clientViewFilter.getPredicate(builder, root);
         assertNotNull(predicate);
 
         clientViewFilter.setFullName(null);
-        predicate = clientViewFilter.getPredicate(builder, root, predicate);
+        predicate = clientViewFilter.getPredicate(builder, root);
         assertNotNull(predicate);
 
         clientViewFilter.setFullName("TestFullName");
         clientViewFilter.setManager(null);
-        predicate = clientViewFilter.getPredicate(builder, root, predicate);
+        predicate = clientViewFilter.getPredicate(builder, root);
         assertNotNull(predicate);
 
         clientViewFilter.setFullName(null);
         clientViewFilter.setManager(null);
-        predicate = clientViewFilter.getPredicate(builder, root, predicate);
+        predicate = clientViewFilter.getPredicate(builder, root);
         assertNotNull(predicate);
     }
 }

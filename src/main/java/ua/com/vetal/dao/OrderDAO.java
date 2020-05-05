@@ -11,6 +11,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -21,22 +22,21 @@ public class OrderDAO {
 	private EntityManager entityManager;
 
 	public List<StatisticOrder> findByFilterData(OrderViewFilter orderViewFilter) {
-		List<StatisticOrder> list = null;
+		if (orderViewFilter == null) {
+			return new ArrayList<>();
+		}
+
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<StatisticOrder> query = builder.createQuery(StatisticOrder.class);
 		Root<StatisticOrder> root = query.from(StatisticOrder.class);
 
-		Predicate predicate = builder.conjunction();
+		Predicate predicate = orderViewFilter.getPredicate(builder, root);
 
-		if (orderViewFilter != null && orderViewFilter.hasData()) {
-			predicate = orderViewFilter.getPredicate(builder, root, predicate);
-		}
 		query.where(predicate);
 		query.orderBy(builder.desc(root.get("dateBegin")));
 
-		list = entityManager.createQuery(query).getResultList();
-
-        return list;
-    }
+		List<StatisticOrder> list = entityManager.createQuery(query).getResultList();
+		return list;
+	}
 
 }

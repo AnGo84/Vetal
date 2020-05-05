@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @ComponentScan("ua.com.vetal.dao")
@@ -47,7 +48,8 @@ public class ViewTaskDAOTest {
     void whenFindByFilterData() {
         int allRecords = 2;
         List<ViewTask> filteredList = viewTaskDAO.findByFilterData(null);
-        assertEquals(allRecords, filteredList.size());
+        assertTrue(filteredList.isEmpty());
+        assertEquals(0, filteredList.size());
 
         OrderViewFilter orderViewFilter = new OrderViewFilter();
         filteredList = viewTaskDAO.findByFilterData(orderViewFilter);

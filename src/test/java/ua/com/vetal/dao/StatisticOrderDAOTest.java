@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @ComponentScan("ua.com.vetal.dao")
@@ -65,9 +66,10 @@ public class StatisticOrderDAOTest {
 
     @Test
     void whenFindByFilterData() {
-		int allRecords = 4;
-		List<StatisticOrder> filteredList = orderDAO.findByFilterData(null);
-        assertEquals(allRecords, filteredList.size());
+        int allRecords = 4;
+        List<StatisticOrder> filteredList = orderDAO.findByFilterData(null);
+        assertTrue(filteredList.isEmpty());
+        assertEquals(0, filteredList.size());
 
         OrderViewFilter orderViewFilter = new OrderViewFilter();
         filteredList = orderDAO.findByFilterData(orderViewFilter);

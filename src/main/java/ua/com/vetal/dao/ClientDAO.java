@@ -11,6 +11,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -21,19 +22,18 @@ public class ClientDAO {
     private EntityManager entityManager;
 
     public List<Client> findByFilterData(ClientViewFilter filterData) {
-        List<Client> list = null;
+        if (filterData == null) {
+            return new ArrayList<>();
+        }
 
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Client> query = builder.createQuery(Client.class);
         Root<Client> root = query.from(Client.class);
 
-        Predicate predicate = builder.conjunction();
-        if (filterData != null && filterData.hasData()) {
-            predicate = filterData.getPredicate(builder, root, predicate);
-        }
+        Predicate predicate = filterData.getPredicate(builder, root);
         query.where(predicate);
         //query.orderBy(builder.desc(root.get("fullName")));
-        list = entityManager.createQuery(query).getResultList();
+        List<Client> list = entityManager.createQuery(query).getResultList();
 
         return list;
     }

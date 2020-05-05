@@ -11,6 +11,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -21,19 +22,18 @@ public class ContractorDAO {
     private EntityManager entityManager;
 
     public List<Contractor> findByFilterData(PersonViewFilter filterData) {
-        List<Contractor> list = null;
+        if (filterData == null) {
+            return new ArrayList<>();
+        }
 
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Contractor> query = builder.createQuery(Contractor.class);
         Root<Contractor> root = query.from(Contractor.class);
 
-        Predicate predicate = builder.conjunction();
-        if (filterData != null) {
-            predicate = filterData.getPredicate(builder, root, predicate);
-        }
-		query.where(predicate);
-		//query.orderBy(builder.desc(root.get("fullName")));
-		list = entityManager.createQuery(query).getResultList();
+        Predicate predicate = filterData.getPredicate(builder, root);
+        query.where(predicate);
+        //query.orderBy(builder.desc(root.get("fullName")));
+        List<Contractor> list = entityManager.createQuery(query).getResultList();
 
 		return list;
 	}

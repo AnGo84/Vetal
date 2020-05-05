@@ -13,6 +13,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -37,20 +38,20 @@ public class TaskDAO {
     }
 
     public List<Task> findByFilterData(OrderViewFilter orderViewFilter) {
-        List<Task> list = null;
+        if (orderViewFilter == null) {
+            return new ArrayList<>();
+        }
+
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Task> query = builder.createQuery(Task.class);
         Root<Task> root = query.from(Task.class);
 
-        Predicate predicate = builder.conjunction();
+        Predicate predicate = orderViewFilter.getPredicate(builder, root);
 
-        if (orderViewFilter != null && orderViewFilter.hasData()) {
-            predicate = orderViewFilter.getPredicate(builder, root, predicate);
-        }
         query.where(predicate);
         query.orderBy(builder.desc(root.get("dateBegin")));
 
-        list = entityManager.createQuery(query).getResultList();
+        List<Task> list = entityManager.createQuery(query).getResultList();
         return list;
     }
 

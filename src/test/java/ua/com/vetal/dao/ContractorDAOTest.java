@@ -16,6 +16,7 @@ import ua.com.vetal.repositories.ManagerRepository;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @ComponentScan("ua.com.vetal.dao")
@@ -59,7 +60,8 @@ public class ContractorDAOTest {
 	void whenFindByFilterData() {
         int allRecords = 2;
         List<Contractor> filteredList = contractorDAO.findByFilterData(null);
-        assertEquals(allRecords, filteredList.size());
+        assertTrue(filteredList.isEmpty());
+        assertEquals(0, filteredList.size());
 
         PersonViewFilter filterData = new PersonViewFilter();
         filterData.setCorpName(contractor.getFullName());

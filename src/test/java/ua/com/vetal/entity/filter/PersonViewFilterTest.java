@@ -57,26 +57,25 @@ public class PersonViewFilterTest {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Contractor> query = builder.createQuery(Contractor.class);
         Root<Contractor> root = query.from(Contractor.class);
-        Predicate predicate = builder.conjunction();
 
         PersonViewFilter personViewFilter = new PersonViewFilter();
         personViewFilter.setCorpName("TestCorpName");
         personViewFilter.setManager(TestDataUtils.getManager(1l));
-        predicate = personViewFilter.getPredicate(builder, root, predicate);
+        Predicate predicate = personViewFilter.getPredicate(builder, root);
         assertNotNull(predicate);
 
         personViewFilter.setCorpName(null);
-        predicate = personViewFilter.getPredicate(builder, root, predicate);
+        predicate = personViewFilter.getPredicate(builder, root);
         assertNotNull(predicate);
 
         personViewFilter.setCorpName("TestCorpName");
         personViewFilter.setManager(null);
-        predicate = personViewFilter.getPredicate(builder, root, predicate);
+        predicate = personViewFilter.getPredicate(builder, root);
         assertNotNull(predicate);
 
         personViewFilter.setCorpName(null);
         personViewFilter.setManager(null);
-        predicate = personViewFilter.getPredicate(builder, root, predicate);
+        predicate = personViewFilter.getPredicate(builder, root);
         assertNotNull(predicate);
     }
 }

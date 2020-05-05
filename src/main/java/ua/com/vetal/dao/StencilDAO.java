@@ -13,6 +13,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -37,21 +38,19 @@ public class StencilDAO {
     }
 
     public List<Stencil> findByFilterData(OrderViewFilter orderViewFilter) {
-        List<Stencil> list = null;
+        if (orderViewFilter == null) {
+            return new ArrayList<>();
+        }
 
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Stencil> query = builder.createQuery(Stencil.class);
         Root<Stencil> root = query.from(Stencil.class);
 
-        Predicate predicate = builder.conjunction();
-
-        if (orderViewFilter != null && orderViewFilter.hasData()) {
-            predicate = orderViewFilter.getPredicate(builder, root, predicate);
-        }
+        Predicate predicate = orderViewFilter.getPredicate(builder, root);
         query.where(predicate);
         query.orderBy(builder.desc(root.get("dateBegin")));
 
-        list = entityManager.createQuery(query).getResultList();
+        List<Stencil> list = entityManager.createQuery(query).getResultList();
         return list;
     }
 }
