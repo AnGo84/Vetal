@@ -10,23 +10,20 @@ import javax.persistence.Converter;
 public class MoneyConverter implements AttributeConverter<Double, Long> {
 	@Override
 	public Long convertToDatabaseColumn(Double aDouble) {
-		log.info("convertToDatabaseColumn Double: {}", aDouble);
 		if (aDouble == null) {
 			return new Long(0);
 		}
 		Long result = Double.valueOf(aDouble * 100).longValue();
-		log.info("Get Long: {}", result);
+
 		return result;
 	}
 
 	@Override
 	public Double convertToEntityAttribute(Long aLong) {
-		log.info("convertToDatabaseColumn Long: {}", aLong);
 		if (aLong == null) {
 			return Double.valueOf(0);
 		}
 		Double result = (aLong.doubleValue()) / 100;
-		log.info("Get Double: {}", result);
 		return result;
 	}
 }
