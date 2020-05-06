@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import ua.com.vetal.entity.attributeConverter.MoneyConverter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.text.DecimalFormat;
@@ -159,11 +160,12 @@ public class Order {
 	@JoinColumn(name = "Payment_ID")
 	protected Payment payment;
 
-	//@Digits(integer = 8, fraction = 2)
+	@Digits(integer = 8, fraction = 2)
 	@Column(name = "Debt_amount", nullable = true)
 	@Convert(converter = MoneyConverter.class)
 	protected Double debtAmount;
-	//@Digits(integer = 8, fraction = 2)
+	
+	@Digits(integer = 8, fraction = 2)
 	@Column(name = "other_expenses", nullable = true)
 	@Convert(converter = MoneyConverter.class)
 	protected Double otherExpenses;
