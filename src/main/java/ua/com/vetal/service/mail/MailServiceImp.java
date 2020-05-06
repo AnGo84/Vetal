@@ -8,7 +8,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import ua.com.vetal.email.EmailAttachment;
 import ua.com.vetal.email.EmailMessage;
-import ua.com.vetal.service.EmailService;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;

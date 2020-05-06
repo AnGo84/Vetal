@@ -1,12 +1,14 @@
 package ua.com.vetal.entity;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "chromaticity")
-public class ChromaticityDirectory extends AbstractDirectory {
+public class ChromaticityDirectory extends AbstractDirectoryEntity {
+
+}
+/*public class ChromaticityDirectory extends AbstractDirectory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -20,5 +22,4 @@ public class ChromaticityDirectory extends AbstractDirectory {
     public String getName() {
         return name;
     }
-
-}
+}*/

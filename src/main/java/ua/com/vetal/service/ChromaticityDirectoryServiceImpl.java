@@ -1,29 +1,33 @@
 package ua.com.vetal.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.entity.ChromaticityDirectory;
 import ua.com.vetal.repositories.ChromaticityDirectoryRepository;
-
-import java.util.List;
+import ua.com.vetal.service.common.AbstractDirectoryService;
 
 @Service("chronomaticityDirectoryService")
 @Transactional
-public class ChromaticityDirectoryServiceImpl implements SimpleService<ChromaticityDirectory> {
 
-    // private static final Logger logger =
-    // LoggerFactory.getLogger(UserServiceImpl.class);
+public class ChromaticityDirectoryServiceImpl extends AbstractDirectoryService<ChromaticityDirectory, ChromaticityDirectoryRepository> {
+    public ChromaticityDirectoryServiceImpl(ChromaticityDirectoryRepository repository) {
+        super(repository);
+    }
+
+/*public class ChromaticityDirectoryServiceImpl implements SimpleService<ChromaticityDirectory> {
+
 
     @Autowired
     private ChromaticityDirectoryRepository directoryRepository;
 
     @Override
     public ChromaticityDirectory findById(Long id) {
-        /*
-         * Optional<User> optinalEntity = userRepository.findById(id); User user
-         * = optinalEntity.get(); return user;
-         */
+        */
+    /*
+     * Optional<User> optinalEntity = userRepository.findById(id); User user
+     * = optinalEntity.get(); return user;
+     *//*
+
         return directoryRepository.getOne(id);
     }
 
@@ -56,5 +60,6 @@ public class ChromaticityDirectoryServiceImpl implements SimpleService<Chromatic
     public boolean isObjectExist(ChromaticityDirectory directory) {
         return findByName(directory.getName()) != null;
     }
+*/
 
 }
