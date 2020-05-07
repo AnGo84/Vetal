@@ -1,10 +1,13 @@
 package ua.com.vetal.entity;
 
+import lombok.Data;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "chromaticity")
+@Data
 public class ChromaticityDirectory extends AbstractDirectoryEntity {
 
 }

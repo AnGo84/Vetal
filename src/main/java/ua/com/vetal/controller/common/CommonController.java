@@ -21,7 +21,7 @@ public interface CommonController<E extends AbstractEntity> {
     @GetMapping(value = "/edit-{id}")
     String editRecord(@PathVariable Long id, Model model);
 
-    @PostMapping(value = "/edit-{id}")
+    @PostMapping(value = "/update")
     String updateRecord(@Valid @ModelAttribute("directory") E directory,
                         BindingResult bindingResult, Model model);
 

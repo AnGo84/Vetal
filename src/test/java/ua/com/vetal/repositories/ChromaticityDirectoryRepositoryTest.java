@@ -9,6 +9,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.ChromaticityDirectory;
+import ua.com.vetal.service.common.CommonOptional;
 
 import javax.validation.ConstraintViolationException;
 import java.util.List;
@@ -27,6 +28,7 @@ public class ChromaticityDirectoryRepositoryTest {
     @Autowired
     private ChromaticityDirectoryRepository directoryRepository;
     private ChromaticityDirectory directory;
+    private CommonOptional<ChromaticityDirectory> commonOptional = new CommonOptional<>();
 
     @BeforeEach
     public void beforeEach() {
@@ -85,7 +87,10 @@ public class ChromaticityDirectoryRepositoryTest {
         ChromaticityDirectory newDirectory = TestBuildersUtils.getChromaticityDirectory(null, SECOND_DIRECTORY_NAME);
         entityManager.persistAndFlush(newDirectory);
         // when
-        List<ChromaticityDirectory> directoryList = directoryRepository.findAll();
+        //List<ChromaticityDirectory> directoryList = directoryRepository.findAll();
+        Iterable<ChromaticityDirectory> iterableDirectoryList = directoryRepository.findAll();
+        assertNotNull(iterableDirectoryList);
+        List<ChromaticityDirectory> directoryList = commonOptional.getListFromIterable(iterableDirectoryList);
         // then
         assertNotNull(directoryList);
         assertFalse(directoryList.isEmpty());
@@ -125,14 +130,21 @@ public class ChromaticityDirectoryRepositoryTest {
         ChromaticityDirectory newDirectory = TestBuildersUtils.getChromaticityDirectory(null, SECOND_DIRECTORY_NAME);
 
         entityManager.persistAndFlush(newDirectory);
-        assertEquals(directoryRepository.findAll().size(), 2);
+        //assertEquals(directoryRepository.findAll().size(), 2);
+        Iterable<ChromaticityDirectory> iterableDirectoryList = directoryRepository.findAll();
+        assertNotNull(iterableDirectoryList);
+        List<ChromaticityDirectory> directoryList = commonOptional.getListFromIterable(iterableDirectoryList);
+        assertEquals(directoryList.size(), 2);
 
         ChromaticityDirectory foundDirectory = directoryRepository.findByName(SECOND_DIRECTORY_NAME);
 
         // when
         directoryRepository.deleteById(foundDirectory.getId());
         // then
-        assertEquals(directoryRepository.findAll().size(), 1);
+        //assertEquals(directoryRepository.findAll().size(), 1);
+        iterableDirectoryList = directoryRepository.findAll();
+        assertNotNull(iterableDirectoryList);
+        directoryList = commonOptional.getListFromIterable(iterableDirectoryList);
     }
 
     @Test

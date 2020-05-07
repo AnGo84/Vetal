@@ -39,8 +39,12 @@ class ChromaticityDirectoryControllerTest {
     public void beforeEach() {
         directory = TestBuildersUtils.getChromaticityDirectory(1l, ChromaticityDirectoryRepositoryTest.DIRECTORY_NAME);
 
+        when(mockDirectoryService.getAll()).thenReturn(Arrays.asList(directory));
+        when(mockDirectoryService.get(anyLong())).thenReturn(directory);
+        /*
         when(mockDirectoryService.findAllObjects()).thenReturn(Arrays.asList(directory));
         when(mockDirectoryService.findById(anyLong())).thenReturn(directory);
+        */
     }
 
 
@@ -130,7 +134,10 @@ class ChromaticityDirectoryControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateRecordAsAuthorizedWithExistName_thenError() throws Exception {
-        when(mockDirectoryService.isObjectExist(any())).thenReturn(true);
+        //when(mockDirectoryService.isObjectExist(any())).thenReturn(true);
+        when(mockDirectoryService.isExist(any())).thenReturn(true);
+        //when(mockDirectoryService.isExistByName(anyString())).thenReturn(true);
+
         //mockDirectoryService.updateObject(directory);
 
         mockMvc.perform(post(MAPPED_URL + "/update")
@@ -141,14 +148,15 @@ class ChromaticityDirectoryControllerTest {
                 .andExpect(model().attributeExists("directory"))
                 .andExpect(model().attributeHasFieldErrors("directory", "name"))
                 .andExpect(view().name("directoryRecordPage"));
-        verify(mockDirectoryService, times(0)).updateObject(directory);
+        //verify(mockDirectoryService, times(0)).updateObject(directory);
+        verify(mockDirectoryService, times(0)).update(directory);
     }
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateRecordAsAuthorizedWithNotNullDirectory_thenOk() throws Exception {
-        //doNothing().when(mockUserService).updateObject(any(User.class));
-        mockDirectoryService.updateObject(directory);
+        //mockDirectoryService.updateObject(directory);
+        //mockDirectoryService.update(directory);
 
         mockMvc.perform(post(MAPPED_URL + "/update")
                 .param("id", String.valueOf(directory.getId()))
@@ -157,7 +165,8 @@ class ChromaticityDirectoryControllerTest {
                 .andExpect(status().isFound())
 
                 .andExpect(redirectedUrl(MAPPED_URL));
-        verify(mockDirectoryService, times(1)).updateObject(directory);
+        //verify(mockDirectoryService, times(1)).updateObject(directory);
+        verify(mockDirectoryService, times(1)).update(directory);
     }
 
 

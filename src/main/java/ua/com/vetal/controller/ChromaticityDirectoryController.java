@@ -1,30 +1,21 @@
 package ua.com.vetal.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import ua.com.vetal.controller.common.AbstractDirectoryController;
 import ua.com.vetal.entity.ChromaticityDirectory;
 import ua.com.vetal.service.ChromaticityDirectoryServiceImpl;
-import ua.com.vetal.utils.LoggerUtils;
-
-import javax.validation.Valid;
-import java.util.Locale;
 
 @Controller
 @RequestMapping("/chromaticity")
 @Slf4j
+public class ChromaticityDirectoryController extends AbstractDirectoryController<ChromaticityDirectory, ChromaticityDirectoryServiceImpl> {
+    public ChromaticityDirectoryController(ChromaticityDirectoryServiceImpl chromaticityDirectoryService) {
+        super(ChromaticityDirectory.class, DirectoryType.CHROMATICITY, chromaticityDirectoryService);
+    }
 
-public class ChromaticityDirectoryController {
-
-	private String title = "Chromaticity";
+	/*private String title = "Chromaticity";
 
 	private String pageName = "/chromaticity";
 
@@ -55,7 +46,7 @@ public class ChromaticityDirectoryController {
 
 	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
 	public String editRecord(@PathVariable Long id, Model model) {
-		log.info("Edit Chromaticity with ID= {}");
+		log.info("Edit Chromaticity with ID= {}", id);
 		// model.addAttribute("title", "Edit user");
 		// model.addAttribute("userRolesList",
 		// userRoleService.findAllObjects());
@@ -67,7 +58,7 @@ public class ChromaticityDirectoryController {
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String updateRecord(@Valid @ModelAttribute("directory") ChromaticityDirectory directory,
 			BindingResult bindingResult, Model model) {
-		log.info("Update Chromaticity: {}");
+		log.info("Update Chromaticity: {}", directory);
 		if (bindingResult.hasErrors()) {
 			LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
 			return "directoryRecordPage";
@@ -92,9 +83,9 @@ public class ChromaticityDirectoryController {
 		return "redirect:" + pageName;
 	}
 
-	/**
-	 * This method will provide Title to views
-	 */
+	*//**
+     * This method will provide Title to views
+     *//*
 	@ModelAttribute("title")
 	public String initializeTitle() {
 		return this.title;
@@ -112,5 +103,5 @@ public class ChromaticityDirectoryController {
 	@ModelAttribute("pageName")
 	public String initializePageName() {
 		return this.pageName;
-	}
+	}*/
 }

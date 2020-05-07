@@ -118,7 +118,8 @@ public class ModelAttributeControllerAdvice {
 
 	@ModelAttribute("chromaticityList")
 	public List<ChromaticityDirectory> getChromaticityList() {
-		List<ChromaticityDirectory> resultList = chromaticityService.findAllObjects();
+		//List<ChromaticityDirectory> resultList = chromaticityService.findAllObjects();
+		List<ChromaticityDirectory> resultList = chromaticityService.getAll();
 		return resultList.stream().sorted(Comparator.comparing(ChromaticityDirectory::getName))
 				.collect(Collectors.toList());
 	}

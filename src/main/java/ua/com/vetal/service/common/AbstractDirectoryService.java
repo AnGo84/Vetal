@@ -1,11 +1,11 @@
 package ua.com.vetal.service.common;
 
+import lombok.extern.slf4j.Slf4j;
 import ua.com.vetal.entity.AbstractDirectoryEntity;
 import ua.com.vetal.repositories.CommonDirectoryRepository;
+import ua.com.vetal.utils.StringUtils;
 
-import java.util.Optional;
-
-
+@Slf4j
 public abstract class AbstractDirectoryService<E extends AbstractDirectoryEntity, R extends CommonDirectoryRepository<E>>
         extends AbstractService<E, R> {
 
@@ -13,11 +13,29 @@ public abstract class AbstractDirectoryService<E extends AbstractDirectoryEntity
         super(repository);
     }
 
-    public Optional<E> getByName(String name) {
-        return Optional.of(repository.findByName(name));
+    public E getByName(String name) {
+        return repository.findByName(name);
     }
 
     public Boolean isExistByName(String name) {
+        if (StringUtils.isEmpty(name)) {
+            return false;
+        }
         return repository.findByName(name) != null;
+    }
+
+    @Override
+    public Boolean isExist(E entity) {
+        log.info("Check on exist: {}", entity);
+        if (entity == null) {
+            return false;
+        }
+        E foundEntity = repository.findByName(entity.getName());
+        if (foundEntity == null) {
+            return false;
+        } else if (entity.getId() == null || !entity.getId().equals(foundEntity.getId())) {
+            return true;
+        }
+        return false;
     }
 }
