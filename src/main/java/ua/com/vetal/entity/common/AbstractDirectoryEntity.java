@@ -10,17 +10,28 @@ import javax.validation.constraints.Size;
 @MappedSuperclass
 @Data
 public abstract class AbstractDirectoryEntity extends AbstractEntity {
-    @NotEmpty
-    @Size(max = 250)
-    @Column(name = "FullName", length = 250, nullable = false, unique = true)
-    private String name;
+	/*@NotEmpty
+	@Size(max = 250)
+	@Column(name = "FullName", length = 250, nullable = false, unique = true)*/
+	private String name;
 
-    @Override
-    public String toString() {
-        final StringBuffer sb = new StringBuffer(this.getClass().getName() + "{");
-        sb.append("id='").append(getId()).append('\'');
-        sb.append(", name='").append(name).append('\'');
-        sb.append('}');
-        return sb.toString();
-    }
+	@NotEmpty
+	@Size(max = 250)
+	@Column(name = "FullName", length = 250, nullable = false, unique = true)
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer(this.getClass().getName() + "{");
+		sb.append("id='").append(getId()).append('\'');
+		sb.append(", name='").append(name).append('\'');
+		sb.append('}');
+		return sb.toString();
+	}
 }

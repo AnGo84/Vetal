@@ -14,47 +14,120 @@ import javax.validation.constraints.Size;
 @MappedSuperclass
 @Data
 public abstract class AbstractContragentEntity extends AbstractEntity {
+
+    public String corpName;
+
+    private Manager manager;
+
+    private String lastName;
+
+    private String firstName;
+
+    private String middleName;
+
+    private String email;
+
+    private String phone;
+
+    private String address;
+
+    private String siteURL;
+
     @NotEmpty
     @Size(min = 0, max = 250)
     @Column(name = "CorpName", length = 250, nullable = false)
-    public String corpName;
+    public String getCorpName() {
+        return corpName;
+    }
+
+    public void setCorpName(String corpName) {
+        this.corpName = corpName;
+    }
 
     @ManyToOne
     @JoinColumn(name = "manager_id")
-    private Manager manager;
+    public Manager getManager() {
+        return manager;
+    }
+
+    public void setManager(Manager manager) {
+        this.manager = manager;
+    }
 
     @NotEmpty
     @Size(min = 0, max = 50)
     @Column(name = "LastName", length = 50, nullable = false)
-    private String lastName;
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
     @NotEmpty
     @Size(min = 0, max = 50)
     @Column(name = "FirstName", length = 50, nullable = false)
-    private String firstName;
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
     @Size(max = 50)
     @Column(name = "MiddleName", length = 50, nullable = true)
-    private String middleName;
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
 
     @NotEmpty
     @Size(min = 0, max = 250)
     @Column(name = "email", length = 250, nullable = true)
-    private String email;
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     @NotEmpty
     @Size(max = 250)
     @Column(name = "phone", length = 250, nullable = false)
-    private String phone;
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     @NotEmpty
     @Size(max = 250)
     @Column(name = "address", length = 250, nullable = false)
-    private String address;
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     @Size(max = 100)
     @Column(name = "site_url", length = 100)
-    private String siteURL;
+    public String getSiteURL() {
+        return siteURL;
+    }
+
+    public void setSiteURL(String siteURL) {
+        this.siteURL = siteURL;
+    }
 
     public String getFullName() {
         if (!Strings.isBlank(corpName)) {
