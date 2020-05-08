@@ -22,15 +22,15 @@ public abstract class AbstractService<E extends AbstractEntity, R extends Common
     public E save(E entity) {
         log.info("Save entity: {}", entity);
         E savedEntity = repository.save(entity);
-        log.info("Saved entity: {}", savedEntity);
         return savedEntity;
         //return repository.save(entity);
     }
 
     @Override
     public List<E> saveAll(List<E> entities) {
-        List<E> result = commonOptional.getListFromIterable(repository.saveAll(entities));
-        return result;
+        /*List<E> result = commonOptional.getListFromIterable(repository.saveAll(entities));
+        return result;*/
+        return repository.saveAll(entities);
     }
 
     @Override
@@ -49,8 +49,9 @@ public abstract class AbstractService<E extends AbstractEntity, R extends Common
 
     @Override
     public List<E> getAll() {
-        List<E> result = commonOptional.getListFromIterable(repository.findAll());
-        return result;
+        return repository.findAll();
+        /*List<E> result = commonOptional.getListFromIterable(repository.findAll());
+        return result;*/
     }
 
     @Override
@@ -64,9 +65,8 @@ public abstract class AbstractService<E extends AbstractEntity, R extends Common
     @Override
     public Boolean deleteAll() {
         repository.deleteAll();
-        List<E> result = commonOptional.getListFromIterable(repository.findAll());
-        return result.isEmpty();
+        /*List<E> result = commonOptional.getListFromIterable(repository.findAll());
+        return result.isEmpty();*/
+        return repository.findAll().isEmpty();
     }
-
-
 }
