@@ -1,4 +1,4 @@
-package ua.com.vetal.entity;
+package ua.com.vetal.entity.common;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

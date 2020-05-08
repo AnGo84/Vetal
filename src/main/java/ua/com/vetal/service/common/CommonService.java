@@ -1,6 +1,6 @@
 package ua.com.vetal.service.common;
 
-import ua.com.vetal.entity.AbstractEntity;
+import ua.com.vetal.entity.common.AbstractEntity;
 
 import java.util.List;
 

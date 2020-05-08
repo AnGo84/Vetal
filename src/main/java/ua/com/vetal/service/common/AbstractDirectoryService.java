@@ -1,8 +1,8 @@
 package ua.com.vetal.service.common;
 
 import lombok.extern.slf4j.Slf4j;
-import ua.com.vetal.entity.AbstractDirectoryEntity;
-import ua.com.vetal.repositories.CommonDirectoryRepository;
+import ua.com.vetal.entity.common.AbstractDirectoryEntity;
+import ua.com.vetal.repositories.common.CommonDirectoryRepository;
 import ua.com.vetal.utils.StringUtils;
 
 @Slf4j

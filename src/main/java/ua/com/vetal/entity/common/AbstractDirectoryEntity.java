@@ -1,4 +1,4 @@
-package ua.com.vetal.entity;
+package ua.com.vetal.entity.common;
 
 import lombok.Data;
 

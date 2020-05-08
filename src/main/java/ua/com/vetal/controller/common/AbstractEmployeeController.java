@@ -6,9 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import ua.com.vetal.entity.common.AbstractDirectoryEntity;
+import ua.com.vetal.entity.common.AbstractEmployeeEntity;
 import ua.com.vetal.service.common.CommonService;
 import ua.com.vetal.utils.LoggerUtils;
 
@@ -17,10 +16,10 @@ import java.util.Locale;
 
 @RequiredArgsConstructor
 @Slf4j
-public abstract class AbstractDirectoryController<E extends AbstractDirectoryEntity, S extends CommonService<E>>
+public abstract class AbstractEmployeeController<E extends AbstractEmployeeEntity, S extends CommonService<E>>
         implements CommonController<E> {
-    private final String DIRECTORY_PAGE = "directoryPage";
-    private final String DIRECTORY_RECORD_PAGE = "directoryRecordPage";
+    private final String DIRECTORY_PAGE = "employeePage";
+    private final String DIRECTORY_RECORD_PAGE = "employeeRecordPage";
     private final Class<E> objectClass;
 
     private final ControllerType controllerType;
@@ -31,7 +30,7 @@ public abstract class AbstractDirectoryController<E extends AbstractDirectoryEnt
 
     @Override
     public String allRecords(Model model) {
-        model.addAttribute("directoryList", service.getAll());
+        model.addAttribute("employeeList", service.getAll());
         return DIRECTORY_PAGE;
     }
 
@@ -39,7 +38,7 @@ public abstract class AbstractDirectoryController<E extends AbstractDirectoryEnt
     public String addRecord(Model model) {
         log.info("Add new '{}' record", objectClass);
         model.addAttribute("edit", false);
-        model.addAttribute("directory", createInstance(objectClass));
+        model.addAttribute("employee", createInstance(objectClass));
         return DIRECTORY_RECORD_PAGE;
     }
 
@@ -47,26 +46,18 @@ public abstract class AbstractDirectoryController<E extends AbstractDirectoryEnt
     public String editRecord(Long id, Model model) {
         log.info("Edit '{}' with ID= {}", objectClass, id);
         model.addAttribute("edit", true);
-        model.addAttribute("directory", service.get(id));
+        model.addAttribute("employee", service.get(id));
         return DIRECTORY_RECORD_PAGE;
     }
 
     @Override
-    public String updateRecord(@Valid @ModelAttribute("directory") E directory, BindingResult bindingResult, Model model) {
-        log.info("Update '{}': {}", objectClass, directory);
+    public String updateRecord(@Valid @ModelAttribute("employee") E employee, BindingResult bindingResult, Model model) {
+        log.info("Update '{}': {}", objectClass, employee);
         if (bindingResult.hasErrors()) {
             LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
             return DIRECTORY_RECORD_PAGE;
         }
-        if (service.isExist(directory)) {
-            log.error("Directory '{}' exist", directory.getName());
-            FieldError fieldError = new FieldError("directory", "name", messageSource.getMessage("non.unique.field",
-                    new String[]{"Название", directory.getName()}, new Locale("ru")));
-            bindingResult.addError(fieldError);
-            return DIRECTORY_RECORD_PAGE;
-        }
-
-        E updated = service.update(directory);
+        E updated = service.update(employee);
         log.info("Updated: {}", updated);
         return "redirect:" + controllerType.getPageName();
     }
@@ -86,7 +77,7 @@ public abstract class AbstractDirectoryController<E extends AbstractDirectoryEnt
         return controllerType.getTitle();
     }
 
-    @ModelAttribute("directoryName")
+    @ModelAttribute("employeeName")
     public String initializeDirectoryName() {
         String name = messageSource.getMessage("label." + controllerType.getLabel(), null, new Locale("ru"));
         if (name == null || name.equals("")) {
@@ -99,5 +90,4 @@ public abstract class AbstractDirectoryController<E extends AbstractDirectoryEnt
     public String initializePageName() {
         return controllerType.getPageName();
     }
-
 }

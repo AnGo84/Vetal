@@ -2,10 +2,10 @@ package ua.com.vetal.service.common;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ua.com.vetal.entity.AbstractEntity;
+import ua.com.vetal.entity.common.AbstractEntity;
 import ua.com.vetal.exception.EntityErrorType;
 import ua.com.vetal.exception.EntityException;
-import ua.com.vetal.repositories.CommonRepository;
+import ua.com.vetal.repositories.common.CommonRepository;
 
 import java.util.List;
 import java.util.Optional;

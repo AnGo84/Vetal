@@ -1,6 +1,6 @@
-package ua.com.vetal.controller;
+package ua.com.vetal.controller.common;
 
-public enum DirectoryType {
+public enum ControllerType {
     CHROMATICITY("Chromaticity", "/chromaticity", "Chromaticity", "chromaticity");
 
     private String title;
@@ -8,7 +8,7 @@ public enum DirectoryType {
     private String directoryName;
     private String label;
 
-    DirectoryType(String title, String pageName, String directoryName, String label) {
+    ControllerType(String title, String pageName, String directoryName, String label) {
         this.title = title;
         this.pageName = pageName;
         this.directoryName = directoryName;
