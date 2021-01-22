@@ -14,7 +14,7 @@
 
     <appender name="RollingFile"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOGS}/vetal-logger.log</file>
+        <file>${LOGS}/lab-logger.log</file>
         <encoder
                 class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--<Pattern>%d %p %C{1.} [%t] %m%n</Pattern>-->
@@ -25,7 +25,7 @@
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- rollover daily and when the file reaches 10 MegaBytes -->
-            <fileNamePattern>${LOGS}/archived/vetal-logger-%d{yyyy-MM-dd}.%i.log
+            <fileNamePattern>${LOGS}/archived/lab-logger-%d{yyyy-MM-dd}.%i.log
             </fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -45,9 +45,9 @@
         <appender-ref ref="RollingFile"/>
         <appender-ref ref="Console"/>
     </logger>-->
-    <!--<logger name="org.hibernate" >
+    <logger name="org.hibernate">
         <level value="error"/>
         <appender-ref ref="RollingFile"/>
         <appender-ref ref="Console"/>
-    </logger>-->
+    </logger>
 </configuration>
