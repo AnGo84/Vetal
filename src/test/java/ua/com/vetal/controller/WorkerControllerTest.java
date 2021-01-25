@@ -37,8 +37,8 @@ public class WorkerControllerTest {
 	public void beforeEach() {
 		//Worker = TestBuildersUtils.getWorker(1l, "firstName", "lastName", "middleName", "email");
 		worker = TestDataUtils.getWorker(1l);
-		when(mockWorkerService.findAllObjects()).thenReturn(Arrays.asList(worker));
-		when(mockWorkerService.findById(anyLong())).thenReturn(worker);
+		when(mockWorkerService.getAll()).thenReturn(Arrays.asList(worker));
+		when(mockWorkerService.get(anyLong())).thenReturn(worker);
 	}
 
 	@Test
@@ -47,14 +47,14 @@ public class WorkerControllerTest {
 		mockMvc.perform(get(MAPPED_URL))
 				//.andDo(print())
 				.andExpect(status().isOk())
-				.andExpect(model().attribute("personList", notNullValue()))
-				.andExpect(view().name("personsPage"));
+				.andExpect(model().attribute("employeeList", notNullValue()))
+				.andExpect(view().name("employeesPage"));
 
 		mockMvc.perform(get(MAPPED_URL + "/list"))
 				//.andDo(print())
 				.andExpect(status().isOk())
-				.andExpect(model().attribute("personList", notNullValue()))
-				.andExpect(view().name("personsPage"));
+				.andExpect(model().attribute("employeeList", notNullValue()))
+				.andExpect(view().name("employeesPage"));
 	}
 
 	@Test
@@ -66,19 +66,19 @@ public class WorkerControllerTest {
 
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
-	public void whenShowAddPersonPageAsAuthorized_thenOk() throws Exception {
+	public void whenShowAddEmployeePageAsAuthorized_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/add"))
 				//.andDo(print())
 				.andExpect(status().isOk())
-				.andExpect(model().attributeExists("person"))
-				.andExpect(model().attribute("person", notNullValue()))
+				.andExpect(model().attributeExists("employee"))
+				.andExpect(model().attribute("employee", notNullValue()))
 				.andExpect(model().attribute("edit", false))
-				.andExpect(view().name("personRecordPage"));
+				.andExpect(view().name("employeeRecordPage"));
 	}
 
 
 	@Test
-	public void whenShowAddPersonPageAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
+	public void whenShowAddEmployeePageAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/add"))
 				//.andDo(print())
 				.andExpect(status().isFound())
@@ -87,18 +87,18 @@ public class WorkerControllerTest {
 
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
-	public void whenEditPersonAsAuthorized_thenOk() throws Exception {
+	public void whenEditEmployeeAsAuthorized_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/edit-" + worker.getId()))
 				//.andDo(print())
 				.andExpect(status().isOk())
-				.andExpect(model().attributeExists("person"))
-				.andExpect(model().attribute("person", notNullValue()))
+				.andExpect(model().attributeExists("employee"))
+				.andExpect(model().attribute("employee", notNullValue()))
 				.andExpect(model().attribute("edit", true))
-				.andExpect(view().name("personRecordPage"));
+				.andExpect(view().name("employeeRecordPage"));
 	}
 
 	@Test
-	public void whenEditPersonAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
+	public void whenEditEmployeeAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/edit-" + worker.getId()))
 				//.andDo(print())
 				.andExpect(status().isFound())
@@ -107,25 +107,25 @@ public class WorkerControllerTest {
 
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
-	public void whenUpdatePersonAsAuthorizedWithNullWorker_thenOk() throws Exception {
+	public void whenUpdateEmployeeAsAuthorizedWithNullWorker_thenOk() throws Exception {
 		mockMvc.perform(post(MAPPED_URL + "/update"))
 				//.andDo(print())
 				.andExpect(status().isOk())
-				.andExpect(model().attributeExists("person"))
-				.andExpect(model().attribute("person", notNullValue()))
-				.andExpect(model().attribute("person", hasProperty("id", nullValue())))
-				.andExpect(model().attribute("person", hasProperty("firstName", blankOrNullString())))
-				.andExpect(model().attribute("person", hasProperty("lastName", blankOrNullString())))
-				.andExpect(model().attribute("person", hasProperty("middleName", blankOrNullString())))
-				.andExpect(model().attribute("person", hasProperty("email", blankOrNullString())))
-				.andExpect(view().name("personRecordPage"));
+				.andExpect(model().attributeExists("employee"))
+				.andExpect(model().attribute("employee", notNullValue()))
+				.andExpect(model().attribute("employee", hasProperty("id", nullValue())))
+				.andExpect(model().attribute("employee", hasProperty("firstName", blankOrNullString())))
+				.andExpect(model().attribute("employee", hasProperty("lastName", blankOrNullString())))
+				.andExpect(model().attribute("employee", hasProperty("middleName", blankOrNullString())))
+				.andExpect(model().attribute("employee", hasProperty("email", blankOrNullString())))
+				.andExpect(view().name("employeeRecordPage"));
 	}
 
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
-	public void whenUpdatePersonAsAuthorizedWithNotNullWorker_thenOk() throws Exception {
+	public void whenUpdateEmployeeAsAuthorizedWithNotNullWorker_thenOk() throws Exception {
 		//doNothing().when(mockUserService).updateObject(any(User.class));
-		mockWorkerService.updateObject(worker);
+		mockWorkerService.update(worker);
 
 		mockMvc.perform(post(MAPPED_URL + "/update")
 				.param("id", String.valueOf(worker.getId()))
@@ -137,12 +137,12 @@ public class WorkerControllerTest {
 				.andExpect(status().isFound())
 
 				.andExpect(redirectedUrl(MAPPED_URL));
-		verify(mockWorkerService, times(1)).updateObject(worker);
+		verify(mockWorkerService, times(1)).update(worker);
 	}
 
 
 	@Test
-	public void whenUpdatePersonAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
+	public void whenUpdateEmployeeAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(post(MAPPED_URL + "/update"))
 				//.andDo(print())
 				.andExpect(status().isFound())
@@ -151,7 +151,7 @@ public class WorkerControllerTest {
 
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
-	public void whenDeletePersonAsAuthorizedWithNotNullUser_thenOk() throws Exception {
+	public void whenDeleteEmployeeAsAuthorizedWithNotNullUser_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/delete-" + worker.getId()))
 				//.andDo(print())
 				.andExpect(status().isFound())
@@ -161,7 +161,7 @@ public class WorkerControllerTest {
 	}
 
 	@Test
-	public void whenDeletePersonAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
+	public void whenDeleteEmployeeAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/delete-" + worker.getId()))
 				//.andDo(print())
 				.andExpect(status().isFound())

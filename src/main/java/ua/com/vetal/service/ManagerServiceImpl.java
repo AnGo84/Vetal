@@ -1,16 +1,20 @@
 package ua.com.vetal.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.entity.Manager;
 import ua.com.vetal.repositories.ManagerRepository;
-
-import java.util.List;
+import ua.com.vetal.service.common.AbstractEmployeeService;
 
 @Service("managerService")
 @Transactional
-public class ManagerServiceImpl implements SimpleService<Manager> {
+public class ManagerServiceImpl extends AbstractEmployeeService<Manager, ManagerRepository> {
+
+    public ManagerServiceImpl(ManagerRepository repository) {
+        super(repository);
+    }
+}
+/*public class ManagerServiceImpl implements SimpleService<Manager> {
 
     // private static final Logger logger =
     // LoggerFactory.getLogger(UserServiceImpl.class);
@@ -20,10 +24,10 @@ public class ManagerServiceImpl implements SimpleService<Manager> {
 
     @Override
     public Manager findById(Long id) {
-        /*
-         * Optional<User> optinalEntity = userRepository.findById(id); User user
-         * = optinalEntity.get(); return user;
-         */
+        *//*
+ * Optional<User> optinalEntity = userRepository.findById(id); User user
+ * = optinalEntity.get(); return user;
+ *//*
         return personRepository.getOne(id);
     }
 
@@ -58,4 +62,4 @@ public class ManagerServiceImpl implements SimpleService<Manager> {
         return findById(person.getId()) != null;
     }
 
-}
+}*/

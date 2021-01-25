@@ -62,7 +62,7 @@ public class ModelAttributeControllerAdvice {
 
 	@ModelAttribute("managerList")
 	public List<Manager> getManagersList() {
-		List<Manager> resultList = managerService.findAllObjects();
+		List<Manager> resultList = managerService.getAll();
 		return resultList.stream().sorted(Comparator.comparing(Manager::getFullName, String.CASE_INSENSITIVE_ORDER))
 				.collect(Collectors.toList());
 	}
@@ -167,14 +167,14 @@ public class ModelAttributeControllerAdvice {
 
 	@ModelAttribute("printerList")
 	public List<Printer> getPrintersList() {
-		List<Printer> resultList = printerService.findAllObjects();
+		List<Printer> resultList = printerService.getAll();
 		return resultList.stream().sorted(Comparator.comparing(Printer::getFullName, String.CASE_INSENSITIVE_ORDER))
 				.collect(Collectors.toList());
 	}
 
 	@ModelAttribute("workerList")
 	public List<Worker> getWorkersList() {
-		List<Worker> resultList = workerService.findAllObjects();
+		List<Worker> resultList = workerService.getAll();
 		return resultList.stream().sorted(Comparator.comparing(Worker::getFullName, String.CASE_INSENSITIVE_ORDER))
 				.collect(Collectors.toList());
 	}

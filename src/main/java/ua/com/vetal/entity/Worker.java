@@ -1,11 +1,15 @@
 package ua.com.vetal.entity;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import ua.com.vetal.entity.common.AbstractEmployeeEntity;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "workers")
+public class Worker extends AbstractEmployeeEntity {
+}
+/*
 public class Worker extends AbstractPerson {
 
     @Id
@@ -41,3 +45,4 @@ public class Worker extends AbstractPerson {
     }
 
 }
+*/

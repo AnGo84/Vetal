@@ -14,7 +14,10 @@ public abstract class AbstractEmployeeService<E extends AbstractEmployeeEntity, 
 
     @Override
     public Boolean isExist(E entity) {
-        log.info("Check on exist: {}", entity);
-        return get(entity.getId()) != null;
-    }
+		log.info("Check on exist: {}", entity);
+		if (entity == null) {
+			return false;
+		}
+		return get(entity.getId()) != null;
+	}
 }

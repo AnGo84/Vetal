@@ -1,15 +1,20 @@
 package ua.com.vetal.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.entity.Worker;
 import ua.com.vetal.repositories.WorkerRepository;
-
-import java.util.List;
+import ua.com.vetal.service.common.AbstractEmployeeService;
 
 @Service("workerService")
 @Transactional
+public class WorkerServiceImpl extends AbstractEmployeeService<Worker, WorkerRepository> {
+
+	public WorkerServiceImpl(WorkerRepository repository) {
+		super(repository);
+	}
+}
+/*
 public class WorkerServiceImpl implements SimpleService<Worker> {
 
 	// private static final Logger logger =
@@ -20,10 +25,12 @@ public class WorkerServiceImpl implements SimpleService<Worker> {
 
 	@Override
 	public Worker findById(Long id) {
-		/*
-		 * Optional<User> optinalEntity = userRepository.findById(id); User user
-		 * = optinalEntity.get(); return user;
-		 */
+		*/
+/*
+ * Optional<User> optinalEntity = userRepository.findById(id); User user
+ * = optinalEntity.get(); return user;
+ *//*
+
 		return personRepository.getOne(id);
 	}
 
@@ -59,3 +66,4 @@ public class WorkerServiceImpl implements SimpleService<Worker> {
 	}
 
 }
+*/

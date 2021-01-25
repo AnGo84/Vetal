@@ -1,12 +1,16 @@
 package ua.com.vetal.entity;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import ua.com.vetal.entity.common.AbstractEmployeeEntity;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "managers")
-public class Manager extends AbstractPerson {
+public class Manager extends AbstractEmployeeEntity {
+
+}
+/*public class Manager extends AbstractPerson {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,4 +43,4 @@ public class Manager extends AbstractPerson {
     public String getEmail() {
         return email;
     }
-}
+}*/

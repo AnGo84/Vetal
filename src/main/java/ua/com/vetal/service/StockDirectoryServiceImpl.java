@@ -9,7 +9,6 @@ import ua.com.vetal.service.common.AbstractDirectoryService;
 @Service("stockDirectoryService")
 @Transactional
 public class StockDirectoryServiceImpl extends AbstractDirectoryService<StockDirectory, StockDirectoryRepository> {
-
     public StockDirectoryServiceImpl(StockDirectoryRepository repository) {
         super(repository);
     }

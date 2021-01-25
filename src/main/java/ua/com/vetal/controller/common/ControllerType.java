@@ -9,7 +9,11 @@ public enum ControllerType {
 	PAPER("Paper", "/paper", "Paper", "label.paper"),
 	PRINTING_UNIT("Printing Unit", "/printingUnit", "Printing Unit", "label.printing_unit"),
 	PRODUCTION_TYPE("Production Type", "/productionType", "Production Type", "label.productionType"),
-	STOCK("Stock", "/stock", "Production Type", "label.stock");
+	STOCK("Stock", "/stock", "Stock", "label.stock"),
+	/**/
+	WORKER("Worker", "/worker", "Worker", "label.worker"),
+	PRINTER("Printer", "/printer", "Printer", "label.printer"),
+	MANAGER("Manager", "/manager", "Manager", "label.manager");
 
 	private String title;
 	private String pageName;

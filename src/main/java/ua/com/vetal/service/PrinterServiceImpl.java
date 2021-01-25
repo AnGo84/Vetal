@@ -1,15 +1,20 @@
 package ua.com.vetal.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.entity.Printer;
 import ua.com.vetal.repositories.PrinterRepository;
-
-import java.util.List;
+import ua.com.vetal.service.common.AbstractEmployeeService;
 
 @Service("printerService")
 @Transactional
+public class PrinterServiceImpl extends AbstractEmployeeService<Printer, PrinterRepository> {
+
+    public PrinterServiceImpl(PrinterRepository repository) {
+        super(repository);
+    }
+}
+/*
 public class PrinterServiceImpl implements SimpleService<Printer> {
 
     // private static final Logger logger =
@@ -20,10 +25,12 @@ public class PrinterServiceImpl implements SimpleService<Printer> {
 
     @Override
     public Printer findById(Long id) {
-        /*
-         * Optional<User> optinalEntity = userRepository.findById(id); User user
-         * = optinalEntity.get(); return user;
-         */
+        */
+/*
+ * Optional<User> optinalEntity = userRepository.findById(id); User user
+ * = optinalEntity.get(); return user;
+ *//*
+
         return personRepository.getOne(id);
     }
 
@@ -59,3 +66,4 @@ public class PrinterServiceImpl implements SimpleService<Printer> {
     }
 
 }
+*/

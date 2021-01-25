@@ -18,8 +18,8 @@ import java.util.Locale;
 @Slf4j
 public abstract class AbstractEmployeeController<E extends AbstractEmployeeEntity, S extends CommonService<E>>
         implements CommonController<E> {
-    private final String DIRECTORY_PAGE = "employeePage";
-    private final String DIRECTORY_RECORD_PAGE = "employeeRecordPage";
+    private final String DIRECTORY_PAGE = "employeesPage";
+	private final String DIRECTORY_RECORD_PAGE = "employeeRecordPage";
     private final Class<E> objectClass;
 
     private final ControllerType controllerType;
@@ -79,7 +79,7 @@ public abstract class AbstractEmployeeController<E extends AbstractEmployeeEntit
 
     @ModelAttribute("employeeName")
     public String initializeDirectoryName() {
-        String name = messageSource.getMessage("label." + controllerType.getLabel(), null, new Locale("ru"));
+		String name = messageSource.getMessage(controllerType.getLabel(), null, new Locale("ru"));
         if (name == null || name.equals("")) {
             return controllerType.getDirectoryName();
         }

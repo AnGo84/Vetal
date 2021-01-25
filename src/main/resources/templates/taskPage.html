@@ -101,7 +101,7 @@
                                     class="form-control form-control-sm selectpicker"
                                     data-live-search="true">
                                 <option th:each="dropDownItem : ${numberBaseList}"
-                                        th:text="${dropDownItem.fullName}" th:value="${dropDownItem.id}"
+                                        th:text="${dropDownItem.name}" th:value="${dropDownItem.id}"
                                         th:attr="data-tokens=${dropDownItem.name}"/>
                             </select>
                         </div>

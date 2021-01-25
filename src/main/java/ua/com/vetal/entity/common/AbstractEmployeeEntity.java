@@ -1,15 +1,16 @@
 package ua.com.vetal.entity.common;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.apache.logging.log4j.util.Strings;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @MappedSuperclass
-@Data
+@EqualsAndHashCode(callSuper = true)
 public abstract class AbstractEmployeeEntity extends AbstractEntity {
 
     private String lastName;
@@ -65,6 +66,7 @@ public abstract class AbstractEmployeeEntity extends AbstractEntity {
         this.email = email;
     }
 
+    @Transient
     public String getPhone() {
         return phone;
     }
@@ -73,6 +75,7 @@ public abstract class AbstractEmployeeEntity extends AbstractEntity {
         this.phone = phone;
     }
 
+    @Transient
     public String getAddress() {
         return address;
     }
@@ -81,6 +84,7 @@ public abstract class AbstractEmployeeEntity extends AbstractEntity {
         this.address = address;
     }
 
+    @Transient
     public String getFullName() {
         String result = "";
         if (!Strings.isBlank(lastName)) {
