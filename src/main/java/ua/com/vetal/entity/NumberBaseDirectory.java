@@ -1,12 +1,17 @@
 package ua.com.vetal.entity;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import ua.com.vetal.entity.common.AbstractDirectoryEntity;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "bases")
-public class NumberBaseDirectory extends AbstractDirectory {
+public class NumberBaseDirectory extends AbstractDirectoryEntity {
+
+}
+
+/*public class NumberBaseDirectory extends AbstractDirectory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -21,4 +26,4 @@ public class NumberBaseDirectory extends AbstractDirectory {
         return name;
     }
 
-}
+}*/

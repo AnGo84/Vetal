@@ -1,28 +1,23 @@
 package ua.com.vetal.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import ua.com.vetal.entity.FormatDirectory;
+import ua.com.vetal.controller.common.AbstractDirectoryController;
+import ua.com.vetal.controller.common.ControllerType;
 import ua.com.vetal.entity.NumberBaseDirectory;
 import ua.com.vetal.service.NumberBaseDirectoryServiceImpl;
-import ua.com.vetal.utils.LoggerUtils;
-
-import javax.validation.Valid;
-import java.util.Locale;
 
 @Controller
 @RequestMapping("/numberBases")
 @Slf4j
+public class NumberBaseDirectoryController extends AbstractDirectoryController<NumberBaseDirectory, NumberBaseDirectoryServiceImpl> {
 
+	public NumberBaseDirectoryController(NumberBaseDirectoryServiceImpl service) {
+		super(NumberBaseDirectory.class, ControllerType.NUMBER_BASE, service);
+	}
+}
+/*
 public class NumberBaseDirectoryController {
 
 	private String title = "NumberBase";
@@ -87,9 +82,11 @@ public class NumberBaseDirectoryController {
 		return "redirect:" + pageName;
 	}
 
-	/**
-	 * This method will provide Title to views
-	 */
+	*/
+/**
+ * This method will provide Title to views
+ *//*
+
 	@ModelAttribute("title")
 	public String initializeTitle() {
 		return this.title;
@@ -97,7 +94,7 @@ public class NumberBaseDirectoryController {
 
 	@ModelAttribute("directoryName")
 	public String initializeDirectoryName() {
-		String name = messageSource.getMessage("label.paper_format", null, new Locale("ru"));
+		String name = messageSource.getMessage("label.number_bases", null, new Locale("ru"));
 		if (name == null || name.equals("")) {
 			return directoryName;
 		}
@@ -110,3 +107,4 @@ public class NumberBaseDirectoryController {
 		return this.pageName;
 	}
 }
+*/

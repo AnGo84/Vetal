@@ -1,16 +1,20 @@
 package ua.com.vetal.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.entity.FormatDirectory;
 import ua.com.vetal.repositories.FormatDirectoryRepository;
-
-import java.util.List;
+import ua.com.vetal.service.common.AbstractDirectoryService;
 
 @Service("formatDirectoryService")
 @Transactional
-public class FormatDirectoryServiceImpl implements SimpleService<FormatDirectory> {
+public class FormatDirectoryServiceImpl extends AbstractDirectoryService<FormatDirectory, FormatDirectoryRepository> {
+
+    public FormatDirectoryServiceImpl(FormatDirectoryRepository repository) {
+        super(repository);
+    }
+}
+/*public class FormatDirectoryServiceImpl implements SimpleService<FormatDirectory> {
 
     // private static final Logger logger =
     // LoggerFactory.getLogger(UserServiceImpl.class);
@@ -20,10 +24,10 @@ public class FormatDirectoryServiceImpl implements SimpleService<FormatDirectory
 
     @Override
     public FormatDirectory findById(Long id) {
-        /*
-         * Optional<User> optinalEntity = userRepository.findById(id); User user
-         * = optinalEntity.get(); return user;
-         */
+        *//*
+ * Optional<User> optinalEntity = userRepository.findById(id); User user
+ * = optinalEntity.get(); return user;
+ *//*
         return directoryRepository.getOne(id);
     }
 
@@ -57,4 +61,4 @@ public class FormatDirectoryServiceImpl implements SimpleService<FormatDirectory
         return findByName(directory.getName()) != null;
     }
 
-}
+}*/

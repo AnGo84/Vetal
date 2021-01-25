@@ -1,15 +1,20 @@
 package ua.com.vetal.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.entity.NumberBaseDirectory;
 import ua.com.vetal.repositories.NumberBaseDirectoryRepository;
-
-import java.util.List;
+import ua.com.vetal.service.common.AbstractDirectoryService;
 
 @Service("numberBaseDirectoryService")
 @Transactional
+public class NumberBaseDirectoryServiceImpl extends AbstractDirectoryService<NumberBaseDirectory, NumberBaseDirectoryRepository> {
+
+    public NumberBaseDirectoryServiceImpl(NumberBaseDirectoryRepository repository) {
+        super(repository);
+    }
+}
+/*
 public class NumberBaseDirectoryServiceImpl implements SimpleService<NumberBaseDirectory> {
 
     // private static final Logger logger =
@@ -20,10 +25,12 @@ public class NumberBaseDirectoryServiceImpl implements SimpleService<NumberBaseD
 
     @Override
     public NumberBaseDirectory findById(Long id) {
-        /*
-         * Optional<User> optinalEntity = userRepository.findById(id); User user
-         * = optinalEntity.get(); return user;
-         */
+        */
+/*
+ * Optional<User> optinalEntity = userRepository.findById(id); User user
+ * = optinalEntity.get(); return user;
+ *//*
+
         return directoryRepository.getOne(id);
     }
 
@@ -58,3 +65,4 @@ public class NumberBaseDirectoryServiceImpl implements SimpleService<NumberBaseD
     }
 
 }
+*/

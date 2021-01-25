@@ -1,27 +1,23 @@
 package ua.com.vetal.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import ua.com.vetal.controller.common.AbstractDirectoryController;
+import ua.com.vetal.controller.common.ControllerType;
 import ua.com.vetal.entity.PaperDirectory;
 import ua.com.vetal.service.PaperDirectoryServiceImpl;
-import ua.com.vetal.utils.LoggerUtils;
-
-import javax.validation.Valid;
-import java.util.Locale;
 
 @Controller
 @RequestMapping("/paper")
 @Slf4j
-public class PaperDirectoryController {
+public class PaperDirectoryController extends AbstractDirectoryController<PaperDirectory, PaperDirectoryServiceImpl> {
+
+	public PaperDirectoryController(PaperDirectoryServiceImpl service) {
+		super(PaperDirectory.class, ControllerType.PAPER, service);
+	}
+}
+/*public class PaperDirectoryController {
 
 	private String title = "Paper";
 	private String directoryName = "Paper";
@@ -84,9 +80,9 @@ public class PaperDirectoryController {
 		return "redirect:" + pageName;
 	}
 
-	/**
-	 * This method will provide Title to views
-	 */
+	*//**
+ * This method will provide Title to views
+ *//*
 	@ModelAttribute("title")
 	public String initializeTitle() {
 		return this.title;
@@ -105,4 +101,4 @@ public class PaperDirectoryController {
 	public String initializePageName() {
 		return this.pageName;
 	}
-}
+}*/

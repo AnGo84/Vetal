@@ -1,16 +1,20 @@
 package ua.com.vetal.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.entity.CringleDirectory;
 import ua.com.vetal.repositories.CringleDirectoryRepository;
-
-import java.util.List;
+import ua.com.vetal.service.common.AbstractDirectoryService;
 
 @Service("cringleDirectoryService")
 @Transactional
-public class CringleDirectoryServiceImpl implements SimpleService<CringleDirectory> {
+public class CringleDirectoryServiceImpl extends AbstractDirectoryService<CringleDirectory, CringleDirectoryRepository> {
+
+    public CringleDirectoryServiceImpl(CringleDirectoryRepository repository) {
+        super(repository);
+    }
+}
+/*public class CringleDirectoryServiceImpl implements SimpleService<CringleDirectory> {
 
     // private static final Logger logger =
     // LoggerFactory.getLogger(UserServiceImpl.class);
@@ -20,10 +24,10 @@ public class CringleDirectoryServiceImpl implements SimpleService<CringleDirecto
 
     @Override
     public CringleDirectory findById(Long id) {
-        /*
-         * Optional<User> optinalEntity = userRepository.findById(id); User user
-         * = optinalEntity.get(); return user;
-         */
+        *//*
+ * Optional<User> optinalEntity = userRepository.findById(id); User user
+ * = optinalEntity.get(); return user;
+ *//*
         return directoryRepository.getOne(id);
     }
 
@@ -57,4 +61,4 @@ public class CringleDirectoryServiceImpl implements SimpleService<CringleDirecto
         return findByName(directory.getName()) != null;
     }
 
-}
+}*/

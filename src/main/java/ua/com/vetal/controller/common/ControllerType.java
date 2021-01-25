@@ -1,17 +1,25 @@
 package ua.com.vetal.controller.common;
 
 public enum ControllerType {
-    CHROMATICITY("Chromaticity", "/chromaticity", "Chromaticity", "chromaticity");
+	CHROMATICITY("Chromaticity", "/chromaticity", "Chromaticity", "label.chromaticity"),
+	CRINGLE("Cringle", "/cringle", "Cringle", "label.cringle"),
+	FORMAT("Format", "/format", "Format", "label.paper_format"),
+	LAMINATE("Laminate", "/laminate", "Laminate", "label.laminate"),
+	NUMBER_BASE("NumberBase", "/numberBases", "NumberBase", "label.number_bases"),
+	PAPER("Paper", "/paper", "Paper", "label.paper"),
+	PRINTING_UNIT("Printing Unit", "/printingUnit", "Printing Unit", "label.printing_unit"),
+	PRODUCTION_TYPE("Production Type", "/productionType", "Production Type", "label.productionType"),
+	STOCK("Stock", "/stock", "Production Type", "label.stock");
 
-    private String title;
-    private String pageName;
-    private String directoryName;
-    private String label;
+	private String title;
+	private String pageName;
+	private String directoryName;
+	private String label;
 
-    ControllerType(String title, String pageName, String directoryName, String label) {
-        this.title = title;
-        this.pageName = pageName;
-        this.directoryName = directoryName;
+	ControllerType(String title, String pageName, String directoryName, String label) {
+		this.title = title;
+		this.pageName = pageName;
+		this.directoryName = directoryName;
         this.label = label;
     }
 

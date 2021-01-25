@@ -17,6 +17,11 @@ public abstract class AbstractDirectoryService<E extends AbstractDirectoryEntity
         return repository.findByName(name);
     }
 
+    /*
+    public List<E> getAllOrderByNameAsc() {
+        return repository.findAllByOrderByNameAsc();
+    }
+    */
     public Boolean isExistByName(String name) {
         if (StringUtils.isEmpty(name)) {
             return false;

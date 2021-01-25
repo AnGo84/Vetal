@@ -88,7 +88,7 @@ public abstract class AbstractDirectoryController<E extends AbstractDirectoryEnt
 
     @ModelAttribute("directoryName")
     public String initializeDirectoryName() {
-        String name = messageSource.getMessage("label." + controllerType.getLabel(), null, new Locale("ru"));
+        String name = messageSource.getMessage(controllerType.getLabel(), null, new Locale("ru"));
         if (name == null || name.equals("")) {
             return controllerType.getDirectoryName();
         }

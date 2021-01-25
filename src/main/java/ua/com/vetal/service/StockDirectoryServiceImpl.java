@@ -1,15 +1,20 @@
 package ua.com.vetal.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.entity.StockDirectory;
 import ua.com.vetal.repositories.StockDirectoryRepository;
-
-import java.util.List;
+import ua.com.vetal.service.common.AbstractDirectoryService;
 
 @Service("stockDirectoryService")
 @Transactional
+public class StockDirectoryServiceImpl extends AbstractDirectoryService<StockDirectory, StockDirectoryRepository> {
+
+    public StockDirectoryServiceImpl(StockDirectoryRepository repository) {
+        super(repository);
+    }
+}
+/*
 public class StockDirectoryServiceImpl implements SimpleService<StockDirectory> {
 
     // private static final Logger logger =
@@ -20,10 +25,12 @@ public class StockDirectoryServiceImpl implements SimpleService<StockDirectory> 
 
     @Override
     public StockDirectory findById(Long id) {
-        /*
-         * Optional<User> optinalEntity = userRepository.findById(id); User user
-         * = optinalEntity.get(); return user;
-         */
+        */
+/*
+ * Optional<User> optinalEntity = userRepository.findById(id); User user
+ * = optinalEntity.get(); return user;
+ *//*
+
         return directoryRepository.getOne(id);
     }
 
@@ -58,3 +65,4 @@ public class StockDirectoryServiceImpl implements SimpleService<StockDirectory> 
     }
 
 }
+*/

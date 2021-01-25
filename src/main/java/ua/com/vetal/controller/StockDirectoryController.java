@@ -1,27 +1,23 @@
 package ua.com.vetal.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import ua.com.vetal.controller.common.AbstractDirectoryController;
+import ua.com.vetal.controller.common.ControllerType;
 import ua.com.vetal.entity.StockDirectory;
 import ua.com.vetal.service.StockDirectoryServiceImpl;
-import ua.com.vetal.utils.LoggerUtils;
-
-import javax.validation.Valid;
-import java.util.Locale;
 
 @Controller
 @RequestMapping("/stock")
 @Slf4j
-public class StockDirectoryController {
+public class StockDirectoryController extends AbstractDirectoryController<StockDirectory, StockDirectoryServiceImpl> {
+
+	public StockDirectoryController(StockDirectoryServiceImpl service) {
+		super(StockDirectory.class, ControllerType.STOCK, service);
+	}
+}
+/*public class StockDirectoryController {
 	private String title = "Stock";
 	private String directoryName = "Stock";
 	private String pageName = "/stock";
@@ -84,9 +80,9 @@ public class StockDirectoryController {
 		return "redirect:" + pageName;
 	}
 
-	/**
-	 * This method will provide Title to views
-	 */
+	*//**
+ * This method will provide Title to views
+ *//*
 	@ModelAttribute("title")
 	public String initializeTitle() {
 		return this.title;
@@ -106,4 +102,4 @@ public class StockDirectoryController {
 	public String initializePageName() {
 		return this.pageName;
 	}
-}
+}*/

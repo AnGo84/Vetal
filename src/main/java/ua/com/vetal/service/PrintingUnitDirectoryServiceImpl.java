@@ -1,15 +1,20 @@
 package ua.com.vetal.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.entity.PrintingUnitDirectory;
 import ua.com.vetal.repositories.PrintingUnitDirectoryRepository;
-
-import java.util.List;
+import ua.com.vetal.service.common.AbstractDirectoryService;
 
 @Service("printingUnitDirectoryService")
 @Transactional
+public class PrintingUnitDirectoryServiceImpl extends AbstractDirectoryService<PrintingUnitDirectory, PrintingUnitDirectoryRepository> {
+
+    public PrintingUnitDirectoryServiceImpl(PrintingUnitDirectoryRepository repository) {
+        super(repository);
+    }
+}
+/*
 public class PrintingUnitDirectoryServiceImpl implements SimpleService<PrintingUnitDirectory> {
 
     // private static final Logger logger =
@@ -20,10 +25,12 @@ public class PrintingUnitDirectoryServiceImpl implements SimpleService<PrintingU
 
     @Override
     public PrintingUnitDirectory findById(Long id) {
-        /*
-         * Optional<User> optinalEntity = userRepository.findById(id); User user
-         * = optinalEntity.get(); return user;
-         */
+        */
+/*
+ * Optional<User> optinalEntity = userRepository.findById(id); User user
+ * = optinalEntity.get(); return user;
+ *//*
+
         return printingUnitRepository.getOne(id);
     }
 
@@ -58,3 +65,4 @@ public class PrintingUnitDirectoryServiceImpl implements SimpleService<PrintingU
     }
 
 }
+*/

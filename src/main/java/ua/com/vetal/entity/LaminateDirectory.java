@@ -1,12 +1,16 @@
 package ua.com.vetal.entity;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import ua.com.vetal.entity.common.AbstractDirectoryEntity;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "laminates")
-public class LaminateDirectory extends AbstractDirectory {
+public class LaminateDirectory extends AbstractDirectoryEntity {
+
+}
+/*public class LaminateDirectory extends AbstractDirectory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -21,4 +25,4 @@ public class LaminateDirectory extends AbstractDirectory {
         return name;
     }
 
-}
+}*/

@@ -37,11 +37,11 @@ public class CringleDirectoryControllerTest {
 
 	@BeforeEach
 	public void beforeEach() {
-        directory = TestBuildersUtils.getCringleDirectory(1l, CringleDirectoryRepositoryTest.DIRECTORY_NAME);
+		directory = TestBuildersUtils.getCringleDirectory(1l, CringleDirectoryRepositoryTest.DIRECTORY_NAME);
 
-        when(mockDirectoryService.findAllObjects()).thenReturn(Arrays.asList(directory));
-        when(mockDirectoryService.findById(anyLong())).thenReturn(directory);
-    }
+		when(mockDirectoryService.getAll()).thenReturn(Arrays.asList(directory));
+		when(mockDirectoryService.get(anyLong())).thenReturn(directory);
+	}
 
 
 	@Test
@@ -131,7 +131,7 @@ public class CringleDirectoryControllerTest {
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenUpdateRecordAsAuthorizedWithNotNullDirectory_thenOk() throws Exception {
 		//doNothing().when(mockUserService).updateObject(any(User.class));
-		mockDirectoryService.updateObject(directory);
+		//mockDirectoryService.update(directory);
 
 		mockMvc.perform(post(MAPPED_URL + "/update")
 				.param("id", String.valueOf(directory.getId()))
@@ -140,14 +140,14 @@ public class CringleDirectoryControllerTest {
 				.andExpect(status().isFound())
 
 				.andExpect(redirectedUrl(MAPPED_URL));
-		verify(mockDirectoryService, times(1)).updateObject(directory);
+		verify(mockDirectoryService, times(1)).update(directory);
 	}
 
 
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenUpdateRecordAsAuthorizedWithExistName_thenError() throws Exception {
-		when(mockDirectoryService.isObjectExist(any())).thenReturn(true);
+		when(mockDirectoryService.isExist(any())).thenReturn(true);
 		//mockDirectoryService.updateObject(directory);
 
 		mockMvc.perform(post(MAPPED_URL + "/update")
@@ -158,7 +158,7 @@ public class CringleDirectoryControllerTest {
 				.andExpect(model().attributeExists("directory"))
 				.andExpect(model().attributeHasFieldErrors("directory", "name"))
 				.andExpect(view().name("directoryRecordPage"));
-		verify(mockDirectoryService, times(0)).updateObject(directory);
+		verify(mockDirectoryService, times(0)).update(directory);
 	}
 
 	@Test

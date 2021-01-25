@@ -9,7 +9,7 @@ import java.io.Serializable;
 @MappedSuperclass
 public abstract class AbstractEntity implements Serializable {
 
-    private Long id;
+    protected Long id;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

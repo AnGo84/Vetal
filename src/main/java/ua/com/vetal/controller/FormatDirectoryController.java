@@ -1,26 +1,23 @@
 package ua.com.vetal.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import ua.com.vetal.controller.common.AbstractDirectoryController;
+import ua.com.vetal.controller.common.ControllerType;
 import ua.com.vetal.entity.FormatDirectory;
 import ua.com.vetal.service.FormatDirectoryServiceImpl;
-import ua.com.vetal.utils.LoggerUtils;
-
-import javax.validation.Valid;
-import java.util.Locale;
 
 @Controller
 @RequestMapping("/format")
 @Slf4j
+public class FormatDirectoryController extends AbstractDirectoryController<FormatDirectory, FormatDirectoryServiceImpl> {
+
+	public FormatDirectoryController(FormatDirectoryServiceImpl service) {
+		super(FormatDirectory.class, ControllerType.FORMAT, service);
+	}
+}
+/*
 public class FormatDirectoryController {
 
 	private String title = "Format";
@@ -86,9 +83,11 @@ public class FormatDirectoryController {
 		return "redirect:" + pageName;
 	}
 
-	/**
-	 * This method will provide Title to views
-	 */
+	*/
+/**
+ * This method will provide Title to views
+ *//*
+
 	@ModelAttribute("title")
 	public String initializeTitle() {
 		return this.title;
@@ -108,3 +107,4 @@ public class FormatDirectoryController {
 		return this.pageName;
 	}
 }
+*/

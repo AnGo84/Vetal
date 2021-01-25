@@ -1,15 +1,20 @@
 package ua.com.vetal.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.entity.PaperDirectory;
 import ua.com.vetal.repositories.PaperDirectoryRepository;
-
-import java.util.List;
+import ua.com.vetal.service.common.AbstractDirectoryService;
 
 @Service("paperDirectoryService")
 @Transactional
+public class PaperDirectoryServiceImpl extends AbstractDirectoryService<PaperDirectory, PaperDirectoryRepository> {
+
+    public PaperDirectoryServiceImpl(PaperDirectoryRepository repository) {
+        super(repository);
+    }
+}
+/*
 public class PaperDirectoryServiceImpl implements SimpleService<PaperDirectory> {
 
     // private static final Logger logger =
@@ -20,10 +25,12 @@ public class PaperDirectoryServiceImpl implements SimpleService<PaperDirectory> 
 
     @Override
     public PaperDirectory findById(Long id) {
-        /*
-         * Optional<User> optinalEntity = userRepository.findById(id); User user
-         * = optinalEntity.get(); return user;
-         */
+        */
+/*
+ * Optional<User> optinalEntity = userRepository.findById(id); User user
+ * = optinalEntity.get(); return user;
+ *//*
+
         return directoryRepository.getOne(id);
     }
 
@@ -58,3 +65,4 @@ public class PaperDirectoryServiceImpl implements SimpleService<PaperDirectory> 
     }
 
 }
+*/

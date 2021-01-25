@@ -25,7 +25,6 @@ public class Order {
 	@Column(name = "Number", nullable = false)
 	protected int number;
 
-
 	@NotNull
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "Number_Base_ID")
@@ -182,10 +181,10 @@ public class Order {
 	}
 
 	public String getNumberBaseWithSuffix() {
-		return numberBase.name + " " + numberSuffix;
+		return numberBase.getName() + " " + numberSuffix;
 	}
 
 	public String getPrintingWithUnit() {
-		return printing + " " + printingUnit.name;
+		return printing + " " + printingUnit.getName();
 	}
 }

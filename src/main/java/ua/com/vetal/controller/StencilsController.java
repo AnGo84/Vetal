@@ -63,6 +63,7 @@ public class StencilsController extends BaseController {
 	private PaperDirectoryServiceImpl paperService;
 	@Autowired
 	private PrintingUnitDirectoryServiceImpl printingUnitService;*/
+	/*    */
 
 	@Autowired
 	private StencilJasperReportData reportData;
@@ -201,6 +202,7 @@ public class StencilsController extends BaseController {
 	public String initializePageName() {
 		return this.pageName;
 	}
+
 /*
 	@ModelAttribute("numberBaseList")
 	public List<NumberBaseDirectory> getNumberBaseList() {

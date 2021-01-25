@@ -8,7 +8,6 @@ import ua.com.vetal.service.common.AbstractDirectoryService;
 
 @Service("chronomaticityDirectoryService")
 @Transactional
-
 public class ChromaticityDirectoryServiceImpl extends AbstractDirectoryService<ChromaticityDirectory, ChromaticityDirectoryRepository> {
     public ChromaticityDirectoryServiceImpl(ChromaticityDirectoryRepository repository) {
         super(repository);

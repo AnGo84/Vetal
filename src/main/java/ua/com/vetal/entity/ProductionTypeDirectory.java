@@ -1,11 +1,15 @@
 package ua.com.vetal.entity;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import ua.com.vetal.entity.common.AbstractDirectoryEntity;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "production_types")
+public class ProductionTypeDirectory extends AbstractDirectoryEntity {
+}
+/*
 public class ProductionTypeDirectory extends AbstractDirectory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,3 +26,4 @@ public class ProductionTypeDirectory extends AbstractDirectory {
     }
 
 }
+*/
