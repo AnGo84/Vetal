@@ -27,7 +27,6 @@ public class DBFileStorageService {
 
         try {
             DBFile dbFile = new DBFile(fileName, file.getContentType(), file.getBytes());
-            System.out.println("DBFile created: " + dbFile);
             return dbFileRepository.save(dbFile);
         } catch (IOException ex) {
             throw new FileUploadException("Could not store file " + fileName + ". Please try again!", ex);

@@ -35,9 +35,9 @@ public class TestDataUtils {
     }
 
     public static Contractor getContractor(Long id) {
-        Contractor contractor = TestBuildersUtils.getContractor(1l, "corpName" + id, "shortName" + id,
-                "firstName" + id, "lastName" + id, "middleName" + id, "address" + id,
-                "email" + id, "phone" + id, "siteURL" + id);
+        Contractor contractor = TestBuildersUtils.getContractor(id, "corpName" + id, "shortName" + id,
+				"firstName" + id, "lastName" + id, "middleName" + id, "address" + id,
+				"email" + id, "phone" + id, "siteURL" + id);
         contractor.setManager(getManager(id));
         return contractor;
     }
@@ -173,6 +173,8 @@ public class TestDataUtils {
 		task.setPayment(TestBuildersUtils.getPayment(id, "name task" + taskNumber, "altname" + taskNumber));
 		task.setDebtAmount(Double.valueOf(5 * taskNumber));
 
+		task.setAmountForContractor(Double.valueOf(2 * taskNumber));
+
 		return task;
 	}
 
@@ -248,4 +250,5 @@ public class TestDataUtils {
 
 		return stencil;
 	}
+
 }

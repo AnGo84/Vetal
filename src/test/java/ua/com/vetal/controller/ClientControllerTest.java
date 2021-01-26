@@ -16,7 +16,7 @@ import ua.com.vetal.service.ClientServiceImpl;
 
 import java.util.Arrays;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -115,46 +115,33 @@ public class ClientControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateClientAsAuthorizedWithNullClient_thenOk() throws Exception {
-		mockMvc.perform(post(MAPPED_URL + "/update"))
-				//.andDo
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("client"))
-                .andExpect(model().attribute("client", notNullValue()))
-                .andExpect(model().attribute("client", hasProperty("id", nullValue())))
-                .andExpect(model().attribute("client", hasProperty("fullName", blankOrNullString())))
-                .andExpect(model().attribute("client", hasProperty("manager", blankOrNullString())))
-                .andExpect(model().attribute("client", hasProperty("firstName", blankOrNullString())))
-                .andExpect(model().attribute("client", hasProperty("lastName", blankOrNullString())))
-                .andExpect(model().attribute("client", hasProperty("middleName", blankOrNullString())))
-                .andExpect(model().attribute("client", hasProperty("address", blankOrNullString())))
-                .andExpect(model().attribute("client", hasProperty("email", blankOrNullString())))
-                .andExpect(model().attribute("client", hasProperty("phone", blankOrNullString())))
-                .andExpect(view().name("clientPage"));
-    }
-
-    @Test
-    @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
-    public void whenUpdateClientAsAuthorizedWithNotNullClient_thenOk() throws Exception {
-        mockClientService.updateObject(client);
-
 		mockMvc.perform(post(MAPPED_URL + "/update")
-				.param("id", String.valueOf(client.getId()))
-				.param("fullName", client.getFullName())
-				.param("manager", String.valueOf(client.getId()))
-				.param("firstName", client.getFirstName())
-				.param("lastName", client.getLastName())
-				.param("middleName", client.getMiddleName())
-				.param("address", client.getAddress())
-				.param("email", client.getEmail())
-				.param("phone", client.getPhone())
+				.flashAttr("client", client)
 		)
 				//.andDo
 				.andExpect(status().isFound())
-
 				.andExpect(redirectedUrl(MAPPED_URL));
-		verify(mockClientService, times(1)).updateObject(client);
-    }
 
+		verify(mockClientService, times(1)).updateObject(any());
+
+	}
+
+	@Test
+	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
+	public void whenUpdateClientAsAuthorizedWithNullClientName_thenOk() throws Exception {
+		when(mockClientService.isFullNameExist(any())).thenReturn(true);
+		Client newClient = TestDataUtils.getClient(null);
+		mockMvc.perform(post(MAPPED_URL + "/update")
+				.flashAttr("client", newClient)
+		)
+				//.andDo
+				.andExpect(status().isOk())
+				.andExpect(model().attributeExists("client"))
+				.andExpect(model().attributeHasFieldErrors("client", "fullName"))
+				.andExpect(view().name("clientPage"));
+
+		verify(mockClientService, times(0)).updateObject(client);
+	}
 
     @Test
     public void whenUpdateClientAsNoAuthorized_thenRedirectToLoginPage() throws Exception {

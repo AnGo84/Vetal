@@ -234,8 +234,24 @@
                             <td class="text-center" style="vertical-align: middle;"
                                 th:text="${#dates.format(stencil.dateBegin, 'dd.MM.yyyy')}"></td>
 
-                            <td class="text-center" style="vertical-align: middle;"
-                                th:text="${stencil.state.altName}"></td>
+                            <!-- Buttons -->
+                            <td class="text-center" style="vertical-align: middle;">
+                                <div>
+                                    <span th:text="${stencil.state.altName}" th:remove="tag"></span>
+                                </div>
+                                <div class="btn-group btn-group-sm"
+                                     th:class="${stencil.state.id==2} ? '':'d-none'"
+                                     sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"
+                                >
+                                    <a class="btn btn-info btn-sm mx-sm-1"
+                                       role="button" th:href="@{'/stencils/pdfReport-' + ${stencil.id}}"
+                                       th:title="#{message.record.make_done}">
+                                        <i class="fa fa-check"></i>
+                                        <span th:text="#{label.ready}" th:remove="tag"></span>
+                                    </a>
+                                </div>
+
+                            </td>
 
                             <td class="text-center align-self-center" style="vertical-align: middle;">
                                 <!--<a th:href="@{'/tasks/pdfReport-' + ${task.id}}"

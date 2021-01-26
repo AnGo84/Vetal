@@ -77,7 +77,6 @@ public class Stencil extends Order {
 
     public Stencil getCopy() {
 
-        System.out.println("Copy From task:" + this);
         Stencil task = new Stencil();
 
         task.numberBase = this.numberBase;

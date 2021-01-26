@@ -107,8 +107,6 @@ public class CatalogController {
             @PathVariable String path) throws IOException {
         FileMediaType fileMediaType = new FileMediaType(servletContext);
         MediaType mediaType = fileMediaType.getMediaTypeForFileName(path);
-        System.out.println("fileName: " + path);
-        System.out.println("mediaType: " + mediaType);
 
         LocalFile localFile = ListFilesUtils.findLocalFileByName(localFileList, path);
 

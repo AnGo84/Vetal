@@ -1,5 +1,6 @@
 package ua.com.vetal.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,26 +32,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class TasksControllerTest {
 	public static final String MAPPED_URL = "/tasks";
-
+	private final ObjectMapper mapper = new ObjectMapper();
 	@Autowired
 	private MockMvc mockMvc;
 	@MockBean
 	private TaskServiceImpl mockTaskService;
-
 	@MockBean
 	private TaskJasperReportData reportData;
 	@MockBean
 	private JasperReportService mockJasperReportService;
-
 	@MockBean
 	private MailServiceImp mailServiceImp;
-
 	private Task task;
 
 	@BeforeEach
 	public void beforeEach() {
 		task = TestDataUtils.getTask(1l, 1);
-		System.out.println("Create TASK: " + task);
 		when(mockTaskService.findAllObjects()).thenReturn(Arrays.asList(task));
 		when(mockTaskService.findById(anyLong())).thenReturn(task);
 		when(mockTaskService.findByAccount(anyString())).thenReturn(task);
@@ -193,39 +190,14 @@ public class TasksControllerTest {
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenUpdateTaskAsAuthorizedWithNotNullTask_thenOk() throws Exception {
-		mockTaskService.updateObject(task);
-
 		mockMvc.perform(post(MAPPED_URL + "/update")
-				.param("id", String.valueOf(task.getId()))
-				.param("number", String.valueOf(task.getNumber()))
-				.param("numberBase", String.valueOf(task.getNumberBase().getId()))
-				.param("account", task.getAccount())
-				.param("numberSuffix", String.valueOf(task.getNumberSuffix()))
-				.param("manager", String.valueOf(task.getManager().getId()))
-				.param("workName", task.getWorkName())
-				.param("contractor", String.valueOf(task.getContractor().getId()))
-				.param("amountForContractor", String.valueOf(task.getAmountForContractor()))
-				.param("contractorAmount", String.valueOf(task.getContractorAmount()))
-				.param("production", String.valueOf(task.getProduction().getId()))
-				.param("productionType", String.valueOf(task.getProductionType().getId()))
-				.param("dateBegin", String.valueOf(task.getDateBegin()))
-				.param("dateEnd", String.valueOf(task.getDateEnd()))
-				.param("client", String.valueOf(task.getClient().getId()))
-				.param("stock", String.valueOf(task.getStock().getId()))
-				.param("printing", String.valueOf(task.getPrinting()))
-				.param("printingUnit", String.valueOf(task.getPrintingUnit().getId()))
-				.param("chromaticity", String.valueOf(task.getChromaticity().getId()))
-				.param("printingFormat", task.getPrintingFormat())
-				.param("laminate", String.valueOf(task.getLaminate().getId()))
-				.param("paper", String.valueOf(task.getPaper().getId()))
-				.param("cringle", String.valueOf(task.getCringle().getId()))
+				.flashAttr("task", task)
 		)
 				//.andDo(print())
-				.andExpect(status().isOk())
-				.andExpect(view().name("taskPage"));
+				.andExpect(status().isFound())
+				.andExpect(redirectedUrl(MAPPED_URL));
 
-
-		verify(mockTaskService, times(1)).updateObject(task);
+		verify(mockTaskService, times(1)).updateObject(any(), any());
 	}
 
 
@@ -259,16 +231,16 @@ public class TasksControllerTest {
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenFilterTasksAsAuthorizedWithNotNullUser_thenOk() throws Exception {
-        OrderViewFilter orderViewFilter = new OrderViewFilter();
-        orderViewFilter.setAccount("account");
-        orderViewFilter.setManager(orderViewFilter.getManager());
-        mockMvc.perform(get(MAPPED_URL + "/filter")
-                .param("FilterDataData", orderViewFilter.toString())
-        )
-                //.andDo(print())
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl(MAPPED_URL));
-    }
+		OrderViewFilter orderViewFilter = new OrderViewFilter();
+		orderViewFilter.setAccount("account");
+		orderViewFilter.setManager(orderViewFilter.getManager());
+		mockMvc.perform(get(MAPPED_URL + "/filter")
+				.param("FilterDataData", orderViewFilter.toString())
+		)
+				//.andDo(print())
+				.andExpect(status().isFound())
+				.andExpect(redirectedUrl(MAPPED_URL));
+	}
 
 	@Test
 	public void whenFilterTasksAsNoAuthorized_thenRedirectToMappedURL() throws Exception {

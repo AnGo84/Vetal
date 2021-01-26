@@ -52,7 +52,6 @@ public class StencilsControllerTest {
 
 	}
 
-
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
 	public void whenGetStencilListAsAuthorized_thenOk() throws Exception {

@@ -40,7 +40,7 @@ public class AppRoleDAOTest {
         userRoleRepository.saveAll(userRole);
 
         userRoleSet = new HashSet<>(userRoleRepository.findAll());
-        System.out.println("Roles: " + userRoleSet.size());
+
         user = userRepository.save(TestBuildersUtils.getUser(null, "User", "password", true, userRoleSet));
 
         userRoleSet = new HashSet<UserRole>() {{

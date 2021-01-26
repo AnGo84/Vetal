@@ -1,20 +1,26 @@
 package ua.com.vetal.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import ua.com.vetal.dao.TaskDAO;
 import ua.com.vetal.email.EmailAttachment;
 import ua.com.vetal.email.EmailMessage;
+import ua.com.vetal.entity.DBFile;
 import ua.com.vetal.entity.Task;
 import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.repositories.TaskRepository;
+import ua.com.vetal.utils.StringUtils;
 
 import javax.activation.DataSource;
 import javax.mail.util.ByteArrayDataSource;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -30,6 +36,8 @@ public class TaskServiceImpl implements SimpleService<Task> {
     private TaskRepository taskRepository;
     @Autowired
     private TaskDAO taskDAO;
+    @Autowired
+    private DBFileStorageService dbFileStorageService;
 
     @Override
     public Task findById(Long id) {
@@ -49,6 +57,30 @@ public class TaskServiceImpl implements SimpleService<Task> {
     @Override
     public void updateObject(Task task) {
         saveObject(task);
+    }
+
+    //TODO cover with tests
+    public void updateObject(Task task, MultipartFile uploadFile) throws IOException {
+        Long oldFileId = null;
+        if (task.getDbFile() != null && (StringUtils.isEmpty(task.getFileName()))) {
+            oldFileId = task.getDbFile().getId();
+            task.setDbFile(null);
+        }
+        if (uploadFile != null && !uploadFile.isEmpty()) {
+            try {
+                DBFile dbFile = dbFileStorageService.storeMultipartFile(uploadFile);
+                log.debug("Get dbFile: {}", dbFile.getFileName());
+                task.setDbFile(dbFile);
+            } catch (FileUploadException | FileNotFoundException e) {
+                log.error("Error on load file: {}", e.getMessage(), e);
+                throw new IOException(e);
+            }
+        }
+        saveObject(task);
+        if (oldFileId != null) {
+            log.debug("Delete old dbFile by ID= {}", oldFileId);
+            dbFileStorageService.deleteById(oldFileId);
+        }
     }
 
     @Override
