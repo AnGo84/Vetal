@@ -8,6 +8,3 @@ import ua.com.vetal.repositories.common.CommonDirectoryRepository;
 public interface NumberBaseDirectoryRepository extends CommonDirectoryRepository<NumberBaseDirectory> {
 
 }
-/*public interface NumberBaseDirectoryRepository extends JpaRepository<NumberBaseDirectory, Long> {
-    NumberBaseDirectory findByName(String name);
-}*/

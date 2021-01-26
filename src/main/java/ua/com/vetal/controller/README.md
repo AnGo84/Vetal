@@ -1,4 +1,4 @@
-## Useful links for work
+## Useful links
 
 ### File download
 - http://websystique.com/springmvc/spring-mvc-4-file-download-example/

@@ -8,8 +8,3 @@ import ua.com.vetal.repositories.common.CommonDirectoryRepository;
 public interface LaminateDirectoryRepository extends CommonDirectoryRepository<LaminateDirectory> {
 
 }
-/*
-public interface LaminateDirectoryRepository extends JpaRepository<LaminateDirectory, Long> {
-    LaminateDirectory findByName(String name);
-}
-*/

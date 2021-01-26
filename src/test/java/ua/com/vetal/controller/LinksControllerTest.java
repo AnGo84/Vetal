@@ -39,8 +39,6 @@ public class LinksControllerTest {
 
     @BeforeEach
     public void beforeEach() {
-        /*linkType = TestBuildersUtils.getLinkType(1l, "file");
-        link = TestBuildersUtils.getLink(1l, "fullName", "shortName", linkType, "path");*/
 
         link = TestDataUtils.getLink(1l);
         linkType = link.getLinkType();

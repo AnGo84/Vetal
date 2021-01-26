@@ -12,7 +12,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.com.vetal.entity.PasswordResetToken;
-import ua.com.vetal.entity.User;
 import ua.com.vetal.entity.dto.PasswordResetDto;
 import ua.com.vetal.repositories.PasswordResetTokenRepository;
 
@@ -27,8 +26,6 @@ public class PasswordResetController {
     @Autowired
     private MessageSource messageSource;
 
-    /*@Autowired
-    private UserServiceImpl userService;*/
     @Autowired
     private PasswordResetTokenRepository tokenRepository;
     @Autowired
@@ -74,10 +71,9 @@ public class PasswordResetController {
         }
 
         PasswordResetToken token = tokenRepository.findByToken(passwordResetDto.getToken());
-        User user = token.getUser();
         String updatedPassword = passwordEncoder.encode(passwordResetDto.getPassword());
 
-        user.setEncryptedPassword(updatedPassword);
+        token.getUser().setEncryptedPassword(updatedPassword);
         tokenRepository.delete(token);
 
         return "redirect:/login?resetSuccess";

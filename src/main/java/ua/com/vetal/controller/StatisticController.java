@@ -37,11 +37,11 @@ public class StatisticController extends BaseController {
 
     private final String title = "Statistic";
     private final String pageName = "/statistic";
-    @Autowired
-    private OrderServiceImpl orderService;
 
     private List<StatisticOrder> statisticOrderList;
 
+    @Autowired
+    private OrderServiceImpl orderService;
     @Autowired
     private ManagerServiceImpl managerService;
     @Autowired
@@ -99,10 +99,6 @@ public class StatisticController extends BaseController {
         jasperReportService.exportToResponseStream(JasperReportExporterType.XLSX,
                 jasperReportData, title, response);
     }
-
-    /**
-     * This methods will provide lists and fields to views
-     */
 
     @ModelAttribute("ordersList")
     public List<StatisticOrder> getOrdersListData() {

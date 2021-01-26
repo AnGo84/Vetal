@@ -55,7 +55,6 @@ public class OrderViewFilterTest {
         orderViewFilter.setClient(TestDataUtils.getClient(1l));
         assertTrue(orderViewFilter.hasData());
 
-
         orderViewFilter.setClient(null);
         orderViewFilter.setPrinter(TestDataUtils.getPrinter(1l));
         assertTrue(orderViewFilter.hasData());
@@ -89,7 +88,6 @@ public class OrderViewFilterTest {
         assertTrue(orderViewFilter.hasData());
     }
 
-
     @Test
     public void onGetDefault() {
         OrderViewFilter orderViewFilter = new OrderViewFilter();
@@ -111,7 +109,6 @@ public class OrderViewFilterTest {
 		orderViewFilter.setManager(TestDataUtils.getManager(1l));
         Predicate predicate = orderViewFilter.getPredicate(builder, root);
 		assertNotNull(predicate);
-
 	}
 
 }

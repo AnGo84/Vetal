@@ -44,10 +44,9 @@ public class StencilsControllerTest {
 
 	@BeforeEach
 	public void beforeEach() {
-
 		stencil = TestDataUtils.getStencil(1l, 1);
-		System.out.println("Create Stencil: " + stencil);
-		when(mockStencilService.findAllObjects()).thenReturn(Arrays.asList(stencil));
+
+        when(mockStencilService.findAllObjects()).thenReturn(Arrays.asList(stencil));
 		when(mockStencilService.findById(anyLong())).thenReturn(stencil);
 		when(mockStencilService.findByAccount(anyString())).thenReturn(stencil);
 
@@ -171,8 +170,6 @@ public class StencilsControllerTest {
 	public void whenViewStencilAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/view-" + stencil.getId()))
 				//.andDo
-				/*.andExpect(status().isFound())
-				.andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));*/
 				.andExpect(status().isOk())
 				.andExpect(view().name("stencilPage"));
 	}
@@ -185,22 +182,12 @@ public class StencilsControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(model().attributeExists("stencil"))
 				.andExpect(model().attribute("stencil", notNullValue()))
-				/*.andExpect(model().attribute("Stencil", hasProperty("id", nullValue())))
-				.andExpect(model().attribute("Stencil", hasProperty("fullName", blankOrNullString())))
-				.andExpect(model().attribute("Stencil", hasProperty("manager", blankOrNullString())))
-				.andExpect(model().attribute("Stencil", hasProperty("firstName", blankOrNullString())))
-				.andExpect(model().attribute("Stencil", hasProperty("lastName", blankOrNullString())))
-				.andExpect(model().attribute("Stencil", hasProperty("middleName", blankOrNullString())))
-				.andExpect(model().attribute("Stencil", hasProperty("address", blankOrNullString())))
-				.andExpect(model().attribute("Stencil", hasProperty("email", blankOrNullString())))
-				.andExpect(model().attribute("Stencil", hasProperty("phone", blankOrNullString())))*/
 				.andExpect(view().name("stencilPage"));
 	}
 
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenUpdateStencilAsAuthorizedWithNotNullStencil_thenOk() throws Exception {
-		//doNothing().when(mockUserService).updateObject(any(User.class));
 		mockStencilService.updateObject(stencil);
 
 		mockMvc.perform(post(MAPPED_URL + "/update")
@@ -221,8 +208,6 @@ public class StencilsControllerTest {
 				.param("paper", String.valueOf(stencil.getPaper().getId()))
 		)
 				//.andDo
-				/*.andExpect(status().isFound())
-				.andExpect(redirectedUrl(MAPPED_URL));*/
 				.andExpect(status().isOk())
 				.andExpect(view().name("stencilPage"));
 
@@ -301,7 +286,6 @@ public class StencilsControllerTest {
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
 	public void whenExportToExcelReportStencilAsAuthorized_thenOk() throws Exception {
-		//when(mockExporterService.export(any(ReportType.class), any(), anyString(), any()).thenReturn(null);
 		mockMvc.perform(get(MAPPED_URL + "/excelExport"))
 				//.andDo
 				.andExpect(status().isOk());
@@ -319,7 +303,6 @@ public class StencilsControllerTest {
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
 	public void whenPdfReportStencilAsAuthorized_thenOk() throws Exception {
-		//when(mockExporterService.export(any(ReportType.class), any(), anyString(), any()).thenReturn(null);
 		mockMvc.perform(get(MAPPED_URL + "/pdfReport-" + stencil.getId()))
 				//.andDo
 				.andExpect(status().isOk());

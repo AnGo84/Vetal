@@ -12,26 +12,17 @@ public class BaseController {
     private final String controllerName;
     private final Map<String, ViewFilter> viewFilterMap;
     private final ViewFilter defaultFilter;
-    //private ViewFilter viewFilter;
 
     public ViewFilter getViewFilter() {
-        ViewFilter viewFilter = viewFilterMap.get(controllerName);
-        if (viewFilter == null) {
-            viewFilter = defaultFilter.getDefault();
-            viewFilterMap.put(controllerName, viewFilter);
-        }
-        return viewFilter;
+        initViewFilter();
+        return viewFilterMap.get(controllerName);
     }
 
     public ViewFilter updateViewFilter(ViewFilter viewFilter) {
-        viewFilter = viewFilterMap.put(controllerName, viewFilter);
-
-        return viewFilter;
+        return viewFilterMap.put(controllerName, viewFilter);
     }
 
-    /*public void initViewFilter(ViewFilter viewFilter) {
-        if (!viewFilterMap.containsKey(controllerName)) {
-            viewFilterMap.put(controllerName, viewFilter);
-        }
-    }*/
+    public void initViewFilter() {
+        viewFilterMap.putIfAbsent(controllerName, defaultFilter.getDefault());
+    }
 }

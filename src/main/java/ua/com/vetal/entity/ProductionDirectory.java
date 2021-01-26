@@ -23,7 +23,6 @@ public class ProductionDirectory {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "Production_Type_ID")
-    //@Transient
     private ProductionTypeDirectory productionType;
 
 }

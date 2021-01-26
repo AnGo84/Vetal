@@ -24,7 +24,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-//@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 class UserControllerTest {
@@ -142,7 +141,6 @@ class UserControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateUserAsAuthorizedWithNotNullUser_thenOk() throws Exception {
-        //doNothing().when(mockUserService).updateObject(any(User.class));
         mockUserService.updateObject(user);
 
         mockMvc.perform(post(MAPPED_URL + "/update")
@@ -151,7 +149,6 @@ class UserControllerTest {
                         .param("encryptedPassword", "password")
                         .param("enabled", String.valueOf(user.isEnabled()))
                         .param("userRoles", "1")
-                //{id=1, name=ROLE_ADMIN}
         )
                 //.andDo(print())
                 .andExpect(status().isFound())
@@ -163,8 +160,6 @@ class UserControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateUserAsAuthorizedErrorOnSave() throws Exception {
         doThrow(DataIntegrityViolationException.class).when(mockUserService).saveObject(any(User.class));
-        //doNothing().when(mockUserService).updateObject(any(User.class));
-        //when(mockUserService.saveObject(any(User.class))).thenThrow(DataIntegrityViolationException.class);
 
         mockMvc.perform(post(MAPPED_URL + "/update")
                 .param("id", String.valueOf(user.getId()))

@@ -17,5 +17,4 @@ public class EmailMessage {
 	private String subject;
 	private String text;
 	private List<EmailAttachment> attachments;
-
 }

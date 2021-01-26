@@ -42,7 +42,6 @@ public class ClientViewFilterTest {
         assertTrue(clientViewFilter.hasData());
     }
 
-
     @Test
     public void onGetDefault() {
         ClientViewFilter clientViewFilter = new ClientViewFilter();

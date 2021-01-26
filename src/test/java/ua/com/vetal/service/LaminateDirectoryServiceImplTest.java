@@ -34,7 +34,6 @@ public class LaminateDirectoryServiceImplTest {
 
 	@Test
 	void whenFindById_thenReturnObject() {
-		//when(mockDirectoryRepository.getOne(1L)).thenReturn(directory);
 		when(mockDirectoryRepository.findById(1L)).thenReturn(Optional.of(directory));
 		long id = 1;
 		LaminateDirectory found = directoryService.get(id);

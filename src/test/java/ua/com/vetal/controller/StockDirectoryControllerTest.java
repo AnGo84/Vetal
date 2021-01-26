@@ -130,12 +130,10 @@ public class StockDirectoryControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateRecordAsAuthorizedWithNotNullDirectory_thenOk() throws Exception {
-		//doNothing().when(mockUserService).updateObject(any(User.class));
-		//mockDirectoryService.update(directory);
 
-		mockMvc.perform(post(MAPPED_URL + "/update")
-				.param("id", String.valueOf(directory.getId()))
-				.param("name", directory.getName()))
+        mockMvc.perform(post(MAPPED_URL + "/update")
+                .param("id", String.valueOf(directory.getId()))
+                .param("name", directory.getName()))
 				//.andDo(print())
 				.andExpect(status().isFound())
 
@@ -147,7 +145,6 @@ public class StockDirectoryControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateRecordAsAuthorizedWithExistName_thenError() throws Exception {
 		when(mockDirectoryService.isExist(any())).thenReturn(true);
-        //mockDirectoryService.updateObject(directory);
 
 		mockMvc.perform(post(MAPPED_URL + "/update")
 				.param("id", String.valueOf(directory.getId()))

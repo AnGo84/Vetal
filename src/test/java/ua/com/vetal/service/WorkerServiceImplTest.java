@@ -30,13 +30,11 @@ public class WorkerServiceImplTest {
 
 	@BeforeEach
 	public void beforeEach() {
-
 		worker = TestBuildersUtils.getWorker(null, "firstName", "lastName", "middleName", "email");
 	}
 
 	@Test
 	void whenFindById_thenReturnWorker() {
-		//when(mockWorkerRepository.getOne(1L)).thenReturn(worker);
 		when(mockWorkerRepository.findById(1L)).thenReturn(Optional.of(worker));
 		long id = 1;
 		Worker found = workerService.get(id);

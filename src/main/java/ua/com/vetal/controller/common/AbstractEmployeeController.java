@@ -18,8 +18,8 @@ import java.util.Locale;
 @Slf4j
 public abstract class AbstractEmployeeController<E extends AbstractEmployeeEntity, S extends CommonService<E>>
         implements CommonController<E> {
-    private final String DIRECTORY_PAGE = "employeesPage";
-	private final String DIRECTORY_RECORD_PAGE = "employeeRecordPage";
+    private final String EMPLOYEE_LIST_PAGE = "employeesPage";
+    private final String EMPLOYEE_RECORD_PAGE = "employeeRecordPage";
     private final Class<E> objectClass;
 
     private final ControllerType controllerType;
@@ -31,7 +31,7 @@ public abstract class AbstractEmployeeController<E extends AbstractEmployeeEntit
     @Override
     public String allRecords(Model model) {
         model.addAttribute("employeeList", service.getAll());
-        return DIRECTORY_PAGE;
+        return EMPLOYEE_LIST_PAGE;
     }
 
     @Override
@@ -39,7 +39,7 @@ public abstract class AbstractEmployeeController<E extends AbstractEmployeeEntit
         log.info("Add new '{}' record", objectClass);
         model.addAttribute("edit", false);
         model.addAttribute("employee", createInstance(objectClass));
-        return DIRECTORY_RECORD_PAGE;
+        return EMPLOYEE_RECORD_PAGE;
     }
 
     @Override
@@ -47,7 +47,7 @@ public abstract class AbstractEmployeeController<E extends AbstractEmployeeEntit
         log.info("Edit '{}' with ID= {}", objectClass, id);
         model.addAttribute("edit", true);
         model.addAttribute("employee", service.get(id));
-        return DIRECTORY_RECORD_PAGE;
+        return EMPLOYEE_RECORD_PAGE;
     }
 
     @Override
@@ -55,7 +55,7 @@ public abstract class AbstractEmployeeController<E extends AbstractEmployeeEntit
         log.info("Update '{}': {}", objectClass, employee);
         if (bindingResult.hasErrors()) {
             LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
-            return DIRECTORY_RECORD_PAGE;
+            return EMPLOYEE_RECORD_PAGE;
         }
         E updated = service.update(employee);
         log.info("Updated: {}", updated);

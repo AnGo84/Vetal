@@ -8,8 +8,3 @@ import ua.com.vetal.repositories.common.CommonDirectoryRepository;
 public interface PrintingUnitDirectoryRepository extends CommonDirectoryRepository<PrintingUnitDirectory> {
 
 }
-/*public interface PrintingUnitDirectoryRepository extends JpaRepository<PrintingUnitDirectory, Long> {
-
-    PrintingUnitDirectory findByName(String name);
-
-}*/

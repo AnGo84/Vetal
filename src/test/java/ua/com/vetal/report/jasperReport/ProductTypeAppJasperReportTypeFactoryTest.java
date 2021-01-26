@@ -36,8 +36,6 @@ public class ProductTypeAppJasperReportTypeFactoryTest {
 		productionType.setId(10l);
 		appJasperReportType = typeFactory.getAppJasperReport(productionType);
 		assertEquals(AppJasperReportType.TASK_REPORT, appJasperReportType);
-
-
 	}
 
 	@Test

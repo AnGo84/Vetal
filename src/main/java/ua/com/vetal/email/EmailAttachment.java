@@ -12,5 +12,4 @@ import javax.activation.DataSource;
 public class EmailAttachment {
 	private String name;
 	private DataSource dataSource;
-
 }

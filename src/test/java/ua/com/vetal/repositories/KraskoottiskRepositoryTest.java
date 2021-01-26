@@ -38,6 +38,6 @@ public class KraskoottiskRepositoryTest {
 		assertNotNull(kraskoottisks);
 		assertFalse(kraskoottisks.isEmpty());
 		assertEquals(kraskoottisks.size(), 5);
-
 	}
+
 }

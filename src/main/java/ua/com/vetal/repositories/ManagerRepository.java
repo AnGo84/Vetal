@@ -8,7 +8,3 @@ import ua.com.vetal.repositories.common.CommonRepository;
 public interface ManagerRepository extends CommonRepository<Manager> {
 
 }
-/*
-public interface ManagerRepository extends JpaRepository<Manager, Long> {
-}
-*/

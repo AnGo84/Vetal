@@ -8,8 +8,3 @@ import ua.com.vetal.repositories.common.CommonDirectoryRepository;
 public interface StockDirectoryRepository extends CommonDirectoryRepository<StockDirectory> {
 
 }
-/*public interface StockDirectoryRepository extends JpaRepository<StockDirectory, Long> {
-
-    StockDirectory findByName(String name);
-
-}*/

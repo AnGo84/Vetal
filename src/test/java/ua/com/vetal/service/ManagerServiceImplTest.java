@@ -35,7 +35,6 @@ public class ManagerServiceImplTest {
 
 	@Test
 	void whenFindById_thenReturnManager() {
-		//when(mockManagerRepository.getOne(1L)).thenReturn(manager);
 		when(mockManagerRepository.findById(1L)).thenReturn(Optional.of(manager));
 		long id = 1;
 		Manager found = managerService.get(id);
@@ -50,7 +49,6 @@ public class ManagerServiceImplTest {
 
 	@Test
 	void whenFindById_thenReturnNull() {
-		//when(mockManagerRepository.getOne(1L)).thenReturn(manager);
 		when(mockManagerRepository.findById(1L)).thenReturn(Optional.of(manager));
 		long id = 2;
 		Manager found = managerService.get(id);

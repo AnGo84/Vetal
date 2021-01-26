@@ -50,13 +50,12 @@ public class StatisticOrderRepositoryTest {
     @Test
     public void whenFindAll_thenReturnListOfManagers() {
         List<StatisticOrder> statisticOrders = orderRepository.findAll();
-        System.out.println("Orders: " + statisticOrders.size());
 
         List<Task> tasks = taskRepository.findAll();
-        System.out.println("Tasks: " + tasks.size());
+        assertEquals(tasks.size(), 1);
 
         List<Stencil> stencils = stencilRepository.findAll();
-        System.out.println("Stencils: " + stencils.size());
+        assertEquals(stencils.size(), 1);
 
         assertNotNull(statisticOrders);
         assertFalse(statisticOrders.isEmpty());
@@ -68,13 +67,11 @@ public class StatisticOrderRepositoryTest {
     public void whenFindAllWithSortOption_thenReturnListOfManagers() {
         List<StatisticOrder> statisticOrders = orderRepository.findAll(Sort.by(Sort.Direction.ASC, "dateBegin"));
 
-        System.out.println("Orders: " + statisticOrders.size());
-
         List<Task> tasks = taskRepository.findAll(Sort.by(Sort.Direction.ASC, "dateBegin"));
-        System.out.println("Tasks: " + tasks.size());
+        assertEquals(tasks.size(), 1);
 
         List<Stencil> stencils = stencilRepository.findAll(Sort.by(Sort.Direction.ASC, "dateBegin"));
-        System.out.println("Stencils: " + stencils.size());
+        assertEquals(stencils.size(), 1);
 
         assertNotNull(statisticOrders);
         assertFalse(statisticOrders.isEmpty());

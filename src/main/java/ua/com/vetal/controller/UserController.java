@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,13 +28,15 @@ import java.util.Locale;
 @Slf4j
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:vetal.properties")
 public class UserController {
+	private String title = "user";
+
+	@Value("${user.password.default}")
+	private String userPasswordDefault;
+
 	@Autowired
 	private final UserServiceImpl userService;
 	@Autowired
 	private MessageSource messageSource;
-	private String title = "user";
-	@Value("${user.password.default}")
-	private String userPasswordDefault;
 	@Autowired
 	private UserRoleServiceImpl userRoleService;
 	@Autowired
@@ -65,7 +65,7 @@ public class UserController {
 
 	@RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
 	public String editUser(@PathVariable Long id, Model model) {
-		log.info("Edit user with ID= " + id);
+		log.info("Edit user with ID= {}", id);
 		model.addAttribute("edit", true);
 		model.addAttribute("user", userService.findById(id));
 		return "userPage";
@@ -73,7 +73,7 @@ public class UserController {
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String updateUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
-		log.info("Update User: " + user);
+		log.info("Update User: {}", user);
 		if (bindingResult.hasErrors()) {
 			LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
 			return "userPage";
@@ -118,23 +118,17 @@ public class UserController {
 		return "redirect:/users/edit-" + user.getId();
 	}
 
-	/**
-	 * This method will provide UserRose list to views
-	 */
 	@ModelAttribute("userRolesList")
 	public List<UserRole> initializeRoles() {
 		return userRoleService.findAllObjects();
 	}
 
-	/**
-	 * This method will provide Title to views
-	 */
 	@ModelAttribute("title")
 	public String initializeTitle() {
 		return this.title;
 	}
 
-	private String getPrincipal() {
+	/*private String getPrincipal() {
 		String userName = null;
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -144,5 +138,5 @@ public class UserController {
 			userName = principal.toString();
 		}
 		return userName;
-	}
+	}*/
 }

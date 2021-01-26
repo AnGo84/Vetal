@@ -70,7 +70,6 @@ public class StatisticOrderServiceImplTest {
 		assertEquals(objects.size(), 2);
 	}
 
-    //@Disabled("Disabled until refactoring filters")
     @Test
     void whenFindByFilterData() {
 		when(mockOrderDAO.findByFilterData(any(OrderViewFilter.class))).thenReturn(Arrays.asList(statisticOrder));

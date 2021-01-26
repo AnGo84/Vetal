@@ -38,8 +38,6 @@ public class ProductionDirectoryControllerTest {
 
     @BeforeEach
     public void beforeEach() {
-		/*productionType = TestBuildersUtils.getProductionTypeDirectory(1l,"Production type");
-		production = TestBuildersUtils.getProductionDirectory(1l, "fullName", "shortName", productionType);*/
         production = TestDataUtils.getProductionDirectory(1l);
         productionType = production.getProductionType();
 
@@ -131,7 +129,6 @@ public class ProductionDirectoryControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateProductionDirectoryAsAuthorizedWithNotNullProductionDirectory_thenOk() throws Exception {
-        //doNothing().when(mockUserService).updateObject(any(User.class));
         mockProductionDirectoryService.updateObject(production);
 
         mockMvc.perform(post(MAPPED_URL + "/update")

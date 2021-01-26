@@ -8,5 +8,3 @@ import ua.com.vetal.repositories.common.CommonRepository;
 public interface WorkerRepository extends CommonRepository<Worker> {
 
 }
-/*public interface WorkerRepository extends JpaRepository<Worker, Long> {
-}*/

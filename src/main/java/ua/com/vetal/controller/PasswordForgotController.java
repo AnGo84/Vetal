@@ -46,18 +46,17 @@ public class PasswordForgotController {
 
 
 	@PostMapping
-	public String processForgotPasswordForm(@ModelAttribute("forgotPasswordForm") @Valid PasswordForgotDto form,
-											BindingResult result,
-											HttpServletRequest request) {
-		if (result.hasErrors()) {
-			return "passwordForgotPage";
-		}
-		User user = userService.findByName(form.getUserName());
-		if (user == null) {
-			result.rejectValue("userName", null, messageSource.getMessage("non.unique.field",
-					new String[]{"Login", form.getUserName()}, new Locale("ru")));
-			return "passwordForgotPage";
-		}
+    public String processForgotPasswordForm(@ModelAttribute("forgotPasswordForm") @Valid PasswordForgotDto form,
+                                            BindingResult result, HttpServletRequest request) {
+        if (result.hasErrors()) {
+            return "passwordForgotPage";
+        }
+        User user = userService.findByName(form.getUserName());
+        if (user == null) {
+            result.rejectValue("userName", null, messageSource.getMessage("non.unique.field",
+                    new String[]{"Login", form.getUserName()}, new Locale("ru")));
+            return "passwordForgotPage";
+        }
 
 		PasswordResetToken token = PasswordResetToken.newBuilder().setUser(user).build();
 		tokenRepository.save(token);

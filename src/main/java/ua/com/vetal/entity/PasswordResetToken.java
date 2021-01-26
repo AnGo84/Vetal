@@ -10,21 +10,20 @@ import java.util.UUID;
 @Entity
 @Table(name = "password_reset_token")
 public class PasswordResetToken {
-	//private static final int EXPIRATION = 60 * 24; //24 hours
+    private static final int EXPIRATION = 60 * 1; //in hours
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(nullable = false, unique = true)
-	private String token;
+    @Column(nullable = false, unique = true)
+    private String token;
 
-	@OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-	@JoinColumn(nullable = false, name = "user_id")
+    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "user_id")
 	private User user;
 
 	@Column(name = "expiry_date", nullable = false)
-	//@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date expiryDate;
 
 	public static Builder newBuilder() {
@@ -95,13 +94,12 @@ public class PasswordResetToken {
 		}
 
 		public PasswordResetToken build() {
-			//PasswordResetToken token = new PasswordResetToken();
 			if (StringUtils.isBlank(PasswordResetToken.this.token)) {
 				PasswordResetToken.this.token = UUID.randomUUID().toString();
 			}
 			if (PasswordResetToken.this.expiryDate == null) {
-				PasswordResetToken.this.setExpiryDate(60); // 1 hour
-			}
+                PasswordResetToken.this.setExpiryDate(EXPIRATION);
+            }
 			return PasswordResetToken.this;
 		}
 	}

@@ -108,7 +108,6 @@ public class ViewTaskDAOTest {
         filteredList = viewTaskDAO.findByFilterData(orderViewFilter);
         assertEquals(1, filteredList.size());
 
-
         Date dateFrom = DateUtils.addToDate(new Date(), Calendar.DATE, -11);
         Date dateTill = DateUtils.addToDate(new Date(), Calendar.DATE, -5);
 

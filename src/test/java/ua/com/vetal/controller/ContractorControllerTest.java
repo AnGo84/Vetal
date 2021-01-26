@@ -40,13 +40,6 @@ public class ContractorControllerTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		/*manager = TestBuildersUtils.getManager(1l,"firstName", "lastName", "middleName", "email");
-
-		contractor = TestBuildersUtils.getContractor(1l, "corpName", "shortName",
-				"firstName", "lastName", "middleName", "address",
-				"email", "phone", "siteURL");
-		contractor.setManager(manager);*/
-
         contractor = TestDataUtils.getContractor(1l);
         manager = contractor.getManager();
 
@@ -193,7 +186,6 @@ public class ContractorControllerTest {
 	}
 
 	@Test
-	//@Disabled("Fix filters")
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenFilterContractorsAsAuthorizedWithNotNullUser_thenOk() throws Exception {
 		PersonViewFilter personViewFilter = new PersonViewFilter();
@@ -213,11 +205,9 @@ public class ContractorControllerTest {
 				//.andDo
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl(MAPPED_URL));
-		//.andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
 	}
 
 	@Test
-	//@Disabled("Fix filters")
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenClearFilterContractorsAsAuthorizedWithNotNullUser_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/clearFilter"))
@@ -232,7 +222,6 @@ public class ContractorControllerTest {
 				//.andDo(print())
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl(MAPPED_URL));
-		//.andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
 	}
 
 }

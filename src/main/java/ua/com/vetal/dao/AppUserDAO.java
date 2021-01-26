@@ -13,17 +13,17 @@ import javax.persistence.Query;
 @Transactional(readOnly = true)
 public class AppUserDAO {
 
+    public static final String PREPARED_QUERY = "Select e from %s e " //
+            + " Where e.userName = :userName ";
+
     @PersistenceContext
     private EntityManager entityManager;
 
     public AppUser findUserAccount(String userName) {
         try {
-            String sql = "Select e from " + AppUser.class.getName() + " e " //
-                    + " Where e.userName = :userName ";
-            // System.out.println(sql);
+            String sql = String.format(PREPARED_QUERY, AppUser.class.getName());
             Query query = entityManager.createQuery(sql, AppUser.class);
             query.setParameter("userName", userName);
-
             return (AppUser) query.getSingleResult();
         } catch (NoResultException e) {
             return null;

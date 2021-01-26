@@ -35,8 +35,6 @@ class ManagerControllerTest {
 
     @BeforeEach
     public void beforeEach() {
-		//manager = TestBuildersUtils.getManager(1l,"firstName", "lastName", "middleName", "email");
-
 		manager = TestDataUtils.getManager(1l);
 
 		when(mockManagerService.getAll()).thenReturn(Arrays.asList(manager));
@@ -126,7 +124,6 @@ class ManagerControllerTest {
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenUpdateEmployeeAsAuthorizedWithNotNullManager_thenOk() throws Exception {
-		//doNothing().when(mockUserService).updateObject(any(User.class));
 		mockManagerService.update(manager);
 
 		mockMvc.perform(post(MAPPED_URL + "/update")
@@ -141,25 +138,6 @@ class ManagerControllerTest {
 				.andExpect(redirectedUrl(MAPPED_URL));
 		verify(mockManagerService, times(1)).update(manager);
 	}
-
-/*    @Test
-    @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
-    public void whenUpdateRecordAsAuthorizedWithExistName_thenError() throws Exception {
-        when(mockManagerService.isObjectExist(any())).thenReturn(true);
-
-        mockMvc.perform(post(MAPPED_URL + "/update")
-                .param("id", String.valueOf(manager.getId()))
-                .param("firstName", manager.getFirstName())
-                .param("lastName", manager.getLastName())
-                .param("middleName", manager.getMiddleName())
-                .param("email", manager.getEmail()))
-                //.andDo
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("directory"))
-                .andExpect(model().attributeHasFieldErrors("directory","name"))
-                .andExpect(view().name("directoryRecordPage"));
-        verify(mockDirectoryService, times(0)).updateObject(directory);
-    }*/
 
 	@Test
 	public void whenUpdateEmployeeAsNoAuthorized_thenRedirectToLoginPage() throws Exception {

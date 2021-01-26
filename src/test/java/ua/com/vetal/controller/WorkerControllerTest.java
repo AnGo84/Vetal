@@ -35,7 +35,6 @@ public class WorkerControllerTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		//Worker = TestBuildersUtils.getWorker(1l, "firstName", "lastName", "middleName", "email");
 		worker = TestDataUtils.getWorker(1l);
 		when(mockWorkerService.getAll()).thenReturn(Arrays.asList(worker));
 		when(mockWorkerService.get(anyLong())).thenReturn(worker);
@@ -124,7 +123,6 @@ public class WorkerControllerTest {
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenUpdateEmployeeAsAuthorizedWithNotNullWorker_thenOk() throws Exception {
-		//doNothing().when(mockUserService).updateObject(any(User.class));
 		mockWorkerService.update(worker);
 
 		mockMvc.perform(post(MAPPED_URL + "/update")

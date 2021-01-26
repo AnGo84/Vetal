@@ -8,5 +8,3 @@ import ua.com.vetal.repositories.common.CommonRepository;
 public interface PrinterRepository extends CommonRepository<Printer> {
 
 }
-/*public interface PrinterRepository extends JpaRepository<Printer, Long> {
-}*/

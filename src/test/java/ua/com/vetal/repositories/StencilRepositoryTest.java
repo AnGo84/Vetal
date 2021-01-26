@@ -56,8 +56,6 @@ public class StencilRepositoryTest {
 
 	@Test
 	public void whenFindByID_thenReturnManager() {
-
-		//User user = userRepository.findByName("User");
 		// when
 		Optional<Stencil> foundStencil = stencilRepository.findById(stencil.getId());
 		// then

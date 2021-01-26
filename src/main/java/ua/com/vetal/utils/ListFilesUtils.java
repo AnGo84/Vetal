@@ -36,7 +36,6 @@ public class ListFilesUtils {
         List<LocalFile> resultDirectoriesList = new ArrayList<>();
 
         for (File file : fList) {
-            //System.out.println(file.getName() + " : " + file.getParent());
             if (!file.isHidden()) {
                 if (file.isDirectory()) {
                     resultDirectoriesList.add(new LocalFile(file.getName(), file, file.isDirectory()));

@@ -14,7 +14,6 @@ class EncodePasswordTest {
 	@Test
 	void encryptPassword() {
 		String encodedPass = encoder.encode(password);
-		log.info("Pass '{}' was encode to: {}", password, encodedPass);
 		assertTrue(encoder.matches(password, encodedPass));
 	}
 }

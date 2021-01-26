@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-//@SpringBootTest({"spring.main.allow-bean-definition-overriding=true"})
 @SpringBootTest
 public class ChromaticityDirectoryServiceImplTest {
     @Autowired
@@ -36,7 +35,6 @@ public class ChromaticityDirectoryServiceImplTest {
 
     @Test
     void whenFindById_thenReturnObject() {
-        //when(mockDirectoryRepository.getOne(1L)).thenReturn(directory);
         when(mockDirectoryRepository.findById(1L)).thenReturn(Optional.of(directory));
         long id = 1;
         ChromaticityDirectory found = directoryService.get(id);
@@ -47,10 +45,8 @@ public class ChromaticityDirectoryServiceImplTest {
 
     @Test
     void whenFindById_thenReturnNull() {
-        //when(mockDirectoryRepository.getOne(1L)).thenReturn(directory);
         when(mockDirectoryRepository.findById(1L)).thenReturn(Optional.of(directory));
         long id = 221121;
-        //ChromaticityDirectory found = directoryService.findById(id);
         ChromaticityDirectory found = directoryService.get(id);
         assertNull(found);
     }
@@ -58,10 +54,8 @@ public class ChromaticityDirectoryServiceImplTest {
     @Test
     void whenFindByName_thenReturnNull() {
         when(mockDirectoryRepository.findByName(directory.getName())).thenReturn(directory);
-        //ChromaticityDirectory found = directoryService.findByName("wrong name");
         ChromaticityDirectory found = directoryService.getByName("wrong name");
         assertNull(found);
-        //assertFalse(found.isPresent());
     }
 
     @Test
@@ -77,7 +71,6 @@ public class ChromaticityDirectoryServiceImplTest {
     void whenSaveObject_thenNPE() {
         when(mockDirectoryRepository.save(any(ChromaticityDirectory.class))).thenThrow(NullPointerException.class);
         assertThrows(NullPointerException.class, () -> {
-            //directoryService.saveObject(directory);
             directoryService.save(directory);
         });
     }
@@ -86,7 +79,6 @@ public class ChromaticityDirectoryServiceImplTest {
     void whenUpdateObject_thenSuccess() {
         directory.setName(ChromaticityDirectoryRepositoryTest.SECOND_DIRECTORY_NAME);
         when(mockDirectoryRepository.save(any())).thenReturn(directory);
-        //directoryService.updateObject(directory);
         ChromaticityDirectory updatedDirectory = directoryService.update(directory);
         assertNotNull(updatedDirectory);
         verify(mockDirectoryRepository, times(1)).save(directory);
@@ -96,7 +88,6 @@ public class ChromaticityDirectoryServiceImplTest {
     void whenUpdateObject_thenThrow() {
         when(mockDirectoryRepository.save(any(ChromaticityDirectory.class))).thenThrow(NullPointerException.class);
         assertThrows(NullPointerException.class, () -> {
-            //directoryService.updateObject(directory);
             directoryService.update(directory);
         });
     }
@@ -128,7 +119,6 @@ public class ChromaticityDirectoryServiceImplTest {
     @Test
     void findAllObjects() {
         when(mockDirectoryRepository.findAll()).thenReturn(Arrays.asList(directory));
-        //List<ChromaticityDirectory> directorieList = directoryService.findAllObjects();
         List<ChromaticityDirectory> directorieList = directoryService.getAll();
         assertNotNull(directorieList);
         assertFalse(directorieList.isEmpty());
@@ -140,7 +130,6 @@ public class ChromaticityDirectoryServiceImplTest {
         assertFalse(directoryService.isExist(null));
         when(mockDirectoryRepository.findByName(directory.getName())).thenReturn(null);
         assertFalse(directoryService.isExist(directory));
-        //assertTrue(directoryService.isObjectExist(directory));
         ChromaticityDirectory findDirectory = TestBuildersUtils.getChromaticityDirectory(1l, directory.getName());
         when(mockDirectoryRepository.findByName(anyString())).thenReturn(findDirectory);
         assertTrue(directoryService.isExist(directory));

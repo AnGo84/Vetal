@@ -6,7 +6,7 @@ import javax.activation.DataSource;
 import javax.mail.util.ByteArrayDataSource;
 import java.util.ArrayList;
 import java.util.List;
-
+@Deprecated
 public class EmailMessageBuilder {
 	public EmailMessage build(Task task, String subject, String text) {
 		EmailMessage emailMessage = new EmailMessage();

@@ -138,6 +138,5 @@ public class TaskDAOTest {
         orderViewFilter.setDateBeginTill(dateTill);
         filteredList = taskDAO.findByFilterData(orderViewFilter);
         assertEquals(1, filteredList.size());
-
     }
 }

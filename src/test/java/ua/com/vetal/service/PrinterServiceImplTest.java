@@ -35,7 +35,6 @@ public class PrinterServiceImplTest {
 
 	@Test
 	void whenFindById_thenReturnPrinter() {
-		//when(mockPrinterRepository.getOne(1L)).thenReturn(printer);
 		when(mockPrinterRepository.findById(1L)).thenReturn(Optional.of(printer));
 		long id = 1;
 		Printer found = printerService.get(id);

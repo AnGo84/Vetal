@@ -59,8 +59,6 @@ public class DBFileStorageServiceTest {
 
     @Test
     void whenSaveDBFile_thenSuccess() {
-
-        //DBFile newDBFile = new DBFile("file2", "content_type", "file2 data".getBytes());
         when(mockDBFileRepository.save(any(DBFile.class))).thenReturn(dbFile);
         DBFile savedDBFile = fileService.save(dbFile);
         verify(mockDBFileRepository, times(1)).save(dbFile);

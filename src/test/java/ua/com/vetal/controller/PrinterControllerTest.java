@@ -35,7 +35,6 @@ public class PrinterControllerTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		//printer = TestBuildersUtils.getPrinter(1l, "firstName", "lastName", "middleName", "email");
 		printer = TestDataUtils.getPrinter(1l);
 		when(mockPrinterService.getAll()).thenReturn(Arrays.asList(printer));
 		when(mockPrinterService.get(anyLong())).thenReturn(printer);
@@ -124,7 +123,6 @@ public class PrinterControllerTest {
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenUpdateEmployeeAsAuthorizedWithNotNullPrinter_thenOk() throws Exception {
-		//doNothing().when(mockUserService).updateObject(any(User.class));
 		mockPrinterService.update(printer);
 
 		mockMvc.perform(post(MAPPED_URL + "/update")

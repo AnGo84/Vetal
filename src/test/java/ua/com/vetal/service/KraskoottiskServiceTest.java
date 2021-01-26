@@ -9,6 +9,8 @@ import ua.com.vetal.entity.Kraskoottisk;
 import ua.com.vetal.repositories.KraskoottiskRepository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,12 +37,27 @@ public class KraskoottiskServiceTest {
 	}
 
 	@Test
-	void findAllObjects() {
+	public void findAllObjects() {
 		when(mockKraskoottiskRepository.findAll()).thenReturn(kraskoottisks);
 		List<Kraskoottisk> objects = kraskoottiskService.findAllObjects();
 		assertNotNull(objects);
 		assertFalse(objects.isEmpty());
 		assertEquals(objects.size(), 5);
+	}
+
+	@Test
+	public void whenGetKraskoottiskAmount_ThenReturnResult() {
+		assertEquals(0, kraskoottiskService.getKraskoottiskAmount());
+
+		when(mockKraskoottiskRepository.findAll()).thenReturn(null);
+		assertEquals(0, kraskoottiskService.getKraskoottiskAmount());
+
+		when(mockKraskoottiskRepository.findAll()).thenReturn(Collections.emptyList());
+		assertEquals(0, kraskoottiskService.getKraskoottiskAmount());
+
+		double amount = 2.455;
+		when(mockKraskoottiskRepository.findAll()).thenReturn(Arrays.asList(new Kraskoottisk(amount)));
+		assertEquals(amount, kraskoottiskService.getKraskoottiskAmount());
 	}
 
 }

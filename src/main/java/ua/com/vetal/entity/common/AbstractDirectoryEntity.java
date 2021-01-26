@@ -7,10 +7,8 @@ import javax.validation.constraints.Size;
 
 @MappedSuperclass
 public abstract class AbstractDirectoryEntity extends AbstractEntity {
-	/*@NotEmpty
-	@Size(max = 250)
-	@Column(name = "FullName", length = 250, nullable = false, unique = true)*/
-	private String name;
+
+    private String name;
 
 	@NotEmpty
 	@Size(max = 250)

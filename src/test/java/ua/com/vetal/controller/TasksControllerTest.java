@@ -175,8 +175,6 @@ public class TasksControllerTest {
 	public void whenViewTaskAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/view-" + task.getId()))
 				//.andDo(print())
-				/*.andExpect(status().isFound())
-				.andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));*/
 				.andExpect(status().isOk())
 				.andExpect(view().name("taskPage"));
 	}
@@ -189,15 +187,6 @@ public class TasksControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(model().attributeExists("task"))
 				.andExpect(model().attribute("task", notNullValue()))
-				/*.andExpect(model().attribute("task", hasProperty("id", nullValue())))
-				.andExpect(model().attribute("Task", hasProperty("fullName", blankOrNullString())))
-				.andExpect(model().attribute("Task", hasProperty("manager", blankOrNullString())))
-				.andExpect(model().attribute("Task", hasProperty("firstName", blankOrNullString())))
-				.andExpect(model().attribute("Task", hasProperty("lastName", blankOrNullString())))
-				.andExpect(model().attribute("Task", hasProperty("middleName", blankOrNullString())))
-				.andExpect(model().attribute("Task", hasProperty("address", blankOrNullString())))
-				.andExpect(model().attribute("Task", hasProperty("email", blankOrNullString())))
-				.andExpect(model().attribute("Task", hasProperty("phone", blankOrNullString())))*/
 				.andExpect(view().name("taskPage"));
 	}
 
@@ -232,8 +221,6 @@ public class TasksControllerTest {
 				.param("cringle", String.valueOf(task.getCringle().getId()))
 		)
 				//.andDo(print())
-				/*.andExpect(status().isFound())
-				.andExpect(redirectedUrl(MAPPED_URL));*/
 				.andExpect(status().isOk())
 				.andExpect(view().name("taskPage"));
 

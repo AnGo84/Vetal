@@ -17,10 +17,6 @@ public class AppUserServiceImpl implements SimpleService<AppUser> {
 
 	@Override
 	public AppUser findById(Long id) {
-		/*
-		 * Optional<User> optinalEntity = userRepository.findById(id); User user
-		 * = optinalEntity.get(); return user;
-		 */
 		return appUserRepository.getOne(id);
 	}
 

@@ -23,7 +23,6 @@ class LinkTypeRepositoryTest {
 	public static final String SECOND_DIRECTORY_NAME = "Second Link Type";
 	public static final String DIRECTORY_NAME = "LinkType";
 
-
 	@Autowired
 	private TestEntityManager entityManager;
 	@Autowired

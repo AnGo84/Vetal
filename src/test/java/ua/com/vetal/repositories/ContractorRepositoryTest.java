@@ -70,8 +70,6 @@ class ContractorRepositoryTest {
 
     @Test
     public void whenFindByID_thenReturnContractor() {
-
-        //User user = userRepository.findByName("User");
         // when
         Optional<Contractor> foundContractor = contractorRepository.findById(contractor.getId());
         // then
@@ -362,19 +360,7 @@ class ContractorRepositoryTest {
         });
     }
 
-    //@Test
-    public void whenSaveContractorWithSiteURLTooShortLength_thenThrowConstraintViolationException() {
-        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "shortName",
-                "firstName", "lastName", "middleName", "address",
-                "email", "phone", "");
-        newContractor.setManager(manager);
-        assertThrows(ConstraintViolationException.class, () -> {
-            contractorRepository.save(newContractor);
-        });
-    }
-
-
-    //@Test
+    @Test
     public void whenSaveContractorWithSiteURLNull_thenThrowConstraintViolationException() {
         Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "shortName",
                 "firstName", null, "middleName", "address",
@@ -406,7 +392,6 @@ class ContractorRepositoryTest {
         assertEquals(foundContractor.getPhone(), newContractor.getPhone());
         assertEquals(foundContractor.getSiteURL(), newContractor.getSiteURL());
         assertNull(foundContractor.getManager());
-        //assertEquals(foundClient.getManager(), newContractor.getManager());
     }
 
     @Test

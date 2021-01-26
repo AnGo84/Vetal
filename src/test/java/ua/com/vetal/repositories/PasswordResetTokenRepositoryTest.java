@@ -37,7 +37,6 @@ public class PasswordResetTokenRepositoryTest {
 
 		passwordResetTokenRepository.deleteAll();
 		user = testEntityManager.persistAndFlush(getUser(userRoleSet));
-		//passwordResetToken = testEntityManager.persistAndFlush(passwordResetToken);
 	}
 
 	@Test

@@ -10,7 +10,6 @@ import javax.persistence.Table;
 //TODO replace class with calling stored procedure
 // https://stackoverflow.com/questions/48281009/how-to-call-mysql-stored-procedure-in-spring-boot-using-hibernate
 
-
 @Entity
 @Immutable
 @Table(name = "vkrascoottiskamount")

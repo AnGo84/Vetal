@@ -70,7 +70,6 @@ public class StatisticControllerTest {
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
 	public void whenGetCrossReportAsAuthorized_thenOk() throws Exception {
-		//when(mockExporterService.export(any(ReportType.class), any(), anyString(), any()).thenReturn(null);
 		mockMvc.perform(get(MAPPED_URL + "/crossReport"))
 				//.andDo
 				.andExpect(status().isOk());

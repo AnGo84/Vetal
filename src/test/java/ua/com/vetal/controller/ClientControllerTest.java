@@ -38,10 +38,6 @@ public class ClientControllerTest {
 
     @BeforeEach
     public void beforeEach() {
-        /*manager = TestBuildersUtils.getManager(1l,"firstName", "lastName", "middleName", "email");
-
-        client = TestBuildersUtils.getClient(1l, "fullName", "firstName", "lastName", "middleName", "address", "email", "phone");
-        client.setManager(manager);*/
 
         client = TestDataUtils.getClient(1l);
         manager = client.getManager();
@@ -139,7 +135,6 @@ public class ClientControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateClientAsAuthorizedWithNotNullClient_thenOk() throws Exception {
-        //doNothing().when(mockUserService).updateObject(any(User.class));
         mockClientService.updateObject(client);
 
 		mockMvc.perform(post(MAPPED_URL + "/update")
@@ -225,7 +220,6 @@ public class ClientControllerTest {
                 //.andDo
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(MAPPED_URL));
-        //.andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
     }
 
 

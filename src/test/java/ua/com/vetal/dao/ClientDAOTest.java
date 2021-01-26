@@ -52,7 +52,6 @@ public class ClientDAOTest {
 		secondClient = testEntityManager.persistAndFlush(secondClient);
 	}
 
-	//@Disabled("Disabled until refactoring filters")
 	@Test
 	void whenFindByFilterData() {
         int allRecords = 2;

@@ -1,5 +1,6 @@
 package ua.com.vetal.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,20 +11,14 @@ import java.util.List;
 
 @Service("userService")
 @Transactional
+@Slf4j
 public class UserServiceImpl implements SimpleService<User> {
-
-    // private static final Logger logger =
-    // LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserRepository userRepository;
 
     @Override
     public User findById(Long id) {
-        /*
-         * Optional<User> optinalEntity = userRepository.findById(id); User user
-         * = optinalEntity.get(); return user;
-         */
         return userRepository.getOne(id);
     }
 

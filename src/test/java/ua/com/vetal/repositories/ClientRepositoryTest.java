@@ -68,8 +68,6 @@ public class ClientRepositoryTest {
 
     @Test
     public void whenFindByID_thenReturnManager() {
-
-        //User user = userRepository.findByName("User");
         // when
         Optional<Client> foundClient = clientRepository.findById(client.getId());
         // then

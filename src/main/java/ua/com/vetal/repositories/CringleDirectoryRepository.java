@@ -8,6 +8,3 @@ import ua.com.vetal.repositories.common.CommonDirectoryRepository;
 public interface CringleDirectoryRepository extends CommonDirectoryRepository<CringleDirectory> {
 
 }
-/*public interface CringleDirectoryRepository extends JpaRepository<CringleDirectory, Long> {
-    CringleDirectory findByName(String name);
-}*/

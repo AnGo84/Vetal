@@ -6,7 +6,5 @@ import ua.com.vetal.entity.Client;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
-
     Client findByFullName(String name);
-
 }

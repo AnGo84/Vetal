@@ -36,8 +36,6 @@ public class ContractorController extends BaseController {
     @Autowired
     private MessageSource messageSource;
     private List<Contractor> contractorList;
-    /*@Autowired
-    private ManagerServiceImpl managerService;*/
 
     @Autowired
     private ContractorServiceImpl personService;
@@ -52,7 +50,7 @@ public class ContractorController extends BaseController {
     }
 
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
-    public String personList(Model model) {
+    public String personList() {
         return "contractorsPage";
     }
 
@@ -63,7 +61,6 @@ public class ContractorController extends BaseController {
         model.addAttribute("edit", false);
         model.addAttribute("person", person);
         return "contractorRecordPage";
-
     }
 
     @RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
@@ -75,8 +72,7 @@ public class ContractorController extends BaseController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String updatePerson(@Valid @ModelAttribute("person") Contractor person, BindingResult bindingResult,
-                               Model model) {
+    public String updatePerson(@Valid @ModelAttribute("person") Contractor person, BindingResult bindingResult) {
         log.info("Update {}: {}", title, person);
         if (bindingResult.hasErrors()) {
             LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
@@ -104,9 +100,6 @@ public class ContractorController extends BaseController {
         return "redirect:" + pageName;
     }
 
-    /**
-     * This method will provide Title to views
-     */
     @ModelAttribute("title")
     public String initializeTitle() {
         return this.title;
@@ -140,7 +133,8 @@ public class ContractorController extends BaseController {
         updateViewFilter(new PersonViewFilter());
         return "redirect:/contractor";
     }
-/*
+
+    /*
     @ModelAttribute("managerList")
     public List<Manager> getManagersList() {
         List<Manager> resultList = managerService.findAllObjects();

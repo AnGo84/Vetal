@@ -81,7 +81,6 @@ public class TaskServiceImplTest {
 
 	@Test
 	void whenFindByName_thenReturnNull() {
-		//when(mockManagerRepository.findByName(anyString())).thenReturn(manager);
 		Task found = taskService.findByName(null);
 		assertNull(found);
 		found = taskService.findByName("wrong name");

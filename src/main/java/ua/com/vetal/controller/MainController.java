@@ -29,7 +29,6 @@ public class MainController {
 
     @Autowired
     private MessageSource messageSource;
-
     @Autowired
     private UserServiceImpl userService;
     @Autowired
@@ -63,10 +62,7 @@ public class MainController {
 
     @RequestMapping(value = "/userInfo", method = RequestMethod.GET)
     public String userInfo(Model model, Principal principal) {
-        // After user login successfully.
-        String userName = principal.getName();
-
-        log.info("Show UserInfo form User Name: {}", userName);
+        log.info("Show UserInfo form User Name: {}", principal.getName());
 
         User loggedUser = (User) ((Authentication) principal).getPrincipal();
 
@@ -88,12 +84,11 @@ public class MainController {
         try {
             if (PlatformUtils.isWindows()) {
                 String command = "explorer.exe " + url;
-                log.info("Called command: {}", command);
+                log.debug("Called command: {}", command);
                 Runtime.getRuntime().exec(command);
             }
         } catch (IOException e) {
-            log.info("Error on open: {}", url);
-            e.printStackTrace();
+            log.error("Error on open: {}", url, e);
             String errorMessage = "Error on open URL '" + url + "': " + e.getMessage();
             WebUtils.setTextToResponse(errorMessage, response);
             return;

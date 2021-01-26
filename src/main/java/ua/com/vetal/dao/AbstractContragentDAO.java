@@ -21,6 +21,7 @@ import java.util.List;
 public abstract class AbstractContragentDAO<E extends AbstractContragentEntity> {
 
     private final Class<E> objectClass;
+
     @PersistenceContext
     private EntityManager entityManager;
 

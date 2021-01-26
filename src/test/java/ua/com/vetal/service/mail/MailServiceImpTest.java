@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
-/*@WebAppConfiguration*/
 @SpringBootTest
 @Slf4j
 public class MailServiceImpTest {
@@ -47,12 +46,6 @@ public class MailServiceImpTest {
 
     @Test
     public void shouldSendEmailMessage() throws MessagingException, IOException {
-        //log.info("SmtpServer: {}",smtpServerRule. .getSmtp().getServerSetup());
-        /*Mail mail = new Mail();
-        mail.setFrom("no-reply@memorynotfound.com");
-        mail.setTo("info@memorynotfound.com");
-        mail.setSubject("Spring Mail Integration Testing with JUnit and GreenMail Example");
-        mail.setContent("We show how to write Integration Tests using Spring and GreenMail.");*/
         EmailMessage emailMessage = new EmailMessage();
         emailMessage.setFrom("no-reply@memorynotfound.com");
         emailMessage.setTo("info@memorynotfound.com");
@@ -65,14 +58,6 @@ public class MailServiceImpTest {
         assertEquals(1, receivedMessages.length);
 
         MimeMessage current = receivedMessages[0];
-        log.info("Subject: {}", current.getSubject());
-        log.info("From: {}", current.getFrom());
-        log.info("To: {}", current.getAllRecipients());
-        log.info("Content: {}", current.getContent());
-        log.info("Content: {}", getTextFromMessage(current));
-        log.info("Content: {}", String.valueOf(current.getContent().toString()));
-        log.info("Instance  ofContent: {}", (current.getContent().getClass()));
-
 
         assertEquals(emailMessage.getSubject(), current.getSubject());
         assertEquals(emailMessage.getTo(), current.getAllRecipients()[0].toString());
@@ -82,12 +67,6 @@ public class MailServiceImpTest {
 
     @Test
     public void shouldSendSingleMail() throws MessagingException, IOException {
-        //log.info("SmtpServer: {}",smtpServerRule. .getSmtp().getServerSetup());
-        /*Mail mail = new Mail();
-        mail.setFrom("no-reply@memorynotfound.com");
-        mail.setTo("info@memorynotfound.com");
-        mail.setSubject("Spring Mail Integration Testing with JUnit and GreenMail Example");
-        mail.setContent("We show how to write Integration Tests using Spring and GreenMail.");*/
         EmailMessage emailMessage = new EmailMessage();
         emailMessage.setFrom("no-reply@memorynotfound.com");
         emailMessage.setTo("info@memorynotfound.com");
@@ -103,14 +82,6 @@ public class MailServiceImpTest {
         assertEquals(1, receivedMessages.length);
 
         MimeMessage current = receivedMessages[0];
-        log.info("Subject: {}", current.getSubject());
-        log.info("From: {}", current.getFrom());
-        log.info("To: {}", current.getAllRecipients());
-        log.info("Content: {}", current.getContent());
-        log.info("Content: {}", current.getContent());
-        log.info("Content: {}", String.valueOf(current.getContent().toString()));
-        log.info("Instance  ofContent: {}", (current.getContent().getClass()));
-
 
         assertEquals(emailMessage.getSubject(), current.getSubject());
         assertEquals(emailMessage.getTo(), current.getAllRecipients()[0].toString());

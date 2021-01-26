@@ -6,7 +6,4 @@ import ua.com.vetal.repositories.common.CommonDirectoryRepository;
 
 @Repository
 public interface ChromaticityDirectoryRepository extends CommonDirectoryRepository<ChromaticityDirectory> {
-    //public interface ChromaticityDirectoryRepository extends JpaRepository<ChromaticityDirectory, Long> {
-    //ChromaticityDirectory findByName(String name);
-
 }

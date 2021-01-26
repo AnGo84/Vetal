@@ -8,8 +8,3 @@ import ua.com.vetal.repositories.common.CommonDirectoryRepository;
 public interface FormatDirectoryRepository extends CommonDirectoryRepository<FormatDirectory> {
 
 }
-/*
-public interface FormatDirectoryRepository extends JpaRepository<FormatDirectory, Long> {
-    FormatDirectory findByName(String name);
-}
-*/

@@ -51,52 +51,19 @@ public class TasksController extends BaseController {
     private final String title = "Tasks";
     private final String personName = "Tasks";
     private final String pageName = "/tasks";
-    @Autowired
-    private MessageSource messageSource;
+
+    //TODO check if needed
     @Autowired
     private ApplicationContext appContext;
+
+    @Autowired
+    private MessageSource messageSource;
     @Autowired
     private TaskServiceImpl taskService;
     @Autowired
     private ViewTaskServiceImpl viewTaskService;
-
-    //private List<Task> tasksList;
-    private List<ViewTask> tasksList;
-
-    /*@Autowired
-    private StateServiceImpl stateService;
-    @Autowired
-    private PaymentServiceImpl paymentService;
-    @Autowired
-    private ManagerServiceImpl managerService;
-    @Autowired
-    private ContractorServiceImpl contractorService;
-    @Autowired
-    private ProductionDirectoryServiceImpl productionService;
-    @Autowired
-    private ProductionTypeDirectoryServiceImpl productionTypeService;
-    @Autowired
-    private ClientServiceImpl clientService;
-    @Autowired
-    private StockDirectoryServiceImpl stockService;
-    @Autowired
-    private ChromaticityDirectoryServiceImpl chromaticityService;
-    @Autowired
-    private FormatDirectoryServiceImpl formatService;
-    @Autowired
-    private LaminateDirectoryServiceImpl laminateService;
-    @Autowired
-    private PaperDirectoryServiceImpl paperService;
-    @Autowired
-    private CringleDirectoryServiceImpl cringleService;
-    @Autowired
-    private NumberBaseDirectoryServiceImpl numberBaseService;
-    @Autowired
-    private PrintingUnitDirectoryServiceImpl printingUnitService;*/
-
     @Autowired
     private DBFileStorageService dbFileStorageService;
-
     @Autowired
     private TaskJasperReportData reportData;
     @Autowired
@@ -171,6 +138,7 @@ public class TasksController extends BaseController {
             LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
             return "taskPage";
         }
+        //TODO refactor file upload
         Long fileId = null;
         if (uploadFile != null && !uploadFile.isEmpty()) {
             log.info("uploadFile is not NULL");
@@ -238,6 +206,7 @@ public class TasksController extends BaseController {
 
         Task task = taskService.findById(id);
 
+        //TODO refactor sending email
         //logger.info(task.toString());
         if (task != null) {
             taskMailingDeclineReason = taskService.taskMailingDeclineReason(task);
@@ -297,9 +266,6 @@ public class TasksController extends BaseController {
         return "redirect:/tasks";
     }
 
-    /**
-     * This methods will provide lists and fields to views
-     */
     @ModelAttribute("title")
     public String initializeTitle() {
         return this.title;
@@ -315,216 +281,6 @@ public class TasksController extends BaseController {
         return this.pageName;
     }
 
-
-    /*@ModelAttribute("stateList")
-    public List<State> getStatesList() {
-        List<State> resultList = stateService.findAllObjects();
-        *//*Collections.sort(resultList, new Comparator<Worker>() {
-            @Override
-            public int compare(Worker m1, Worker m2) {
-                return m1.getFullName().compareTo(m2.getFullName());
-            }
-        });*//*
-
-        return resultList;
-    }
-
-    @ModelAttribute("paymentList")
-    public List<Payment> getPaymentsList() {
-        List<Payment> resultList = paymentService.findAllObjects();
-        *//*Collections.sort(resultList, new Comparator<Worker>() {
-            @Override
-            public int compare(Worker m1, Worker m2) {
-                return m1.getFullName().compareTo(m2.getFullName());
-            }
-        });*//*
-        return resultList;
-    }*/
-
-    /*@ModelAttribute("managerList")
-    public List<Manager> getManagersList() {
-        List<Manager> resultList = managerService.findAllObjects();
-        Collections.sort(resultList, new Comparator<Manager>() {
-            @Override
-            public int compare(Manager m1, Manager m2) {
-                return m1.getFullName().compareTo(m2.getFullName());
-            }
-        });
-
-        return resultList;
-    }*/
-/*
-    @ModelAttribute("contractorList")
-    public List<Contractor> getContractorsList() {
-        List<Contractor> resultList = contractorService.findAllObjects();
-		*//*Collections.sort(resultList, new Comparator<Contractor>() {
-			@Override
-			public int compare(Contractor m1, Contractor m2) {
-				return m1.getFullName().compareTo(m2.getFullName());
-			}
-		});
-		return resultList;
-		*//*
-
-        List<Contractor> result = resultList.stream()           // convert list to stream
-                .filter(contractor -> !StringUtils.isEmpty(contractor.getCorpName())
-                        && contractor.getManager() != null && !StringUtils.isEmpty(contractor.getLastName())
-                        && !StringUtils.isEmpty(contractor.getFirstName()) && !StringUtils.isEmpty(contractor.getEmail())
-                        && !StringUtils.isEmpty(contractor.getPhone()) && !StringUtils.isEmpty(contractor.getAddress())
-                )
-                .sorted(Comparator.comparing(Contractor::getFullName))
-                .collect(Collectors.toList());
-
-        return result;
-    }
-
-    @ModelAttribute("productionList")
-    public List<ProductionDirectory> getProductionsList() {
-        List<ProductionDirectory> resultList = productionService.findAllObjects();
-        Collections.sort(resultList, new Comparator<ProductionDirectory>() {
-            @Override
-            public int compare(ProductionDirectory m1, ProductionDirectory m2) {
-                return m1.getFullName().compareTo(m2.getFullName());
-            }
-        });
-
-        return resultList;
-    }
-
-    @ModelAttribute("productionTypesList")
-    public List<ProductionTypeDirectory> initializeProductionTypes() {
-        return productionTypeService.findAllObjects();
-    }
-
-    @ModelAttribute("clientList")
-    public List<Client> getClientsList() {
-        List<Client> resultList = clientService.findAllObjects();
-
-        List<Client> result = resultList.stream()           // convert list to stream
-                .filter(client -> !StringUtils.isEmpty(client.getFullName())
-                        && client.getManager() != null && !StringUtils.isEmpty(client.getLastName())
-                        && !StringUtils.isEmpty(client.getFirstName()) && !StringUtils.isEmpty(client.getEmail())
-                        && !StringUtils.isEmpty(client.getPhone()) && !StringUtils.isEmpty(client.getAddress())
-                )
-                .sorted(Comparator.comparing(Client::getFullName))
-                .collect(Collectors.toList());
-
-		*//*Collections.sort(resultList, new Comparator<Client>() {
-			@Override
-			public int compare(Client m1, Client m2) {
-				return m1.getFullName().compareTo(m2.getFullName());
-			}
-		});
-		return resultList;
-		*//*
-        return result;
-    }
-
-    @ModelAttribute("stockList")
-    public List<StockDirectory> getStocksList() {
-        List<StockDirectory> resultList = stockService.findAllObjects();
-        Collections.sort(resultList, new Comparator<StockDirectory>() {
-            @Override
-            public int compare(StockDirectory m1, StockDirectory m2) {
-                return m1.getName().compareTo(m2.getName());
-            }
-        });
-
-        return resultList;
-    }
-
-    @ModelAttribute("chromaticityList")
-    public List<ChromaticityDirectory> getChromaticityList() {
-        List<ChromaticityDirectory> resultList = chromaticityService.findAllObjects();
-        Collections.sort(resultList, new Comparator<ChromaticityDirectory>() {
-            @Override
-            public int compare(ChromaticityDirectory m1, ChromaticityDirectory m2) {
-                return m1.getName().compareTo(m2.getName());
-            }
-        });
-
-        return resultList;
-    }
-
-    @ModelAttribute("formatList")
-    public List<FormatDirectory> getFormatsList() {
-        List<FormatDirectory> resultList = formatService.findAllObjects();
-        Collections.sort(resultList, new Comparator<FormatDirectory>() {
-            @Override
-            public int compare(FormatDirectory m1, FormatDirectory m2) {
-                return m1.getName().compareTo(m2.getName());
-            }
-        });
-
-        return resultList;
-    }
-
-    @ModelAttribute("laminateList")
-    public List<LaminateDirectory> getLaminatesList() {
-        List<LaminateDirectory> resultList = laminateService.findAllObjects();
-        Collections.sort(resultList, new Comparator<LaminateDirectory>() {
-            @Override
-            public int compare(LaminateDirectory m1, LaminateDirectory m2) {
-                return m1.getName().compareTo(m2.getName());
-            }
-        });
-
-        return resultList;
-    }
-
-    @ModelAttribute("paperList")
-    public List<PaperDirectory> getPapersList() {
-        List<PaperDirectory> resultList = paperService.findAllObjects();
-        Collections.sort(resultList, new Comparator<PaperDirectory>() {
-            @Override
-            public int compare(PaperDirectory m1, PaperDirectory m2) {
-                return m1.getName().compareTo(m2.getName());
-            }
-        });
-
-        return resultList;
-    }
-
-    @ModelAttribute("cringleList")
-    public List<CringleDirectory> getCringlesList() {
-        List<CringleDirectory> resultList = cringleService.findAllObjects();
-        Collections.sort(resultList, new Comparator<CringleDirectory>() {
-            @Override
-            public int compare(CringleDirectory m1, CringleDirectory m2) {
-                return m1.getName().compareTo(m2.getName());
-            }
-        });
-
-        return resultList;
-    }
-
-
-    @ModelAttribute("printingUnitList")
-    public List<PrintingUnitDirectory> getPrintingUnitList() {
-        List<PrintingUnitDirectory> resultList = printingUnitService.findAllObjects();
-        Collections.sort(resultList, new Comparator<PrintingUnitDirectory>() {
-            @Override
-            public int compare(PrintingUnitDirectory m1, PrintingUnitDirectory m2) {
-                return m1.getName().compareTo(m2.getName());
-            }
-        });
-
-        return resultList;
-    }
-
-    @ModelAttribute("numberBaseList")
-    public List<NumberBaseDirectory> getNumberBaseList() {
-        List<NumberBaseDirectory> resultList = numberBaseService.findAllObjects();
-        Collections.sort(resultList, new Comparator<NumberBaseDirectory>() {
-            @Override
-            public int compare(NumberBaseDirectory m1, NumberBaseDirectory m2) {
-                return m1.getName().compareTo(m2.getName());
-            }
-        });
-
-        return resultList;
-    }*/
-
     @ModelAttribute("taskFilterData")
     public OrderViewFilter getTaskViewFilter() {
         log.info("Get Filter: {}", getViewFilter());
@@ -539,8 +295,7 @@ public class TasksController extends BaseController {
 
     @ModelAttribute("tasksList")
     public List<ViewTask> getViewTasksListData() {
-        tasksList = viewTaskService.findByFilterData(getTaskViewFilter());
-        return tasksList;
+        return viewTaskService.findByFilterData(getTaskViewFilter());
     }
 
 }

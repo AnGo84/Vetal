@@ -34,8 +34,6 @@ public class ClientController extends BaseController {
     @Autowired
     private MessageSource messageSource;
     private List<Client> clientList;
-    /*@Autowired
-    private ManagerServiceImpl managerService;*/
 
     @Autowired
     private ClientServiceImpl clientService;
@@ -62,7 +60,6 @@ public class ClientController extends BaseController {
         model.addAttribute("edit", false);
         model.addAttribute("client", client);
         return "clientPage";
-
     }
 
     @RequestMapping(value = "/edit-{id}", method = RequestMethod.GET)
@@ -100,19 +97,6 @@ public class ClientController extends BaseController {
         clientService.deleteById(id);
         return "redirect:/clients";
     }
-
-    /*@ModelAttribute("managerList")
-    public List<Manager> getManagersList() {
-        List<Manager> resultList = managerService.findAllObjects();
-        Collections.sort(resultList, new Comparator<Manager>() {
-            @Override
-            public int compare(Manager m1, Manager m2) {
-                return m1.getFullName().compareTo(m2.getFullName());
-            }
-        });
-
-        return resultList;
-    }*/
 
     //Filter
     @RequestMapping(value = "/filter", method = RequestMethod.GET)

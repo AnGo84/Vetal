@@ -8,8 +8,3 @@ import ua.com.vetal.repositories.common.CommonDirectoryRepository;
 public interface ProductionTypeDirectoryRepository extends CommonDirectoryRepository<ProductionTypeDirectory> {
 
 }
-/*public interface ProductionTypeDirectoryRepository extends JpaRepository<ProductionTypeDirectory, Long> {
-
-    ProductionTypeDirectory findByName(String name);
-
-}*/

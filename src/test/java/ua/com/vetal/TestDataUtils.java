@@ -87,11 +87,6 @@ public class TestDataUtils {
         viewTask.setWorkName("workName" + taskNumber);
         viewTask.setFileName("fileName" + taskNumber);
 
-		/*ProductionTypeDirectory productionType = TestBuildersUtils.getProductionTypeDirectory(id, "Production type Task" + taskNumber);
-		ProductionDirectory production = TestBuildersUtils.getProductionDirectory(id, "fullName" + taskNumber, "shortName" + taskNumber, productionType);
-		viewTask.setProduction(production);
-		viewTask.setProductionType(productionType);*/
-
         viewTask.setDateBegin(DateUtils.addToDate(new Date(), Calendar.DATE, -10 * taskNumber));
         viewTask.setDateEnd(DateUtils.addToDate(new Date(), Calendar.DATE, -1 * taskNumber));
 

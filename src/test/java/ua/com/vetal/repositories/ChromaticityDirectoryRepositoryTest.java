@@ -87,7 +87,6 @@ public class ChromaticityDirectoryRepositoryTest {
         ChromaticityDirectory newDirectory = TestBuildersUtils.getChromaticityDirectory(null, SECOND_DIRECTORY_NAME);
         entityManager.persistAndFlush(newDirectory);
         // when
-        //List<ChromaticityDirectory> directoryList = directoryRepository.findAll();
         Iterable<ChromaticityDirectory> iterableDirectoryList = directoryRepository.findAll();
         assertNotNull(iterableDirectoryList);
         List<ChromaticityDirectory> directoryList = commonOptional.getListFromIterable(iterableDirectoryList);
@@ -130,7 +129,6 @@ public class ChromaticityDirectoryRepositoryTest {
         ChromaticityDirectory newDirectory = TestBuildersUtils.getChromaticityDirectory(null, SECOND_DIRECTORY_NAME);
 
         entityManager.persistAndFlush(newDirectory);
-        //assertEquals(directoryRepository.findAll().size(), 2);
         Iterable<ChromaticityDirectory> iterableDirectoryList = directoryRepository.findAll();
         assertNotNull(iterableDirectoryList);
         List<ChromaticityDirectory> directoryList = commonOptional.getListFromIterable(iterableDirectoryList);
@@ -141,7 +139,6 @@ public class ChromaticityDirectoryRepositoryTest {
         // when
         directoryRepository.deleteById(foundDirectory.getId());
         // then
-        //assertEquals(directoryRepository.findAll().size(), 1);
         iterableDirectoryList = directoryRepository.findAll();
         assertNotNull(iterableDirectoryList);
         directoryList = commonOptional.getListFromIterable(iterableDirectoryList);

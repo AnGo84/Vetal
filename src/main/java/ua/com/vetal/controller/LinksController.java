@@ -24,7 +24,6 @@ import java.util.Locale;
 @RequestMapping("/links")
 @Controller
 @Slf4j
-
 public class LinksController {
     @Autowired
     private MessageSource messageSource;
@@ -40,7 +39,6 @@ public class LinksController {
         model.addAttribute("linksList", linkService.findAllObjects());
         return "linksPage";
     }
-
 
     @RequestMapping(value = {"/add"}, method = RequestMethod.GET)
     public String showAddLinkPage(Model model) {
@@ -90,9 +88,6 @@ public class LinksController {
         return "redirect:/links";
     }
 
-    /**
-     * This method will provide LinkType list to views
-     */
     @ModelAttribute("linkTypesList")
     public List<LinkType> initializeLinkTypes() {
         return linkTypeService.findAllObjects();

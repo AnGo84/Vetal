@@ -34,7 +34,6 @@ public class CringleDirectoryServiceImplTest {
 
 	@Test
 	void whenFindById_thenReturnObject() {
-		//when(mockDirectoryRepository.getOne(1L)).thenReturn(directory);
 		when(mockDirectoryRepository.findById(1L)).thenReturn(Optional.of(directory));
 		long id = 1;
 		CringleDirectory found = directoryService.get(id);
@@ -117,7 +116,6 @@ public class CringleDirectoryServiceImplTest {
 		assertFalse(directoryService.isExist(null));
 		when(mockDirectoryRepository.findByName(directory.getName())).thenReturn(null);
 		assertFalse(directoryService.isExist(directory));
-		//assertTrue(directoryService.isObjectExist(directory));
 		CringleDirectory findDirectory = TestBuildersUtils.getCringleDirectory(1l, directory.getName());
 		when(mockDirectoryRepository.findByName(anyString())).thenReturn(findDirectory);
 		assertTrue(directoryService.isExist(directory));

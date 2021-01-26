@@ -8,8 +8,3 @@ import ua.com.vetal.repositories.common.CommonDirectoryRepository;
 public interface PaperDirectoryRepository extends CommonDirectoryRepository<PaperDirectory> {
 
 }
-/*public interface PaperDirectoryRepository extends JpaRepository<PaperDirectory, Long> {
-
-    PaperDirectory findByName(String name);
-
-}*/

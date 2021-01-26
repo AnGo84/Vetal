@@ -32,7 +32,6 @@ class UserRepositoryTest {
 	private User user;
 	private static Set<UserRole> userRoleSet;
 
-
 	@BeforeAll
 	public static void beforeAll() {
 
@@ -51,9 +50,7 @@ class UserRepositoryTest {
     }
 	@AfterEach
 	public void afterEach(){
-
 	}
-
 
 	@Test
 	public void whenFindByUserName_thenReturnUser() {
@@ -74,7 +71,6 @@ class UserRepositoryTest {
 
 	@Test
 	public void whenFindByID_thenReturnUser() {
-		//User user = userRepository.findByName("User");
 		// when
 		Optional<User> foundUser = userRepository.findById(user.getId());
 		// then
