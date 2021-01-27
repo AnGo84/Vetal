@@ -64,11 +64,11 @@ public class ContractorServiceImpl implements SimpleService<Contractor> {
     }
 
     public List<Contractor> findByFilterData(PersonViewFilter filterData) {
-        List<Contractor> list = contractorDAO.findByFilterData(filterData);
 
         if (filterData == null) {
             return findAllObjects();
         }
+        List<Contractor> list = contractorDAO.findByFilterData(filterData);
         return list;
     }
 }

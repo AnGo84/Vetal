@@ -202,11 +202,17 @@ class ContractorServiceImplTest {
 
 	@Test
 	void whenFindByFilterData() {
-        when(mockContractorDAO.findByFilterData(any(PersonViewFilter.class))).thenReturn(Arrays.asList(contractor));
-        List<Contractor> objects = contractorService.findByFilterData(new PersonViewFilter());
-        assertNotNull(objects);
-        assertFalse(objects.isEmpty());
-        assertEquals(objects.size(), 1);
+		when(mockContractorDAO.findByFilterData(any(PersonViewFilter.class))).thenReturn(Arrays.asList(contractor));
+		List<Contractor> objects = contractorService.findByFilterData(new PersonViewFilter());
+		assertNotNull(objects);
+		assertFalse(objects.isEmpty());
+		assertEquals(objects.size(), 1);
+
+		when(mockContractorRepository.findAll()).thenReturn(Arrays.asList(contractor));
+		objects = contractorService.findByFilterData(null);
+		assertNotNull(objects);
+		assertFalse(objects.isEmpty());
+		assertEquals(objects.size(), 1);
 	}
 
 }

@@ -49,6 +49,7 @@ class UserViewControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenShowUserViewPageAsAuthorized_thenOk() throws Exception {
+        when(mockUserService.getPrincipal()).thenReturn("user name");
         when(mockUserService.findByName(anyString())).thenReturn(user);
         when(mockUserService.isObjectExist(any())).thenReturn(true);
 		mockMvc.perform(get(MAPPED_URL + "/view"))

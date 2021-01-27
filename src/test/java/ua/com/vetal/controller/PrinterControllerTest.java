@@ -14,7 +14,7 @@ import ua.com.vetal.service.PrinterServiceImpl;
 
 import java.util.Arrays;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -107,35 +107,30 @@ public class PrinterControllerTest {
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenUpdateEmployeeAsAuthorizedWithNullPrinter_thenOk() throws Exception {
-		mockMvc.perform(post(MAPPED_URL + "/update"))
+		mockMvc.perform(post(MAPPED_URL + "/update")
+				.flashAttr("employee", printer)
+		)
 				//.andDo
-				.andExpect(status().isOk())
-				.andExpect(model().attributeExists("employee"))
-				.andExpect(model().attribute("employee", notNullValue()))
-				.andExpect(model().attribute("employee", hasProperty("id", nullValue())))
-				.andExpect(model().attribute("employee", hasProperty("firstName", blankOrNullString())))
-				.andExpect(model().attribute("employee", hasProperty("lastName", blankOrNullString())))
-				.andExpect(model().attribute("employee", hasProperty("middleName", blankOrNullString())))
-				.andExpect(model().attribute("employee", hasProperty("email", blankOrNullString())))
-				.andExpect(view().name("employeeRecordPage"));
+				.andExpect(status().isFound())
+				.andExpect(redirectedUrl(MAPPED_URL));
+
+		verify(mockPrinterService, times(1)).update(any());
 	}
 
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenUpdateEmployeeAsAuthorizedWithNotNullPrinter_thenOk() throws Exception {
 		mockPrinterService.update(printer);
-
+		Printer newPrinter = TestDataUtils.getPrinter(1l);
+		printer.setFirstName("New");
 		mockMvc.perform(post(MAPPED_URL + "/update")
-				.param("id", String.valueOf(printer.getId()))
-				.param("firstName", printer.getFirstName())
-				.param("lastName", printer.getLastName())
-				.param("middleName", printer.getMiddleName())
-				.param("email", printer.getEmail()))
+				.flashAttr("employee", newPrinter)
+		)
 				//.andDo
 				.andExpect(status().isFound())
 
 				.andExpect(redirectedUrl(MAPPED_URL));
-		verify(mockPrinterService, times(1)).update(printer);
+		verify(mockPrinterService, times(2)).update(any());
 	}
 
 

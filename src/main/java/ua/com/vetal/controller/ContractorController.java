@@ -134,20 +134,6 @@ public class ContractorController extends BaseController {
         return "redirect:/contractor";
     }
 
-    /*
-    @ModelAttribute("managerList")
-    public List<Manager> getManagersList() {
-        List<Manager> resultList = managerService.findAllObjects();
-        Collections.sort(resultList, new Comparator<Manager>() {
-            @Override
-            public int compare(Manager m1, Manager m2) {
-                return m1.getFullName().compareTo(m2.getFullName());
-            }
-        });
-
-        return resultList;
-    }*/
-
     @RequestMapping(value = {"/excelExport"}, method = RequestMethod.GET)
     @ResponseBody
     public void exportToExcelReportContractor(HttpServletResponse response) throws JRException, IOException {

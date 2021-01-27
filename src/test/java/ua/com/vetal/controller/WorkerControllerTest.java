@@ -123,18 +123,13 @@ public class WorkerControllerTest {
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenUpdateEmployeeAsAuthorizedWithNotNullWorker_thenOk() throws Exception {
-		mockWorkerService.update(worker);
-
 		mockMvc.perform(post(MAPPED_URL + "/update")
-				.param("id", String.valueOf(worker.getId()))
-				.param("firstName", worker.getFirstName())
-				.param("lastName", worker.getLastName())
-				.param("middleName", worker.getMiddleName())
-				.param("email", worker.getEmail()))
-				//.andDo(print())
+				.flashAttr("employee", worker)
+		)
+				//.andDo
 				.andExpect(status().isFound())
-
 				.andExpect(redirectedUrl(MAPPED_URL));
+
 		verify(mockWorkerService, times(1)).update(worker);
 	}
 

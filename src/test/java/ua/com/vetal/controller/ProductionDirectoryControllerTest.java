@@ -15,7 +15,7 @@ import ua.com.vetal.service.ProductionDirectoryServiceImpl;
 
 import java.util.Arrays;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -114,16 +114,14 @@ public class ProductionDirectoryControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateProductionDirectoryAsAuthorizedWithNullProductionDirectory_thenOk() throws Exception {
-        mockMvc.perform(post(MAPPED_URL + "/update"))
+        mockMvc.perform(post(MAPPED_URL + "/update")
+                .flashAttr("production", production)
+        )
                 //.andDo
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("production"))
-                .andExpect(model().attribute("production", notNullValue()))
-                .andExpect(model().attribute("production", hasProperty("id", nullValue())))
-                .andExpect(model().attribute("production", hasProperty("fullName", blankOrNullString())))
-                .andExpect(model().attribute("production", hasProperty("shortName", blankOrNullString())))
-                .andExpect(model().attribute("production", hasProperty("productionType", blankOrNullString())))
-                .andExpect(view().name("productionPage"));
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl(MAPPED_URL));
+
+        verify(mockProductionDirectoryService, times(1)).updateObject(any());
     }
 
     @Test
@@ -139,7 +137,6 @@ public class ProductionDirectoryControllerTest {
         )
                 //.andDo
                 .andExpect(status().isFound())
-
                 .andExpect(redirectedUrl(MAPPED_URL));
         verify(mockProductionDirectoryService, times(1)).updateObject(production);
     }

@@ -57,11 +57,10 @@ public class StencilServiceImpl implements SimpleService<Stencil> {
     }
 
     public List<Stencil> findByFilterData(OrderViewFilter orderViewFilter) {
-        List<Stencil> list = stencilDAO.findByFilterData(orderViewFilter);
-
         if (orderViewFilter == null) {
             return findAllObjects();
         }
+        List<Stencil> list = stencilDAO.findByFilterData(orderViewFilter);
         return list;
     }
 

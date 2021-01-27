@@ -14,7 +14,7 @@ import ua.com.vetal.service.ManagerServiceImpl;
 
 import java.util.Arrays;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -108,35 +108,30 @@ class ManagerControllerTest {
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenUpdateEmployeeAsAuthorizedWithNullManager_thenOk() throws Exception {
-		mockMvc.perform(post(MAPPED_URL + "/update"))
+		mockMvc.perform(post(MAPPED_URL + "/update")
+				.flashAttr("employee", manager)
+		)
 				//.andDo
-				.andExpect(status().isOk())
-				.andExpect(model().attributeExists("employee"))
-				.andExpect(model().attribute("employee", notNullValue()))
-				.andExpect(model().attribute("employee", hasProperty("id", nullValue())))
-				.andExpect(model().attribute("employee", hasProperty("firstName", blankOrNullString())))
-				.andExpect(model().attribute("employee", hasProperty("lastName", blankOrNullString())))
-				.andExpect(model().attribute("employee", hasProperty("middleName", blankOrNullString())))
-				.andExpect(model().attribute("employee", hasProperty("email", blankOrNullString())))
-				.andExpect(view().name("employeeRecordPage"));
-    }
+				.andExpect(status().isFound())
+				.andExpect(redirectedUrl(MAPPED_URL));
+
+		verify(mockManagerService, times(1)).update(any());
+	}
 
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenUpdateEmployeeAsAuthorizedWithNotNullManager_thenOk() throws Exception {
 		mockManagerService.update(manager);
-
+		Manager newManager = TestDataUtils.getManager(1l);
+		manager.setFirstName("New");
 		mockMvc.perform(post(MAPPED_URL + "/update")
-				.param("id", String.valueOf(manager.getId()))
-				.param("firstName", manager.getFirstName())
-				.param("lastName", manager.getLastName())
-				.param("middleName", manager.getMiddleName())
-				.param("email", manager.getEmail()))
+				.flashAttr("employee", newManager)
+		)
 				//.andDo
 				.andExpect(status().isFound())
 
 				.andExpect(redirectedUrl(MAPPED_URL));
-		verify(mockManagerService, times(1)).update(manager);
+		verify(mockManagerService, times(2)).update(any());
 	}
 
 	@Test

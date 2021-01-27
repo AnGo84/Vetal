@@ -163,5 +163,11 @@ class StencilServiceImplTest {
         assertNotNull(objects);
         assertFalse(objects.isEmpty());
         assertEquals(objects.size(), 1);
-	}
+
+        when(mockStencilRepository.findAll(any(Sort.class))).thenReturn(Arrays.asList(stencil));
+        objects = stencilService.findByFilterData(null);
+        assertNotNull(objects);
+        assertFalse(objects.isEmpty());
+        assertEquals(objects.size(), 1);
+    }
 }

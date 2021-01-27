@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,7 +41,7 @@ public class UserViewController {
 	@RequestMapping(value = {"/view"}, method = RequestMethod.GET)
 	public String showUserViewPage(Model model) {
 		log.info("View user");
-		User user = userService.findByName(getPrincipal());
+		User user = userService.findByName(userService.getPrincipal());
 		if (userService.isObjectExist(user)) {
 			model.addAttribute("user", user);
 			return "userViewPage";
@@ -64,7 +62,7 @@ public class UserViewController {
 		return "redirect:/passwordReset?token=" + token.getToken();
 	}
 
-	private String getPrincipal() {
+	/*private String getPrincipal() {
 		String userName;
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -74,5 +72,5 @@ public class UserViewController {
 			userName = principal.toString();
 		}
 		return userName;
-	}
+	}*/
 }

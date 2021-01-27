@@ -174,6 +174,12 @@ public class ClientServiceImplTest {
         assertNotNull(objects);
         assertFalse(objects.isEmpty());
         assertEquals(objects.size(), 1);
+
+        when(mockClientRepository.findAll()).thenReturn(Arrays.asList(client));
+        objects = clientService.findByFilterData(null);
+        assertNotNull(objects);
+        assertFalse(objects.isEmpty());
+        assertEquals(objects.size(), 1);
     }
 
 }

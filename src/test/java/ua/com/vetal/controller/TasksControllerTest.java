@@ -185,6 +185,9 @@ public class TasksControllerTest {
 				.andExpect(model().attributeExists("task"))
 				.andExpect(model().attribute("task", notNullValue()))
 				.andExpect(view().name("taskPage"));
+
+		verify(mockTaskService, times(0)).updateObject(any());
+		verify(mockTaskService, times(0)).updateObject(any(), any());
 	}
 
 	@Test
@@ -197,6 +200,7 @@ public class TasksControllerTest {
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl(MAPPED_URL));
 
+		verify(mockTaskService, times(0)).updateObject(any());
 		verify(mockTaskService, times(1)).updateObject(any(), any());
 	}
 

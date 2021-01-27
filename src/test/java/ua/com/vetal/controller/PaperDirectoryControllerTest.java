@@ -15,9 +15,8 @@ import ua.com.vetal.service.PaperDirectoryServiceImpl;
 
 import java.util.Arrays;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -117,14 +116,14 @@ public class PaperDirectoryControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateRecordAsAuthorizedWithNullDirectory_thenOk() throws Exception {
-        mockMvc.perform(post(MAPPED_URL + "/update"))
+        mockMvc.perform(post(MAPPED_URL + "/update")
+                .flashAttr("directory", directory)
+        )
                 //.andDo
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("directory"))
-                .andExpect(model().attribute("directory", notNullValue()))
-                .andExpect(model().attribute("directory", hasProperty("id", nullValue())))
-                .andExpect(model().attribute("directory", hasProperty("name", blankOrNullString())))
-                .andExpect(view().name("directoryRecordPage"));
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl(MAPPED_URL));
+
+        verify(mockDirectoryService, times(1)).update(any());
     }
 
     @Test

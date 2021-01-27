@@ -83,7 +83,7 @@ public class UserController {
 			if (user.getEncryptedPassword() == null) {
 				user.setEncryptedPassword(passwordEncoder.encode(userPasswordDefault));
 			}
-			userService.saveObject(user);
+			userService.updateObject(user);
 
 		} catch (DataIntegrityViolationException e) {
 			FieldError ssoError = new FieldError("user", "name", messageSource.getMessage("non.unique.field",
@@ -128,15 +128,4 @@ public class UserController {
 		return this.title;
 	}
 
-	/*private String getPrincipal() {
-		String userName = null;
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-		if (principal instanceof UserDetails) {
-			userName = ((UserDetails) principal).getUsername();
-		} else {
-			userName = principal.toString();
-		}
-		return userName;
-	}*/
 }

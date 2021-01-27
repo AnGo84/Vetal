@@ -77,7 +77,7 @@ public class LinksController {
             return "linkPage";
         }
 
-        linkService.saveObject(link);
+        linkService.updateObject(link);
         return "redirect:/links";
     }
 

@@ -59,10 +59,11 @@ public class ClientServiceImpl implements SimpleService<Client> {
     }
 
     public List<Client> findByFilterData(ClientViewFilter filterData) {
-        List<Client> list = clientDAO.findByFilterData(filterData);
-        if (list == null) {
+        if (filterData == null) {
             return findAllObjects();
         }
+
+        List<Client> list = clientDAO.findByFilterData(filterData);
         return list;
     }
 }

@@ -20,6 +20,7 @@ import java.util.Arrays;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -182,36 +183,21 @@ public class StencilsControllerTest {
 				.andExpect(model().attributeExists("stencil"))
 				.andExpect(model().attribute("stencil", notNullValue()))
 				.andExpect(view().name("stencilPage"));
+
+		verify(mockStencilService, times(0)).updateObject(any());
 	}
 
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenUpdateStencilAsAuthorizedWithNotNullStencil_thenOk() throws Exception {
-		mockStencilService.updateObject(stencil);
-
 		mockMvc.perform(post(MAPPED_URL + "/update")
-				.param("id", String.valueOf(stencil.getId()))
-				.param("number", String.valueOf(stencil.getNumber()))
-				.param("numberBase", String.valueOf(stencil.getNumberBase().getId()))
-				.param("account", stencil.getAccount())
-				.param("numberSuffix", String.valueOf(stencil.getNumberSuffix()))
-				.param("manager", String.valueOf(stencil.getManager().getId()))
-				.param("orderName", stencil.getOrderName())
-				.param("production", String.valueOf(stencil.getProduction().getId()))
-				.param("dateBegin", String.valueOf(stencil.getDateBegin()))
-				.param("dateEnd", String.valueOf(stencil.getDateEnd()))
-				.param("client", String.valueOf(stencil.getClient().getId()))
-				.param("stock", String.valueOf(stencil.getStock().getId()))
-				.param("printing", String.valueOf(stencil.getPrinting()))
-				.param("printingUnit", String.valueOf(stencil.getPrintingUnit().getId()))
-				.param("paper", String.valueOf(stencil.getPaper().getId()))
+				.flashAttr("stencil", stencil)
 		)
-				//.andDo
-				.andExpect(status().isOk())
-				.andExpect(view().name("stencilPage"));
+				//.andDo(print())
+				.andExpect(status().isFound())
+				.andExpect(redirectedUrl(MAPPED_URL));
 
-
-		verify(mockStencilService, times(1)).updateObject(stencil);
+		verify(mockStencilService, times(1)).updateObject(any());
 	}
 
 

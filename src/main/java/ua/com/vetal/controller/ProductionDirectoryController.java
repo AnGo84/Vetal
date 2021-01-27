@@ -66,7 +66,7 @@ public class ProductionDirectoryController {
             return "productionPage";
         }
 
-        directoryService.saveObject(directory);
+        directoryService.updateObject(directory);
         return "redirect:" + pageName;
     }
 

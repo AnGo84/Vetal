@@ -59,17 +59,20 @@ public class TaskServiceImpl implements SimpleService<Task> {
         saveObject(task);
     }
 
-    //TODO cover with tests
     public void updateObject(Task task, MultipartFile uploadFile) throws IOException {
         Long oldFileId = null;
         if (task.getDbFile() != null && (StringUtils.isEmpty(task.getFileName()))) {
             oldFileId = task.getDbFile().getId();
             task.setDbFile(null);
         }
+
         if (uploadFile != null && !uploadFile.isEmpty()) {
             try {
                 DBFile dbFile = dbFileStorageService.storeMultipartFile(uploadFile);
                 log.debug("Get dbFile: {}", dbFile.getFileName());
+                if (task.getDbFile() != null) {
+                    oldFileId = task.getDbFile().getId();
+                }
                 task.setDbFile(dbFile);
             } catch (FileUploadException | FileNotFoundException e) {
                 log.error("Error on load file: {}", e.getMessage(), e);
@@ -99,12 +102,10 @@ public class TaskServiceImpl implements SimpleService<Task> {
     }
 
     public List<Task> findByFilterData(OrderViewFilter orderViewFilter) {
-        List<Task> tasks = taskDAO.findByFilterData(orderViewFilter);
-
         if (orderViewFilter == null) {
             return findAllObjects();
         }
-
+        List<Task> tasks = taskDAO.findByFilterData(orderViewFilter);
         return tasks;
     }
 
