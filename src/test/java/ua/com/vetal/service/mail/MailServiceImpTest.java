@@ -49,8 +49,8 @@ public class MailServiceImpTest {
         EmailMessage emailMessage = new EmailMessage();
         emailMessage.setFrom("no-reply@memorynotfound.com");
         emailMessage.setTo("info@memorynotfound.com");
-        emailMessage.setSubject("Spring Mail Integration Testing with JUnit and GreenMail Example");
-        emailMessage.setText("We show how to write Integration Tests using Spring and GreenMail.");
+        emailMessage.setSubject("Testing email");
+        emailMessage.setText("Test sending email with all data");
 
         mailServiceImp.sendEmail(emailMessage);
 
@@ -60,6 +60,7 @@ public class MailServiceImpTest {
         MimeMessage current = receivedMessages[0];
 
         assertEquals(emailMessage.getSubject(), current.getSubject());
+        assertEquals(emailMessage.getFrom(), current.getFrom()[0].toString());
         assertEquals(emailMessage.getTo(), current.getAllRecipients()[0].toString());
         assertTrue(getTextFromMessage(current).contains(emailMessage.getText()));
 
@@ -70,13 +71,13 @@ public class MailServiceImpTest {
         EmailMessage emailMessage = new EmailMessage();
         emailMessage.setFrom("no-reply@memorynotfound.com");
         emailMessage.setTo("info@memorynotfound.com");
-        emailMessage.setSubject("Spring Mail Integration Testing with JUnit and GreenMail Example");
-        emailMessage.setText("We show how to write Integration Tests using Spring and GreenMail.");
+        emailMessage.setSubject("Testing email");
+        emailMessage.setText("Test sending email with default address");
 
         mailServiceImp.sendEmail("no-reply@memorynotfound.com",
                 "info@memorynotfound.com",
-                "Spring Mail Integration Testing with JUnit and GreenMail Example",
-                "We show how to write Integration Tests using Spring and GreenMail.");
+                "Testing email",
+                "Test sending email with default address");
 
         MimeMessage[] receivedMessages = smtpServerRule.getMessages();
         assertEquals(1, receivedMessages.length);
@@ -84,6 +85,7 @@ public class MailServiceImpTest {
         MimeMessage current = receivedMessages[0];
 
         assertEquals(emailMessage.getSubject(), current.getSubject());
+        assertEquals(emailMessage.getFrom(), current.getFrom()[0].toString());
         assertEquals(emailMessage.getTo(), current.getAllRecipients()[0].toString());
         assertTrue(String.valueOf(current.getContent()).contains(emailMessage.getText()));
 

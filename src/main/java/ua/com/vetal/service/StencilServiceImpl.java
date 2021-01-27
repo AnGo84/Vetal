@@ -2,15 +2,18 @@ package ua.com.vetal.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.dao.StencilDAO;
+import ua.com.vetal.email.EmailMessage;
 import ua.com.vetal.entity.Stencil;
 import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.repositories.StencilRepository;
 
 import java.util.List;
+import java.util.Locale;
 
 @Service("stencilService")
 @Transactional
@@ -20,6 +23,8 @@ public class StencilServiceImpl implements SimpleService<Stencil> {
     private StencilDAO stencilDAO;
     @Autowired
     private StencilRepository stencilRepository;
+    @Autowired
+    private MessageSource messageSource;
 
     @Override
     public Stencil findById(Long id) {
@@ -80,5 +85,18 @@ public class StencilServiceImpl implements SimpleService<Stencil> {
 
     public Long getMaxID() {
         return stencilDAO.getMaxID();
+    }
+
+    public EmailMessage getEmailMessage(Stencil stencil, String from) {
+        EmailMessage emailMessage = new EmailMessage();
+
+        String subject = messageSource.getMessage("email.stencil.change_state", null, new Locale("ru"));
+        String emailTest = String.format(subject, stencil.getFullNumber(), stencil.getState().getAltName());
+
+        emailMessage.setFrom(from);
+        emailMessage.setTo(stencil.getManager().getEmail());
+        emailMessage.setSubject(emailTest);
+        emailMessage.setText(emailTest);
+        return emailMessage;
     }
 }

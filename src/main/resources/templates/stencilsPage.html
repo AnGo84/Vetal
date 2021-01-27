@@ -243,12 +243,22 @@
                                      th:class="${stencil.state.id==2} ? '':'d-none'"
                                      sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"
                                 >
-                                    <a class="btn btn-info btn-sm mx-sm-1"
-                                       role="button" th:href="@{'/stencils/pdfReport-' + ${stencil.id}}"
+                                    <!--<a class="btn btn-info btn-sm mx-sm-1"
+                                       role="button" th:href="@{'/stencils/make_ready-' + ${stencil.id}}"
                                        th:title="#{message.record.make_done}">
                                         <i class="fa fa-check"></i>
                                         <span th:text="#{label.ready}" th:remove="tag"></span>
-                                    </a>
+                                    </a>-->
+
+                                    <form method="POST" th:action="@{'/stencils/make_ready-' + ${stencil.id}}">
+                                        <button class="btn btn-info btn-sm mx-sm-1"
+                                                type="submit" name="submit" value="value"
+                                                th:title="#{message.record.make_done}"
+                                                th:text="#{label.ready}">
+                                            <i class="fa fa-check"></i>
+                                        </button>
+                                    </form>
+
                                 </div>
 
                             </td>
@@ -275,8 +285,7 @@
                                        role="button" th:href="@{'/stencils/edit-' + ${stencil.id}}"
                                        th:title="#{message.record.edit}"><i class="fa fa-pencil"></i></a>
 
-                                    <form accept-charset="UTF-8" action="#"
-                                          method="GET"
+                                    <form accept-charset="UTF-8" action="#" method="GET"
                                           style="display: inline" th:action="@{'/stencils/delete-' + ${stencil.id}}">
                                         <button class="btn btn-sm btn-danger mx-sm-1"
                                                 data-target="#confirmDelete" data-toggle="modal"

@@ -5,16 +5,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.MessageSource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.dao.StencilDAO;
+import ua.com.vetal.email.EmailMessage;
 import ua.com.vetal.entity.Stencil;
 import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.repositories.StencilRepository;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -22,9 +25,11 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class StencilServiceImplTest {
-
+	@Autowired
+	private MessageSource messageSource;
 	@Autowired
 	private StencilServiceImpl stencilService;
+
 	@MockBean
 	private StencilRepository mockStencilRepository;
 	@MockBean
@@ -160,14 +165,30 @@ class StencilServiceImplTest {
 	void whenFindByFilterData() {
         when(mockStencilDAO.findByFilterData(any(OrderViewFilter.class))).thenReturn(Arrays.asList(stencil));
         List<Stencil> objects = stencilService.findByFilterData(new OrderViewFilter());
-        assertNotNull(objects);
-        assertFalse(objects.isEmpty());
-        assertEquals(objects.size(), 1);
+		assertNotNull(objects);
+		assertFalse(objects.isEmpty());
+		assertEquals(objects.size(), 1);
 
-        when(mockStencilRepository.findAll(any(Sort.class))).thenReturn(Arrays.asList(stencil));
-        objects = stencilService.findByFilterData(null);
-        assertNotNull(objects);
-        assertFalse(objects.isEmpty());
-        assertEquals(objects.size(), 1);
-    }
+		when(mockStencilRepository.findAll(any(Sort.class))).thenReturn(Arrays.asList(stencil));
+		objects = stencilService.findByFilterData(null);
+		assertNotNull(objects);
+		assertFalse(objects.isEmpty());
+		assertEquals(objects.size(), 1);
+	}
+
+	@Test
+	public void whenGetEmailMessage() {
+		String text = messageSource.getMessage("email.stencil.change_state", null, new Locale("ru"));
+
+		String defaultFrom = "default@email";
+		EmailMessage emailMessage = stencilService.getEmailMessage(stencil, defaultFrom);
+		assertNotNull(emailMessage);
+		assertEquals(defaultFrom, emailMessage.getFrom());
+		assertEquals(stencil.getManager().getEmail(), emailMessage.getTo());
+		assertTrue(emailMessage.getSubject().contains(stencil.getFullNumber()));
+		assertTrue(emailMessage.getText().contains(stencil.getFullNumber()));
+		assertNull(emailMessage.getAttachments());
+
+	}
+
 }

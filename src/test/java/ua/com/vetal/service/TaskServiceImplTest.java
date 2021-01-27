@@ -281,7 +281,6 @@ public class TaskServiceImplTest {
         assertNotNull(emailMessage);
         assertEquals(task.getManager().getEmail(), emailMessage.getFrom());
         assertEquals(task.getContractor().getEmail(), emailMessage.getTo());
-        assertEquals(task.getContractor().getEmail(), emailMessage.getTo());
         assertTrue(emailMessage.getSubject().startsWith(subject));
         assertEquals(text, emailMessage.getText());
         assertNotNull(emailMessage.getAttachments());
@@ -292,7 +291,6 @@ public class TaskServiceImplTest {
         emailMessage = taskService.getEmailMessage(task);
         assertNotNull(emailMessage);
         assertEquals(task.getManager().getEmail(), emailMessage.getFrom());
-        assertEquals(task.getContractor().getEmail(), emailMessage.getTo());
         assertEquals(task.getContractor().getEmail(), emailMessage.getTo());
         assertTrue(emailMessage.getSubject().startsWith(subject));
         assertNotNull(emailMessage.getAttachments());

@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ua.com.vetal.acpect.LogExecutionTime;
+import ua.com.vetal.email.EmailMessage;
+import ua.com.vetal.entity.State;
 import ua.com.vetal.entity.Stencil;
 import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.entity.filter.ViewFilter;
@@ -16,21 +18,24 @@ import ua.com.vetal.report.jasperReport.JasperReportData;
 import ua.com.vetal.report.jasperReport.exporter.JasperReportExporterType;
 import ua.com.vetal.report.jasperReport.reportdata.StencilJasperReportData;
 import ua.com.vetal.service.KraskoottiskService;
+import ua.com.vetal.service.StateServiceImpl;
 import ua.com.vetal.service.StencilServiceImpl;
+import ua.com.vetal.service.mail.MailServiceImp;
 import ua.com.vetal.service.reports.JasperReportService;
 import ua.com.vetal.utils.LoggerUtils;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/stencils")
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:vetal.properties")
 @Slf4j
 public class StencilsController extends BaseController {
+	static final Set<Long> emailingStates = new HashSet<>(Arrays.asList(2l, 4l));
 
 	private String title = "Stencils";
 	private String personName = "Stencils";
@@ -42,6 +47,10 @@ public class StencilsController extends BaseController {
 	private StencilJasperReportData reportData;
 	@Autowired
 	private JasperReportService jasperReportService;
+	@Autowired
+	private StateServiceImpl stateService;
+	@Autowired
+	private MailServiceImp mailService;
 
 	@Autowired
 	private KraskoottiskService kraskoottiskService;
@@ -102,6 +111,31 @@ public class StencilsController extends BaseController {
 		return "stencilPage";
 	}
 
+	//TODO cover with tests
+	@RequestMapping(value = "/make_ready-{id}", method = RequestMethod.POST)
+	public String makeReadyStencil(@PathVariable Long id) {
+		log.info("Make ready {} with ID= {}", title, id);
+
+		Stencil stencil = stencilService.findById(id);
+		if (stencil.getState().getId().equals(2l)) {
+			State readyState = stateService.findById(4l);
+			stencil.setState(readyState);
+			stencilService.updateObject(stencil);
+			sendEmailToManager(stencil);
+		}
+		return "redirect:/stencils";
+	}
+
+	private void sendEmailToManager(Stencil stencil) {
+		try {
+			EmailMessage emailMessage = stencilService.getEmailMessage(stencil, mailService.getDefaultEmail());
+			mailService.sendEmail(emailMessage);
+		} catch (MessagingException e) {
+			log.error("Error on sending email to manager: {}", e.getMessage(), e);
+		}
+	}
+
+	//TODO cover with tests
 	@LogExecutionTime
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String updateStencil(@Valid @ModelAttribute("stencil") Stencil stencil, BindingResult bindingResult, Model model) {
@@ -110,9 +144,27 @@ public class StencilsController extends BaseController {
 			LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
 			return "stencilPage";
 		}
+
+		boolean needSend = hasNewStateForEmailing(stencil);
+
 		stencilService.updateObject(stencil);
 
+		if (needSend) {
+			sendEmailToManager(stencil);
+		}
+
 		return "redirect:/stencils";
+	}
+
+	private boolean hasNewStateForEmailing(Stencil stencil) {
+		if (stencil != null && stencil.getId() != null) {
+			Stencil oldStencil = stencilService.findById(stencil.getId());
+			if (oldStencil.getState().getId() != stencil.getState().getId() &&
+					emailingStates.contains(stencil.getState().getId())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@LogExecutionTime
