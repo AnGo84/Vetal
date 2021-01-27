@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.Task;
 import ua.com.vetal.entity.filter.OrderViewFilter;
@@ -16,16 +19,20 @@ import ua.com.vetal.report.jasperReport.reportdata.TaskJasperReportData;
 import ua.com.vetal.service.TaskServiceImpl;
 import ua.com.vetal.service.mail.MailServiceImp;
 import ua.com.vetal.service.reports.JasperReportService;
+import ua.com.vetal.utils.StringUtils;
 
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -348,5 +355,35 @@ public class TasksControllerTest {
 				.andExpect(model().attribute("resultSuccess", notNullValue()))
 				.andExpect(model().attribute("resultSuccess", is(false)))
 				.andExpect(view().name("emailResultPage"));
+	}
+
+	@Test
+	public void whenDownloadFile_thenReturnResult() throws Exception {
+		task.getDbFile().setFileType(MediaType.APPLICATION_JSON.toString());
+		when(mockTaskService.findById(anyLong())).thenReturn(task);
+
+		MvcResult mvcResult = mockMvc.perform(get(MAPPED_URL + "/downloadFile-" + task.getId()))
+				//.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andReturn();
+		String headerValue = mvcResult.getResponse().getHeader(HttpHeaders.CONTENT_DISPOSITION);
+		assertTrue(headerValue.contains(task.getDbFile().getFileName()));
+
+		String bodyValue = mvcResult.getResponse().getContentAsString();
+		assertFalse(StringUtils.isEmpty(bodyValue));
+	}
+
+	@Test
+	public void whenDownloadFile_thenReturnEmptyResult() throws Exception {
+		when(mockTaskService.findById(anyLong())).thenReturn(null);
+
+		MvcResult mvcResult = mockMvc.perform(get(MAPPED_URL + "/downloadFile-" + task.getId()))
+				.andDo(print())
+				.andExpect(status().isForbidden())
+				.andReturn();
+		String bodyValue = mvcResult.getResponse().getContentAsString();
+		assertFalse(StringUtils.isEmpty(bodyValue));
+		assertTrue(bodyValue.contains("error"));
 	}
 }

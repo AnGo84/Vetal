@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -195,8 +195,7 @@ public class TasksController extends BaseController {
 					taskMailingDeclineReason = messageSource.getMessage("message.email.sent_to",
 							new String[]{task.getContractor().getFullName(), task.getContractor().getEmail()}, new Locale("ru"));
 				} catch (Exception e) {
-					log.error("Email sanding error: {}", e.getMessage());
-					//e.printStackTrace();
+					log.error("Email sanding error: {}", e.getMessage(), e);
 					taskMailingDeclineReason = messageSource.getMessage("message.email.service_error",
 							null, new Locale("ru")) + ": " + e.getMessage();
 				}
@@ -212,8 +211,14 @@ public class TasksController extends BaseController {
 	}
 
 	@GetMapping("/downloadFile-{taskId}")
-	public ResponseEntity<Resource> downloadFile(@PathVariable Long taskId) {
+	public ResponseEntity downloadFile(@PathVariable Long taskId) {
 		Task task = taskService.findById(taskId);
+		if (task == null || task.getDbFile() == null) {
+			return ResponseEntity
+					.status(HttpStatus.FORBIDDEN)
+					.body("File downloading error");
+		}
+
 		DBFile dbFile = task.getDbFile();
 		return ResponseEntity.ok()
 				.contentType(MediaType.parseMediaType(dbFile.getFileType()))

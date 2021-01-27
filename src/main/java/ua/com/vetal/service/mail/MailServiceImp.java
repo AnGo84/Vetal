@@ -1,5 +1,6 @@
 package ua.com.vetal.service.mail;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +17,7 @@ import javax.mail.internet.MimeMessage;
 
 @Service
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:application.properties")
+@Slf4j
 public class MailServiceImp implements EmailService {
 
 
@@ -60,6 +62,7 @@ public class MailServiceImp implements EmailService {
 	}
 
 	public void sendEmail(EmailMessage emailMessage) throws MessagingException {
+		log.info("Sending: {}", emailMessage);
 		MimeMessage message = javaMailSender.createMimeMessage();
 
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);

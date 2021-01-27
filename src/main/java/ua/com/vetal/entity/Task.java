@@ -1,6 +1,7 @@
 package ua.com.vetal.entity;
 
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.Type;
 import ua.com.vetal.entity.attributeConverter.MoneyConverter;
 
@@ -12,6 +13,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "tasks")
 @Data
+@ToString(callSuper = true)
 public class Task extends Order {
 
     @NotEmpty

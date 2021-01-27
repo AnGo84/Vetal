@@ -11,6 +11,7 @@ import ua.com.vetal.email.EmailMessage;
 import ua.com.vetal.entity.Stencil;
 import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.repositories.StencilRepository;
+import ua.com.vetal.utils.StringUtils;
 
 import java.util.List;
 import java.util.Locale;
@@ -91,7 +92,8 @@ public class StencilServiceImpl implements SimpleService<Stencil> {
         EmailMessage emailMessage = new EmailMessage();
 
         String subject = messageSource.getMessage("email.stencil.change_state", null, new Locale("ru"));
-        String emailTest = String.format(subject, stencil.getFullNumber(), stencil.getState().getAltName());
+        String stencilFullNumber = StringUtils.isEmpty(stencil.getFullNumber()) ? stencil.constructFullNumber() : stencil.getFullNumber();
+        String emailTest = String.format(subject, stencilFullNumber, stencil.getState().getAltName());
 
         emailMessage.setFrom(from);
         emailMessage.setTo(stencil.getManager().getEmail());

@@ -111,8 +111,7 @@ public class StencilsController extends BaseController {
 		return "stencilPage";
 	}
 
-	//TODO cover with tests
-	@RequestMapping(value = "/make_ready-{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "/make_ready-{id}", method = RequestMethod.GET)
 	public String makeReadyStencil(@PathVariable Long id) {
 		log.info("Make ready {} with ID= {}", title, id);
 
@@ -135,7 +134,6 @@ public class StencilsController extends BaseController {
 		}
 	}
 
-	//TODO cover with tests
 	@LogExecutionTime
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String updateStencil(@Valid @ModelAttribute("stencil") Stencil stencil, BindingResult bindingResult, Model model) {

@@ -221,13 +221,13 @@
                                         ''))))"
                         >
                             <!--th:style="${stencil.state.id == 3} ? 'color: green;' : (${stencil.state.id == 2} ? 'color: red;': 'color: yellow;')"-->
-                            <td class="text-center" th:text="${stencil.id}"></td>
+                            <td class="text-center" style="vertical-align: middle;" th:text="${stencil.id}"></td>
                             <!--<td class="text-center" th:text="${stencil.number}"></td>-->
-                            <td><a th:href="@{'/stencils/view-' + ${stencil.id}}"
-                                   th:text="${stencil.fullNumber}"></a></td>
-                            <td th:text="${stencil.orderName}"></td>
-                            <td th:text="${stencil.client.fullName}"></td>
-                            <td th:text="${stencil.manager.fullName}"></td>
+                            <td style="vertical-align: middle;"><a th:href="@{'/stencils/view-' + ${stencil.id}}"
+                                                                   th:text="${stencil.fullNumber}"></a></td>
+                            <td style="vertical-align: middle;" th:text="${stencil.orderName}"></td>
+                            <td style="vertical-align: middle;" th:text="${stencil.client.fullName}"></td>
+                            <td style="vertical-align: middle;" th:text="${stencil.manager.fullName}"></td>
                             <!--<td class="text-right"
                                 th:text="${#numbers.formatDecimal(stencil.amount, 1, 'COMMA', 2, 'POINT')}"></td>-->
                             <!-- th:text="${stencil.amount}"  -->
@@ -243,19 +243,15 @@
                                      th:class="${stencil.state.id==2} ? '':'d-none'"
                                      sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"
                                 >
-                                    <!--<a class="btn btn-info btn-sm mx-sm-1"
-                                       role="button" th:href="@{'/stencils/make_ready-' + ${stencil.id}}"
-                                       th:title="#{message.record.make_done}">
-                                        <i class="fa fa-check"></i>
-                                        <span th:text="#{label.ready}" th:remove="tag"></span>
-                                    </a>-->
-
-                                    <form method="POST" th:action="@{'/stencils/make_ready-' + ${stencil.id}}">
-                                        <button class="btn btn-info btn-sm mx-sm-1"
-                                                type="submit" name="submit" value="value"
+                                    <form accept-charset="UTF-8" action="#" method="GET" style="display: inline"
+                                          th:action="@{'/stencils/make_ready-' + ${stencil.id}}">
+                                        <button class="btn btn-sm btn-info" type="button"
+                                                data-target="#confirmAction" data-toggle="modal"
                                                 th:title="#{message.record.make_done}"
-                                                th:text="#{label.ready}">
+                                                th:attr="data-title=''+#{message.record.make_done} +'', data-action-info=''+ #{label.stencil}+' №'+${stencil.fullNumber}+ ''"
+                                        >
                                             <i class="fa fa-check"></i>
+                                            <span th:text="#{label.ready}" th:remove="tag">Ready</span>
                                         </button>
                                     </form>
 
@@ -392,6 +388,8 @@
 
 <!-- Include _deleteConfirmDialog.html -->
 <th:block th:include="/_deleteConfirmDialog.html"></th:block>
+<!-- Include _actionConfirmDialog.html -->
+<th:block th:include="/_actionConfirmDialog.html"></th:block>
 
 <script>
     initDatePicker('#filterDateBeginFrom');

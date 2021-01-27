@@ -1,6 +1,7 @@
 package ua.com.vetal.entity;
 
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 import ua.com.vetal.entity.attributeConverter.MoneyConverter;
@@ -14,6 +15,7 @@ import java.util.Date;
 @Entity
 @Table(name = "stencils")
 @Data
+@ToString(callSuper = true)
 public class Stencil extends Order {
 
     @NotEmpty

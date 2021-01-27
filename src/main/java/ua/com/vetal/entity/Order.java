@@ -2,6 +2,7 @@ package ua.com.vetal.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 import ua.com.vetal.entity.attributeConverter.MoneyConverter;
@@ -14,6 +15,7 @@ import java.util.Date;
 
 @Getter
 @Setter
+@ToString
 @MappedSuperclass
 public class Order {
 	@Id
@@ -186,5 +188,9 @@ public class Order {
 
 	public String getPrintingWithUnit() {
 		return printing + " " + printingUnit.getName();
+	}
+
+	public String constructFullNumber() {
+		return this.number + "/" + this.numberBase.getName() + "-" + this.numberSuffix;
 	}
 }
