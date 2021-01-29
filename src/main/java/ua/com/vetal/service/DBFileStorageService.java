@@ -18,6 +18,9 @@ public class DBFileStorageService {
     private DBFileRepository dbFileRepository;
 
     public DBFile storeMultipartFile(MultipartFile file) throws FileUploadException, FileNotFoundException {
+        if (file == null || file.isEmpty()) {
+            throw new FileNotFoundException("Wrong file");
+        }
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         // Check if the file's name contains invalid characters

@@ -26,6 +26,7 @@ import ua.com.vetal.entity.filter.ViewFilter;
 import ua.com.vetal.report.jasperReport.JasperReportData;
 import ua.com.vetal.report.jasperReport.exporter.JasperReportExporterType;
 import ua.com.vetal.report.jasperReport.reportdata.TaskJasperReportData;
+import ua.com.vetal.service.DBFileStorageService;
 import ua.com.vetal.service.TaskServiceImpl;
 import ua.com.vetal.service.ViewTaskServiceImpl;
 import ua.com.vetal.service.mail.MailServiceImp;
@@ -60,6 +61,8 @@ public class TasksController extends BaseController {
 	private JasperReportService jasperReportService;
 	@Autowired
 	private MailServiceImp mailServiceImp;
+	@Autowired
+	private DBFileStorageService dbFileStorageService;
 
 	public TasksController(Map<String, ViewFilter> viewFilters) {
 		super("TasksController", viewFilters, new OrderViewFilter());
@@ -130,7 +133,8 @@ public class TasksController extends BaseController {
 		}
 
 		try {
-			taskService.updateObject(task, uploadFile);
+			DBFile dbFile = dbFileStorageService.storeMultipartFile(uploadFile);
+			taskService.updateObject(task, dbFile);
 		} catch (IOException e) {
 			return "taskPage";
 		}

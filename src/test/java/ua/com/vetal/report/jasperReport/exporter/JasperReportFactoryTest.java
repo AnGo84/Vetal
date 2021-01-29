@@ -30,7 +30,7 @@ public class JasperReportFactoryTest {
 		IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
 			jasperReportFactory.getJasperReport(null, null);
 		});
-		assertTrue(thrown.getMessage().startsWith("Wrong JasperReportExporter type:"));
+		assertTrue(thrown.getMessage().startsWith("Wrong JasperReportExporter type"));
 	}
 
 }

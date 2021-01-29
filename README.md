@@ -21,6 +21,8 @@ Also, user can filtered data and export result to Excel format.
 In progress
 Add:
 - test coverage;
+- analytic by orders and managers;
+- emailing on stencils change;
 
 ### Realise 1.0 INFO
 

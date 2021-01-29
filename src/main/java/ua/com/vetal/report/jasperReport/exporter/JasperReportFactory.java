@@ -8,9 +8,9 @@ public class JasperReportFactory {
 	public JasperReportExporter getJasperReport(JasperReportExporterType type, JasperPrint jasperPrint) {
 		log.info("Get JasperReportExporter for type: {}", type);
 		if (type == null) {
-			throw new IllegalArgumentException("Wrong JasperReportExporter type:" + type);
+			throw new IllegalArgumentException("Wrong JasperReportExporter type");
 		}
-		JasperReportExporter toReturn = null;
+		JasperReportExporter toReturn;
 		switch (type) {
 			case XLS:
 				toReturn = new JasperReportExporterXLS(jasperPrint);

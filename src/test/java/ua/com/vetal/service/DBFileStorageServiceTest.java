@@ -51,11 +51,21 @@ public class DBFileStorageServiceTest {
 
     @Test
     void whenFindById_thenThrowFileNotFoundException() {
-        when(mockDBFileRepository.getOne(1L)).thenReturn(null);
-        assertThrows(FileNotFoundException.class, () -> {
-            DBFile found = fileService.findById(1l);
-        });
-    }
+		assertThrows(FileNotFoundException.class, () -> {
+			fileService.storeMultipartFile(null);
+		});
+
+		MultipartFile mockMultipartFile = mock(MultipartFile.class);
+		when(mockMultipartFile.isEmpty()).thenReturn(true);
+		assertThrows(FileNotFoundException.class, () -> {
+			fileService.storeMultipartFile(mockMultipartFile);
+		});
+
+		when(mockDBFileRepository.getOne(1L)).thenReturn(null);
+		assertThrows(FileNotFoundException.class, () -> {
+			DBFile found = fileService.findById(1l);
+		});
+	}
 
     @Test
     void whenSaveDBFile_thenSuccess() {

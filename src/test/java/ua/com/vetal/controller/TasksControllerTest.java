@@ -16,6 +16,7 @@ import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.Task;
 import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.report.jasperReport.reportdata.TaskJasperReportData;
+import ua.com.vetal.service.DBFileStorageService;
 import ua.com.vetal.service.TaskServiceImpl;
 import ua.com.vetal.service.mail.MailServiceImp;
 import ua.com.vetal.service.reports.JasperReportService;
@@ -50,6 +51,9 @@ public class TasksControllerTest {
 	private JasperReportService mockJasperReportService;
 	@MockBean
 	private MailServiceImp mailServiceImp;
+	@MockBean
+	private DBFileStorageService mockDBFileStorageService;
+
 	private Task task;
 
 	@BeforeEach

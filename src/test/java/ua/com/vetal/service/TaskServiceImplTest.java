@@ -8,8 +8,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.dao.TaskDAO;
 import ua.com.vetal.email.EmailMessage;
@@ -19,7 +17,6 @@ import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.repositories.TaskRepository;
 import ua.com.vetal.utils.StringUtils;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -44,7 +41,8 @@ public class TaskServiceImplTest {
     private DBFileStorageService mockDBFileStorageService;
 
     private Task task;
-    private MultipartFile mockMultipartFile = new MockMultipartFile("new file", "new file data".getBytes());
+
+    private DBFile mockDBFile = new DBFile("new file", "type", "new file data".getBytes());
 
     @BeforeEach
     public void beforeEach() {
@@ -121,7 +119,7 @@ public class TaskServiceImplTest {
 
         taskService.updateObject(task, null);
         verify(mockTaskRepository, times(2)).save(task);
-        taskService.updateObject(task, new MockMultipartFile("file", new byte[0]));
+        taskService.updateObject(task, new DBFile("file", "", new byte[0]));
         verify(mockTaskRepository, times(3)).save(task);
 
         //case wrong file name
@@ -155,13 +153,13 @@ public class TaskServiceImplTest {
         DBFile dbFile = new DBFile("file1", "text/plain", "file data".getBytes());
         when(mockDBFileStorageService.storeMultipartFile(any())).thenReturn(dbFile);
 
-        taskService.updateObject(task, mockMultipartFile);
+        taskService.updateObject(task, mockDBFile);
 
         verify(mockTaskRepository, times(1)).save(task);
         verify(mockDBFileStorageService, times(0)).deleteById(anyLong());
 
         task.getDbFile().setId(12l);
-        taskService.updateObject(task, mockMultipartFile);
+        taskService.updateObject(task, mockDBFile);
         verify(mockTaskRepository, times(2)).save(task);
         verify(mockDBFileStorageService, times(1)).deleteById(anyLong());
 
@@ -178,19 +176,9 @@ public class TaskServiceImplTest {
             taskService.updateObject(task, null);
         });
 
-        assertThrows(NullPointerException.class, () -> {
-            taskService.updateObject(task, new MockMultipartFile("file", new byte[0]));
-        });
     }
 
-    @Test
-    public void whenUpdateTaskWithUploadFile_thenThrow() throws IOException {
-        when(mockDBFileStorageService.storeMultipartFile(any())).thenThrow(FileNotFoundException.class);
 
-        assertThrows(IOException.class, () -> {
-            taskService.updateObject(task, mockMultipartFile);
-        });
-    }
 
     @Test
     public void whenDeleteById_thenSuccess() {
