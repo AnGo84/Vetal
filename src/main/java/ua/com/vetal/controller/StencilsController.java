@@ -17,7 +17,6 @@ import ua.com.vetal.entity.filter.ViewFilter;
 import ua.com.vetal.report.jasperReport.JasperReportData;
 import ua.com.vetal.report.jasperReport.exporter.JasperReportExporterType;
 import ua.com.vetal.report.jasperReport.reportdata.StencilJasperReportData;
-import ua.com.vetal.service.KraskoottiskService;
 import ua.com.vetal.service.StateServiceImpl;
 import ua.com.vetal.service.StencilServiceImpl;
 import ua.com.vetal.service.mail.MailServiceImp;
@@ -51,9 +50,6 @@ public class StencilsController extends BaseController {
 	private StateServiceImpl stateService;
 	@Autowired
 	private MailServiceImp mailService;
-
-	@Autowired
-	private KraskoottiskService kraskoottiskService;
 
 	public StencilsController(Map<String, ViewFilter> viewFilters) {
 		super("StencilsController", viewFilters, new OrderViewFilter());
@@ -239,7 +235,8 @@ public class StencilsController extends BaseController {
 
 	@ModelAttribute("kraskoottiskAmount")
 	public double getKraskoottiskAmount() {
-		double amount = kraskoottiskService.getKraskoottiskAmount();
+		double amount = stencilService.getKraskoottiskAmount();
+
 		log.debug("Kraskoottisk amount: {}", amount);
 		return amount;
 	}

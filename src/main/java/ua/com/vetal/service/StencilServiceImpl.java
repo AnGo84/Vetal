@@ -101,4 +101,8 @@ public class StencilServiceImpl implements SimpleService<Stencil> {
         emailMessage.setText(emailTest);
         return emailMessage;
     }
+
+    public double getKraskoottiskAmount() {
+        return stencilRepository.getCurrentKrascoottiskAmount();
+    }
 }

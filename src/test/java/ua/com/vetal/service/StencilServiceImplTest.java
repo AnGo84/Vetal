@@ -149,6 +149,13 @@ class StencilServiceImplTest {
 	}
 
 	@Test
+	void whenGetCurrentKrascoottiskAmount_ThenReturn() {
+		double testKrascoottiskAmount = 2564d;
+		when(mockStencilRepository.getCurrentKrascoottiskAmount()).thenReturn(testKrascoottiskAmount);
+		assertTrue(Double.compare(testKrascoottiskAmount, stencilService.getKraskoottiskAmount()) == 0);
+	}
+
+	@Test
 	void whenIssAccountValueExist() {
 		when(mockStencilRepository.findByAccount(stencil.getAccount())).thenReturn(stencil);
 		assertFalse(stencilService.isAccountValueExist(stencil));
@@ -188,7 +195,6 @@ class StencilServiceImplTest {
 		assertTrue(emailMessage.getSubject().contains(stencil.getFullNumber()));
 		assertTrue(emailMessage.getText().contains(stencil.getFullNumber()));
 		assertNull(emailMessage.getAttachments());
-
 	}
 
 }

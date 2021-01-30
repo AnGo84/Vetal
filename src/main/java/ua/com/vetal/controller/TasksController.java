@@ -179,8 +179,6 @@ public class TasksController extends BaseController {
 
 		Task task = taskService.findById(id);
 
-		//TODO refactor sending email
-		//logger.info(task.toString());
 		if (task != null) {
 			taskMailingDeclineReason = taskService.taskMailingDeclineReason(task);
 			if (taskMailingDeclineReason.equals("")) {
@@ -196,22 +194,24 @@ public class TasksController extends BaseController {
 
 					result = true;
 					log.info("Sent {} with ID= {} from {} to {}", title, id, task.getManager().getEmail(), task.getContractor().getEmail());
-					taskMailingDeclineReason = messageSource.getMessage("message.email.sent_to",
-							new String[]{task.getContractor().getFullName(), task.getContractor().getEmail()}, new Locale("ru"));
+					taskMailingDeclineReason = getLocalizedMessage("message.email.sent_to",
+							new String[]{task.getContractor().getFullName(), task.getContractor().getEmail()});
 				} catch (Exception e) {
 					log.error("Email sanding error: {}", e.getMessage(), e);
-					taskMailingDeclineReason = messageSource.getMessage("message.email.service_error",
-							null, new Locale("ru")) + ": " + e.getMessage();
+					taskMailingDeclineReason = getLocalizedMessage("message.email.service_error", null) + ": " + e.getMessage();
 				}
 			}
 		} else {
-			taskMailingDeclineReason = messageSource.getMessage("message.email.miss_task_by_id",
-					new String[]{String.valueOf(id)}, new Locale("ru"));
+			taskMailingDeclineReason = getLocalizedMessage("message.email.miss_task_by_id", new String[]{String.valueOf(id)});
 		}
 		model.addAttribute("resultSuccess", result);
 		model.addAttribute("message", taskMailingDeclineReason);
 
 		return "emailResultPage";
+	}
+
+	private String getLocalizedMessage(String label, Object[] labelParams) {
+		return messageSource.getMessage(label, labelParams, new Locale("ru"));
 	}
 
 	@GetMapping("/downloadFile-{taskId}")

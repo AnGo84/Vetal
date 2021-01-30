@@ -34,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class StencilsControllerTest {
 	public static final String MAPPED_URL = "/stencils";
+	public static final double KRATKOOTTISK_AMOUNT = 1236d;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -58,6 +59,7 @@ public class StencilsControllerTest {
 		when(mockStencilService.findAllObjects()).thenReturn(Arrays.asList(stencil));
 		when(mockStencilService.findById(anyLong())).thenReturn(stencil);
 		when(mockStencilService.findByAccount(anyString())).thenReturn(stencil);
+		when(mockStencilService.getKraskoottiskAmount()).thenReturn(KRATKOOTTISK_AMOUNT);
 
 	}
 
@@ -69,12 +71,16 @@ public class StencilsControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(model().attribute("title", "Stencils"))
 				.andExpect(model().attribute("stencilsList", notNullValue()))
+				.andExpect(model().attribute("kraskoottiskAmount", notNullValue()))
+				.andExpect(model().attribute("kraskoottiskAmount", is(KRATKOOTTISK_AMOUNT)))
 				.andExpect(view().name("stencilsPage"));
 
 		mockMvc.perform(get(MAPPED_URL + "/list"))
-				//.andDo
+				//.andDo(print())
 				.andExpect(model().attribute("title", "Stencils"))
 				.andExpect(model().attribute("stencilsList", notNullValue()))
+				.andExpect(model().attribute("kraskoottiskAmount", notNullValue()))
+				.andExpect(model().attribute("kraskoottiskAmount", is(KRATKOOTTISK_AMOUNT)))
 				.andExpect(view().name("stencilsPage"));
 	}
 
@@ -377,7 +383,6 @@ public class StencilsControllerTest {
 		verify(mockStateService, times(0)).findById(4l);
 		verify(mockStencilService, times(0)).updateObject(stencil);
 		verify(mockMailService, times(0)).sendEmail(any());
-
 	}
 
 }
