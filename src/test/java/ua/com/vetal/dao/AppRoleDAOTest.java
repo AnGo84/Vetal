@@ -2,11 +2,9 @@ package ua.com.vetal.dao;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.User;
 import ua.com.vetal.entity.UserRole;
@@ -20,7 +18,6 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(SpringExtension.class)
 @DataJpaTest
 @ComponentScan(basePackages = "ua.com.vetal.dao")
 public class AppRoleDAOTest {
@@ -43,7 +40,7 @@ public class AppRoleDAOTest {
         userRoleRepository.saveAll(userRole);
 
         userRoleSet = new HashSet<>(userRoleRepository.findAll());
-        System.out.println("Roles: " + userRoleSet.size());
+
         user = userRepository.save(TestBuildersUtils.getUser(null, "User", "password", true, userRoleSet));
 
         userRoleSet = new HashSet<UserRole>() {{

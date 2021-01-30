@@ -1,5 +1,7 @@
 package ua.com.vetal.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -9,16 +11,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-//@Table(name = "APP_USER", uniqueConstraints = { //
-//		@UniqueConstraint(name = "APP_USER_UK", columnNames = "User_Name") })
 @Table(name = "APP_USER", uniqueConstraints = { //
         @UniqueConstraint(name = "APP_USER_UK", columnNames = "User_Name")})
-
-//uniqueConstraints = {
-//@UniqueConstraint(columnNames = {"username"}),
-//@UniqueConstraint(columnNames = {"email"}
-
-
+@Data
 public class User implements Serializable {
 
     @Id
@@ -31,7 +26,6 @@ public class User implements Serializable {
     @Column(name = "User_Name", length = 36, nullable = false, unique = true)
     private String name;
 
-    //@NotEmpty
     @Size(max = 128)
     @Column(name = "Encrypted_Password", length = 128, nullable = false)
     private String encryptedPassword;
@@ -51,64 +45,4 @@ public class User implements Serializable {
     @Column(name = "Email", length = 100)
     private String email;
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEncryptedPassword() {
-        return encryptedPassword;
-    }
-
-    public void setEncryptedPassword(String encryptedPassword) {
-        this.encryptedPassword = encryptedPassword;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public Set<UserRole> getUserRoles() {
-        return userRoles;
-    }
-
-    public void setUserRoles(Set<UserRole> userRoles) {
-        this.userRoles = userRoles;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("User{");
-        sb.append("id=").append(id);
-        sb.append(", name='").append(name).append('\'');
-        sb.append(", enabled=").append(enabled);
-        sb.append(", userRoles=").append(userRoles);
-        sb.append(", email=").append(email);
-        sb.append('}');
-        return sb.toString();
-    }
 }

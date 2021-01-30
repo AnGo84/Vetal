@@ -8,7 +8,6 @@ public class DateUtils {
     public static final String DATE_PATTERN_DD_MM_YYYY = "dd.MM.yyyy";
     public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat(DATE_PATTERN_DD_MM_YYYY);
 
-
     public static String getDatePattern() {
         return DATE_PATTERN_DD_MM_YYYY;
     }
@@ -27,7 +26,6 @@ public class DateUtils {
         calendar.setTime(date);
         calendar.add(calendarType, value);
         Date newDate = calendar.getTime();
-        //System.out.println("1 min later: " + newDate);
         return newDate;
     }
 

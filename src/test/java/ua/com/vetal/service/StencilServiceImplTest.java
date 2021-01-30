@@ -5,16 +5,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.MessageSource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Sort;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.dao.StencilDAO;
+import ua.com.vetal.email.EmailMessage;
 import ua.com.vetal.entity.Stencil;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.repositories.StencilRepository;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -22,9 +25,11 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class StencilServiceImplTest {
-
+	@Autowired
+	private MessageSource messageSource;
 	@Autowired
 	private StencilServiceImpl stencilService;
+
 	@MockBean
 	private StencilRepository mockStencilRepository;
 	@MockBean
@@ -41,7 +46,6 @@ class StencilServiceImplTest {
 		when(mockStencilRepository.getOne(1L)).thenReturn(stencil);
 		long id = 1;
 		Stencil foundStencil = stencilService.findById(id);
-
 		// then
 		assertNotNull(foundStencil);
 		assertNotNull(foundStencil.getId());
@@ -75,7 +79,6 @@ class StencilServiceImplTest {
 
 	@Test
 	void whenFindByName_thenReturnNull() {
-		//when(mockManagerRepository.findByName(anyString())).thenReturn(manager);
 		Stencil found = stencilService.findByName(null);
 		assertNull(found);
 		found = stencilService.findByName("wrong name");
@@ -146,6 +149,13 @@ class StencilServiceImplTest {
 	}
 
 	@Test
+	void whenGetCurrentKrascoottiskAmount_ThenReturn() {
+		double testKrascoottiskAmount = 2564d;
+		when(mockStencilRepository.getCurrentKrascoottiskAmount()).thenReturn(testKrascoottiskAmount);
+		assertTrue(Double.compare(testKrascoottiskAmount, stencilService.getKraskoottiskAmount()) == 0);
+	}
+
+	@Test
 	void whenIssAccountValueExist() {
 		when(mockStencilRepository.findByAccount(stencil.getAccount())).thenReturn(stencil);
 		assertFalse(stencilService.isAccountValueExist(stencil));
@@ -158,49 +168,33 @@ class StencilServiceImplTest {
 		assertTrue(stencilService.isAccountValueExist(newStencil));
 	}
 
-	//@Disabled("Disabled until refactoring filters")
 	@Test
 	void whenFindByFilterData() {
-		when(mockStencilDAO.findByFilterData(any(FilterData.class))).thenReturn(Arrays.asList(stencil));
-		List<Stencil> objects = stencilService.findByFilterData(new FilterData());
+        when(mockStencilDAO.findByFilterData(any(OrderViewFilter.class))).thenReturn(Arrays.asList(stencil));
+        List<Stencil> objects = stencilService.findByFilterData(new OrderViewFilter());
 		assertNotNull(objects);
 		assertFalse(objects.isEmpty());
 		assertEquals(objects.size(), 1);
 
-		/*
-
-		List<Stencil> filteredList = stencilService.findByFilterData(null);
-		assertEquals(filteredList.size(), 1);
-
-		FilterData filterData = new FilterData();
-		filterData.setAccount(stencil.getAccount());
-		filterData.setManager(stencil.getManager());
-
-		filteredList = stencilService.findByFilterData(filterData);
-		assertEquals(1, filteredList.size());
-
-		filterData = new FilterData();
-		filteredList = stencilService.findByFilterData(filterData);
-		assertEquals(0, filteredList.size());
-
-		filterData = new FilterData();
-		filterData.setAccount(stencil.getAccount());
-		filteredList = stencilService.findByFilterData(filterData);
-		assertEquals(1, filteredList.size());
-
-		filterData = new FilterData();
-		filterData.setManager(stencil.getManager());
-		filteredList = stencilService.findByFilterData(filterData);
-		assertEquals(1, filteredList.size());
-
-		filterData = new FilterData();
-		filterData.setManager(new Manager());
-		filteredList = stencilService.findByFilterData(filterData);
-		assertEquals(0, filteredList.size());
-
-		filterData = new FilterData();
-		filterData.setAccount("not exist name");
-		filteredList = stencilService.findByFilterData(filterData);
-		assertEquals(0, filteredList.size());*/
+		when(mockStencilRepository.findAll(any(Sort.class))).thenReturn(Arrays.asList(stencil));
+		objects = stencilService.findByFilterData(null);
+		assertNotNull(objects);
+		assertFalse(objects.isEmpty());
+		assertEquals(objects.size(), 1);
 	}
+
+	@Test
+	public void whenGetEmailMessage() {
+		String text = messageSource.getMessage("email.stencil.change_state", null, new Locale("ru"));
+
+		String defaultFrom = "default@email";
+		EmailMessage emailMessage = stencilService.getEmailMessage(stencil, defaultFrom);
+		assertNotNull(emailMessage);
+		assertEquals(defaultFrom, emailMessage.getFrom());
+		assertEquals(stencil.getManager().getEmail(), emailMessage.getTo());
+		assertTrue(emailMessage.getSubject().contains(stencil.getFullNumber()));
+		assertTrue(emailMessage.getText().contains(stencil.getFullNumber()));
+		assertNull(emailMessage.getAttachments());
+	}
+
 }

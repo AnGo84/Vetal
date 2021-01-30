@@ -13,12 +13,6 @@ import java.io.Serializable;
 @Data
 public class AppUserRole implements Serializable {
 
-    /*@Id
-    //@GeneratedValue
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Id", nullable = false)
-    private Long id;*/
-
     @EmbeddedId
     private CompositeAppUserRolePK appUserRoleID;
 
@@ -31,29 +25,4 @@ public class AppUserRole implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Role_Id", nullable = false)
     private AppRole appRole;
-
-    /*public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public AppUser getAppUser() {
-        return appUser;
-    }
-
-    public void setAppUser(AppUser appUser) {
-        this.appUser = appUser;
-    }
-
-    public AppRole getAppRole() {
-        return appRole;
-    }
-
-    public void setAppRole(AppRole appRole) {
-        this.appRole = appRole;
-    }*/
-
 }

@@ -8,10 +8,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
 import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.Printer;
+import ua.com.vetal.exception.EntityException;
 import ua.com.vetal.repositories.PrinterRepository;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -28,14 +30,14 @@ public class PrinterServiceImplTest {
 
 	@BeforeEach
 	public void beforeEach() {
-        printer = TestBuildersUtils.getPrinter(1l, "firstName", "lastName", "middleName", "email");
+		printer = TestBuildersUtils.getPrinter(null, "firstName", "lastName", "middleName", "email");
     }
 
 	@Test
 	void whenFindById_thenReturnPrinter() {
-		when(mockPrinterRepository.getOne(1L)).thenReturn(printer);
+		when(mockPrinterRepository.findById(1L)).thenReturn(Optional.of(printer));
 		long id = 1;
-		Printer found = printerService.findById(id);
+		Printer found = printerService.get(id);
 
 		assertNotNull(found);
 		assertEquals(found.getId(), printer.getId());
@@ -49,24 +51,14 @@ public class PrinterServiceImplTest {
 	void whenFindById_thenReturnNull() {
 		when(mockPrinterRepository.getOne(1L)).thenReturn(printer);
 		long id = 2;
-		Printer found = printerService.findById(id);
-		assertNull(found);
-	}
-
-
-	@Test
-	void whenFindByName_thenReturnNull() {
-		//when(mockManagerRepository.findByName(anyString())).thenReturn(manager);
-		Printer found = printerService.findByName(null);
-		assertNull(found);
-		found = printerService.findByName("wrong name");
+		Printer found = printerService.get(id);
 		assertNull(found);
 	}
 
 	@Test
 	void whenSaveObject_thenSuccess() {
 		Printer newPrinter = TestBuildersUtils.getPrinter(null, "firstName2", "lastName2", "middleName2", "email2");
-		printerService.saveObject(newPrinter);
+		printerService.save(newPrinter);
 		verify(mockPrinterRepository, times(1)).save(newPrinter);
 	}
 
@@ -74,14 +66,14 @@ public class PrinterServiceImplTest {
 	void whenSaveObject_thenNPE() {
 		when(mockPrinterRepository.save(any(Printer.class))).thenThrow(NullPointerException.class);
 		assertThrows(NullPointerException.class, () -> {
-			printerService.saveObject(printer);
+			printerService.save(printer);
 		});
 	}
 
 	@Test
 	void whenUpdateObject_thenSuccess() {
-		printer.setCorpName("CorpName2");
-		printerService.updateObject(printer);
+		printer.setFirstName("CorpName2");
+		printerService.update(printer);
 		verify(mockPrinterRepository, times(1)).save(printer);
 	}
 
@@ -89,12 +81,14 @@ public class PrinterServiceImplTest {
 	void whenUpdateObject_thenThrowNPE() {
 		when(mockPrinterRepository.save(any(Printer.class))).thenThrow(NullPointerException.class);
 		assertThrows(NullPointerException.class, () -> {
-			printerService.updateObject(printer);
+			printerService.update(printer);
 		});
 	}
 
 	@Test
 	void whenDeleteById_thenSuccess() {
+		printer.setId(1L);
+		when(mockPrinterRepository.findById(1L)).thenReturn(Optional.of(printer));
 		printerService.deleteById(1l);
 		verify(mockPrinterRepository, times(1)).deleteById(1l);
 	}
@@ -102,7 +96,7 @@ public class PrinterServiceImplTest {
 	@Test
 	void whenDeleteById_thenThrowEmptyResultDataAccessException() {
 		doThrow(new EmptyResultDataAccessException(0)).when(mockPrinterRepository).deleteById(anyLong());
-		assertThrows(EmptyResultDataAccessException.class, () -> {
+		assertThrows(EntityException.class, () -> {
 			printerService.deleteById(1000000l);
 		});
 	}
@@ -110,7 +104,7 @@ public class PrinterServiceImplTest {
 	@Test
 	void findAllObjects() {
 		when(mockPrinterRepository.findAll()).thenReturn(Arrays.asList(printer));
-		List<Printer> objects = printerService.findAllObjects();
+		List<Printer> objects = printerService.getAll();
 		assertNotNull(objects);
 		assertFalse(objects.isEmpty());
 		assertEquals(objects.size(), 1);
@@ -118,11 +112,14 @@ public class PrinterServiceImplTest {
 
 	@Test
 	void isObjectExist() {
-		when(mockPrinterRepository.getOne(printer.getId())).thenReturn(printer);
-		assertTrue(printerService.isObjectExist(printer));
+		assertFalse(printerService.isExist(null));
 
-		when(mockPrinterRepository.getOne(anyLong())).thenReturn(null);
-		assertFalse(printerService.isObjectExist(printer));
+		printer.setId(1L);
+		when(mockPrinterRepository.findById(1L)).thenReturn(Optional.of(printer));
+		assertTrue(printerService.isExist(printer));
+
+		when(mockPrinterRepository.findById(anyLong())).thenReturn(Optional.empty());
+		assertFalse(printerService.isExist(printer));
 	}
 
 }

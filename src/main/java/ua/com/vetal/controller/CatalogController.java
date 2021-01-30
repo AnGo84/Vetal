@@ -1,7 +1,6 @@
 package ua.com.vetal.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -30,9 +29,8 @@ import java.util.List;
 @Controller
 @SessionScope
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:vetal.properties")
+@Slf4j
 public class CatalogController {
-    static final Logger logger = LoggerFactory.getLogger(CatalogController.class);
-
     @Autowired
     private ServletContext servletContext;
 
@@ -44,7 +42,7 @@ public class CatalogController {
 
     @RequestMapping(value = {""}, method = RequestMethod.GET)
     public String mainPage(Model model) {
-        logger.info("Read folder default: " + defaultParentPath);
+        log.info("Read folder default: {}", defaultParentPath);
 
         currentParentPath = defaultParentPath;
         localFileList = ListFilesUtils.listFilesAndFoldersWithParent(currentParentPath);
@@ -56,7 +54,7 @@ public class CatalogController {
         return "catalogPage";
     }
 
-/*    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
+    /*@RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String readCatalogByPath(Model model, @RequestParam("path") String path) {
         logger.info("Read folder : " + path);
         if (path == null || path.isEmpty() || path.equals("..")) {
@@ -73,10 +71,8 @@ public class CatalogController {
 
 
     @RequestMapping(value = {"/{path}"}, method = RequestMethod.GET)
-    public String readFolder(Model model, @PathVariable String path)
-    /*@RequestMapping(value = {"/"}, method = RequestMethod.GET)
-    public String readFolder(Model model, @RequestParam("path") String path)*/ {
-        logger.info("Read folder: " + path);
+    public String readFolder(Model model, @PathVariable String path) {
+        log.info("Read folder: {}", path);
 
         if (path == null || path.isEmpty() || path.equals("..")) {
             currentParentPath = defaultParentPath;
@@ -84,9 +80,9 @@ public class CatalogController {
         } else {
             LocalFile localFile = ListFilesUtils.findLocalFileByName(localFileList, path);
             if (localFile == null) {
-                logger.info("LocalFile is null. Parent name: " + parentPath.getName());
+                log.info("LocalFile is null. Parent name: {}", parentPath.getName());
                 if (parentPath.getName().equals(path)) {
-                    logger.info("Parent name: " + parentPath.getName() + " equal to " + path);
+                    log.info("Parent name: {} equal to {}", parentPath.getName(), path);
 
                     currentParentPath = parentPath.getAbsolutePath();
                     parentPath = parentPath.getParentFile();
@@ -97,7 +93,7 @@ public class CatalogController {
             }
         }
 
-        logger.info("Read folder: " + currentParentPath);
+        log.info("Read folder: {}", currentParentPath);
         localFileList = ListFilesUtils.listFilesAndFoldersWithParent(currentParentPath);
 
         model.addAttribute("parentPath", parentPath);
@@ -111,8 +107,6 @@ public class CatalogController {
             @PathVariable String path) throws IOException {
         FileMediaType fileMediaType = new FileMediaType(servletContext);
         MediaType mediaType = fileMediaType.getMediaTypeForFileName(path);
-        System.out.println("fileName: " + path);
-        System.out.println("mediaType: " + mediaType);
 
         LocalFile localFile = ListFilesUtils.findLocalFileByName(localFileList, path);
 
@@ -129,10 +123,6 @@ public class CatalogController {
                 .body(resource);
     }
 
-
-    /**
-     * This method will provide LocalFile list to views
-     */
     @ModelAttribute("localFilesList")
     public List<LocalFile> localFiles() {
         return localFileList;

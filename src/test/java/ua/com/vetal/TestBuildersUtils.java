@@ -200,49 +200,49 @@ public class TestBuildersUtils {
         return printer;
     }
 
-    public static Order getOrder(Long id, double amount, Client client, Date dateBegin, double debtAmount, String fullNumber, Manager manager, String orderType, int printing, ProductionDirectory production) {
-        Order order = new Order();
-        order.setId(id);
-        order.setAmount(amount);
-        order.setClient(client);
-        order.setDateBegin(dateBegin);
-        order.setDebtAmount(debtAmount);
-        order.setFullNumber(fullNumber);
-        order.setManager(manager);
-        order.setOrderType(orderType);
-        order.setPrinting(printing);
-        order.setProduction(production);
-        return order;
+    public static StatisticOrder getOrder(Long id, double amount, Client client, Date dateBegin, double debtAmount, String fullNumber, Manager manager, String orderType, int printing, ProductionDirectory production) {
+        StatisticOrder statisticOrder = new StatisticOrder();
+        statisticOrder.setId(id);
+        statisticOrder.setAmount(amount);
+        statisticOrder.setClient(client);
+        statisticOrder.setDateBegin(dateBegin);
+        statisticOrder.setDebtAmount(debtAmount);
+        statisticOrder.setFullNumber(fullNumber);
+        statisticOrder.setManager(manager);
+        statisticOrder.setOrderType(orderType);
+        statisticOrder.setPrinting(printing);
+        statisticOrder.setProduction(production);
+        return statisticOrder;
     }
 
 
-    public static Order getOrderFromTask(Task task) {
-        Order order = new Order();
-        order.setId(task.getId());
-        order.setAmount(task.getAmountForContractor());
-        order.setClient(task.getClient());
-        order.setDateBegin(task.getDateBegin());
-        order.setDebtAmount(task.getDebtAmount());
-        order.setFullNumber(task.getFullNumber());
-        order.setManager(task.getManager());
-        order.setOrderType("task");
-        order.setPrinting(task.getPrinting());
-        order.setProduction(task.getProduction());
-        return order;
+    public static StatisticOrder getOrderFromTask(Task task) {
+        StatisticOrder statisticOrder = new StatisticOrder();
+        statisticOrder.setId(task.getId());
+        statisticOrder.setAmount(task.getAmountForContractor());
+        statisticOrder.setClient(task.getClient());
+        statisticOrder.setDateBegin(task.getDateBegin());
+        statisticOrder.setDebtAmount(task.getDebtAmount());
+        statisticOrder.setFullNumber(task.getFullNumber());
+        statisticOrder.setManager(task.getManager());
+        statisticOrder.setOrderType("task");
+        statisticOrder.setPrinting(task.getPrinting());
+        statisticOrder.setProduction(task.getProduction());
+        return statisticOrder;
     }
 
-    public static Order getOrderFromStencil(Stencil stencil) {
-        Order order = new Order();
-        order.setId(stencil.getId());
-        order.setAmount(stencil.getAmount());
-        order.setClient(stencil.getClient());
-        order.setDateBegin(stencil.getDateBegin());
-        order.setDebtAmount(stencil.getDebtAmount());
-        order.setFullNumber(stencil.getFullNumber());
-        order.setManager(stencil.getManager());
-        order.setOrderType("stencil");
-        order.setPrinting(stencil.getPrinting());
-        order.setProduction(stencil.getProduction());
-        return order;
+    public static StatisticOrder getOrderFromStencil(Stencil stencil) {
+        StatisticOrder statisticOrder = new StatisticOrder();
+        statisticOrder.setId(stencil.getId());
+        statisticOrder.setAmount(stencil.getAmount());
+        statisticOrder.setClient(stencil.getClient());
+        statisticOrder.setDateBegin(stencil.getDateBegin());
+        statisticOrder.setDebtAmount(stencil.getDebtAmount());
+        statisticOrder.setFullNumber(stencil.getFullNumber());
+        statisticOrder.setManager(stencil.getManager());
+        statisticOrder.setOrderType("stencil");
+        statisticOrder.setPrinting(stencil.getPrinting());
+        statisticOrder.setProduction(stencil.getProduction());
+        return statisticOrder;
     }
 }

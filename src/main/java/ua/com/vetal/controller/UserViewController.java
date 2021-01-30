@@ -1,13 +1,10 @@
 package ua.com.vetal.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,18 +17,19 @@ import ua.com.vetal.service.UserServiceImpl;
 
 @Controller
 @RequestMapping("/user")
-
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:vetal.properties")
+@Slf4j
 public class UserViewController {
-	static final Logger logger = LoggerFactory.getLogger(UserViewController.class);
+
+	private String title = "user";
+
+	@Value("${user.password.default}")
+	private String userPasswordDefault;
+
 	@Autowired
 	private final UserServiceImpl userService;
 	@Autowired
 	private MessageSource messageSource;
-
-	private String title = "user";
-	@Value("${user.password.default}")
-	private String userPasswordDefault;
 	@Autowired
 	private PasswordResetTokenRepository tokenRepository;
 
@@ -42,8 +40,8 @@ public class UserViewController {
 
 	@RequestMapping(value = {"/view"}, method = RequestMethod.GET)
 	public String showUserViewPage(Model model) {
-		logger.info("View user");
-		User user = userService.findByName(getPrincipal());
+		log.info("View user");
+		User user = userService.findByName(userService.getPrincipal());
 		if (userService.isObjectExist(user)) {
 			model.addAttribute("user", user);
 			return "userViewPage";
@@ -53,39 +51,19 @@ public class UserViewController {
 
 	@RequestMapping(value = "/changePassword-{id}", method = RequestMethod.GET)
 	public String changeUserPassword(@PathVariable Long id, Model model) {
-		logger.info("Change Pass for user with ID= " + id);
+		log.info("Change Pass for user with ID= {}", id);
 		User user = userService.findById(id);
-		//logger.info("Find User= " + user);
 		if (!userService.isObjectExist(user)) {
+			log.error("Cannot change password for user id '{}'. User not exist.", id);
 			return "error";
-			//throw new RuntimeException("User error");
 		}
 		PasswordResetToken token = PasswordResetToken.newBuilder().setUser(user).build();
 		tokenRepository.save(token);
-/*
-        Mail mail = new Mail();
-        mail.setFrom("no-reply@memorynotfound.com");
-        mail.setTo(user.getEmail());
-        mail.setSubject("Password reset request");
-
-        Map<String, Object> model = new HashMap<>();
-        model.put("token", token);
-        model.put("user", user);
-        model.put("signature", "https://memorynotfound.com");
-        String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-        model.put("resetUrl", url + "/reset-password?token=" + token.getToken());
-        mail.setModel(model);
-        emailService.sendEmail(mail);
-
-        return "redirect:/forgot-password?success";
-*/
-		logger.error("Test token: " + token.getToken());
 		return "redirect:/passwordReset?token=" + token.getToken();
 	}
 
-
-	private String getPrincipal() {
-		String userName = null;
+	/*private String getPrincipal() {
+		String userName;
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		if (principal instanceof UserDetails) {
@@ -94,5 +72,5 @@ public class UserViewController {
 			userName = principal.toString();
 		}
 		return userName;
-	}
+	}*/
 }

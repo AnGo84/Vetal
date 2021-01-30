@@ -42,8 +42,8 @@ public class AppUserDAOTest {
         List<UserRole> userRole = Arrays.asList(TestBuildersUtils.getUserRole(null, "ADMIN"), TestBuildersUtils.getUserRole(null, "MANAGER"));
         userRole.forEach(role -> testEntityManager.persistAndFlush(role));
         userRoleSet = new HashSet<>(userRoleRepository.findAll());
-        System.out.println("Roles: " + userRoleSet.size());
-        user = testEntityManager.persistAndFlush(TestBuildersUtils.getUser(null, "User", "password", true, userRoleSet));
+
+		user = testEntityManager.persistAndFlush(TestBuildersUtils.getUser(null, "User", "password", true, userRoleSet));
 
         userRoleSet = new HashSet<UserRole>() {{
             add(userRoleRepository.findAll().get(0));

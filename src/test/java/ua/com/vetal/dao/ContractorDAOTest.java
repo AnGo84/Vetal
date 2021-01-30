@@ -9,13 +9,14 @@ import org.springframework.context.annotation.ComponentScan;
 import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.Contractor;
 import ua.com.vetal.entity.Manager;
-import ua.com.vetal.entity.filter.PersonFilter;
+import ua.com.vetal.entity.filter.PersonViewFilter;
 import ua.com.vetal.repositories.ContractorRepository;
 import ua.com.vetal.repositories.ManagerRepository;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @ComponentScan("ua.com.vetal.dao")
@@ -57,46 +58,47 @@ public class ContractorDAOTest {
 
 	@Test
 	void whenFindByFilterData() {
-		int allRecords = 2;
-		List<Contractor> filteredList = contractorDAO.findByFilterData(null);
-		assertEquals(allRecords, filteredList.size());
+        int allRecords = 2;
+        List<Contractor> filteredList = contractorDAO.findByFilterData(null);
+        assertTrue(filteredList.isEmpty());
+        assertEquals(0, filteredList.size());
 
-		PersonFilter filterData = new PersonFilter();
-		filterData.setCorpName(contractor.getFullName());
-		filterData.setManager(contractor.getManager());
+        PersonViewFilter filterData = new PersonViewFilter();
+        filterData.setCorpName(contractor.getFullName());
+        filterData.setManager(contractor.getManager());
 
-		filteredList = contractorDAO.findByFilterData(filterData);
-		assertEquals(1, filteredList.size());
+        filteredList = contractorDAO.findByFilterData(filterData);
+        assertEquals(1, filteredList.size());
 
-		filterData = new PersonFilter();
-		filteredList = contractorDAO.findByFilterData(filterData);
-		assertEquals(allRecords, filteredList.size());
+        filterData = new PersonViewFilter();
+        filteredList = contractorDAO.findByFilterData(filterData);
+        assertEquals(allRecords, filteredList.size());
 
-		filterData = new PersonFilter();
-		filterData.setCorpName(contractor.getFullName());
-		filteredList = contractorDAO.findByFilterData(filterData);
-		assertEquals(1, filteredList.size());
+        filterData = new PersonViewFilter();
+        filterData.setCorpName(contractor.getFullName());
+        filteredList = contractorDAO.findByFilterData(filterData);
+        assertEquals(1, filteredList.size());
 
-		filterData = new PersonFilter();
-		filterData.setManager(contractor.getManager());
-		filteredList = contractorDAO.findByFilterData(filterData);
-		assertEquals(1, filteredList.size());
+        filterData = new PersonViewFilter();
+        filterData.setManager(contractor.getManager());
+        filteredList = contractorDAO.findByFilterData(filterData);
+        assertEquals(1, filteredList.size());
 
-		filterData = new PersonFilter();
-		filterData.setManager(new Manager());
-		filteredList = contractorDAO.findByFilterData(filterData);
-		assertEquals(allRecords, filteredList.size());
+        filterData = new PersonViewFilter();
+        filterData.setManager(new Manager());
+        filteredList = contractorDAO.findByFilterData(filterData);
+        assertEquals(allRecords, filteredList.size());
 
-		filterData = new PersonFilter();
-		Manager newManager = new Manager();
-		newManager.setId(1021L);
-		filterData.setManager(newManager);
-		filteredList = contractorDAO.findByFilterData(filterData);
-		assertEquals(0, filteredList.size());
+        filterData = new PersonViewFilter();
+        Manager newManager = new Manager();
+        newManager.setId(1021L);
+        filterData.setManager(newManager);
+        filteredList = contractorDAO.findByFilterData(filterData);
+        assertEquals(0, filteredList.size());
 
-		filterData = new PersonFilter();
-		filterData.setCorpName("not exist name");
-		filteredList = contractorDAO.findByFilterData(filterData);
-		assertEquals(0, filteredList.size());
-	}
+        filterData = new PersonViewFilter();
+        filterData.setCorpName("not exist name");
+        filteredList = contractorDAO.findByFilterData(filterData);
+        assertEquals(0, filteredList.size());
+    }
 }

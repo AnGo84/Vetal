@@ -18,9 +18,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-/**
- * https://www.baeldung.com/mockito-verify
- */
 @SpringBootTest
 class AppUserServiceImplTest {
 	@Autowired

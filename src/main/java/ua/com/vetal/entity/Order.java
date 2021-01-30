@@ -1,158 +1,196 @@
 package ua.com.vetal.entity;
 
-import org.hibernate.annotations.Immutable;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
-import ua.com.vetal.entity.pk.OrderPK;
+import ua.com.vetal.entity.attributeConverter.MoneyConverter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.text.DecimalFormat;
 import java.util.Date;
 
-/**
- * orderType='task','stencil'
- */
-@Entity
-@Table(name = "vorders")
-@Immutable
-@IdClass(OrderPK.class)
+@Getter
+@Setter
+@ToString
+@MappedSuperclass
 public class Order {
 	@Id
-	@Column(name = "order_id")
-	private Long id;
-	@Id
-	@Column(name = "order_type")
-	private String orderType;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	protected Long id;
+
+	@NotNull
+	@Column(name = "Number", nullable = false)
+	protected int number;
+
+	@NotNull
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "Number_Base_ID")
+	protected NumberBaseDirectory numberBase;
+
+	@NotNull
+	@Column(name = "Number_Suffix", nullable = false)
+	protected int numberSuffix;
 
 	@Column(name = "Full_number")
-	private String fullNumber;
+	protected String fullNumber;
 
-	@Column(name = "Date_BEGIN")
-	@Temporal(TemporalType.DATE)
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date dateBegin;
+	@Column(name = "Account")
+	@Size(max = 50)
+	protected String account;
+
+	@NotNull
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "Client_ID")
+	protected Client client;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "Manager_ID")
-	private Manager manager;
+	protected Manager manager;
 
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "Client_ID")
-	private Client client;
+	@NotNull
+	@Column(name = "Date_BEGIN", nullable = false)
+	@Temporal(TemporalType.DATE)
+	// @DateTimeFormat(pattern = "dd-MM-yyyy")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	protected Date dateBegin;
 
+	@NotNull
+	@Column(name = "Date_END", nullable = false)
+	@Temporal(TemporalType.DATE)
+	// @DateTimeFormat(pattern = "dd-MM-yyyy")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	protected Date dateEnd;
+
+	@NotNull
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "Production_ID")
-	private ProductionDirectory production;
+	protected ProductionDirectory production;
 
-	@Column(name = "Printing")
-	private int printing;
+	@NotNull
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "Stock_ID")
+	protected StockDirectory stock;
 
-	@Digits(integer = 8, fraction = 2)
-	@Column(name = "Amount")
-	private double amount;
+	@NotNull
+	@Column(name = "Printing", nullable = false)
+	protected int printing;
 
-	@Digits(integer = 8, fraction = 2)
-	@Column(name = "Debt_amount")
-	private double debtAmount;
+	@NotNull
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "Printing_unit_id", nullable = false)
+	protected PrintingUnitDirectory printingUnit;
 
-	public Long getId() {
-		return id;
-	}
+	@NotNull
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "Paper_ID")
+	protected PaperDirectory paper;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+	@Column(name = "Fillet", nullable = false)
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	protected boolean fillet;
 
-	public String getOrderType() {
-		return orderType;
-	}
+	@Column(name = "Popup", nullable = false)
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	protected boolean popup;
 
-	public void setOrderType(String orderType) {
-		this.orderType = orderType;
-	}
+	@Column(name = "Carving", nullable = false)
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	protected boolean carving;
 
-	public String getFullNumber() {
-		return fullNumber;
-	}
+	@Column(name = "Stamping", nullable = false)
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	protected boolean stamping;
 
-	public void setFullNumber(String fullNumber) {
-		this.fullNumber = fullNumber;
-	}
+	@Column(name = "Embossing", nullable = false)
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	protected boolean embossing;
 
-	public Date getDateBegin() {
-		return dateBegin;
-	}
+	@Column(name = "Bending", nullable = false)
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	protected boolean bending;
 
-	public void setDateBegin(Date dateBegin) {
-		this.dateBegin = dateBegin;
-	}
+	@Column(name = "Plotter", nullable = false)
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	protected boolean plotter;
 
-	public Manager getManager() {
-		return manager;
-	}
+	@Column(name = "PackBox", nullable = false)
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	protected boolean packBox;
 
-	public void setManager(Manager manager) {
-		this.manager = manager;
-	}
+	@Column(name = "PackPellicle", nullable = false)
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	protected boolean packPellicle;
 
-	public Client getClient() {
-		return client;
-	}
+	@Column(name = "PackPaper", nullable = false)
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	protected boolean packPaper;
 
-	public void setClient(Client client) {
-		this.client = client;
-	}
+	@Column(name = "PackPackage", nullable = false)
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	protected boolean packPackage;
 
-	public ProductionDirectory getProduction() {
-		return production;
-	}
+	@Column(name = "PackNP", nullable = false)
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	protected boolean packNP;
 
-	public void setProduction(ProductionDirectory production) {
-		this.production = production;
-	}
+	@Column(name = "Numeration", nullable = false)
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	protected boolean numeration;
 
-	public int getPrinting() {
-		return printing;
-	}
+	@NotNull
+	@Column(name = "Numeration_start")
+	protected int numerationStart;
 
-	public void setPrinting(int printing) {
-		this.printing = printing;
-	}
+	//@NotNull
+	//@Digits(integer = 8, fraction = 2)
+	@Column(name = "Amount", nullable = true)
+	@Convert(converter = MoneyConverter.class)
+	protected Double amount;
 
-	public double getAmount() {
-		return amount;
+	@ManyToOne(optional = true)
+	@JoinColumn(name = "State_ID")
+	protected State state;
+
+	@ManyToOne(optional = true)
+	@JoinColumn(name = "Payment_ID")
+	protected Payment payment;
+
+	//@Digits(integer = 8, fraction = 2)
+	@Column(name = "Debt_amount", nullable = true)
+	@Convert(converter = MoneyConverter.class)
+	protected Double debtAmount;
+	//@Digits(integer = 8, fraction = 2)
+	@Column(name = "other_expenses", nullable = true)
+	@Convert(converter = MoneyConverter.class)
+	protected Double otherExpenses;
+
+	/*public double getAmount() {
+		return amount / 100;
 	}
 
 	public void setAmount(double amount) {
-		this.amount = amount;
+		this.amount = amount * 100;
+	}*/
+
+	public String getStringAmount() {
+		return new DecimalFormat("#,##0.00").format(amount) + " грн";
+		//return new DecimalFormat("#,##0.00").format(amount / 100) + " грн";
 	}
 
-	public double getDebtAmount() {
-		return debtAmount;
+	public String getNumberBaseWithSuffix() {
+		return numberBase.getName() + " " + numberSuffix;
 	}
 
-	public void setDebtAmount(double debtAmount) {
-		this.debtAmount = debtAmount;
+	public String getPrintingWithUnit() {
+		return printing + " " + printingUnit.getName();
 	}
 
-	public String getLinkPrefix() {
-		return ("task".equals(orderType) ? "/tasks" : "/stencils");
-	}
-
-
-	@Override
-	public String toString() {
-		final StringBuilder sb = new StringBuilder("Order{");
-		sb.append("id=").append(id);
-		sb.append(", orderType='").append(orderType).append('\'');
-		sb.append(", number=").append(fullNumber);
-		sb.append(", dateBegin=").append(dateBegin);
-		sb.append(", manager=").append(manager);
-		sb.append(", client=").append(client);
-		sb.append(", production=").append(production);
-		sb.append(", printing=").append(printing);
-		sb.append(", amount=").append(amount);
-		sb.append(", debtAmount=").append(debtAmount);
-		sb.append('}');
-		return sb.toString();
+	public String constructFullNumber() {
+		return this.number + "/" + this.numberBase.getName() + "-" + this.numberSuffix;
 	}
 }

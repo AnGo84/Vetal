@@ -37,7 +37,6 @@ public class LinkRepositoryTest {
     public void beforeEach() {
         linkRepository.deleteAll();
         linkTypeRepository.deleteAll();
-        //LinkType = entityManager.persistAndFlush(TestDataUtils.getLinkType("LinkTypeFirstName", "LinkTypeLastName", "LinkTypeMiddleName", "LinkTypeEmail"));
         linkTypes = linkTypeRepository.saveAll(getLinkTypes());
 
         link = entityManager.persistAndFlush(TestBuildersUtils.getLink(null, "fullName", "shortName", linkTypes.get(0), "path"));
@@ -88,7 +87,6 @@ public class LinkRepositoryTest {
 
     @Test
     public void whenFindByID_thenReturnLink() {
-        //User user = userRepository.findByName("User");
         // when
         Optional<Link> foundLink = linkRepository.findById(link.getId());
         // then

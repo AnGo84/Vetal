@@ -13,16 +13,16 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class AppRoleDAO {
 
-	//@Autowired
-	@PersistenceContext
-	private EntityManager entityManager;
+    public static final String PREPARED_QUERY = "Select ur.appRole.roleName from %s ur " //
+            + " where ur.appUser.userId = :userId ";
 
-	public List<String> getRoleNames(Long userId) {
-		String sql = "Select ur.appRole.roleName from " + AppUserRole.class.getName() + " ur " //
-				+ " where ur.appUser.userId = :userId ";
+    @PersistenceContext
+    private EntityManager entityManager;
 
-		Query query = this.entityManager.createQuery(sql, String.class);
-		query.setParameter("userId", userId);
-		return query.getResultList();
-	}
+    public List<String> getRoleNames(Long userId) {
+        String sql = String.format(PREPARED_QUERY, AppUserRole.class.getName());
+        Query query = this.entityManager.createQuery(sql, String.class);
+        query.setParameter("userId", userId);
+        return query.getResultList();
+    }
 }

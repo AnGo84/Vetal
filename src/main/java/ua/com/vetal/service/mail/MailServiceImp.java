@@ -1,20 +1,28 @@
 package ua.com.vetal.service.mail;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import ua.com.vetal.email.EmailAttachment;
 import ua.com.vetal.email.EmailMessage;
-import ua.com.vetal.service.EmailService;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 @Service
+@PropertySource(ignoreResourceNotFound = true, value = "classpath:application.properties")
+@Slf4j
 public class MailServiceImp implements EmailService {
+
+
+	@Value("${spring.mail.username}")
+	private String defaultEmail;
 
 	@Qualifier("getJavaMailSender")
 	@Autowired
@@ -49,8 +57,12 @@ public class MailServiceImp implements EmailService {
 		javaMailSender.send(message);
 	}*/
 
-	public void sendEmail(EmailMessage emailMessage) throws MessagingException {
+	public String getDefaultEmail() {
+		return defaultEmail;
+	}
 
+	public void sendEmail(EmailMessage emailMessage) throws MessagingException {
+		log.info("Sending: {}", emailMessage);
 		MimeMessage message = javaMailSender.createMimeMessage();
 
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);

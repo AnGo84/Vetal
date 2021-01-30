@@ -1,0 +1,58 @@
+<!-- Modal Dialog -->
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="modal fade" id="confirmAction" role="dialog"
+     aria-labelledby="confirmActionLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" th:text="#{label.confirm_action}">[[#{label.confirm_action}]]</h4>
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">×
+                </button>
+                <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+            </div>
+            <div class="modal-body">
+                <p class="action_info"></p>
+                <p><span th:text="#{message.action_confirm_message}">Are you sure about this?</span></p>
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-default btn-sm"
+                            style="width: 100px;" data-dismiss="modal" th:text="#{label.cancel}">Cancel
+                    </button>
+                </div>
+
+                <div class="col-sm-6">
+                    <button type="button"
+                            class="btn btn-success btn-sm custom-width float-right"
+                            style="width: 100px;" id="confirm" th:text="#{label.confirm}">Confirm
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Dialog show event handler -->
+<script type="text/javascript">
+    $('#confirmAction').on('show.bs.modal', function (e) {
+        $message = $(e.relatedTarget).attr('data-action-info');
+        $(this).find('.modal-body p.action_info').text($message);
+        $title = $(e.relatedTarget).attr('data-title');
+        $(this).find('.modal-title').text($title);
+
+        // Pass form reference to modal for submission on yes/ok
+        var form = $(e.relatedTarget).closest('form');
+        $(this).find('.modal-footer #confirm').data('form', form);
+    });
+
+    <!-- Form confirm (yes/ok) handler, submits form -->
+    $('#confirmAction').find('.modal-footer #confirm').on('click', function () {
+        $(this).data('form').submit();
+    });
+
+</script>
+
+<!-- From here: https://heera.it/bootstrap-3-delete-confirm-dialog -->

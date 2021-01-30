@@ -123,6 +123,10 @@ public class Client {
         this.address = address;
     }
 
+    public String getPersonFullName() {
+        return lastName + " " + firstName + " " + middleName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

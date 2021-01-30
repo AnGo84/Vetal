@@ -63,6 +63,9 @@
                                    th:field="*{fullNumber}" th:disabled="${readOnly}"/>
                         </div>-->
 
+                        <input id="fullNumber" class="col-sm-9 form-control form-control-sm"
+                               th:field="*{fullNumber}" hidden/>
+
                     </div>
                 </div>
 
@@ -87,7 +90,6 @@
 
                 </div>
 
-
                 <input type="hidden" id="recordId" th:field="*{id}"/>
 
             </div>
@@ -111,8 +113,7 @@
                                     class="form-control form-control-sm selectpicker"
                                     data-live-search="true">
                                 <option th:each="dropDownItem : ${numberBaseList}"
-                                        th:value="${dropDownItem.id}" th:text="${dropDownItem.name}"
-                                        th:attr="data-tokens=${dropDownItem.name}"/>
+                                        th:text="${dropDownItem.name}" th:value="${dropDownItem.id}"/>
                             </select>
                         </div>
                         <div class="col-sm-6">

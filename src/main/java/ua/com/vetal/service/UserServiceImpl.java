@@ -1,6 +1,9 @@
 package ua.com.vetal.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vetal.entity.User;
@@ -10,20 +13,14 @@ import java.util.List;
 
 @Service("userService")
 @Transactional
+@Slf4j
 public class UserServiceImpl implements SimpleService<User> {
-
-    // private static final Logger logger =
-    // LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserRepository userRepository;
 
     @Override
     public User findById(Long id) {
-        /*
-         * Optional<User> optinalEntity = userRepository.findById(id); User user
-         * = optinalEntity.get(); return user;
-         */
         return userRepository.getOne(id);
     }
 
@@ -62,4 +59,15 @@ public class UserServiceImpl implements SimpleService<User> {
         return (findUser != null && findUser.getName().equals(user.getName()));
     }
 
+    public String getPrincipal() {
+        String userName;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            userName = ((UserDetails) principal).getUsername();
+        } else {
+            userName = principal.toString();
+        }
+        return userName;
+    }
 }

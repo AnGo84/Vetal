@@ -46,7 +46,6 @@ public class TaskRepositoryTest {
 		assertNotNull(foundTask.getId());
 		assertEquals(task.getId(), foundTask.getId());
 		assertEquals(task, foundTask);
-
 	}
 
 	@Test
@@ -58,7 +57,6 @@ public class TaskRepositoryTest {
 	@Test
 	public void whenFindByID_thenReturnManager() {
 
-		//User user = userRepository.findByName("User");
 		// when
 		Optional<Task> foundTask = taskRepository.findById(task.getId());
 		// then
@@ -310,6 +308,5 @@ public class TaskRepositoryTest {
 			taskRepository.deleteById(10000000l);
 		});
 	}
-
 
 }

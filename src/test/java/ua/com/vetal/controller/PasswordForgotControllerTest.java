@@ -44,7 +44,6 @@ public class PasswordForgotControllerTest {
     }
 
     @Test
-    //@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenGetPasswordResetPageAsAuthorized_thenOk() throws Exception {
         mockMvc.perform(get(MAPPED_URL))
                 //.andDo
@@ -54,18 +53,7 @@ public class PasswordForgotControllerTest {
                 .andExpect(view().name("passwordForgotPage"));
     }
 
-    /*@Test
-    public void whenGetPasswordResetPageAsNoAuthorized_thenOk() throws Exception {
-        mockMvc.perform(get(MAPPED_URL))
-                //.andDo
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("title", notNullValue()))
-                .andExpect(model().attribute("title", "Forgot Password"))
-                .andExpect(view().name("passwordForgotPage"));
-    }*/
-
     @Test
-    //@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenPostPasswordResetPageAsAuthorized_thenOk() throws Exception {
 
         when(mockUserService.findByName(anyString())).thenReturn(user);
@@ -75,21 +63,8 @@ public class PasswordForgotControllerTest {
                 .andExpect(redirectedUrlPattern("/passwordReset?token=*"));
     }
 
-   /* @Test
-    public void whenPostPasswordResetPageAsNoAuthorized_thenOk() throws Exception {
-        when(mockUserService.findByName(anyString())).thenReturn(user);
-        mockMvc.perform(post(MAPPED_URL).param("userName", "user"))
-                //.andDo
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("forgotPasswordForm", notNullValue()))
-                .andExpect(redirectedUrlPattern("/passwordReset?token=*"));
-    }*/
-
     @Test
-    //@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenPostPasswordResetPageWithEmptyUserAsAuthorized_thenError() throws Exception {
-
-        //when(mockUserService.findByName(anyString())).thenReturn(user);
         mockMvc.perform(post(MAPPED_URL))
                 //.andDo
                 .andExpect(status().isOk())
@@ -100,7 +75,6 @@ public class PasswordForgotControllerTest {
     }
 
     @Test
-    //@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenPostPasswordResetPageWithNotFoundUserAsAuthorized_thenError() throws Exception {
 
         when(mockUserService.findByName(anyString())).thenReturn(null);
@@ -112,15 +86,5 @@ public class PasswordForgotControllerTest {
                 .andExpect(model().attributeHasFieldErrors("forgotPasswordForm", "userName"))
                 .andExpect(view().name("passwordForgotPage"));
     }
-
-    /*@Test
-    public void whenPostPasswordResetPageWithEmptyUserAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
-        when(mockUserService.findByName(anyString())).thenReturn(user);
-        mockMvc.perform(post(MAPPED_URL))
-                //.andDo
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("error", notNullValue()))
-                .andExpect(view().name("passwordForgotPage"));
-    }*/
 
 }

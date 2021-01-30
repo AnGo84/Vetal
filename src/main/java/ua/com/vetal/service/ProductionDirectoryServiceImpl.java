@@ -12,18 +12,11 @@ import java.util.List;
 @Transactional
 public class ProductionDirectoryServiceImpl implements SimpleService<ProductionDirectory> {
 
-    // private static final Logger logger =
-    // LoggerFactory.getLogger(UserServiceImpl.class);
-
     @Autowired
     private ProductionDirectoryRepository productionDirectoryRepository;
 
     @Override
     public ProductionDirectory findById(Long id) {
-        /*
-         * Optional<User> optinalEntity = userRepository.findById(id); User user
-         * = optinalEntity.get(); return user;
-         */
         return productionDirectoryRepository.getOne(id);
     }
 

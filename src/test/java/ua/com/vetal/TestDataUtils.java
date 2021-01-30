@@ -35,9 +35,9 @@ public class TestDataUtils {
     }
 
     public static Contractor getContractor(Long id) {
-        Contractor contractor = TestBuildersUtils.getContractor(1l, "corpName" + id, "shortName" + id,
-                "firstName" + id, "lastName" + id, "middleName" + id, "address" + id,
-                "email" + id, "phone" + id, "siteURL" + id);
+        Contractor contractor = TestBuildersUtils.getContractor(id, "corpName" + id, "shortName" + id,
+				"firstName" + id, "lastName" + id, "middleName" + id, "address" + id,
+				"email" + id, "phone" + id, "siteURL" + id);
         contractor.setManager(getManager(id));
         return contractor;
     }
@@ -63,16 +63,16 @@ public class TestDataUtils {
         return productionDirectory;
     }
 
-    public static Order getOrder(Long id) {
-        double amount = ThreadLocalRandom.current().nextDouble(1000, 5000);
-        double debtAmount = ThreadLocalRandom.current().nextDouble(1000, amount);
-        int printing = ThreadLocalRandom.current().nextInt(1, 1000);
-        Order order = TestBuildersUtils.getOrder(id, amount, getClient(id),
-                new Date(), debtAmount, "fullNumber" + id, getManager(id), "orderType" + id,
-                printing, getProductionDirectory(id));
-        return order;
+    public static StatisticOrder getOrder(Long id) {
+		double amount = ThreadLocalRandom.current().nextDouble(1000, 5000);
+		double debtAmount = ThreadLocalRandom.current().nextDouble(1000, amount);
+		int printing = ThreadLocalRandom.current().nextInt(1, 1000);
+		StatisticOrder statisticOrder = TestBuildersUtils.getOrder(id, amount, getClient(id),
+				new Date(), debtAmount, "fullNumber" + id, getManager(id), "orderType" + id,
+				printing, getProductionDirectory(id));
+		return statisticOrder;
 
-    }
+	}
 
     public static ViewTask getViewTask(Long id, int taskNumber) {
         ViewTask viewTask = new ViewTask();
@@ -86,11 +86,6 @@ public class TestDataUtils {
         viewTask.setManager(manager);
         viewTask.setWorkName("workName" + taskNumber);
         viewTask.setFileName("fileName" + taskNumber);
-
-		/*ProductionTypeDirectory productionType = TestBuildersUtils.getProductionTypeDirectory(id, "Production type Task" + taskNumber);
-		ProductionDirectory production = TestBuildersUtils.getProductionDirectory(id, "fullName" + taskNumber, "shortName" + taskNumber, productionType);
-		viewTask.setProduction(production);
-		viewTask.setProductionType(productionType);*/
 
         viewTask.setDateBegin(DateUtils.addToDate(new Date(), Calendar.DATE, -10 * taskNumber));
         viewTask.setDateEnd(DateUtils.addToDate(new Date(), Calendar.DATE, -1 * taskNumber));
@@ -118,28 +113,28 @@ public class TestDataUtils {
         task.setAccount("account" + taskNumber);
         Manager manager = TestBuildersUtils.getManager(id, "managerFirstName" + taskNumber, "managerLastName" + taskNumber, "managerMiddleName" + taskNumber, "managerEmail" + taskNumber);
         task.setManager(manager);
-        task.setWorkName("workName" + taskNumber);
-        task.setFileName("fileName" + taskNumber);
-        task.setDbFile(new DBFile("file" + taskNumber, "content_type" + taskNumber, ("file data" + taskNumber).getBytes()));
+		task.setWorkName("workName" + taskNumber);
+		task.setFileName("fileName" + taskNumber);
+		task.setDbFile(new DBFile("file" + taskNumber, "content_type" + taskNumber, ("file data" + taskNumber).getBytes()));
 
-        Contractor contractor = TestBuildersUtils.getContractor(id, "corpName", "shortName", "firstName", "lastName", "middleName", "address", "email", "phone", "siteURL");
-        contractor.setManager(manager);
-        task.setContractor(contractor);
-        task.setContractorNumber("ContractorNumber" + taskNumber);
-        task.setContractorAmount(10 * taskNumber);
-        task.setProvider("provider" + taskNumber);
-        task.setProviderCost(8 * taskNumber);
-        task.setOtherExpenses(3 * taskNumber);
+		Contractor contractor = TestBuildersUtils.getContractor(id, "corpName", "shortName", "firstName", "lastName", "middleName", "address", "email", "phone", "siteURL");
+		contractor.setManager(manager);
+		task.setContractor(contractor);
+		task.setContractorNumber("ContractorNumber" + taskNumber);
+		task.setContractorAmount(Double.valueOf(10 * taskNumber));
+		task.setProvider("provider" + taskNumber);
+		task.setProviderCost(Double.valueOf(8 * taskNumber));
+		task.setOtherExpenses(Double.valueOf(3 * taskNumber));
 
-        ProductionTypeDirectory productionType = TestBuildersUtils.getProductionTypeDirectory(id, "Production type Task" + taskNumber);
-        ProductionDirectory production = TestBuildersUtils.getProductionDirectory(id, "fullName" + taskNumber, "shortName" + taskNumber, productionType);
-        task.setProduction(production);
-        task.setProductionType(productionType);
+		ProductionTypeDirectory productionType = TestBuildersUtils.getProductionTypeDirectory(id, "Production type Task" + taskNumber);
+		ProductionDirectory production = TestBuildersUtils.getProductionDirectory(id, "fullName" + taskNumber, "shortName" + taskNumber, productionType);
+		task.setProduction(production);
+		task.setProductionType(productionType);
 
-        task.setDateBegin(DateUtils.addToDate(new Date(), Calendar.DATE, -10 * taskNumber));
-        task.setDateEnd(DateUtils.addToDate(new Date(), Calendar.DATE, -1 * taskNumber));
+		task.setDateBegin(DateUtils.addToDate(new Date(), Calendar.DATE, -10 * taskNumber));
+		task.setDateEnd(DateUtils.addToDate(new Date(), Calendar.DATE, -1 * taskNumber));
 
-        Client client = TestBuildersUtils.getClient(id, "fullName" + taskNumber, "firstName" + taskNumber, "lastName" + taskNumber, "middleName" + taskNumber, "address" + taskNumber, "email" + taskNumber, "phone" + taskNumber);
+		Client client = TestBuildersUtils.getClient(id, "fullName" + taskNumber, "firstName" + taskNumber, "lastName" + taskNumber, "middleName" + taskNumber, "address" + taskNumber, "email" + taskNumber, "phone" + taskNumber);
         client.setManager(manager);
         task.setClient(client);
         task.setStock(TestBuildersUtils.getStockDirectory(id, "Stock Task" + taskNumber));
@@ -166,17 +161,19 @@ public class TestDataUtils {
         task.setCutting(taskTrueFalse);
         task.setNote("Task description" + taskNumber);
         task.setPackBox(taskTrueFalse);
-        task.setPackPellicle(taskTrueFalse);
-        task.setPackPaper(taskTrueFalse);
-        task.setPackPackage(taskTrueFalse);
-        task.setPackNP(taskTrueFalse);
-        task.setPackBy("Pack by" + taskNumber);
-        task.setNumeration(taskTrueFalse);
-        task.setNumerationStart(taskNumber + 1);
-        task.setAmount(20 * taskNumber);
+		task.setPackPellicle(taskTrueFalse);
+		task.setPackPaper(taskTrueFalse);
+		task.setPackPackage(taskTrueFalse);
+		task.setPackNP(taskTrueFalse);
+		task.setPackBy("Pack by" + taskNumber);
+		task.setNumeration(taskTrueFalse);
+		task.setNumerationStart(taskNumber + 1);
+		task.setAmount(Double.valueOf(20 * taskNumber));
 		task.setState(TestBuildersUtils.getState(id, "name task" + taskNumber, "altname" + taskNumber));
 		task.setPayment(TestBuildersUtils.getPayment(id, "name task" + taskNumber, "altname" + taskNumber));
-		task.setDebtAmount(5 * taskNumber);
+		task.setDebtAmount(Double.valueOf(5 * taskNumber));
+
+		task.setAmountForContractor(Double.valueOf(2 * taskNumber));
 
 		return task;
 	}
@@ -242,15 +239,16 @@ public class TestDataUtils {
 		stencil.setCutRibbon(stencilTrueFalse);
 		stencil.setRibbonLength(8 * number);
 		stencil.setSticker(stencilTrueFalse);
-		stencil.setAmount(20 * number);
+		stencil.setAmount(Double.valueOf(20 * number));
 		stencil.setState(TestBuildersUtils.getState(id, "name stencil" + number, "altname" + number));
 		stencil.setPayment(TestBuildersUtils.getPayment(id, "name stencil" + number, "altname" + number));
-		stencil.setDebtAmount(5 * number);
+		stencil.setDebtAmount(Double.valueOf(5 * number));
 		stencil.setKraskoottisk(8 * number);
-		stencil.setCostOfMaterials(15 * number);
-		stencil.setCostOfPrinting(2 * number);
-		stencil.setOtherExpenses(3 * number);
+		stencil.setCostOfMaterials(Double.valueOf(15 * number));
+		stencil.setCostOfPrinting(Double.valueOf(2 * number));
+		stencil.setOtherExpenses(Double.valueOf(3 * number));
 
 		return stencil;
 	}
+
 }

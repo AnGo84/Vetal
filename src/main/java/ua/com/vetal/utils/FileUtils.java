@@ -143,7 +143,6 @@ public class FileUtils {
 
     public static void openDirectory(String path) throws IOException {
         File file = new File(path);
-        System.out.println("Absolute path: " + file.getAbsolutePath());
         if (file.isAbsolute()) {
             if (file.exists()) {
                 if (!file.isDirectory()) {
@@ -160,7 +159,6 @@ public class FileUtils {
                     command = "gnome-open " + file.getPath();
                     //Runtime.getRuntime().exec("gnome-open " + file.getPath());
                 }
-                System.out.println("Open command: " + command);
                 Runtime.getRuntime().exec(command);
             } else {
                 throw new IOException("File not exists by URL: " + path);

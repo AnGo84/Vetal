@@ -19,11 +19,9 @@ public class FileMediaType {
         // application/xml
         // image/gif, ...
         try {
-            //log.info("servletContext is null: {}", (servletContext==null));
             String mineType = servletContext.getMimeType(fileName);
-            //log.info("String mineType= {}", mineType);
             MediaType mediaType = MediaType.parseMediaType(mineType);
-            //log.info("MediaType= {}", mediaType);
+
             return mediaType;
         } catch (Exception e) {
             log.error("Wrong file extension for filename '{}' with error: {}", fileName, e.getMessage());

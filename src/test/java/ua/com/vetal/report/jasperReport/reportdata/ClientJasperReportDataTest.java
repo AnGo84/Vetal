@@ -4,7 +4,7 @@ import net.sf.jasperreports.engine.JREmptyDataSource;
 import org.junit.jupiter.api.Test;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.Client;
-import ua.com.vetal.entity.filter.ClientFilter;
+import ua.com.vetal.entity.filter.ClientViewFilter;
 import ua.com.vetal.report.jasperReport.AppJasperReportType;
 import ua.com.vetal.report.jasperReport.JasperReportData;
 
@@ -40,23 +40,23 @@ public class ClientJasperReportDataTest {
 
 	@Test
 	public void whenGetReportDataFromListWithFilterReturnResult() {
-		List<Client> clientList = Arrays.asList(TestDataUtils.getClient(1l), TestDataUtils.getClient(2l));
-		JasperReportData jasperReportData = reportData.getReportData(clientList, null);
-		assertEquals(AppJasperReportType.CLIENTS_REPORT.getReportName(), jasperReportData.getReportName());
-		assertNotNull(jasperReportData.getParameters());
-		assertEquals(1, jasperReportData.getParameters().size());
-		assertTrue(jasperReportData.getParameters().containsKey("clients"));
-		assertNotNull(jasperReportData.getParameters().get("clients"));
-		assertNotNull(jasperReportData.getDataSource());
-		assertTrue(jasperReportData.getDataSource().getClass() == JREmptyDataSource.class);
+        List<Client> clientList = Arrays.asList(TestDataUtils.getClient(1l), TestDataUtils.getClient(2l));
+        JasperReportData jasperReportData = reportData.getReportData(clientList, null);
+        assertEquals(AppJasperReportType.CLIENTS_REPORT.getReportName(), jasperReportData.getReportName());
+        assertNotNull(jasperReportData.getParameters());
+        assertEquals(1, jasperReportData.getParameters().size());
+        assertTrue(jasperReportData.getParameters().containsKey("clients"));
+        assertNotNull(jasperReportData.getParameters().get("clients"));
+        assertNotNull(jasperReportData.getDataSource());
+        assertTrue(jasperReportData.getDataSource().getClass() == JREmptyDataSource.class);
 
-		jasperReportData = reportData.getReportData(clientList, new ClientFilter());
-		assertEquals(AppJasperReportType.CLIENTS_REPORT.getReportName(), jasperReportData.getReportName());
-		assertNotNull(jasperReportData.getParameters());
-		assertEquals(1, jasperReportData.getParameters().size());
-		assertTrue(jasperReportData.getParameters().containsKey("clients"));
-		assertNotNull(jasperReportData.getParameters().get("clients"));
-		assertNotNull(jasperReportData.getDataSource());
-		assertTrue(jasperReportData.getDataSource().getClass() == JREmptyDataSource.class);
-	}
+        jasperReportData = reportData.getReportData(clientList, new ClientViewFilter());
+        assertEquals(AppJasperReportType.CLIENTS_REPORT.getReportName(), jasperReportData.getReportName());
+        assertNotNull(jasperReportData.getParameters());
+        assertEquals(1, jasperReportData.getParameters().size());
+        assertTrue(jasperReportData.getParameters().containsKey("clients"));
+        assertNotNull(jasperReportData.getParameters().get("clients"));
+        assertNotNull(jasperReportData.getDataSource());
+        assertTrue(jasperReportData.getDataSource().getClass() == JREmptyDataSource.class);
+    }
 }

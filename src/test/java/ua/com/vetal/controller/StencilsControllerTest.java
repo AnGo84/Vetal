@@ -8,18 +8,23 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.Stencil;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.report.jasperReport.reportdata.TaskJasperReportData;
+import ua.com.vetal.service.StateServiceImpl;
 import ua.com.vetal.service.StencilServiceImpl;
+import ua.com.vetal.service.mail.MailServiceImp;
 import ua.com.vetal.service.reports.JasperReportService;
 
+import javax.mail.MessagingException;
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -29,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class StencilsControllerTest {
 	public static final String MAPPED_URL = "/stencils";
+	public static final double KRATKOOTTISK_AMOUNT = 1236d;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -39,20 +45,23 @@ public class StencilsControllerTest {
 	private TaskJasperReportData reportData;
 	@MockBean
 	private JasperReportService mockJasperReportService;
+	@MockBean
+	private StateServiceImpl mockStateService;
+	@MockBean
+	private MailServiceImp mockMailService;
 
 	private Stencil stencil;
 
 	@BeforeEach
 	public void beforeEach() {
-
 		stencil = TestDataUtils.getStencil(1l, 1);
-		System.out.println("Create Stencil: " + stencil);
+
 		when(mockStencilService.findAllObjects()).thenReturn(Arrays.asList(stencil));
 		when(mockStencilService.findById(anyLong())).thenReturn(stencil);
 		when(mockStencilService.findByAccount(anyString())).thenReturn(stencil);
+		when(mockStencilService.getKraskoottiskAmount()).thenReturn(KRATKOOTTISK_AMOUNT);
 
 	}
-
 
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
@@ -62,12 +71,16 @@ public class StencilsControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(model().attribute("title", "Stencils"))
 				.andExpect(model().attribute("stencilsList", notNullValue()))
+				.andExpect(model().attribute("kraskoottiskAmount", notNullValue()))
+				.andExpect(model().attribute("kraskoottiskAmount", is(KRATKOOTTISK_AMOUNT)))
 				.andExpect(view().name("stencilsPage"));
 
 		mockMvc.perform(get(MAPPED_URL + "/list"))
-				//.andDo
+				//.andDo(print())
 				.andExpect(model().attribute("title", "Stencils"))
 				.andExpect(model().attribute("stencilsList", notNullValue()))
+				.andExpect(model().attribute("kraskoottiskAmount", notNullValue()))
+				.andExpect(model().attribute("kraskoottiskAmount", is(KRATKOOTTISK_AMOUNT)))
 				.andExpect(view().name("stencilsPage"));
 	}
 
@@ -171,8 +184,6 @@ public class StencilsControllerTest {
 	public void whenViewStencilAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/view-" + stencil.getId()))
 				//.andDo
-				/*.andExpect(status().isFound())
-				.andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));*/
 				.andExpect(status().isOk())
 				.andExpect(view().name("stencilPage"));
 	}
@@ -185,49 +196,65 @@ public class StencilsControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(model().attributeExists("stencil"))
 				.andExpect(model().attribute("stencil", notNullValue()))
-				/*.andExpect(model().attribute("Stencil", hasProperty("id", nullValue())))
-				.andExpect(model().attribute("Stencil", hasProperty("fullName", blankOrNullString())))
-				.andExpect(model().attribute("Stencil", hasProperty("manager", blankOrNullString())))
-				.andExpect(model().attribute("Stencil", hasProperty("firstName", blankOrNullString())))
-				.andExpect(model().attribute("Stencil", hasProperty("lastName", blankOrNullString())))
-				.andExpect(model().attribute("Stencil", hasProperty("middleName", blankOrNullString())))
-				.andExpect(model().attribute("Stencil", hasProperty("address", blankOrNullString())))
-				.andExpect(model().attribute("Stencil", hasProperty("email", blankOrNullString())))
-				.andExpect(model().attribute("Stencil", hasProperty("phone", blankOrNullString())))*/
 				.andExpect(view().name("stencilPage"));
+
+		verify(mockMailService, times(0)).sendEmail(any());
+		verify(mockStencilService, times(0)).updateObject(any());
 	}
 
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenUpdateStencilAsAuthorizedWithNotNullStencil_thenOk() throws Exception {
-		//doNothing().when(mockUserService).updateObject(any(User.class));
-		mockStencilService.updateObject(stencil);
-
 		mockMvc.perform(post(MAPPED_URL + "/update")
-				.param("id", String.valueOf(stencil.getId()))
-				.param("number", String.valueOf(stencil.getNumber()))
-				.param("numberBase", String.valueOf(stencil.getNumberBase().getId()))
-				.param("account", stencil.getAccount())
-				.param("numberSuffix", String.valueOf(stencil.getNumberSuffix()))
-				.param("manager", String.valueOf(stencil.getManager().getId()))
-				.param("orderName", stencil.getOrderName())
-				.param("production", String.valueOf(stencil.getProduction().getId()))
-				.param("dateBegin", String.valueOf(stencil.getDateBegin()))
-				.param("dateEnd", String.valueOf(stencil.getDateEnd()))
-				.param("client", String.valueOf(stencil.getClient().getId()))
-				.param("stock", String.valueOf(stencil.getStock().getId()))
-				.param("printing", String.valueOf(stencil.getPrinting()))
-				.param("printingUnit", String.valueOf(stencil.getPrintingUnit().getId()))
-				.param("paper", String.valueOf(stencil.getPaper().getId()))
+				.flashAttr("stencil", stencil)
 		)
-				//.andDo
-				/*.andExpect(status().isFound())
-				.andExpect(redirectedUrl(MAPPED_URL));*/
-				.andExpect(status().isOk())
-				.andExpect(view().name("stencilPage"));
+				//.andDo(print())
+				.andExpect(status().isFound())
+				.andExpect(redirectedUrl(MAPPED_URL));
 
+		verify(mockMailService, times(0)).sendEmail(any());
+		verify(mockStencilService, times(1)).updateObject(any());
+	}
 
-		verify(mockStencilService, times(1)).updateObject(stencil);
+	@Test
+	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
+	public void whenUpdateStencilAsAuthorizedWithNotNullStencil_thenOkAndSendEmail() throws Exception {
+		Stencil dbStencil = TestDataUtils.getStencil(1l, 2);
+		when(mockStencilService.findById(any())).thenReturn(dbStencil);
+
+		stencil.setId(1l);
+		stencil.getState().setId(2l);
+		mockMvc.perform(post(MAPPED_URL + "/update")
+				.flashAttr("stencil", stencil)
+		)
+				//.andDo(print())
+				.andExpect(status().isFound())
+				.andExpect(redirectedUrl(MAPPED_URL));
+
+		verify(mockStencilService, times(1)).findById(stencil.getId());
+		verify(mockMailService, times(1)).sendEmail(any());
+		verify(mockStencilService, times(1)).updateObject(any());
+	}
+
+	@Test
+	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
+	public void whenUpdateStencilAsAuthorizedWithNotNullStencil_thenOkAndErrorEmail() throws Exception {
+		Stencil dbStencil = TestDataUtils.getStencil(1l, 2);
+		when(mockStencilService.findById(any())).thenReturn(dbStencil);
+		doThrow(MessagingException.class).when(mockMailService).sendEmail(any());
+
+		stencil.setId(1l);
+		stencil.getState().setId(2l);
+		mockMvc.perform(post(MAPPED_URL + "/update")
+				.flashAttr("stencil", stencil)
+		)
+				//.andDo(print())
+				.andExpect(status().isFound())
+				.andExpect(redirectedUrl(MAPPED_URL));
+
+		verify(mockStencilService, times(1)).findById(stencil.getId());
+		verify(mockMailService, times(1)).sendEmail(any());
+		verify(mockStencilService, times(1)).updateObject(any());
 	}
 
 
@@ -261,11 +288,11 @@ public class StencilsControllerTest {
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenFilterStencilsAsAuthorizedWithNotNullUser_thenOk() throws Exception {
-		FilterData filterData = new FilterData();
-		filterData.setAccount("account");
-		filterData.setManager(filterData.getManager());
+		OrderViewFilter orderViewFilter = new OrderViewFilter();
+		orderViewFilter.setAccount("account");
+		orderViewFilter.setManager(orderViewFilter.getManager());
 		mockMvc.perform(get(MAPPED_URL + "/filter")
-				.param("FilterDataData", filterData.toString())
+				.param("FilterDataData", orderViewFilter.toString())
 		)
 				//.andDo
 				.andExpect(status().isFound())
@@ -301,7 +328,6 @@ public class StencilsControllerTest {
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
 	public void whenExportToExcelReportStencilAsAuthorized_thenOk() throws Exception {
-		//when(mockExporterService.export(any(ReportType.class), any(), anyString(), any()).thenReturn(null);
 		mockMvc.perform(get(MAPPED_URL + "/excelExport"))
 				//.andDo
 				.andExpect(status().isOk());
@@ -319,7 +345,6 @@ public class StencilsControllerTest {
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
 	public void whenPdfReportStencilAsAuthorized_thenOk() throws Exception {
-		//when(mockExporterService.export(any(ReportType.class), any(), anyString(), any()).thenReturn(null);
 		mockMvc.perform(get(MAPPED_URL + "/pdfReport-" + stencil.getId()))
 				//.andDo
 				.andExpect(status().isOk());
@@ -331,6 +356,33 @@ public class StencilsControllerTest {
 		mockMvc.perform(get(MAPPED_URL + "/pdfReport-" + stencil.getId()))
 				//.andDo
 				.andExpect(status().isOk());
+	}
+
+	@Test
+	public void whenMakeReadyStencil_thenUpdateAndSendEmail() throws Exception {
+		when(mockStateService.findById(anyLong())).thenReturn(TestBuildersUtils.getState(4l, "name task", "altname"));
+
+		stencil.getState().setId(2l);
+		mockMvc.perform(get(MAPPED_URL + "/make_ready-" + stencil.getId()))
+				//.andDo
+				.andExpect(status().isFound())
+				.andExpect(redirectedUrl(MAPPED_URL));
+		verify(mockStateService, times(1)).findById(4l);
+		verify(mockStencilService, times(1)).updateObject(stencil);
+		verify(mockMailService, times(1)).sendEmail(any());
+
+	}
+
+	@Test
+	public void whenMakeReadyStencil_thenUpdateNothing() throws Exception {
+		stencil.getState().setId(1l);
+		mockMvc.perform(get(MAPPED_URL + "/make_ready-" + stencil.getId()))
+				//.andDo
+				.andExpect(status().isFound())
+				.andExpect(redirectedUrl(MAPPED_URL));
+		verify(mockStateService, times(0)).findById(4l);
+		verify(mockStencilService, times(0)).updateObject(stencil);
+		verify(mockMailService, times(0)).sendEmail(any());
 	}
 
 }

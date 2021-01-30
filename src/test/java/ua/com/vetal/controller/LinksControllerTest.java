@@ -15,10 +15,9 @@ import ua.com.vetal.service.LinkServiceImpl;
 
 import java.util.Arrays;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -39,8 +38,6 @@ public class LinksControllerTest {
 
     @BeforeEach
     public void beforeEach() {
-        /*linkType = TestBuildersUtils.getLinkType(1l, "file");
-        link = TestBuildersUtils.getLink(1l, "fullName", "shortName", linkType, "path");*/
 
         link = TestDataUtils.getLink(1l);
         linkType = link.getLinkType();
@@ -127,17 +124,14 @@ public class LinksControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateLinkAsAuthorizedWithNullLink_thenOk() throws Exception {
-        mockMvc.perform(post(MAPPED_URL + "/update"))
+        mockMvc.perform(post(MAPPED_URL + "/update")
+                .flashAttr("link", link)
+        )
                 //.andDo
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("link"))
-                .andExpect(model().attribute("link", notNullValue()))
-                .andExpect(model().attribute("link", hasProperty("id", nullValue())))
-                .andExpect(model().attribute("link", hasProperty("fullName", blankOrNullString())))
-                .andExpect(model().attribute("link", hasProperty("shortName", blankOrNullString())))
-                .andExpect(model().attribute("link", hasProperty("linkType", blankOrNullString())))
-                .andExpect(model().attribute("link", hasProperty("path", blankOrNullString())))
-                .andExpect(view().name("linkPage"));
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl(MAPPED_URL));
+
+        verify(mockLinkService, times(1)).updateObject(any());
     }
 
     @Test

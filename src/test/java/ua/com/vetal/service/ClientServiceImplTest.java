@@ -10,7 +10,7 @@ import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.dao.ClientDAO;
 import ua.com.vetal.entity.Client;
 import ua.com.vetal.entity.Manager;
-import ua.com.vetal.entity.filter.ClientFilter;
+import ua.com.vetal.entity.filter.ClientViewFilter;
 import ua.com.vetal.repositories.ClientRepository;
 
 import java.util.Arrays;
@@ -169,8 +169,14 @@ public class ClientServiceImplTest {
 
     @Test
     void whenFindByFilterData() {
-        when(mockClientDAO.findByFilterData(any(ClientFilter.class))).thenReturn(Arrays.asList(client));
-        List<Client> objects = clientService.findByFilterData(new ClientFilter());
+        when(mockClientDAO.findByFilterData(any(ClientViewFilter.class))).thenReturn(Arrays.asList(client));
+        List<Client> objects = clientService.findByFilterData(new ClientViewFilter());
+        assertNotNull(objects);
+        assertFalse(objects.isEmpty());
+        assertEquals(objects.size(), 1);
+
+        when(mockClientRepository.findAll()).thenReturn(Arrays.asList(client));
+        objects = clientService.findByFilterData(null);
         assertNotNull(objects);
         assertFalse(objects.isEmpty());
         assertEquals(objects.size(), 1);

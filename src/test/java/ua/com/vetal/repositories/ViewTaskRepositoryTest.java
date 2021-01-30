@@ -30,10 +30,6 @@ public class ViewTaskRepositoryTest {
 
     @BeforeEach
     public void beforeEach() {
-        /*viewTaskRepository.deleteAll();
-
-        viewTask = TestDataServiceUtils.saveViewTaskParts(TestDataUtils.getViewTask(null, 1), entityManager);
-        viewTask = entityManager.persistAndFlush(viewTask);*/
 
         taskRepository.deleteAll();
         task = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 1), entityManager);
@@ -43,8 +39,6 @@ public class ViewTaskRepositoryTest {
 
     @Test
     public void whenFindByID_thenReturnManager() {
-
-        //User user = userRepository.findByName("User");
         // when
         Optional<ViewTask> foundViewTask = viewTaskRepository.findById(task.getId());
         // then

@@ -8,23 +8,23 @@ dist: trusty
 
 # version numbers
 jdk:
-    - oraclejdk8
+  - oraclejdk8
 
 # would just use default install/script but the ./mvnw script errors on travis
 # obviously this only works for maven builds right now...
 install:
-    - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 script:
-- mvn test
-#env:
-#    - MAVEN_VERSION=3.3.9
-#install:
-#    - "mvn -N io.takari:maven:wrapper -Dmaven=${MAVEN_VERSION}"
-#    - "./mvnw --show-version --errors --batch-mode test-compile dependency:go-offline"
-#    #- "mvn install -Dmaven.compiler.target=1.8 -Dmaven.compiler.source=1.8 -DskipTests=true"
-#
-#script:
-#  - "./mvnw --show-version --errors --batch-mode -Prun-its clean verify"
+  - mvn test
+    #env:
+    #    - MAVEN_VERSION=3.3.9
+    #install:
+    #    - "mvn -N io.takari:maven:wrapper -Dmaven=${MAVEN_VERSION}"
+    #    - "./mvnw --show-version --errors --batch-mode test-compile dependency:go-offline"
+    #    #- "mvn install -Dmaven.compiler.target=1.8 -Dmaven.compiler.source=1.8 -DskipTests=true"
+    #
+    #script:
+  #  - "./mvnw --show-version --errors --batch-mode -Prun-its clean verify"
   #- "mvn test -Dmaven.compiler.target=1.8 -Dmaven.compiler.source=1.8"
 
 

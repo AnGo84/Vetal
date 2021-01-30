@@ -17,8 +17,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    // replace all AppUser* classes with User's classes
-    // https://medium.com/@gustavo.ponce.ch/spring-boot-spring-mvc-spring-security-mysql-a5d8545d837d
+
     @Autowired
     private AppUserDetailsServiceImpl appUserDetailsService;
 
@@ -33,13 +32,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-
         // Setting Service to find User in the database.
         // And Setting PassswordEncoder
         auth.userDetailsService(appUserDetailsService).passwordEncoder(passwordEncoder());
-
         // auth.inMemoryAuthentication().withUser("user").password("user").roles("USER");
-
     }
 
     @Override

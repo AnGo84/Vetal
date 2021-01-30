@@ -7,40 +7,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
-    @Override
-    public void addFormatters(FormatterRegistry registry) {
-        registry.addFormatter(new DateFormatter());
-    }
-
-/*    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("classpath:/resources/**")
-                .addResourceLocations("classpath:/resources/");
-    }*/
-
-    /*
-	// @Bean(name = "viewMessageSource")
-	@Bean
-	public MessageSource messageSource() {
-		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-
-		// Read i18n/messages_xxx.properties file.
-		// For example: i18n/messages_en.properties
-		// messageSource.setBasename("classpath:/messages/i18n/messages");
-
-		messageSource.setBasenames("classpath:/messages/validation/messages", "classpath:/messages/i18n/messages");
-
-		// messageSource.setUseCodeAsDefaultMessage(true);
-		messageSource.setDefaultEncoding("UTF-8");
-		return messageSource;
-	}
-
+	/**
+	 * Enable to format date type fields on views
+	 */
 	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		LocaleChangeInterceptor localeInterceptor = new LocaleChangeInterceptor();
-		localeInterceptor.setParamName("lang");
-
-		registry.addInterceptor(localeInterceptor).addPathPatterns("/*");
-	}*/
-
+	public void addFormatters(FormatterRegistry registry) {
+		registry.addFormatter(new DateFormatter());
+	}
 }

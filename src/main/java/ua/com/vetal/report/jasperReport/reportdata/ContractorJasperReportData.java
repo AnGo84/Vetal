@@ -5,7 +5,7 @@ import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.stereotype.Component;
 import ua.com.vetal.entity.Contractor;
-import ua.com.vetal.entity.filter.PersonFilter;
+import ua.com.vetal.entity.filter.PersonViewFilter;
 import ua.com.vetal.report.Reportable;
 import ua.com.vetal.report.jasperReport.AppJasperReportType;
 import ua.com.vetal.report.jasperReport.JasperReportData;
@@ -16,16 +16,16 @@ import java.util.Map;
 
 @Component
 @Slf4j
-public class ContractorJasperReportData implements Reportable<Contractor, JasperReportData, PersonFilter> {
-	@Override
-	public JasperReportData getReportData(Contractor object) {
-		log.info("Get JasperReportData for: {}", object);
-		return null;
-	}
+public class ContractorJasperReportData implements Reportable<Contractor, JasperReportData, PersonViewFilter> {
+    @Override
+    public JasperReportData getReportData(Contractor object) {
+        log.info("Get JasperReportData for: {}", object);
+        return null;
+    }
 
-	@Override
-	public JasperReportData getReportData(List<Contractor> objects) {
-		log.info("Get JasperReportData for objects: {}", objects);
+    @Override
+    public JasperReportData getReportData(List<Contractor> objects) {
+        log.info("Get JasperReportData for objects: {}", objects);
 
 		Map<String, Object> parameters = new HashMap<>();
 		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(objects);
@@ -38,11 +38,11 @@ public class ContractorJasperReportData implements Reportable<Contractor, Jasper
 				.build();
 	}
 
-	@Override
-	public JasperReportData getReportData(List<Contractor> objects, PersonFilter filterData) {
-		log.info("Get JasperReportData for objects: {}", objects);
-		log.info("Filter: {}", filterData);
+    @Override
+    public JasperReportData getReportData(List<Contractor> objects, PersonViewFilter filterData) {
+        log.info("Get JasperReportData for objects: {}", objects);
+        log.info("Filter: {}", filterData);
 
-		return getReportData(objects);
-	}
+        return getReportData(objects);
+    }
 }

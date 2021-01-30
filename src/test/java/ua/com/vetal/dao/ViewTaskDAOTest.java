@@ -11,7 +11,7 @@ import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.Manager;
 import ua.com.vetal.entity.Task;
 import ua.com.vetal.entity.ViewTask;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.repositories.TaskRepository;
 import ua.com.vetal.utils.DateUtils;
 
@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @ComponentScan("ua.com.vetal.dao")
@@ -47,83 +48,83 @@ public class ViewTaskDAOTest {
     void whenFindByFilterData() {
         int allRecords = 2;
         List<ViewTask> filteredList = viewTaskDAO.findByFilterData(null);
+        assertTrue(filteredList.isEmpty());
+        assertEquals(0, filteredList.size());
+
+        OrderViewFilter orderViewFilter = new OrderViewFilter();
+        filteredList = viewTaskDAO.findByFilterData(orderViewFilter);
         assertEquals(allRecords, filteredList.size());
 
-        FilterData filterData = new FilterData();
-        filteredList = viewTaskDAO.findByFilterData(filterData);
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setAccount(task.getAccount());
+        filteredList = viewTaskDAO.findByFilterData(orderViewFilter);
+        assertEquals(1, filteredList.size());
+
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setNumber(task.getFullNumber());
+        filteredList = viewTaskDAO.findByFilterData(orderViewFilter);
+        assertEquals(1, filteredList.size());
+
+
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setClient(task.getClient());
+        filteredList = viewTaskDAO.findByFilterData(orderViewFilter);
+        assertEquals(1, filteredList.size());
+
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setFileName(task.getFileName());
+        filteredList = viewTaskDAO.findByFilterData(orderViewFilter);
+        assertEquals(1, filteredList.size());
+
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setManager(task.getManager());
+        filteredList = viewTaskDAO.findByFilterData(orderViewFilter);
+        assertEquals(1, filteredList.size());
+
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setManager(new Manager());
+        filteredList = viewTaskDAO.findByFilterData(orderViewFilter);
         assertEquals(allRecords, filteredList.size());
 
-        filterData = new FilterData();
-        filterData.setAccount(task.getAccount());
-        filteredList = viewTaskDAO.findByFilterData(filterData);
-        assertEquals(1, filteredList.size());
-
-        filterData = new FilterData();
-        filterData.setNumber(task.getFullNumber());
-        filteredList = viewTaskDAO.findByFilterData(filterData);
-        assertEquals(1, filteredList.size());
-
-
-        filterData = new FilterData();
-        filterData.setClient(task.getClient());
-        filteredList = viewTaskDAO.findByFilterData(filterData);
-        assertEquals(1, filteredList.size());
-
-        filterData = new FilterData();
-        filterData.setFileName(task.getFileName());
-        filteredList = viewTaskDAO.findByFilterData(filterData);
-        assertEquals(1, filteredList.size());
-
-        filterData = new FilterData();
-        filterData.setManager(task.getManager());
-        filteredList = viewTaskDAO.findByFilterData(filterData);
-        assertEquals(1, filteredList.size());
-
-        filterData = new FilterData();
-        filterData.setManager(new Manager());
-        filteredList = viewTaskDAO.findByFilterData(filterData);
-        assertEquals(allRecords, filteredList.size());
-
-        filterData = new FilterData();
+        orderViewFilter = new OrderViewFilter();
         Manager newManager = new Manager();
         newManager.setId(1021L);
-        filterData.setManager(newManager);
-        filteredList = viewTaskDAO.findByFilterData(filterData);
+        orderViewFilter.setManager(newManager);
+        filteredList = viewTaskDAO.findByFilterData(orderViewFilter);
         assertEquals(0, filteredList.size());
 
-        filterData = new FilterData();
-        filterData.setAccount("not exist");
-        filteredList = viewTaskDAO.findByFilterData(filterData);
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setAccount("not exist");
+        filteredList = viewTaskDAO.findByFilterData(orderViewFilter);
         assertEquals(0, filteredList.size());
 
-        filterData = new FilterData();
-        filterData.setNumber("not exist");
-        filteredList = viewTaskDAO.findByFilterData(filterData);
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setNumber("not exist");
+        filteredList = viewTaskDAO.findByFilterData(orderViewFilter);
         assertEquals(0, filteredList.size());
 
-        filterData = new FilterData();
-        filterData.setProduction(task.getProduction());
-        filteredList = viewTaskDAO.findByFilterData(filterData);
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setProduction(task.getProduction());
+        filteredList = viewTaskDAO.findByFilterData(orderViewFilter);
         assertEquals(1, filteredList.size());
-
 
         Date dateFrom = DateUtils.addToDate(new Date(), Calendar.DATE, -11);
         Date dateTill = DateUtils.addToDate(new Date(), Calendar.DATE, -5);
 
-        filterData = new FilterData();
-        filterData.setDateBeginFrom(dateFrom);
-        filteredList = viewTaskDAO.findByFilterData(filterData);
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setDateBeginFrom(dateFrom);
+        filteredList = viewTaskDAO.findByFilterData(orderViewFilter);
         assertEquals(1, filteredList.size());
 
-        filterData = new FilterData();
-        filterData.setDateBeginTill(dateTill);
-        filteredList = viewTaskDAO.findByFilterData(filterData);
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setDateBeginTill(dateTill);
+        filteredList = viewTaskDAO.findByFilterData(orderViewFilter);
         assertEquals(allRecords, filteredList.size());
 
-        filterData = new FilterData();
-        filterData.setDateBeginFrom(dateFrom);
-        filterData.setDateBeginTill(dateTill);
-        filteredList = viewTaskDAO.findByFilterData(filterData);
+        orderViewFilter = new OrderViewFilter();
+        orderViewFilter.setDateBeginFrom(dateFrom);
+        orderViewFilter.setDateBeginTill(dateTill);
+        filteredList = viewTaskDAO.findByFilterData(orderViewFilter);
         assertEquals(1, filteredList.size());
 
     }

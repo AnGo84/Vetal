@@ -45,9 +45,9 @@
         <appender-ref ref="RollingFile"/>
         <appender-ref ref="Console"/>
     </logger>-->
-    <!--<logger name="org.hibernate" >
+    <logger name="org.hibernate">
         <level value="error"/>
         <appender-ref ref="RollingFile"/>
         <appender-ref ref="Console"/>
-    </logger>-->
+    </logger>
 </configuration>

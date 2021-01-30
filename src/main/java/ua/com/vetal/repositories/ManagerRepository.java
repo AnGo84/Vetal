@@ -1,9 +1,10 @@
 package ua.com.vetal.repositories;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ua.com.vetal.entity.Manager;
+import ua.com.vetal.repositories.common.CommonRepository;
 
 @Repository
-public interface ManagerRepository extends JpaRepository<Manager, Long> {
+public interface ManagerRepository extends CommonRepository<Manager> {
+
 }

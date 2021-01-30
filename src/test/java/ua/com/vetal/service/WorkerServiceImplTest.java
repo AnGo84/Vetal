@@ -8,10 +8,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
 import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.Worker;
+import ua.com.vetal.exception.EntityException;
 import ua.com.vetal.repositories.WorkerRepository;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -28,14 +30,14 @@ public class WorkerServiceImplTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		worker = TestBuildersUtils.getWorker(1l, "firstName", "lastName", "middleName", "email");
+		worker = TestBuildersUtils.getWorker(null, "firstName", "lastName", "middleName", "email");
 	}
 
 	@Test
 	void whenFindById_thenReturnWorker() {
-		when(mockWorkerRepository.getOne(1L)).thenReturn(worker);
+		when(mockWorkerRepository.findById(1L)).thenReturn(Optional.of(worker));
 		long id = 1;
-		Worker found = workerService.findById(id);
+		Worker found = workerService.get(id);
 
 		assertNotNull(found);
 		assertEquals(found.getId(), worker.getId());
@@ -49,23 +51,14 @@ public class WorkerServiceImplTest {
 	void whenFindById_thenReturnNull() {
 		when(mockWorkerRepository.getOne(1L)).thenReturn(worker);
 		long id = 2;
-		Worker found = workerService.findById(id);
-		assertNull(found);
-	}
-
-	@Test
-	void whenFindByName_thenReturnNull() {
-		//when(mockManagerRepository.findByName(anyString())).thenReturn(manager);
-		Worker found = workerService.findByName(null);
-		assertNull(found);
-		found = workerService.findByName("wrong name");
+		Worker found = workerService.get(id);
 		assertNull(found);
 	}
 
 	@Test
 	void whenSaveObject_thenSuccess() {
 		Worker newWorker = TestBuildersUtils.getWorker(null, "firstName2", "lastName2", "middleName2", "email2");
-		workerService.saveObject(newWorker);
+		workerService.save(newWorker);
 		verify(mockWorkerRepository, times(1)).save(newWorker);
 	}
 
@@ -73,14 +66,14 @@ public class WorkerServiceImplTest {
 	void whenSaveObject_thenNPE() {
 		when(mockWorkerRepository.save(any(Worker.class))).thenThrow(NullPointerException.class);
 		assertThrows(NullPointerException.class, () -> {
-			workerService.saveObject(worker);
+			workerService.save(worker);
 		});
 	}
 
 	@Test
 	void whenUpdateObject_thenSuccess() {
-		worker.setCorpName("CorpName2");
-		workerService.updateObject(worker);
+		worker.setLastName("CorpName2");
+		workerService.update(worker);
 		verify(mockWorkerRepository, times(1)).save(worker);
 	}
 
@@ -88,12 +81,14 @@ public class WorkerServiceImplTest {
 	void whenUpdateObject_thenThrowNPE() {
 		when(mockWorkerRepository.save(any(Worker.class))).thenThrow(NullPointerException.class);
 		assertThrows(NullPointerException.class, () -> {
-			workerService.updateObject(worker);
+			workerService.update(worker);
 		});
 	}
 
 	@Test
 	void whenDeleteById_thenSuccess() {
+		worker.setId(1L);
+		when(mockWorkerRepository.findById(1L)).thenReturn(Optional.of(worker));
 		workerService.deleteById(1l);
 		verify(mockWorkerRepository, times(1)).deleteById(1l);
 	}
@@ -101,7 +96,7 @@ public class WorkerServiceImplTest {
 	@Test
 	void whenDeleteById_thenThrowEmptyResultDataAccessException() {
 		doThrow(new EmptyResultDataAccessException(0)).when(mockWorkerRepository).deleteById(anyLong());
-		assertThrows(EmptyResultDataAccessException.class, () -> {
+		assertThrows(EntityException.class, () -> {
 			workerService.deleteById(1000000l);
 		});
 	}
@@ -109,7 +104,7 @@ public class WorkerServiceImplTest {
 	@Test
 	void findAllObjects() {
 		when(mockWorkerRepository.findAll()).thenReturn(Arrays.asList(worker));
-		List<Worker> objects = workerService.findAllObjects();
+		List<Worker> objects = workerService.getAll();
 		assertNotNull(objects);
 		assertFalse(objects.isEmpty());
 		assertEquals(objects.size(), 1);
@@ -117,10 +112,13 @@ public class WorkerServiceImplTest {
 
 	@Test
 	void isObjectExist() {
-		when(mockWorkerRepository.getOne(worker.getId())).thenReturn(worker);
-		assertTrue(workerService.isObjectExist(worker));
+		assertFalse(workerService.isExist(null));
 
-		when(mockWorkerRepository.getOne(anyLong())).thenReturn(null);
-		assertFalse(workerService.isObjectExist(worker));
+		worker.setId(1L);
+		when(mockWorkerRepository.findById(1L)).thenReturn(Optional.of(worker));
+		assertTrue(workerService.isExist(worker));
+
+		when(mockWorkerRepository.findById(anyLong())).thenReturn(Optional.empty());
+		assertFalse(workerService.isExist(worker));
 	}
 }

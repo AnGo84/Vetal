@@ -9,7 +9,7 @@ import org.springframework.data.domain.Sort;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.dao.ViewTaskDAO;
 import ua.com.vetal.entity.ViewTask;
-import ua.com.vetal.entity.filter.FilterData;
+import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.repositories.ViewTaskRepository;
 
 import java.util.Arrays;
@@ -66,8 +66,8 @@ public class ViewTaskServiceImplTest {
 
     @Test
     void whenFindByFilterData() {
-        when(mockViewTaskDAO.findByFilterData(any(FilterData.class))).thenReturn(Arrays.asList(viewTask));
-        List<ViewTask> objects = viewTaskService.findByFilterData(new FilterData());
+        when(mockViewTaskDAO.findByFilterData(any(OrderViewFilter.class))).thenReturn(Arrays.asList(viewTask));
+        List<ViewTask> objects = viewTaskService.findByFilterData(new OrderViewFilter());
         assertNotNull(objects);
         assertFalse(objects.isEmpty());
         assertEquals(objects.size(), 1);

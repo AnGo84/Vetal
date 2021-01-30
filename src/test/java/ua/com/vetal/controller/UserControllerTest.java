@@ -24,7 +24,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-//@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 class UserControllerTest {
@@ -137,34 +136,27 @@ class UserControllerTest {
                 .andExpect(model().attribute("user", hasProperty("userRoles", empty())))
                 .andExpect(model().attributeHasFieldErrors("user", "userRoles", "name"))
                 .andExpect(view().name("userPage"));
+
+        verify(mockUserService, times(0)).updateObject(any());
     }
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateUserAsAuthorizedWithNotNullUser_thenOk() throws Exception {
-        //doNothing().when(mockUserService).updateObject(any(User.class));
-        mockUserService.updateObject(user);
-
         mockMvc.perform(post(MAPPED_URL + "/update")
-                        .param("id", String.valueOf(user.getId()))
-                        .param("name", user.getName())
-                        .param("encryptedPassword", "password")
-                        .param("enabled", String.valueOf(user.isEnabled()))
-                        .param("userRoles", "1")
-                //{id=1, name=ROLE_ADMIN}
+                .flashAttr("user", user)
         )
                 //.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(MAPPED_URL));
+
         verify(mockUserService, times(1)).updateObject(user);
     }
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateUserAsAuthorizedErrorOnSave() throws Exception {
-        doThrow(DataIntegrityViolationException.class).when(mockUserService).saveObject(any(User.class));
-        //doNothing().when(mockUserService).updateObject(any(User.class));
-        //when(mockUserService.saveObject(any(User.class))).thenThrow(DataIntegrityViolationException.class);
+        doThrow(DataIntegrityViolationException.class).when(mockUserService).updateObject(any(User.class));
 
         mockMvc.perform(post(MAPPED_URL + "/update")
                 .param("id", String.valueOf(user.getId()))
@@ -178,6 +170,7 @@ class UserControllerTest {
                 .andExpect(model().attributeExists("user"))
                 .andExpect(model().attributeHasFieldErrors("user", "name"))
                 .andExpect(view().name("userPage"));
+
         verify(mockUserService, times(0)).updateObject(user);
     }
 

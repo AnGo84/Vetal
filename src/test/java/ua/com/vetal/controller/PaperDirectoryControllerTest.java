@@ -15,9 +15,8 @@ import ua.com.vetal.service.PaperDirectoryServiceImpl;
 
 import java.util.Arrays;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -37,11 +36,11 @@ public class PaperDirectoryControllerTest {
 
     @BeforeEach
     public void beforeEach() {
-        directory = TestBuildersUtils.getPaperDirectory(1l, PaperDirectoryRepositoryTest.DIRECTORY_NAME);
+		directory = TestBuildersUtils.getPaperDirectory(1l, PaperDirectoryRepositoryTest.DIRECTORY_NAME);
 
-        when(mockDirectoryService.findAllObjects()).thenReturn(Arrays.asList(directory));
-        when(mockDirectoryService.findById(anyLong())).thenReturn(directory);
-    }
+		when(mockDirectoryService.getAll()).thenReturn(Arrays.asList(directory));
+		when(mockDirectoryService.get(anyLong())).thenReturn(directory);
+	}
 
 
     @Test
@@ -117,47 +116,44 @@ public class PaperDirectoryControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateRecordAsAuthorizedWithNullDirectory_thenOk() throws Exception {
-        mockMvc.perform(post(MAPPED_URL + "/update"))
+        mockMvc.perform(post(MAPPED_URL + "/update")
+                .flashAttr("directory", directory)
+        )
                 //.andDo
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("directory"))
-                .andExpect(model().attribute("directory", notNullValue()))
-                .andExpect(model().attribute("directory", hasProperty("id", nullValue())))
-                .andExpect(model().attribute("directory", hasProperty("name", blankOrNullString())))
-                .andExpect(view().name("directoryRecordPage"));
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl(MAPPED_URL));
+
+        verify(mockDirectoryService, times(1)).update(any());
     }
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateRecordAsAuthorizedWithNotNullDirectory_thenOk() throws Exception {
-        //doNothing().when(mockUserService).updateObject(any(User.class));
-        mockDirectoryService.updateObject(directory);
 
-        mockMvc.perform(post(MAPPED_URL + "/update")
-                .param("id", String.valueOf(directory.getId()))
-                .param("name", directory.getName()))
-                //.andDo
-                .andExpect(status().isFound())
+		mockMvc.perform(post(MAPPED_URL + "/update")
+				.param("id", String.valueOf(directory.getId()))
+				.param("name", directory.getName()))
+				//.andDo
+				.andExpect(status().isFound())
 
-                .andExpect(redirectedUrl(MAPPED_URL));
-        verify(mockDirectoryService, times(1)).updateObject(directory);
+				.andExpect(redirectedUrl(MAPPED_URL));
+		verify(mockDirectoryService, times(1)).update(directory);
     }
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateRecordAsAuthorizedWithExistName_thenError() throws Exception {
-        when(mockDirectoryService.isObjectExist(any())).thenReturn(true);
-        //mockDirectoryService.updateObject(directory);
+		when(mockDirectoryService.isExist(any())).thenReturn(true);
 
-        mockMvc.perform(post(MAPPED_URL + "/update")
-                .param("id", String.valueOf(directory.getId()))
-                .param("name", directory.getName()))
-                //.andDo
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("directory"))
-                .andExpect(model().attributeHasFieldErrors("directory", "name"))
-                .andExpect(view().name("directoryRecordPage"));
-        verify(mockDirectoryService, times(0)).updateObject(directory);
+		mockMvc.perform(post(MAPPED_URL + "/update")
+				.param("id", String.valueOf(directory.getId()))
+				.param("name", directory.getName()))
+				//.andDo
+				.andExpect(status().isOk())
+				.andExpect(model().attributeExists("directory"))
+				.andExpect(model().attributeHasFieldErrors("directory", "name"))
+				.andExpect(view().name("directoryRecordPage"));
+		verify(mockDirectoryService, times(0)).update(directory);
     }
 
     @Test

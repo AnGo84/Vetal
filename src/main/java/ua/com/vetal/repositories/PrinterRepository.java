@@ -1,10 +1,10 @@
 package ua.com.vetal.repositories;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ua.com.vetal.entity.Printer;
+import ua.com.vetal.repositories.common.CommonRepository;
 
 @Repository
-public interface PrinterRepository extends JpaRepository<Printer, Long> {
+public interface PrinterRepository extends CommonRepository<Printer> {
 
 }

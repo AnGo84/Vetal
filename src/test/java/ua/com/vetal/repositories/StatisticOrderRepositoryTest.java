@@ -9,7 +9,7 @@ import org.springframework.data.domain.Sort;
 import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.TestDataServiceUtils;
 import ua.com.vetal.TestDataUtils;
-import ua.com.vetal.entity.Order;
+import ua.com.vetal.entity.StatisticOrder;
 import ua.com.vetal.entity.Stencil;
 import ua.com.vetal.entity.Task;
 
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 //@ExtendWith(SpringExtension.class)
 @DataJpaTest
-public class OrderRepositoryTest {
+public class StatisticOrderRepositoryTest {
     @Autowired
     private TestEntityManager testEntityManager;
 
@@ -49,36 +49,33 @@ public class OrderRepositoryTest {
 
     @Test
     public void whenFindAll_thenReturnListOfManagers() {
-        List<Order> orders = orderRepository.findAll();
-        System.out.println("Orders: " + orders.size());
+        List<StatisticOrder> statisticOrders = orderRepository.findAll();
 
         List<Task> tasks = taskRepository.findAll();
-        System.out.println("Tasks: " + tasks.size());
+        assertEquals(tasks.size(), 1);
 
         List<Stencil> stencils = stencilRepository.findAll();
-        System.out.println("Stencils: " + stencils.size());
+        assertEquals(stencils.size(), 1);
 
-        assertNotNull(orders);
-        assertFalse(orders.isEmpty());
-        assertEquals(orders.size(), 2);
+        assertNotNull(statisticOrders);
+        assertFalse(statisticOrders.isEmpty());
+        assertEquals(statisticOrders.size(), 2);
 
     }
 
     @Test
     public void whenFindAllWithSortOption_thenReturnListOfManagers() {
-        List<Order> orders = orderRepository.findAll(Sort.by(Sort.Direction.ASC, "dateBegin"));
-
-        System.out.println("Orders: " + orders.size());
+        List<StatisticOrder> statisticOrders = orderRepository.findAll(Sort.by(Sort.Direction.ASC, "dateBegin"));
 
         List<Task> tasks = taskRepository.findAll(Sort.by(Sort.Direction.ASC, "dateBegin"));
-        System.out.println("Tasks: " + tasks.size());
+        assertEquals(tasks.size(), 1);
 
         List<Stencil> stencils = stencilRepository.findAll(Sort.by(Sort.Direction.ASC, "dateBegin"));
-        System.out.println("Stencils: " + stencils.size());
+        assertEquals(stencils.size(), 1);
 
-        assertNotNull(orders);
-        assertFalse(orders.isEmpty());
-        assertEquals(orders.size(), 2);
+        assertNotNull(statisticOrders);
+        assertFalse(statisticOrders.isEmpty());
+        assertEquals(statisticOrders.size(), 2);
     }
 
 }

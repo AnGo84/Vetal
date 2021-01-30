@@ -8,7 +8,6 @@ import javax.validation.constraints.Size;
 @Table(name = "contractors")
 public class Contractor extends AbstractPerson {
 
-
     private Manager manager;
 
     private String address;
@@ -43,7 +42,6 @@ public class Contractor extends AbstractPerson {
         this.address = address;
     }
 
-    //@NotEmpty
     @Size(max =100)
     @Column(name = "site_url", length = 100)
     public String getSiteURL() {
@@ -53,7 +51,6 @@ public class Contractor extends AbstractPerson {
     public void setSiteURL(String siteURL) {
         this.siteURL = siteURL;
     }
-
 
     @NotEmpty
     @Size(min = 0, max = 250)

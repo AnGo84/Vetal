@@ -13,13 +13,11 @@ import javax.servlet.ServletContext;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
-//@ContextConfiguration
 @WebAppConfiguration
 public class FileMediaTypeTest {
 	private MediaType defaultMediaType = MediaType.APPLICATION_OCTET_STREAM;
 	@Autowired
 	private ServletContext servletContext;
-	//private MockServletContext servletContext;
 
 	private FileMediaType fileMediaType;
 
@@ -27,7 +25,6 @@ public class FileMediaTypeTest {
 	public void beforeEach() {
 		fileMediaType = new FileMediaType(servletContext);
 	}
-
 
 	@Test
 	void whenGetMediaTypeForFileName_thenReturnExtractedMediaType() {

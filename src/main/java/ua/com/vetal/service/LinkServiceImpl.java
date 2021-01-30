@@ -16,10 +16,6 @@ public class LinkServiceImpl {
     private LinkRepository linkRepository;
 
     public Link findById(Long id) {
-        /*
-         * Optional<User> optinalEntity = userRepository.findById(id); User user
-         * = optinalEntity.get(); return user;
-         */
         return linkRepository.getOne(id);
     }
 
