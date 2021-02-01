@@ -67,6 +67,29 @@ public class MailServiceImpTest {
     }
 
     @Test
+    public void shouldSendEmailMessageWithLocalization() throws MessagingException, IOException {
+        String localString = "Тестовое сообщение";
+        EmailMessage emailMessage = new EmailMessage();
+        emailMessage.setFrom("no-reply@memorynotfound.com");
+        emailMessage.setTo("info@memorynotfound.com");
+        emailMessage.setSubject(localString);
+        emailMessage.setText(localString);
+
+        mailServiceImp.sendEmail(emailMessage);
+
+        MimeMessage[] receivedMessages = smtpServerRule.getMessages();
+        assertEquals(1, receivedMessages.length);
+
+        MimeMessage current = receivedMessages[0];
+
+        assertEquals(emailMessage.getSubject(), current.getSubject());
+        assertEquals(emailMessage.getFrom(), current.getFrom()[0].toString());
+        assertEquals(emailMessage.getTo(), current.getAllRecipients()[0].toString());
+        assertTrue(getTextFromMessage(current).contains(emailMessage.getText()));
+
+    }
+
+    @Test
     public void shouldSendSingleMail() throws MessagingException, IOException {
         EmailMessage emailMessage = new EmailMessage();
         emailMessage.setFrom("no-reply@memorynotfound.com");

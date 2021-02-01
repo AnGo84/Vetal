@@ -17,7 +17,6 @@ import ua.com.vetal.utils.StringUtils;
 
 import javax.activation.DataSource;
 import javax.mail.util.ByteArrayDataSource;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -56,7 +55,7 @@ public class TaskServiceImpl implements SimpleService<Task> {
 		saveObject(task);
 	}
 
-	public void updateObject(Task task, DBFile dbFile) throws IOException {
+	public void updateObject(Task task, DBFile dbFile) {
 		Long oldFileId = null;
 		if (task.getDbFile() != null && (StringUtils.isEmpty(task.getFileName()))) {
 			oldFileId = task.getDbFile().getId();
