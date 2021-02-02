@@ -17,21 +17,24 @@ Also, user can filtered data and export result to Excel format.
 - MySQL database
 - Jasper report
 
-### Realise 1.5 INFO
-In progress
-Add:
-- test coverage;
-- analytic by orders and managers;
-- emailing on stencils change;
+### Realise 1.5 INFO (Current)
+
+- added tests coverage;
+- added analytic's page;
+- added emailing on stencils change;
+- refactored with generics;
+- added filters on orders views;
 
 ### Realise 1.0 INFO
 
 Stable version with realisation:
+
 - tasks: add, edit, delete, send to contractor, reports;
 - stencils: add, edit, delete, reports, calculate 'ink-prints' by days;
 - users: add, edit, delete, access by roles, password managing;
 - directories: add, edit, delete;
 
 ### TODO
-- Refactoring code;
-- Change view filters logic;
+
+- refactor DB with contragents and employees;
+- add docker support;

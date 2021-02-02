@@ -1,6 +1,6 @@
 package ua.com.vetal.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +9,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import ua.com.vetal.TestDataUtils;
+import ua.com.vetal.entity.DBFile;
 import ua.com.vetal.entity.Task;
 import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.report.jasperReport.reportdata.TaskJasperReportData;
@@ -31,8 +33,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -40,9 +41,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class TasksControllerTest {
 	public static final String MAPPED_URL = "/tasks";
-	private final ObjectMapper mapper = new ObjectMapper();
 	@Autowired
 	private MockMvc mockMvc;
+
 	@MockBean
 	private TaskServiceImpl mockTaskService;
 	@MockBean
@@ -58,7 +59,7 @@ public class TasksControllerTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		task = TestDataUtils.getTask(1l, 1);
+		task = TestDataUtils.getTask(1L, 1);
 		when(mockTaskService.findAllObjects()).thenReturn(Arrays.asList(task));
 		when(mockTaskService.findById(anyLong())).thenReturn(task);
 		when(mockTaskService.findByAccount(anyString())).thenReturn(task);
@@ -97,7 +98,6 @@ public class TasksControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(model().attributeExists("task"))
 				.andExpect(model().attribute("task", notNullValue()))
-				//.andExpect(model().attribute("edit", false))
 				.andExpect(model().attribute("readOnly", false))
 				.andExpect(view().name("taskPage"));
 	}
@@ -119,7 +119,6 @@ public class TasksControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(model().attributeExists("task"))
 				.andExpect(model().attribute("task", notNullValue()))
-				//.andExpect(model().attribute("edit", true))
 				.andExpect(model().attribute("readOnly", false))
 				.andExpect(view().name("taskPage"));
 	}
@@ -135,7 +134,7 @@ public class TasksControllerTest {
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenCopyTaskAsAuthorized_thenOk() throws Exception {
-		when(mockTaskService.getMaxID()).thenReturn(100l);
+		when(mockTaskService.getMaxID()).thenReturn(100L);
 		mockMvc.perform(get(MAPPED_URL + "/copy-" + task.getId()))
 				//.andDo(print())
 				.andExpect(status().isOk())
@@ -174,7 +173,6 @@ public class TasksControllerTest {
 				.andExpect(model().attribute("task", notNullValue()))
 				.andExpect(model().attribute("task", hasProperty("id", notNullValue())))
 				.andExpect(model().attribute("task", hasProperty("account", equalTo(task.getAccount()))))
-				//.andExpect(model().attribute("edit", true))
 				.andExpect(model().attribute("readOnly", true))
 				.andExpect(view().name("taskPage"));
 	}
@@ -208,61 +206,15 @@ public class TasksControllerTest {
 		mockMvc.perform(post(MAPPED_URL + "/update")
 				.flashAttr("task", task)
 		)
-				//.andDo(print())
-				.andExpect(status().isFound())
-				.andExpect(redirectedUrl(MAPPED_URL));
-
-		verify(mockDBFileStorageService, times(0)).storeMultipartFile(any());
-		verify(mockTaskService, times(0)).updateObject(any());
-		verify(mockTaskService, times(1)).updateObject(any(), any());
-		verify(mockDBFileStorageService, times(0)).deleteById(anyLong());
-
-		/*task.getDbFile().setId(1l);
-		final MockMultipartFile mockFile = new MockMultipartFile("fileName", "filetext".getBytes());
-		mockMvc.perform(post(MAPPED_URL + "/update")
-				.flashAttr("task", task)
-				.param("name", "filename")
-				.param("content", "fileText")
-				.param("uploadFile", String.valueOf(mockFile.getBytes()))
-				.param("uploadFileName", "uploadFileName")
-				.param("uploadFile.name", "uploadFile.name")
-
-				.sessionAttr("uploadFile", mockFile)
-
-		)
 				.andDo(print())
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl(MAPPED_URL));
 
-		DBFile file = new DBFile();
-		file.setId(2l);
-		file.setFileName("fileName");
-		file.setFileType("type");
-		file.setData("file text".getBytes());
-
-		when(mockDBFileStorageService.storeMultipartFile(any())).thenReturn(file);
-		verify(mockDBFileStorageService, times(1)).storeMultipartFile(any());
-		verify(mockTaskService, times(0)).updateObject(any());
-		verify(mockTaskService, times(2)).updateObject(any(), any());
-		verify(mockDBFileStorageService, times(1)).deleteById(anyLong());*/
-	}
-
-	//@Test
-	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
-	public void whenUpdateTaskAsAuthorizedWithWrongUploadFile_thenError() throws Exception {
-		mockMvc.perform(post(MAPPED_URL + "/update")
-				.flashAttr("task", task)
-		)
-				//.andDo(print())
-				.andExpect(status().isFound())
-				.andExpect(redirectedUrl(MAPPED_URL));
-
 		verify(mockDBFileStorageService, times(0)).storeMultipartFile(any());
 		verify(mockTaskService, times(0)).updateObject(any());
 		verify(mockTaskService, times(1)).updateObject(any(), any());
 		verify(mockDBFileStorageService, times(0)).deleteById(anyLong());
 	}
-
 
 	@Test
 	public void whenUpdateTaskAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
@@ -271,6 +223,60 @@ public class TasksControllerTest {
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
 	}
+
+	@Test
+	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
+	public void whenUpdateTaskAsAuthorizedWithNotNullTaskAndFile_thenOk() throws Exception {
+
+		final MockMultipartFile mockUploadFile = new MockMultipartFile(
+				"uploadFile", "hello.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
+
+		DBFile dbFile = new DBFile();
+		dbFile.setId(2L);
+		dbFile.setFileName("fileName");
+		dbFile.setFileType("type");
+		dbFile.setData("file text".getBytes());
+
+		when(mockDBFileStorageService.storeMultipartFile(mockUploadFile)).thenReturn(dbFile);
+		task.getDbFile().setId(1L);
+
+		mockMvc.perform(multipart(MAPPED_URL + "/update")
+				.file(mockUploadFile)
+				.flashAttr("task", task)
+		)
+				//.andDo(print())
+				.andExpect(status().isFound())
+				.andExpect(redirectedUrl(MAPPED_URL));
+
+		verify(mockDBFileStorageService, times(1)).storeMultipartFile(mockUploadFile);
+		verify(mockTaskService, times(0)).updateObject(any());
+		verify(mockTaskService, times(1)).updateObject(task, dbFile);
+	}
+
+	@Test
+	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
+	public void whenUpdateTaskAsAuthorizedWithWrongUploadFile_thenError() throws Exception {
+		final MockMultipartFile mockUploadFile = new MockMultipartFile(
+				"uploadFile", "hello.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
+
+		when(mockDBFileStorageService.storeMultipartFile(mockUploadFile)).thenThrow(FileUploadException.class);
+
+		mockMvc.perform(multipart(MAPPED_URL + "/update")
+				.file(mockUploadFile)
+				.flashAttr("task", task)
+		)
+				//.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(model().attributeExists("task"))
+				.andExpect(model().hasErrors())
+				.andExpect(model().attributeHasFieldErrors("task", "dbFile"))
+				.andExpect(view().name("taskPage"));
+
+		verify(mockDBFileStorageService, times(1)).storeMultipartFile(any());
+		verify(mockTaskService, times(0)).updateObject(any());
+		verify(mockTaskService, times(0)).updateObject(any(), any());
+	}
+
 
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})

@@ -420,6 +420,11 @@
                         </div>
                     </div>
 
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('dbFile')}">
+                        <p th:text="${#fields.errors('dbFile')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
                     <!--<div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>

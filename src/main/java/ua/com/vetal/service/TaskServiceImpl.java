@@ -68,6 +68,7 @@ public class TaskServiceImpl implements SimpleService<Task> {
 			}
 			task.setDbFile(dbFile);
 		}
+
 		saveObject(task);
 		if (oldFileId != null) {
 			log.debug("Delete old dbFile by ID= {}", oldFileId);

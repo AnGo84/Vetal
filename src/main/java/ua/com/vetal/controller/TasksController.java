@@ -142,7 +142,7 @@ public class TasksController extends BaseController {
 		} catch (IOException e) {
 			log.error("Error on task {} update: {}", task, e.getMessage(), e);
 
-			FieldError fieldError = new FieldError("task", "fileName",
+			FieldError fieldError = new FieldError("task", "dbFile",
 					messageSource.getMessage("file.upload.error",
 							new String[]{e.getMessage()}, new Locale("ru")));
 			bindingResult.addError(fieldError);
