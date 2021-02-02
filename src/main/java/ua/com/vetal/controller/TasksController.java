@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.com.vetal.acpect.LogExecutionTime;
@@ -126,19 +127,29 @@ public class TasksController extends BaseController {
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String updateTask(@Valid @ModelAttribute("task") Task task, BindingResult bindingResult,
 							 @RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile) {
-		log.info("Update " + title + ": " + task);
+		log.info("Update {}: {}", title, task);
+
 		if (bindingResult.hasErrors()) {
 			LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
 			return "taskPage";
 		}
-
+		DBFile dbFile = null;
 		try {
-			DBFile dbFile = dbFileStorageService.storeMultipartFile(uploadFile);
-			taskService.updateObject(task, dbFile);
+			if (uploadFile != null && !uploadFile.isEmpty()) {
+				dbFile = dbFileStorageService.storeMultipartFile(uploadFile);
+			}
+
 		} catch (IOException e) {
+			log.error("Error on task {} update: {}", task, e.getMessage(), e);
+
+			FieldError fieldError = new FieldError("task", "fileName",
+					messageSource.getMessage("file.upload.error",
+							new String[]{e.getMessage()}, new Locale("ru")));
+			bindingResult.addError(fieldError);
 			return "taskPage";
 		}
 
+		taskService.updateObject(task, dbFile);
 		return "redirect:/tasks";
 	}
 

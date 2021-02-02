@@ -197,6 +197,7 @@ public class TasksControllerTest {
 				.andExpect(model().attribute("task", notNullValue()))
 				.andExpect(view().name("taskPage"));
 
+		verify(mockDBFileStorageService, times(0)).storeMultipartFile(any());
 		verify(mockTaskService, times(0)).updateObject(any());
 		verify(mockTaskService, times(0)).updateObject(any(), any());
 	}
@@ -211,8 +212,55 @@ public class TasksControllerTest {
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl(MAPPED_URL));
 
+		verify(mockDBFileStorageService, times(0)).storeMultipartFile(any());
 		verify(mockTaskService, times(0)).updateObject(any());
 		verify(mockTaskService, times(1)).updateObject(any(), any());
+		verify(mockDBFileStorageService, times(0)).deleteById(anyLong());
+
+		/*task.getDbFile().setId(1l);
+		final MockMultipartFile mockFile = new MockMultipartFile("fileName", "filetext".getBytes());
+		mockMvc.perform(post(MAPPED_URL + "/update")
+				.flashAttr("task", task)
+				.param("name", "filename")
+				.param("content", "fileText")
+				.param("uploadFile", String.valueOf(mockFile.getBytes()))
+				.param("uploadFileName", "uploadFileName")
+				.param("uploadFile.name", "uploadFile.name")
+
+				.sessionAttr("uploadFile", mockFile)
+
+		)
+				.andDo(print())
+				.andExpect(status().isFound())
+				.andExpect(redirectedUrl(MAPPED_URL));
+
+		DBFile file = new DBFile();
+		file.setId(2l);
+		file.setFileName("fileName");
+		file.setFileType("type");
+		file.setData("file text".getBytes());
+
+		when(mockDBFileStorageService.storeMultipartFile(any())).thenReturn(file);
+		verify(mockDBFileStorageService, times(1)).storeMultipartFile(any());
+		verify(mockTaskService, times(0)).updateObject(any());
+		verify(mockTaskService, times(2)).updateObject(any(), any());
+		verify(mockDBFileStorageService, times(1)).deleteById(anyLong());*/
+	}
+
+	//@Test
+	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
+	public void whenUpdateTaskAsAuthorizedWithWrongUploadFile_thenError() throws Exception {
+		mockMvc.perform(post(MAPPED_URL + "/update")
+				.flashAttr("task", task)
+		)
+				//.andDo(print())
+				.andExpect(status().isFound())
+				.andExpect(redirectedUrl(MAPPED_URL));
+
+		verify(mockDBFileStorageService, times(0)).storeMultipartFile(any());
+		verify(mockTaskService, times(0)).updateObject(any());
+		verify(mockTaskService, times(1)).updateObject(any(), any());
+		verify(mockDBFileStorageService, times(0)).deleteById(anyLong());
 	}
 
 
