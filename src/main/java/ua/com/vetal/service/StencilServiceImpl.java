@@ -91,14 +91,16 @@ public class StencilServiceImpl implements SimpleService<Stencil> {
     public EmailMessage getEmailMessage(Stencil stencil, String from) {
         EmailMessage emailMessage = new EmailMessage();
 
-        String subject = messageSource.getMessage("email.stencil.change_state", null, new Locale("ru"));
+        String subject = messageSource.getMessage("email.stencil.change_state.subject", null, new Locale("ru"));
+        String text = messageSource.getMessage("email.stencil.change_state.text", null, new Locale("ru"));
         String stencilFullNumber = StringUtils.isEmpty(stencil.getFullNumber()) ? stencil.constructFullNumber() : stencil.getFullNumber();
-        String emailTest = String.format(subject, stencilFullNumber, stencil.getState().getAltName());
+        String emailSubject = String.format(subject, stencilFullNumber, stencil.getState().getAltName());
+        String emailText = String.format(text, stencilFullNumber, stencil.getOrderName(), stencil.getState().getAltName());
 
         emailMessage.setFrom(from);
         emailMessage.setTo(stencil.getManager().getEmail());
-        emailMessage.setSubject(emailTest);
-        emailMessage.setText(emailTest);
+        emailMessage.setSubject(emailSubject);
+        emailMessage.setText(emailText);
         return emailMessage;
     }
 
