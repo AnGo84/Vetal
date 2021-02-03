@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import ua.com.vetal.entity.attributeConverter.MoneyConverter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.text.DecimalFormat;
@@ -55,14 +56,12 @@ public class Order {
 	@NotNull
 	@Column(name = "Date_BEGIN", nullable = false)
 	@Temporal(TemporalType.DATE)
-	// @DateTimeFormat(pattern = "dd-MM-yyyy")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	protected Date dateBegin;
 
 	@NotNull
 	@Column(name = "Date_END", nullable = false)
 	@Temporal(TemporalType.DATE)
-	// @DateTimeFormat(pattern = "dd-MM-yyyy")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	protected Date dateEnd;
 
@@ -146,9 +145,8 @@ public class Order {
 	@Column(name = "Numeration_start")
 	protected int numerationStart;
 
-	//@NotNull
-	//@Digits(integer = 8, fraction = 2)
-	@Column(name = "Amount", nullable = true)
+	@Digits(integer = 8, fraction = 2)
+	@Column(name = "Amount")
 	@Convert(converter = MoneyConverter.class)
 	protected Double amount;
 
@@ -160,26 +158,18 @@ public class Order {
 	@JoinColumn(name = "Payment_ID")
 	protected Payment payment;
 
-	//@Digits(integer = 8, fraction = 2)
-	@Column(name = "Debt_amount", nullable = true)
+	@Digits(integer = 8, fraction = 2)
+	@Column(name = "Debt_amount")
 	@Convert(converter = MoneyConverter.class)
 	protected Double debtAmount;
-	//@Digits(integer = 8, fraction = 2)
-	@Column(name = "other_expenses", nullable = true)
+
+	@Digits(integer = 8, fraction = 2)
+	@Column(name = "other_expenses")
 	@Convert(converter = MoneyConverter.class)
 	protected Double otherExpenses;
 
-	/*public double getAmount() {
-		return amount / 100;
-	}
-
-	public void setAmount(double amount) {
-		this.amount = amount * 100;
-	}*/
-
 	public String getStringAmount() {
 		return new DecimalFormat("#,##0.00").format(amount) + " грн";
-		//return new DecimalFormat("#,##0.00").format(amount / 100) + " грн";
 	}
 
 	public String getNumberBaseWithSuffix() {

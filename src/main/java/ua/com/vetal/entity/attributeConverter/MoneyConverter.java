@@ -18,7 +18,6 @@ public class MoneyConverter implements AttributeConverter<Double, Long> {
 		if (aLong == null) {
 			return Double.valueOf(0);
 		}
-		aLong = aLong / 100;
-		return aLong.doubleValue();
+		return Double.valueOf(aLong) / 100;
 	}
 }

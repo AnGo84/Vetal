@@ -1185,6 +1185,12 @@
                             <div>"No Printing Units were found, please create some first"</div>
                         </div>-->
                     </div>
+
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('debtAmount')}">
+                        <p th:text="${#fields.errors('debtAmount')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
                     <!--<div class="alert alert-danger"
                          th:if="${#fields.hasErrors('printing')}">
                         <p th:text="${#fields.errors('printing')}"

@@ -1,6 +1,6 @@
 package ua.com.vetal.entity;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 import java.util.Calendar;

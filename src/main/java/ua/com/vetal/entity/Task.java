@@ -6,6 +6,7 @@ import org.hibernate.annotations.Type;
 import ua.com.vetal.entity.attributeConverter.MoneyConverter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -23,8 +24,8 @@ public class Task extends Order {
     @Column(name = "File_Name", nullable = false)
     private String fileName;
 
-    @OneToOne
-    @JoinColumn(name = "file_id")
+	@OneToOne
+	@JoinColumn(name = "file_id")
 	private DBFile dbFile;
 
 	@ManyToOne(optional = false)
@@ -34,18 +35,21 @@ public class Task extends Order {
 	@Column(name = "Contractor_number")
 	private String contractorNumber;
 
-	@Column(name = "Amount_for_Contractor", nullable = true)
+	@Digits(integer = 8, fraction = 2)
+	@Column(name = "Amount_for_Contractor")
 	@Convert(converter = MoneyConverter.class)
 	private Double amountForContractor;
 
-	@Column(name = "Contractor_Amount", nullable = true)
+	@Digits(integer = 8, fraction = 2)
+	@Column(name = "Contractor_Amount")
 	@Convert(converter = MoneyConverter.class)
 	private Double contractorAmount;
 
 	@Column(name = "provider")
 	private String provider;
 
-	@Column(name = "provider_cost", nullable = true)
+	@Digits(integer = 8, fraction = 2)
+	@Column(name = "provider_cost")
 	@Convert(converter = MoneyConverter.class)
 	private Double providerCost;
 

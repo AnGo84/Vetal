@@ -31,7 +31,6 @@ public abstract class JasperReportExporter {
 		response.setCharacterEncoding(UTF_8);
 		response.setHeader("Content-Disposition", "inline; filename=" + URLEncoder.encode(prepareOutputFileName(outputFileName), UTF_8));
 		response.setContentType(type.getMediaType().getMediaType());
-		//response.setContentLength(outputStream.size());
 		return response.getOutputStream();
 	}
 

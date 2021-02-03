@@ -278,14 +278,14 @@
                                 </div>
                                 <div class="btn-group btn-group-sm"
                                      sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">
-                                    <a class="btn btn-primary btn-sm"
+                                    <a class="btn btn-primary btn-sm mx-sm-1"
                                        role="button" th:href="@{'/tasks/copy-' + ${task.id}}"
                                        th:title="#{message.record.clone}"><i class="fa fa-clone"></i></a>
                                     <!--<button class="btn btn-primary btn-sm mx-sm-1"
                                             role="button" th:href="@{'/tasks/copy-' + ${task.id}}"
                                             th:title="#{message.record.clone}"><i class="fa fa-clone"></i></button>-->
 
-                                    <a class="btn btn-success btn-sm  mx-sm-1"
+                                    <a class="btn btn-success btn-sm mx-sm-1"
                                        role="button" th:href="@{'/tasks/edit-' + ${task.id}}"
                                        th:title="#{message.record.edit}"><i class="fa fa-pencil"></i></a>
 

@@ -1007,13 +1007,21 @@
                         <div class="col-sm-9">
                             <input id="stencilDebtAmount" type="number" min="0.00" step="0.01"
                                    class="form-control form-control-sm" th:field="*{debtAmount}"
-                                   th:disabled="${readOnly}"
-                                   onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"/>
+                                   ${#numbers.formatDecimal(abc.value, 1, 'DEFAULT', 2, 'DEFAULT')}
+                            ${#numbers.formatDecimal(
+
+                            th:disabled="${readOnly}"
+                            onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)"/>
                         </div>
                         <!--<div class="col-sm-6"
                              th:if="${printingUnitList == null or #lists.isEmpty(printingUnitList)}">
                             <div>"No Printing Units were found, please create some first"</div>
                         </div>-->
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('debtAmount')}">
+                        <p th:text="${#fields.errors('debtAmount')}"
+                           style="margin-bottom: 0rem"></p>
                     </div>
                     <!--<div class="alert alert-danger"
                          th:if="${#fields.hasErrors('printing')}">

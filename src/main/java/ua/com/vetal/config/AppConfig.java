@@ -14,12 +14,6 @@ import java.util.Map;
 @Configuration
 public class AppConfig {
 
-    /*@Bean
-    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    public OrderViewFilter filterDataBean() {
-        return new OrderViewFilter();
-    }*/
-
     @Bean
     @SessionScope
     public Map<String, ViewFilter> getViewFilters() {

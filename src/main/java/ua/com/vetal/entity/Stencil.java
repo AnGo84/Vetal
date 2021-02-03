@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import ua.com.vetal.entity.attributeConverter.MoneyConverter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -38,7 +39,6 @@ public class Stencil extends Order {
 
     @Column(name = "Date_print_BEGIN")
     @Temporal(TemporalType.DATE)
-    // @DateTimeFormat(pattern = "dd-MM-yyyy")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date datePrintBegin;
 
@@ -58,7 +58,7 @@ public class Stencil extends Order {
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean cutRibbon;
 
-    @Column(name = "Ribbon_length", nullable = true)
+    @Column(name = "Ribbon_length")
     private int ribbonLength;
 
     @NotNull
@@ -69,11 +69,13 @@ public class Stencil extends Order {
     @Column(name = "kraskoottisk")
     private int kraskoottisk;
 
-    @Column(name = "cost_of_materials", nullable = true)
+    @Digits(integer = 8, fraction = 2)
+    @Column(name = "cost_of_materials")
     @Convert(converter = MoneyConverter.class)
     private Double costOfMaterials;
 
-    @Column(name = "cost_of_printing", nullable = true)
+    @Digits(integer = 8, fraction = 2)
+    @Column(name = "cost_of_printing")
     @Convert(converter = MoneyConverter.class)
     private Double costOfPrinting;
 

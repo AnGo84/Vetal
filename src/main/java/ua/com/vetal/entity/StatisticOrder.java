@@ -7,6 +7,7 @@ import ua.com.vetal.entity.attributeConverter.MoneyConverter;
 import ua.com.vetal.entity.pk.OrderPK;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
 import java.util.Date;
 
 /**
@@ -51,12 +52,12 @@ public class StatisticOrder {
 	@Column(name = "Printing")
 	private int printing;
 
-	//@Digits(integer = 8, fraction = 2)
+	@Digits(integer = 8, fraction = 2)
 	@Column(name = "Amount")
 	@Convert(converter = MoneyConverter.class)
 	private Double amount;
 
-	//@Digits(integer = 8, fraction = 2)
+	@Digits(integer = 8, fraction = 2)
 	@Column(name = "Debt_amount")
 	@Convert(converter = MoneyConverter.class)
 	private Double debtAmount;

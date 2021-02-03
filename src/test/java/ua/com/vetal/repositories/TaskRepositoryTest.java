@@ -1,6 +1,6 @@
 package ua.com.vetal.repositories;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +30,11 @@ public class TaskRepositoryTest {
 
 	@BeforeEach
 	public void beforeEach() {
-        taskRepository.deleteAll();
+		taskRepository.deleteAll();
 
-        task = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 1), entityManager);
-        task = entityManager.persistAndFlush(task);
-    }
+		task = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 1), entityManager);
+		task = entityManager.persistAndFlush(task);
+	}
 
 	@Test
 	public void whenFindByAccount_thenReturnObject() {
@@ -83,224 +83,224 @@ public class TaskRepositoryTest {
 
 	@Test
 	public void whenFindAll_thenReturnListOfManagers() {
-        //given
-        Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
-        newTask = entityManager.persistAndFlush(newTask);
+		//given
+		Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
+		newTask = entityManager.persistAndFlush(newTask);
 
-        entityManager.persistAndFlush(newTask);
-        // when
-        List<Task> tasks = taskRepository.findAll();
-        // then
-        assertNotNull(tasks);
-        assertFalse(tasks.isEmpty());
-        assertEquals(tasks.size(), 2);
+		entityManager.persistAndFlush(newTask);
+		// when
+		List<Task> tasks = taskRepository.findAll();
+		// then
+		assertNotNull(tasks);
+		assertFalse(tasks.isEmpty());
+		assertEquals(tasks.size(), 2);
 
 	}
 
 	@Test
 	public void it_should_save_Client() {
-        Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
-        newTask = taskRepository.save(newTask);
-        Task foundTask = taskRepository.findById(newTask.getId()).get();
+		Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
+		newTask = taskRepository.save(newTask);
+		Task foundTask = taskRepository.findById(newTask.getId()).get();
 
-        // then
-        assertNotNull(foundTask);
-        assertNotNull(foundTask.getId());
-        assertEquals(newTask, foundTask);
-    }
+		// then
+		assertNotNull(foundTask);
+		assertNotNull(foundTask.getId());
+		assertEquals(newTask, foundTask);
+	}
 
-    @Test
-    public void whenSaveClientWithAccountTooLong_thenThrowConstraintViolationException() {
-        Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
-        newTask.setAccount("accountWithLengthMoreThen50SymbolsIsTooLongForSaving");
+	@Test
+	public void whenSaveClientWithAccountTooLong_thenThrowConstraintViolationException() {
+		Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
+		newTask.setAccount("accountWithLengthMoreThen50SymbolsIsTooLongForSaving");
 
-        assertThrows(ConstraintViolationException.class, () -> {
-            taskRepository.save(newTask);
-        });
-    }
+		assertThrows(ConstraintViolationException.class, () -> {
+			taskRepository.save(newTask);
+		});
+	}
 
-    @Test
-    public void whenSaveClientWithOutManager_thenThrowDataIntegrityViolationException() {
-        Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
-        newTask.setManager(null);
+	@Test
+	public void whenSaveClientWithOutManager_thenThrowDataIntegrityViolationException() {
+		Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
+		newTask.setManager(null);
 
-        assertThrows(DataIntegrityViolationException.class, () -> {
-            taskRepository.save(newTask);
-        });
-    }
+		assertThrows(DataIntegrityViolationException.class, () -> {
+			taskRepository.save(newTask);
+		});
+	}
 
-    @Test
-    public void whenSaveClientWithNullWorkName_thenThrowConstraintViolationException() {
-        Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
-        newTask.setWorkName(null);
+	@Test
+	public void whenSaveClientWithNullWorkName_thenThrowConstraintViolationException() {
+		Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
+		newTask.setWorkName(null);
 
-        assertThrows(ConstraintViolationException.class, () -> {
-            taskRepository.save(newTask);
-        });
-    }
+		assertThrows(ConstraintViolationException.class, () -> {
+			taskRepository.save(newTask);
+		});
+	}
 
-    @Test
-    public void whenSaveClientWithEmptyWorkName_thenThrowConstraintViolationException() {
-        Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
-        newTask.setWorkName("");
+	@Test
+	public void whenSaveClientWithEmptyWorkName_thenThrowConstraintViolationException() {
+		Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
+		newTask.setWorkName("");
 
-        assertThrows(ConstraintViolationException.class, () -> {
-            taskRepository.save(newTask);
-        });
-    }
+		assertThrows(ConstraintViolationException.class, () -> {
+			taskRepository.save(newTask);
+		});
+	}
 
-    @Test
-    public void whenSaveClientWithOutContractor_thenThrowDataIntegrityViolationException() {
-        Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
-        newTask.setContractor(null);
+	@Test
+	public void whenSaveClientWithOutContractor_thenThrowDataIntegrityViolationException() {
+		Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
+		newTask.setContractor(null);
 
-        assertThrows(DataIntegrityViolationException.class, () -> {
-            taskRepository.save(newTask);
-        });
-    }
+		assertThrows(DataIntegrityViolationException.class, () -> {
+			taskRepository.save(newTask);
+		});
+	}
 
-    @Test
-    public void whenSaveClientWithOutProduction_thenThrowConstraintViolationException() {
-        Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
-        newTask.setProduction(null);
+	@Test
+	public void whenSaveClientWithOutProduction_thenThrowConstraintViolationException() {
+		Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
+		newTask.setProduction(null);
 
-        assertThrows(ConstraintViolationException.class, () -> {
-            taskRepository.save(newTask);
-        });
-    }
+		assertThrows(ConstraintViolationException.class, () -> {
+			taskRepository.save(newTask);
+		});
+	}
 
-    @Test
-    public void whenSaveClientWithOutProductionType_thenThrowConstraintViolationException() {
-        Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
-        newTask.setProductionType(null);
+	@Test
+	public void whenSaveClientWithOutProductionType_thenThrowConstraintViolationException() {
+		Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
+		newTask.setProductionType(null);
 
-        assertThrows(ConstraintViolationException.class, () -> {
-            taskRepository.save(newTask);
-        });
-    }
+		assertThrows(ConstraintViolationException.class, () -> {
+			taskRepository.save(newTask);
+		});
+	}
 
-    @Test
-    public void whenSaveClientWithOutDateBegin_thenThrowConstraintViolationException() {
-        Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
-        newTask.setDateBegin(null);
+	@Test
+	public void whenSaveClientWithOutDateBegin_thenThrowConstraintViolationException() {
+		Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
+		newTask.setDateBegin(null);
 
-        assertThrows(ConstraintViolationException.class, () -> {
-            taskRepository.save(newTask);
-        });
-    }
+		assertThrows(ConstraintViolationException.class, () -> {
+			taskRepository.save(newTask);
+		});
+	}
 
-    @Test
-    public void whenSaveClientWithOutDateEnd_thenThrowConstraintViolationException() {
-        Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
-        newTask.setDateEnd(null);
+	@Test
+	public void whenSaveClientWithOutDateEnd_thenThrowConstraintViolationException() {
+		Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
+		newTask.setDateEnd(null);
 
-        assertThrows(ConstraintViolationException.class, () -> {
-            taskRepository.save(newTask);
-        });
-    }
+		assertThrows(ConstraintViolationException.class, () -> {
+			taskRepository.save(newTask);
+		});
+	}
 
-    @Test
-    public void whenSaveClientWithOutClient_thenThrowConstraintViolationException() {
-        Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
-        newTask.setClient(null);
+	@Test
+	public void whenSaveClientWithOutClient_thenThrowConstraintViolationException() {
+		Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
+		newTask.setClient(null);
 
-        assertThrows(ConstraintViolationException.class, () -> {
-            taskRepository.save(newTask);
-        });
-    }
+		assertThrows(ConstraintViolationException.class, () -> {
+			taskRepository.save(newTask);
+		});
+	}
 
-    @Test
-    public void whenSaveClientWithOutStock_thenThrowConstraintViolationException() {
-        Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
-        newTask.setStock(null);
+	@Test
+	public void whenSaveClientWithOutStock_thenThrowConstraintViolationException() {
+		Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
+		newTask.setStock(null);
 
-        assertThrows(ConstraintViolationException.class, () -> {
-            taskRepository.save(newTask);
-        });
-    }
+		assertThrows(ConstraintViolationException.class, () -> {
+			taskRepository.save(newTask);
+		});
+	}
 
-    @Test
-    public void whenSaveClientWithOutPrintingUnit_thenThrowConstraintViolationException() {
-        Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
-        newTask.setPrintingUnit(null);
+	@Test
+	public void whenSaveClientWithOutPrintingUnit_thenThrowConstraintViolationException() {
+		Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
+		newTask.setPrintingUnit(null);
 
-        assertThrows(ConstraintViolationException.class, () -> {
-            taskRepository.save(newTask);
-        });
-    }
+		assertThrows(ConstraintViolationException.class, () -> {
+			taskRepository.save(newTask);
+		});
+	}
 
-    @Test
-    public void whenSaveClientWithOutChromaticitygUnit_thenThrowConstraintViolationException() {
-        Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
-        newTask.setChromaticity(null);
+	@Test
+	public void whenSaveClientWithOutChromaticitygUnit_thenThrowConstraintViolationException() {
+		Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
+		newTask.setChromaticity(null);
 
-        assertThrows(ConstraintViolationException.class, () -> {
-            taskRepository.save(newTask);
-        });
-    }
+		assertThrows(ConstraintViolationException.class, () -> {
+			taskRepository.save(newTask);
+		});
+	}
 
-    @Test
-    public void whenSaveClientWithOutPrintingFormat_thenThrowConstraintViolationException() {
-        Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
-        newTask.setPrintingFormat(null);
+	@Test
+	public void whenSaveClientWithOutPrintingFormat_thenThrowConstraintViolationException() {
+		Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
+		newTask.setPrintingFormat(null);
 
-        assertThrows(ConstraintViolationException.class, () -> {
-            taskRepository.save(newTask);
-        });
-    }
+		assertThrows(ConstraintViolationException.class, () -> {
+			taskRepository.save(newTask);
+		});
+	}
 
-    @Test
-    public void whenSaveClientWithOutLaminateFormat_thenThrowDataIntegrityViolationException() {
-        Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
-        newTask.setLaminate(null);
+	@Test
+	public void whenSaveClientWithOutLaminateFormat_thenThrowDataIntegrityViolationException() {
+		Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
+		newTask.setLaminate(null);
 
-        assertThrows(DataIntegrityViolationException.class, () -> {
-            taskRepository.save(newTask);
-        });
-    }
+		assertThrows(DataIntegrityViolationException.class, () -> {
+			taskRepository.save(newTask);
+		});
+	}
 
-    @Test
-    public void whenSaveClientWithOutPaperFormat_thenThrowConstraintViolationException() {
-        Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
-        newTask.setPaper(null);
+	@Test
+	public void whenSaveClientWithOutPaperFormat_thenThrowConstraintViolationException() {
+		Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
+		newTask.setPaper(null);
 
-        assertThrows(ConstraintViolationException.class, () -> {
-            taskRepository.save(newTask);
-        });
-    }
+		assertThrows(ConstraintViolationException.class, () -> {
+			taskRepository.save(newTask);
+		});
+	}
 
-    @Test
-    public void whenSaveClientWithOutCringleFormat_thenThrowDataIntegrityViolationException() {
-        Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
-        newTask.setCringle(null);
+	@Test
+	public void whenSaveClientWithOutCringleFormat_thenThrowDataIntegrityViolationException() {
+		Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
+		newTask.setCringle(null);
 
-        assertThrows(DataIntegrityViolationException.class, () -> {
-            taskRepository.save(newTask);
-        });
-    }
+		assertThrows(DataIntegrityViolationException.class, () -> {
+			taskRepository.save(newTask);
+		});
+	}
 
-    @Test
-    public void whenSaveClientWithNoteTooLong_thenThrowConstraintViolationException() {
-        Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
-        newTask.setNote(StringUtils.repeat("noteWithLengthMoreThen1000SymbolsIsTooLongForSaving", 20));
+	@Test
+	public void whenSaveClientWithNoteTooLong_thenThrowConstraintViolationException() {
+		Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
+		newTask.setNote(StringUtils.repeat("noteWithLengthMoreThen1000SymbolsIsTooLongForSaving", 20));
 
-        assertThrows(ConstraintViolationException.class, () -> {
-            taskRepository.save(newTask);
-        });
-    }
+		assertThrows(ConstraintViolationException.class, () -> {
+			taskRepository.save(newTask);
+		});
+	}
 
 	@Test
 	public void whenDeleteById_thenOk() {
-        //given
-        Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
-        newTask = entityManager.persistAndFlush(newTask);
-        assertEquals(taskRepository.findAll().size(), 2);
+		//given
+		Task newTask = TestDataServiceUtils.saveTaskParts(TestDataUtils.getTask(null, 2), entityManager);
+		newTask = entityManager.persistAndFlush(newTask);
+		assertEquals(taskRepository.findAll().size(), 2);
 
-        // when
-        taskRepository.deleteById(newTask.getId());
-        // then
-        assertEquals(taskRepository.findAll().size(), 1);
-    }
+		// when
+		taskRepository.deleteById(newTask.getId());
+		// then
+		assertEquals(taskRepository.findAll().size(), 1);
+	}
 
 	@Test
 	public void whenDeleteById_thenThrowEmptyResultDataAccessException() {
