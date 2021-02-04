@@ -110,7 +110,7 @@ public class StencilRepositoryTest {
 	}
 
 	@Test
-	public void whenSaveClientWithAccountTooLong_thenThrowConstraintViolationException() {
+	public void whenSaveStencilWithAccountTooLong_thenThrowConstraintViolationException() {
 		Stencil newStencil = TestDataServiceUtils.saveStencilParts(TestDataUtils.getStencil(null, 2), entityManager);
 		newStencil.setAccount("accountWithLengthMoreThen50SymbolsIsTooLongForSaving");
 
@@ -120,7 +120,7 @@ public class StencilRepositoryTest {
 	}
 
 	@Test
-	public void whenSaveClientWithOutManager_thenThrowDataIntegrityViolationException() {
+	public void whenSaveStencilWithOutManager_thenThrowDataIntegrityViolationException() {
 		Stencil newStencil = TestDataServiceUtils.saveStencilParts(TestDataUtils.getStencil(null, 2), entityManager);
 		newStencil.setManager(null);
 
@@ -131,7 +131,7 @@ public class StencilRepositoryTest {
 
 
 	@Test
-	public void whenSaveClientWithOutProduction_thenThrowConstraintViolationException() {
+	public void whenSaveStencilWithOutProduction_thenThrowConstraintViolationException() {
 		Stencil newStencil = TestDataServiceUtils.saveStencilParts(TestDataUtils.getStencil(null, 2), entityManager);
 		newStencil.setProduction(null);
 
@@ -141,7 +141,7 @@ public class StencilRepositoryTest {
 	}
 
 	@Test
-	public void whenSaveClientWithOutDateBegin_thenThrowConstraintViolationException() {
+	public void whenSaveStencilWithOutDateBegin_thenThrowConstraintViolationException() {
 		Stencil newStencil = TestDataServiceUtils.saveStencilParts(TestDataUtils.getStencil(null, 2), entityManager);
 		newStencil.setDateBegin(null);
 
@@ -151,7 +151,7 @@ public class StencilRepositoryTest {
 	}
 
 	@Test
-	public void whenSaveClientWithOutDateEnd_thenThrowConstraintViolationException() {
+	public void whenSaveStencilWithOutDateEnd_thenThrowConstraintViolationException() {
 		Stencil newStencil = TestDataServiceUtils.saveStencilParts(TestDataUtils.getStencil(null, 2), entityManager);
 		newStencil.setDateEnd(null);
 
@@ -161,7 +161,7 @@ public class StencilRepositoryTest {
 	}
 
 	@Test
-	public void whenSaveClientWithOutClient_thenThrowConstraintViolationException() {
+	public void whenSaveStencilWithOutClient_thenThrowConstraintViolationException() {
 		Stencil newStencil = TestDataServiceUtils.saveStencilParts(TestDataUtils.getStencil(null, 2), entityManager);
 		newStencil.setClient(null);
 
@@ -171,7 +171,7 @@ public class StencilRepositoryTest {
 	}
 
 	@Test
-	public void whenSaveClientWithOutStock_thenThrowConstraintViolationException() {
+	public void whenSaveStencilWithOutStock_thenThrowConstraintViolationException() {
 		Stencil newStencil = TestDataServiceUtils.saveStencilParts(TestDataUtils.getStencil(null, 2), entityManager);
 		newStencil.setStock(null);
 
@@ -181,7 +181,7 @@ public class StencilRepositoryTest {
 	}
 
 	@Test
-	public void whenSaveClientWithOutPrintingUnit_thenThrowConstraintViolationException() {
+	public void whenSaveStencilWithOutPrintingUnit_thenThrowConstraintViolationException() {
 		Stencil newStencil = TestDataServiceUtils.saveStencilParts(TestDataUtils.getStencil(null, 2), entityManager);
 		newStencil.setPrintingUnit(null);
 
@@ -191,7 +191,7 @@ public class StencilRepositoryTest {
 	}
 
 	@Test
-	public void whenSaveClientWithOutPaperFormat_thenThrowConstraintViolationException() {
+	public void whenSaveStencilWithOutPaperFormat_thenThrowConstraintViolationException() {
 		Stencil newStencil = TestDataServiceUtils.saveStencilParts(TestDataUtils.getStencil(null, 2), entityManager);
 		newStencil.setPaper(null);
 
@@ -202,9 +202,19 @@ public class StencilRepositoryTest {
 
 
 	@Test
-	public void whenSaveClientWithPrintingNoteTooLong_thenThrowConstraintViolationException() {
+	public void whenSaveStencilWithPrintingNoteTooLong_thenThrowConstraintViolationException() {
 		Stencil newStencil = TestDataServiceUtils.saveStencilParts(TestDataUtils.getStencil(null, 2), entityManager);
 		newStencil.setPrintingNote(StringUtils.repeat("noteWithLengthMoreThen1000SymbolsIsTooLongForSaving", 20));
+
+		assertThrows(ConstraintViolationException.class, () -> {
+			stencilRepository.save(newStencil);
+		});
+	}
+
+	@Test
+	public void whenSaveStencilWithoutProductionAvailability_thenThrowConstraintViolationException() {
+		Stencil newStencil = TestDataServiceUtils.saveStencilParts(TestDataUtils.getStencil(null, 2), entityManager);
+		newStencil.setProductionAvailability(null);
 
 		assertThrows(ConstraintViolationException.class, () -> {
 			stencilRepository.save(newStencil);

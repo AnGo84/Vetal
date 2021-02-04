@@ -5,6 +5,7 @@ import lombok.ToString;
 import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 import ua.com.vetal.entity.attributeConverter.MoneyConverter;
+import ua.com.vetal.entity.attributeConverter.ProductionAvailabilityConverter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
@@ -78,6 +79,11 @@ public class Stencil extends Order {
     @Column(name = "cost_of_printing")
     @Convert(converter = MoneyConverter.class)
     private Double costOfPrinting;
+
+    @NotNull
+    @Column(name = "Production_availability_ID")
+    @Convert(converter = ProductionAvailabilityConverter.class)
+    private ProductionAvailability productionAvailability;
 
     public Stencil getCopy() {
 

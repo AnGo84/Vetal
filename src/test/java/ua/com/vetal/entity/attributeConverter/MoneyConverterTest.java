@@ -4,6 +4,7 @@ package ua.com.vetal.entity.attributeConverter;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MoneyConverterTest {
 	private MoneyConverter moneyConverter = new MoneyConverter();
@@ -23,8 +24,10 @@ class MoneyConverterTest {
 		assertEquals(12.12, moneyConverter.convertToEntityAttribute(1212l));
 
 		//
-		Long val = 1236l;
+		Long lVal = 1236l;
+		assertEquals(lVal, moneyConverter.convertToDatabaseColumn(moneyConverter.convertToEntityAttribute(lVal)));
 
-		assertEquals(val, moneyConverter.convertToDatabaseColumn(moneyConverter.convertToEntityAttribute(val)));
+		Double dVal = Double.valueOf(1236.14);
+		assertTrue(dVal.equals(moneyConverter.convertToEntityAttribute(moneyConverter.convertToDatabaseColumn(dVal))));
 	}
 }

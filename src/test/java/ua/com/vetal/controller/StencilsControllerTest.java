@@ -257,6 +257,34 @@ public class StencilsControllerTest {
 		verify(mockStencilService, times(1)).updateObject(any());
 	}
 
+	@Test
+	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
+	public void whenUpdateStencilAsAuthorizedWithNotFillStencil_thenReturnError() throws Exception {
+		Stencil stencil = new Stencil();
+
+		mockMvc.perform(post(MAPPED_URL + "/update")
+				.flashAttr("stencil", stencil)
+		)
+				//.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(model().attribute("stencil", notNullValue()))
+				.andExpect(model().hasErrors())
+				.andExpect(model().attributeHasFieldErrors("stencil", "productionAvailability"))
+				.andExpect(model().attributeHasFieldErrors("stencil", "numberBase"))
+				.andExpect(model().attributeHasFieldErrors("stencil", "client"))
+				.andExpect(model().attributeHasFieldErrors("stencil", "dateBegin"))
+				.andExpect(model().attributeHasFieldErrors("stencil", "dateEnd"))
+				.andExpect(model().attributeHasFieldErrors("stencil", "production"))
+				.andExpect(model().attributeHasFieldErrors("stencil", "printingUnit"))
+				.andExpect(model().attributeHasFieldErrors("stencil", "orderName"))
+				.andExpect(model().attributeHasFieldErrors("stencil", "paperFormat"))
+
+				.andExpect(view().name("stencilPage"));
+
+		verify(mockStencilService, times(0)).findById(stencil.getId());
+		verify(mockMailService, times(0)).sendEmail(any());
+		verify(mockStencilService, times(0)).updateObject(any());
+	}
 
 	@Test
 	public void whenUpdateStencilAsNoAuthorized_thenRedirectToLoginPage() throws Exception {

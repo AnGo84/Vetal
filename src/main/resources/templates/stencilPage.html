@@ -568,6 +568,44 @@
                 </div>
 
             </div>
+            <!-- Production availability -->
+            <div class="row">
+                <div class="col-sm-6">
+
+                    <div class="form-group row">
+
+                        <label for="stencilPaper"
+                               class="col-sm-3 col-form-label col-form-label-sm"><span
+                                th:text="#{label.production_availability}">Production availability</span>:</label>
+                        <div class="col-sm-9">
+                            <!--th:if="${productionAvailabilityList != null and not #lists.isEmpty(productionAvailabilityList)}"-->
+                            <select id="stencilProductionAvailabilityList" th:field="*{productionAvailability}"
+                                    th:disabled="${readOnly}" class="form-control form-control-sm selectpicker"
+                                    data-live-search="true">
+                                <option value="" th:text="#{label.select_choose}"> Please Select</option>
+                                <option th:each="dropDownItem : ${T(ua.com.vetal.entity.ProductionAvailability).values()}"
+                                        th:value="${dropDownItem}"
+                                        th:text="#{${'label.production_availability.' + dropDownItem.name}}"
+                                        th:attr="data-tokens=${dropDownItem.name}"/>
+                            </select>
+                        </div>
+                        <div class="col-sm-9"
+                             th:if="${paperList == null or #lists.isEmpty(paperList)}">
+                            <div>"No Papers were found, please create some first"</div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger"
+                         th:if="${#fields.hasErrors('productionAvailability')}">
+                        <p th:text="${#fields.errors('productionAvailability')}"
+                           style="margin-bottom: 0rem"></p>
+                    </div>
+
+                </div>
+                <div class="col-sm-6">
+
+                </div>
+
+            </div>
 
             <!-- Printing Note -->
             <div class="row">

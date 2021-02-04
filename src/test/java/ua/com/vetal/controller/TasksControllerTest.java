@@ -280,6 +280,38 @@ public class TasksControllerTest {
 
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
+	public void whenUpdateTaskAsAuthorizedWithNotFillStencil_thenReturnError() throws Exception {
+		Task task = new Task();
+
+		mockMvc.perform(post(MAPPED_URL + "/update")
+				.flashAttr("task", task)
+		)
+				//.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(model().attribute("task", notNullValue()))
+				.andExpect(model().hasErrors())
+				.andExpect(model().attributeHasFieldErrors("task", "dateBegin"))
+				.andExpect(model().attributeHasFieldErrors("task", "dateEnd"))
+				.andExpect(model().attributeHasFieldErrors("task", "numberBase"))
+				.andExpect(model().attributeHasFieldErrors("task", "client"))
+				.andExpect(model().attributeHasFieldErrors("task", "production"))
+				.andExpect(model().attributeHasFieldErrors("task", "productionType"))
+				.andExpect(model().attributeHasFieldErrors("task", "printingUnit"))
+				.andExpect(model().attributeHasFieldErrors("task", "printingFormat"))
+				.andExpect(model().attributeHasFieldErrors("task", "paper"))
+				.andExpect(model().attributeHasFieldErrors("task", "chromaticity"))
+				.andExpect(model().attributeHasFieldErrors("task", "stock"))
+				.andExpect(model().attributeHasFieldErrors("task", "workName"))
+
+				.andExpect(view().name("taskPage"));
+
+		verify(mockDBFileStorageService, times(0)).storeMultipartFile(any());
+		verify(mockTaskService, times(0)).updateObject(any());
+		verify(mockTaskService, times(0)).updateObject(any(), any());
+	}
+
+	@Test
+	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenDeleteTaskAsAuthorizedWithNotNullUser_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/delete-" + task.getId()))
 				//.andDo(print())

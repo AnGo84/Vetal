@@ -201,6 +201,7 @@ public class TestDataUtils {
 		ProductionTypeDirectory productionType = TestBuildersUtils.getProductionTypeDirectory(id, "Production type Stencil" + number);
 		ProductionDirectory production = TestBuildersUtils.getProductionDirectory(id, "fullName" + number, "shortName" + number, productionType);
 		stencil.setProduction(production);
+		stencil.setProductionAvailability(ProductionAvailability.IN_STOCK);
 
 		stencil.setStock(TestBuildersUtils.getStockDirectory(id, "Stock Stencil" + number));
 
