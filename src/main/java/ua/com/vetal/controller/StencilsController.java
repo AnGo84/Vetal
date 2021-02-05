@@ -37,7 +37,6 @@ public class StencilsController extends BaseController {
 	static final Set<Long> emailingStates = new HashSet<>(Arrays.asList(2l, 4l));
 
 	private String title = "Stencils";
-	private String personName = "Stencils";
 	private String pageName = "/stencils";
 
 	@Autowired
@@ -204,11 +203,6 @@ public class StencilsController extends BaseController {
 	@ModelAttribute("title")
 	public String initializeTitle() {
 		return this.title;
-	}
-
-	@ModelAttribute("personName")
-	public String initializePersonName() {
-		return this.personName;
 	}
 
 	@ModelAttribute("pageName")

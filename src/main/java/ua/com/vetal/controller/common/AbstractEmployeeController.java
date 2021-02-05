@@ -69,9 +69,6 @@ public abstract class AbstractEmployeeController<E extends AbstractEmployeeEntit
         return "redirect:" + controllerType.getPageName();
     }
 
-    /**
-     * This method will provide Title to views
-     */
     @ModelAttribute("title")
     public String initializeTitle() {
         return controllerType.getTitle();

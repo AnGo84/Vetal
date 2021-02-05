@@ -47,7 +47,6 @@ import java.util.Map;
 @Slf4j
 public class TasksController extends BaseController {
 	private final String title = "Tasks";
-	private final String personName = "Tasks";
 	private final String pageName = "/tasks";
 
 	@Autowired
@@ -258,11 +257,6 @@ public class TasksController extends BaseController {
 	@ModelAttribute("title")
 	public String initializeTitle() {
 		return this.title;
-	}
-
-	@ModelAttribute("personName")
-	public String initializePersonName() {
-		return this.personName;
 	}
 
 	@ModelAttribute("pageName")
