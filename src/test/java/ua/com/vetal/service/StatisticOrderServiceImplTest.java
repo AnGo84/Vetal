@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Sort;
 import ua.com.vetal.TestBuildersUtils;
-import ua.com.vetal.dao.OrderDAO;
+import ua.com.vetal.dao.StatisticDAO;
 import ua.com.vetal.entity.*;
 import ua.com.vetal.entity.filter.OrderViewFilter;
 import ua.com.vetal.repositories.OrderRepository;
@@ -28,10 +28,10 @@ public class StatisticOrderServiceImplTest {
 	private EntityManager entityManager;
 	@Autowired
 	private OrderServiceImpl orderService;
-	@MockBean
-	private OrderRepository mockOrderRepository;
-	@MockBean
-	private OrderDAO mockOrderDAO;
+    @MockBean
+    private OrderRepository mockOrderRepository;
+    @MockBean
+    private StatisticDAO mockStatisticDAO;
 
 	private ProductionDirectory production;
 	private Manager manager;
@@ -72,11 +72,11 @@ public class StatisticOrderServiceImplTest {
 
     @Test
     void whenFindByFilterData() {
-		when(mockOrderDAO.findByFilterData(any(OrderViewFilter.class))).thenReturn(Arrays.asList(statisticOrder));
-		List<StatisticOrder> objects = orderService.findByFilterData(new OrderViewFilter());
-		assertNotNull(objects);
-		assertFalse(objects.isEmpty());
-		assertEquals(objects.size(), 1);
-	}
+        when(mockStatisticDAO.findByFilterData(any(OrderViewFilter.class))).thenReturn(Arrays.asList(statisticOrder));
+        List<StatisticOrder> objects = orderService.findByFilterData(new OrderViewFilter());
+        assertNotNull(objects);
+        assertFalse(objects.isEmpty());
+        assertEquals(objects.size(), 1);
+    }
 
 }

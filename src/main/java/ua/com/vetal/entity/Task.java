@@ -100,51 +100,25 @@ public class Task extends Order {
 	public Task getCopy() {
 
 		Task task = new Task();
+		copyCommonFields(this, task);
 
-		task.manager = this.manager;
 		task.workName = this.workName;
 		task.fileName = this.fileName;
 		task.contractor = this.contractor;
-		task.production = this.production;
 		task.productionType = this.productionType;
-		task.dateBegin = this.dateBegin;
-		task.dateEnd = this.dateEnd;
-		task.client = this.client;
-		task.stock = this.stock;
-		task.printing = this.printing;
-		task.printingUnit = this.printingUnit;
 		task.chromaticity = this.chromaticity;
 		task.format = this.format;
 		task.printingFormat = this.printingFormat;
 		task.laminate = this.laminate;
-		task.paper = this.paper;
 		task.wares = this.wares;
 
 		task.cringle = this.cringle;
-
-		task.fillet = this.fillet;
-		task.popup = this.popup;
-		task.carving = this.carving;
-		task.stamping = this.stamping;
-		task.embossing = this.embossing;
-		task.bending = this.bending;
-		task.plotter = this.plotter;
 
 		task.assembly = this.assembly;
 		task.cutting = this.cutting;
 		task.note = this.note;
 
-		task.packBox = this.packBox;
-		task.packPellicle = this.packPellicle;
-		task.packPaper = this.packPaper;
-		task.packPackage = this.packPackage;
-		task.packNP = this.packNP;
 		task.packBy = this.packBy;
-
-		task.numeration = this.numeration;
-		task.numerationStart = this.numerationStart;
-
-		task.amount = this.amount;
 
 		return task;
 	}

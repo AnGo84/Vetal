@@ -26,18 +26,15 @@ public class OrderJasperReportData implements Reportable<StatisticOrder, JasperR
 
 	@Override
 	public JasperReportData getReportData(List<StatisticOrder> objects) {
-		log.info("Get JasperReportData for objects: {}", objects);
+        log.info("Get JasperReportData for objects: {}", objects);
 
-		Map<String, Object> parameters = new HashMap<>();
-		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(objects);
-		parameters.put("orders", dataSource);
+        Map<String, Object> parameters = new HashMap<>();
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(objects);
+        parameters.put("orders", dataSource);
 
-		return JasperReportData.builder()
-				.reportName(AppJasperReportType.ORDERS_REPORT.getReportName())
-				.parameters(parameters)
-				.dataSource(new JREmptyDataSource())
-				.build();
-	}
+        return getJasperReportData(parameters);
+    }
+
 
 	@Override
 	public JasperReportData getReportData(List<StatisticOrder> objects, OrderViewFilter orderViewFilter) {
@@ -63,10 +60,14 @@ public class OrderJasperReportData implements Reportable<StatisticOrder, JasperR
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(objects);
         parameters.put("orders", dataSource);
 
+        return getJasperReportData(parameters);
+    }
+
+    private JasperReportData getJasperReportData(Map<String, Object> parameters) {
         return JasperReportData.builder()
                 .reportName(AppJasperReportType.ORDERS_REPORT.getReportName())
                 .parameters(parameters)
                 .dataSource(new JREmptyDataSource())
-				.build();
-	}
+                .build();
+    }
 }

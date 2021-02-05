@@ -1,42 +1,55 @@
 package ua.com.vetal.dao;
 
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-import ua.com.vetal.entity.StatisticOrder;
+import ua.com.vetal.entity.Order;
 import ua.com.vetal.entity.filter.OrderViewFilter;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-@Repository
-@Transactional(readOnly = true)
-public class OrderDAO {
 
-	@PersistenceContext
-	private EntityManager entityManager;
+public abstract class OrderDAO<T extends Order> {
+    private final Class<T> tClass;
 
-	public List<StatisticOrder> findByFilterData(OrderViewFilter orderViewFilter) {
-		if (orderViewFilter == null) {
-			return new ArrayList<>();
-		}
+    protected OrderDAO(Class<T> tClass) {
+        this.tClass = tClass;
+    }
 
-		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<StatisticOrder> query = builder.createQuery(StatisticOrder.class);
-		Root<StatisticOrder> root = query.from(StatisticOrder.class);
+    protected Long getMaxID(EntityManager entityManager, String className) {
+        try {
+            String sql = "Select max(e.id) from " + className + " e ";
+            Query query = entityManager.createQuery(sql);
+            Long nom = (Long) query.getSingleResult();
+            if (nom == null) {
+                nom = 0L;
+            }
+            return nom;
+        } catch (NoResultException e) {
+            return 0L;
+        }
+    }
 
-		Predicate predicate = orderViewFilter.getPredicate(builder, root);
+    protected List<T> findByFilterData(EntityManager entityManager, OrderViewFilter orderViewFilter) {
+        if (orderViewFilter == null) {
+            return Collections.emptyList();
+        }
 
-		query.where(predicate);
-		query.orderBy(builder.desc(root.get("dateBegin")));
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<T> query = builder.createQuery(tClass);
+        Root<T> root = query.from(tClass);
 
-		List<StatisticOrder> list = entityManager.createQuery(query).getResultList();
-		return list;
-	}
+        Predicate predicate = orderViewFilter.getPredicate(builder, root);
 
+        query.where(predicate);
+        query.orderBy(builder.desc(root.get("dateBegin")));
+
+        List<T> list = entityManager.createQuery(query).getResultList();
+        return list;
+    }
 }

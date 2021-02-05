@@ -252,4 +252,54 @@ public class TestDataUtils {
 		return stencil;
 	}
 
+	public static Order getOrder(Long id, int orderNumber) {
+		Order order = new Order();
+		order.setId(id);
+		order.setNumber(orderNumber);
+		order.setNumberBase(TestBuildersUtils.getNumberBaseDirectory(id, "numberBaseTask" + orderNumber));
+		order.setNumberSuffix(orderNumber);
+		order.setFullNumber("fullNumber" + orderNumber);
+		order.setAccount("account" + orderNumber);
+		Manager manager = TestBuildersUtils.getManager(id, "managerFirstName" + orderNumber, "managerLastName" + orderNumber, "managerMiddleName" + orderNumber, "managerEmail" + orderNumber);
+		order.setManager(manager);
+
+		order.setOtherExpenses(Double.valueOf(3 * orderNumber));
+
+		ProductionTypeDirectory productionType = TestBuildersUtils.getProductionTypeDirectory(id, "Production type Task" + orderNumber);
+		ProductionDirectory production = TestBuildersUtils.getProductionDirectory(id, "fullName" + orderNumber, "shortName" + orderNumber, productionType);
+		order.setProduction(production);
+
+		order.setDateBegin(DateUtils.addToDate(new Date(), Calendar.DATE, -10 * orderNumber));
+		order.setDateEnd(DateUtils.addToDate(new Date(), Calendar.DATE, -1 * orderNumber));
+
+		Client client = TestBuildersUtils.getClient(id, "fullName" + orderNumber, "firstName" + orderNumber, "lastName" + orderNumber, "middleName" + orderNumber, "address" + orderNumber, "email" + orderNumber, "phone" + orderNumber);
+		client.setManager(manager);
+		order.setClient(client);
+		order.setStock(TestBuildersUtils.getStockDirectory(id, "Stock Task" + orderNumber));
+		order.setPrinting(100 * orderNumber);
+		order.setPrintingUnit(TestBuildersUtils.getPrintingUnitDirectory(id, "PrintingUnit task" + orderNumber));
+		order.setPaper(TestBuildersUtils.getPaperDirectory(id, "Paper task" + orderNumber));
+		boolean taskTrueFalse = (orderNumber % 2) == 0;
+		order.setFillet(taskTrueFalse);
+		order.setPopup(taskTrueFalse);
+		order.setCarving(taskTrueFalse);
+		order.setStamping(taskTrueFalse);
+		order.setEmbossing(taskTrueFalse);
+		order.setBending(taskTrueFalse);
+		order.setPlotter(taskTrueFalse);
+		order.setPackBox(taskTrueFalse);
+		order.setPackPellicle(taskTrueFalse);
+		order.setPackPaper(taskTrueFalse);
+		order.setPackPackage(taskTrueFalse);
+		order.setPackNP(taskTrueFalse);
+		order.setNumeration(taskTrueFalse);
+		order.setNumerationStart(orderNumber + 1);
+		order.setAmount(Double.valueOf(20 * orderNumber));
+		order.setState(TestBuildersUtils.getState(id, "name task" + orderNumber, "altname" + orderNumber));
+		order.setPayment(TestBuildersUtils.getPayment(id, "name task" + orderNumber, "altname" + orderNumber));
+		order.setDebtAmount(Double.valueOf(5 * orderNumber));
+
+		return order;
+	}
+
 }

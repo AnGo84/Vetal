@@ -28,17 +28,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @ComponentScan("ua.com.vetal.dao")
-public class StatisticOrderDAOTest {
-	@Autowired
-	private TestEntityManager testEntityManager;
-	@Autowired
-	private OrderDAO orderDAO;
-	@Autowired
-	private OrderRepository orderRepository;
-	@Autowired
-	private TaskRepository taskRepository;
-	@Autowired
-	private StencilRepository stencilRepository;
+public class StatisticStatisticDAOTest {
+    @Autowired
+    private TestEntityManager testEntityManager;
+    @Autowired
+    private StatisticDAO statisticDAO;
+    @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
+    private TaskRepository taskRepository;
+    @Autowired
+    private StencilRepository stencilRepository;
 
     private Task task;
 	private Stencil stencil;
@@ -67,39 +67,39 @@ public class StatisticOrderDAOTest {
     @Test
     void whenFindByFilterData() {
         int allRecords = 4;
-        List<StatisticOrder> filteredList = orderDAO.findByFilterData(null);
+        List<StatisticOrder> filteredList = statisticDAO.findByFilterData(null);
         assertTrue(filteredList.isEmpty());
         assertEquals(0, filteredList.size());
 
         OrderViewFilter orderViewFilter = new OrderViewFilter();
-        filteredList = orderDAO.findByFilterData(orderViewFilter);
+        filteredList = statisticDAO.findByFilterData(orderViewFilter);
         assertEquals(allRecords, filteredList.size());
 
         orderViewFilter = new OrderViewFilter();
         orderViewFilter.setClient(task.getClient());
-        filteredList = orderDAO.findByFilterData(orderViewFilter);
+        filteredList = statisticDAO.findByFilterData(orderViewFilter);
         assertEquals(1, filteredList.size());
 
         orderViewFilter = new OrderViewFilter();
         orderViewFilter.setManager(task.getManager());
-        filteredList = orderDAO.findByFilterData(orderViewFilter);
+        filteredList = statisticDAO.findByFilterData(orderViewFilter);
         assertEquals(1, filteredList.size());
 
         orderViewFilter = new OrderViewFilter();
         orderViewFilter.setManager(new Manager());
-        filteredList = orderDAO.findByFilterData(orderViewFilter);
+        filteredList = statisticDAO.findByFilterData(orderViewFilter);
         assertEquals(allRecords, filteredList.size());
 
         orderViewFilter = new OrderViewFilter();
         Manager newManager = new Manager();
         newManager.setId(1021L);
         orderViewFilter.setManager(newManager);
-        filteredList = orderDAO.findByFilterData(orderViewFilter);
+        filteredList = statisticDAO.findByFilterData(orderViewFilter);
         assertEquals(0, filteredList.size());
 
         orderViewFilter = new OrderViewFilter();
         orderViewFilter.setProduction(task.getProduction());
-        filteredList = orderDAO.findByFilterData(orderViewFilter);
+        filteredList = statisticDAO.findByFilterData(orderViewFilter);
         assertEquals(1, filteredList.size());
 
         Date dateFrom = DateUtils.addToDate(new Date(), Calendar.DATE, -11);
@@ -107,36 +107,36 @@ public class StatisticOrderDAOTest {
 
         orderViewFilter = new OrderViewFilter();
         orderViewFilter.setDateBeginFrom(dateFrom);
-        filteredList = orderDAO.findByFilterData(orderViewFilter);
+        filteredList = statisticDAO.findByFilterData(orderViewFilter);
         assertEquals(2, filteredList.size());
 
         orderViewFilter = new OrderViewFilter();
         orderViewFilter.setDateBeginTill(dateTill);
-        filteredList = orderDAO.findByFilterData(orderViewFilter);
+        filteredList = statisticDAO.findByFilterData(orderViewFilter);
         assertEquals(allRecords, filteredList.size());
 
         orderViewFilter = new OrderViewFilter();
         orderViewFilter.setDateBeginFrom(dateFrom);
         orderViewFilter.setDateBeginTill(dateTill);
-        filteredList = orderDAO.findByFilterData(orderViewFilter);
+        filteredList = statisticDAO.findByFilterData(orderViewFilter);
         assertEquals(2, filteredList.size());
 
         double debtFrom = 4 * 2;
         double debtTill = 6 * 2;
         orderViewFilter = new OrderViewFilter();
         orderViewFilter.setDebtAmountFrom(debtFrom);
-        filteredList = orderDAO.findByFilterData(orderViewFilter);
+        filteredList = statisticDAO.findByFilterData(orderViewFilter);
         assertEquals(2, filteredList.size());
 
         orderViewFilter = new OrderViewFilter();
         orderViewFilter.setDebtAmountTill(debtTill);
-        filteredList = orderDAO.findByFilterData(orderViewFilter);
+        filteredList = statisticDAO.findByFilterData(orderViewFilter);
         assertEquals(allRecords, filteredList.size());
 
         orderViewFilter = new OrderViewFilter();
         orderViewFilter.setDebtAmountFrom(debtFrom);
         orderViewFilter.setDebtAmountTill(debtTill);
-        filteredList = orderDAO.findByFilterData(orderViewFilter);
+        filteredList = statisticDAO.findByFilterData(orderViewFilter);
         assertEquals(2, filteredList.size());
 
     }

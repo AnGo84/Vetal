@@ -87,58 +87,29 @@ public class Stencil extends Order {
 
     public Stencil getCopy() {
 
-        Stencil task = new Stencil();
+        Stencil stencil = new Stencil();
+        copyCommonFields(this, stencil);
 
-        task.numberBase = this.numberBase;
+        stencil.numberBase = this.numberBase;
 
-        task.client = this.client;
-        task.orderName = this.orderName;
+        stencil.orderName = this.orderName;
 
-        task.manager = this.manager;
-        task.production = this.production;
-        task.dateBegin = this.dateBegin;
-        task.dateEnd = this.dateEnd;
-        task.printingNote = this.printingNote;
+        stencil.paperFormat = this.paperFormat;
+        stencil.sheetNumber = this.sheetNumber;
+        stencil.printer = this.printer;
+        stencil.adjustment = this.adjustment;
+        stencil.datePrintBegin = this.datePrintBegin;
+        stencil.printingNote = this.printingNote;
+        stencil.workerPrint = this.workerPrint;
+        stencil.workerCut = this.workerCut;
 
-        task.stock = this.stock;
-        task.printing = this.printing;
-        task.paper = this.paper;
-        task.paperFormat = this.paperFormat;
-        task.sheetNumber = this.sheetNumber;
-        task.printer = this.printer;
-        task.printingUnit = this.printingUnit;
-        task.adjustment = this.adjustment;
-        task.datePrintBegin = this.datePrintBegin;
-        task.printingNote = this.printingNote;
-        task.workerPrint = this.workerPrint;
-        task.workerCut = this.workerCut;
+        stencil.cutRibbon = this.cutRibbon;
+        stencil.ribbonLength = this.ribbonLength;
 
-        task.fillet = this.fillet;
-        task.popup = this.popup;
-        task.carving = this.carving;
-        task.stamping = this.stamping;
-        task.embossing = this.embossing;
-        task.bending = this.bending;
-        task.plotter = this.plotter;
+        stencil.sticker = this.sticker;
 
-        task.packBox = this.packBox;
-        task.packPellicle = this.packPellicle;
-        task.packPaper = this.packPaper;
-        task.packPackage = this.packPackage;
-        task.packNP = this.packNP;
-
-        task.numeration = this.numeration;
-        task.numerationStart = this.numerationStart;
-
-        task.cutRibbon = this.cutRibbon;
-        task.ribbonLength = this.ribbonLength;
-
-        task.sticker = this.sticker;
-
-        task.amount = this.amount;
-
-        task.kraskoottisk = this.kraskoottisk;
-        return task;
+        stencil.kraskoottisk = this.kraskoottisk;
+        return stencil;
     }
 
 }

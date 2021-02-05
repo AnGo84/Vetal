@@ -183,4 +183,38 @@ public class Order {
 	public String constructFullNumber() {
 		return this.number + "/" + this.numberBase.getName() + "-" + this.numberSuffix;
 	}
+
+	protected Order copyCommonFields(Order source, Order destination) {
+		destination.manager = source.manager;
+		destination.production = this.production;
+		destination.dateBegin = this.dateBegin;
+		destination.dateEnd = this.dateEnd;
+		destination.client = this.client;
+		destination.stock = this.stock;
+		destination.printing = this.printing;
+		destination.printingUnit = this.printingUnit;
+		destination.paper = this.paper;
+
+		destination.fillet = this.fillet;
+		destination.popup = this.popup;
+		destination.carving = this.carving;
+		destination.stamping = this.stamping;
+		destination.embossing = this.embossing;
+		destination.bending = this.bending;
+		destination.plotter = this.plotter;
+
+		destination.packBox = this.packBox;
+		destination.packPellicle = this.packPellicle;
+		destination.packPaper = this.packPaper;
+		destination.packPackage = this.packPackage;
+		destination.packNP = this.packNP;
+		destination.numeration = this.numeration;
+		destination.numerationStart = this.numerationStart;
+
+		destination.amount = this.amount;
+
+		return destination;
+	}
+
+
 }
