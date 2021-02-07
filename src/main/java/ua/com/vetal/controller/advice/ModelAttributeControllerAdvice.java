@@ -69,7 +69,7 @@ public class ModelAttributeControllerAdvice {
 
 	@ModelAttribute("contractorList")
 	public List<Contractor> getContractorsList() {
-		List<Contractor> resultList = contractorService.findAllObjects();
+		List<Contractor> resultList = contractorService.getAll();
 		List<Contractor> result = resultList.stream()
 				.filter(contractor -> !StringUtils.isEmpty(contractor.getCorpName())
 						&& contractor.getManager() != null && !StringUtils.isEmpty(contractor.getLastName())
@@ -96,7 +96,7 @@ public class ModelAttributeControllerAdvice {
 
 	@ModelAttribute("clientList")
 	public List<Client> getClientsList() {
-		List<Client> resultList = clientService.findAllObjects();
+		List<Client> resultList = clientService.getAll();
 
 		List<Client> result = resultList.stream()
 				.filter(client -> !StringUtils.isEmpty(client.getFullName())

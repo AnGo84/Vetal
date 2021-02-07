@@ -1,8 +1,7 @@
 package ua.com.vetal.dao;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.repository.NoRepositoryBean;
 import ua.com.vetal.entity.common.AbstractContragentEntity;
 import ua.com.vetal.entity.filter.ContragentViewFilter;
 
@@ -15,8 +14,7 @@ import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
-@Transactional(readOnly = true)
+@NoRepositoryBean
 @RequiredArgsConstructor
 public abstract class AbstractContragentDAO<E extends AbstractContragentEntity> {
 

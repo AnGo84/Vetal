@@ -30,7 +30,7 @@
     <div class="row">
 
         <div class="col-sm-5">
-            <h2><span th:text="${employeeName}"></span></h2>
+            <h2><span th:text="${employeePageName}"></span></h2>
         </div>
         <div class="col-sm-6"></div>
         <!-- align-self-center float-right  -->
@@ -38,7 +38,7 @@
             <a class="btn btn-primary btn-sm custom-width float-right "
                role="button"
                sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')" style="width: 100px;"
-               th:href="@{${pageName}+'/add'}"
+               th:href="@{${pageLink}+'/add'}"
                th:text="#{label.new}">New</a>
         </div>
     </div>
@@ -71,13 +71,13 @@
                         sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')"><a
                             class="btn btn-success btn-sm custom-width"
                             role="button" style="width: 100px;"
-                            th:href="@{${pageName}+'/edit-' + ${employee.id}}" th:text="#{label.edit}">Edit</a></td>
+                            th:href="@{${pageLink}+'/edit-' + ${employee.id}}" th:text="#{label.edit}">Edit</a></td>
                     <td class="text-center align-self-center"
                         sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">
 
                         <form accept-charset="UTF-8" action="#"
                               method="GET"
-                              style="display: inline" th:action="@{${pageName}+'/delete-' + ${employee.id}}">
+                              style="display: inline" th:action="@{${pageLink}+'/delete-' + ${employee.id}}">
                             <button class="btn btn-sm btn-danger custom-width" data-target="#confirmDelete"
                                     data-toggle="modal" style="width: 100px;"
                                     th:attr="data-title=#{label.delete_record},data-message=#{message.delete_confirm_message}"

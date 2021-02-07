@@ -11,13 +11,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.Client;
 import ua.com.vetal.entity.Manager;
-import ua.com.vetal.entity.filter.ClientViewFilter;
+import ua.com.vetal.entity.filter.ContragentViewFilter;
 import ua.com.vetal.service.ClientServiceImpl;
 
 import java.util.Arrays;
 
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -39,29 +40,29 @@ public class ClientControllerTest {
     @BeforeEach
     public void beforeEach() {
 
-        client = TestDataUtils.getClient(1l);
-        manager = client.getManager();
+		client = TestDataUtils.getClient(1l);
+		manager = client.getManager();
 
-        when(mockClientService.findAllObjects()).thenReturn(Arrays.asList(client));
-        when(mockClientService.findById(anyLong())).thenReturn(client);
-        when(mockClientService.findByName(anyString())).thenReturn(client);
-    }
+		when(mockClientService.getAll()).thenReturn(Arrays.asList(client));
+		when(mockClientService.get(anyLong())).thenReturn(client);
+		when(mockClientService.findByCorpName(anyString())).thenReturn(client);
+	}
 
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ROLE_MANAGER"})
     public void whenGetClientListAsAuthorized_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL))
-                //.andDo
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("clientsList", notNullValue()))
-                .andExpect(view().name("clientsPage"));
+				//.andDo
+				.andExpect(status().isOk())
+				.andExpect(model().attribute("contragentList", notNullValue()))
+				.andExpect(view().name("contragentsPage"));
 
 		mockMvc.perform(get(MAPPED_URL + "/list"))
 				//.andDo
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("clientsList", notNullValue()))
-                .andExpect(view().name("clientsPage"));
+				.andExpect(status().isOk())
+				.andExpect(model().attribute("contragentList", notNullValue()))
+				.andExpect(view().name("contragentsPage"));
     }
 
     @Test
@@ -76,11 +77,11 @@ public class ClientControllerTest {
     public void whenShowAddClientPageAsAuthorized_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/add"))
 				//.andDo
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("client"))
-                .andExpect(model().attribute("client", notNullValue()))
-                .andExpect(model().attribute("edit", false))
-                .andExpect(view().name("clientPage"));
+				.andExpect(status().isOk())
+				.andExpect(model().attributeExists("contragent"))
+				.andExpect(model().attribute("contragent", notNullValue()))
+				.andExpect(model().attribute("readOnly", false))
+				.andExpect(view().name("contragentRecordPage"));
     }
 
 
@@ -97,11 +98,11 @@ public class ClientControllerTest {
     public void whenEditClientAsAuthorized_thenOk() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/edit-" + client.getId()))
 				//.andDo
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("client"))
-                .andExpect(model().attribute("client", notNullValue()))
-                .andExpect(model().attribute("edit", true))
-                .andExpect(view().name("clientPage"));
+				.andExpect(status().isOk())
+				.andExpect(model().attributeExists("contragent"))
+				.andExpect(model().attribute("contragent", notNullValue()))
+				.andExpect(model().attribute("readOnly", false))
+				.andExpect(view().name("contragentRecordPage"));
     }
 
     @Test
@@ -116,31 +117,31 @@ public class ClientControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     public void whenUpdateClientAsAuthorizedWithNullClient_thenOk() throws Exception {
 		mockMvc.perform(post(MAPPED_URL + "/update")
-				.flashAttr("client", client)
+				.flashAttr("contragent", client)
 		)
 				//.andDo
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl(MAPPED_URL));
 
-		verify(mockClientService, times(1)).updateObject(any());
+		verify(mockClientService, times(1)).update(any());
 
 	}
 
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenUpdateClientAsAuthorizedWithNullClientName_thenOk() throws Exception {
-		when(mockClientService.isFullNameExist(any())).thenReturn(true);
+		when(mockClientService.isExist(any())).thenReturn(true);
 		Client newClient = TestDataUtils.getClient(null);
 		mockMvc.perform(post(MAPPED_URL + "/update")
-				.flashAttr("client", newClient)
+				.flashAttr("contragent", newClient)
 		)
 				//.andDo
 				.andExpect(status().isOk())
-				.andExpect(model().attributeExists("client"))
-				.andExpect(model().attributeHasFieldErrors("client", "fullName"))
-				.andExpect(view().name("clientPage"));
+				.andExpect(model().attributeExists("contragent"))
+				.andExpect(model().attributeHasFieldErrors("contragent", "corpName"))
+				.andExpect(view().name("contragentRecordPage"));
 
-		verify(mockClientService, times(0)).updateObject(client);
+		verify(mockClientService, times(0)).update(client);
 	}
 
     @Test
@@ -160,34 +161,58 @@ public class ClientControllerTest {
 				.andExpect(redirectedUrl(MAPPED_URL));
 
         verify(mockClientService, times(1)).deleteById(client.getId());
-    }
+	}
 
-    @Test
-    public void whenDeleteClientAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
+	@Test
+	public void whenDeleteClientAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
 		mockMvc.perform(get(MAPPED_URL + "/delete-" + client.getId()))
 				//.andDo
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
-    }
+				.andExpect(status().isFound())
+				.andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
+	}
 
-    @Test
-    @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
-    public void whenFilterClientsAsAuthorizedWithNotNullUser_thenOk() throws Exception {
-        ClientViewFilter clientViewFilter = new ClientViewFilter();
-        clientViewFilter.setFullName("fullName");
-        clientViewFilter.setManager(manager);
-        mockMvc.perform(get(MAPPED_URL + "/filter")
-                .param("clientFilterData", clientViewFilter.toString())
-        )
-                //.andDo
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl(MAPPED_URL));
-    }
+	@Test
+	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
+	public void whenViewTaskAsAuthorized_thenOk() throws Exception {
+
+		mockMvc.perform(get(MAPPED_URL + "/view-" + client.getId()))
+				//.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(model().attributeExists("contragent"))
+				.andExpect(model().attribute("contragent", notNullValue()))
+				.andExpect(model().attribute("contragent", hasProperty("id", notNullValue())))
+				.andExpect(model().attribute("contragent", hasProperty("corpName", equalTo(client.getCorpName()))))
+				.andExpect(model().attribute("readOnly", true))
+				.andExpect(view().name("contragentRecordPage"));
+	}
+
+	@Test
+	public void whenViewTaskAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
+		mockMvc.perform(get(MAPPED_URL + "/view-" + client.getId()))
+				//.andDo(print())
+				.andExpect(status().isFound())
+				.andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
+	}
+
+	/**/
+	@Test
+	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
+	public void whenFilterClientsAsAuthorizedWithNotNullUser_thenOk() throws Exception {
+		ContragentViewFilter contragentViewFilter = new ContragentViewFilter();
+		contragentViewFilter.setCorpName("corpName");
+		contragentViewFilter.setManager(manager);
+		mockMvc.perform(get(MAPPED_URL + "/filter")
+				.param("contragentFilterData", contragentViewFilter.toString())
+		)
+				//.andDo(print())
+				.andExpect(status().isFound())
+				.andExpect(redirectedUrl(MAPPED_URL));
+	}
 
     @Test
     public void whenFilterClientsAsNoAuthorized_thenRedirectToMappedURL() throws Exception {
         mockMvc.perform(get(MAPPED_URL + "/filter"))
-                //.andDo
+				//.andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(MAPPED_URL));
     }

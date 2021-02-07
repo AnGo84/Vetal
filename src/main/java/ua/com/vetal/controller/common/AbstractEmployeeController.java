@@ -59,14 +59,14 @@ public abstract class AbstractEmployeeController<E extends AbstractEmployeeEntit
         }
         E updated = service.update(employee);
         log.info("Updated: {}", updated);
-        return "redirect:" + controllerType.getPageName();
+        return "redirect:" + controllerType.getPageLink();
     }
 
     @Override
     public String deleteRecord(Long id) {
         log.info("Delete {} with ID= {}", objectClass, id);
         service.deleteById(id);
-        return "redirect:" + controllerType.getPageName();
+        return "redirect:" + controllerType.getPageLink();
     }
 
     @ModelAttribute("title")
@@ -74,17 +74,17 @@ public abstract class AbstractEmployeeController<E extends AbstractEmployeeEntit
         return controllerType.getTitle();
     }
 
-    @ModelAttribute("employeeName")
-    public String initializeDirectoryName() {
-		String name = messageSource.getMessage(controllerType.getLabel(), null, new Locale("ru"));
+    @ModelAttribute("employeePageName")
+    public String initializePageName() {
+        String name = messageSource.getMessage(controllerType.getMessageLabel(), null, new Locale("ru"));
         if (name == null || name.equals("")) {
-            return controllerType.getDirectoryName();
+            return controllerType.getPageName();
         }
         return name;
     }
 
-    @ModelAttribute("pageName")
-    public String initializePageName() {
-        return controllerType.getPageName();
+    @ModelAttribute("pageLink")
+    public String initializePageLink() {
+        return controllerType.getPageLink();
     }
 }

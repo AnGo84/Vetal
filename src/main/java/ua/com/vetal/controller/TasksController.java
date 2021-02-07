@@ -45,7 +45,7 @@ import java.util.Map;
 @RequestMapping("/tasks")
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:vetal.properties")
 @Slf4j
-public class TasksController extends BaseController {
+public class TasksController extends BaseFilteredController {
 	private final String title = "Tasks";
 	private final String pageName = "/tasks";
 

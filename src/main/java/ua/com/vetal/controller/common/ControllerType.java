@@ -1,5 +1,8 @@
 package ua.com.vetal.controller.common;
 
+import lombok.Getter;
+
+@Getter
 public enum ControllerType {
 	CHROMATICITY("Chromaticity", "/chromaticity", "Chromaticity", "label.chromaticity"),
 	CRINGLE("Cringle", "/cringle", "Cringle", "label.cringle"),
@@ -13,33 +16,21 @@ public enum ControllerType {
 	/**/
 	WORKER("Worker", "/worker", "Worker", "label.worker"),
 	PRINTER("Printer", "/printer", "Printer", "label.printer"),
-	MANAGER("Manager", "/manager", "Manager", "label.manager");
+	MANAGER("Manager", "/manager", "Manager", "label.manager"),
+	/**/
+	CLIENT("Clients", "/clients", "Client", "label.client"),
+	CONTRACTOR("Contractor", "/contractor", "Contractor", "label.contractor");
 
 	private String title;
+	private String pageLink;
 	private String pageName;
-	private String directoryName;
-	private String label;
+	private String messageLabel;
 
-	ControllerType(String title, String pageName, String directoryName, String label) {
+	ControllerType(String title, String pageLink, String pageName, String messageLabel) {
 		this.title = title;
+		this.pageLink = pageLink;
 		this.pageName = pageName;
-		this.directoryName = directoryName;
-        this.label = label;
-    }
+		this.messageLabel = messageLabel;
+	}
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getPageName() {
-        return pageName;
-    }
-
-    public String getDirectoryName() {
-        return directoryName;
-    }
-
-    public String getLabel() {
-        return label;
-    }
 }

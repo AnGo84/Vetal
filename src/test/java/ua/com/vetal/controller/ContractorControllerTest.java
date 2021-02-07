@@ -11,14 +11,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.entity.Contractor;
 import ua.com.vetal.entity.Manager;
-import ua.com.vetal.entity.filter.PersonViewFilter;
+import ua.com.vetal.entity.filter.ContragentViewFilter;
 import ua.com.vetal.service.ContractorServiceImpl;
 
 import java.util.Arrays;
 
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -43,9 +44,9 @@ public class ContractorControllerTest {
 		contractor = TestDataUtils.getContractor(1l);
 		manager = contractor.getManager();
 
-		when(mockContractorService.findAllObjects()).thenReturn(Arrays.asList(contractor));
-		when(mockContractorService.findById(anyLong())).thenReturn(contractor);
-		when(mockContractorService.findByName(anyString())).thenReturn(contractor);
+		when(mockContractorService.getAll()).thenReturn(Arrays.asList(contractor));
+		when(mockContractorService.get(anyLong())).thenReturn(contractor);
+		when(mockContractorService.findByCorpName(anyString())).thenReturn(contractor);
 	}
 
 
@@ -55,14 +56,14 @@ public class ContractorControllerTest {
 		mockMvc.perform(get(MAPPED_URL))
 				//.andDo
 				.andExpect(status().isOk())
-				.andExpect(model().attribute("personList", notNullValue()))
-				.andExpect(view().name("contractorsPage"));
+				.andExpect(model().attribute("contragentList", notNullValue()))
+				.andExpect(view().name("contragentsPage"));
 
 		mockMvc.perform(get(MAPPED_URL + "/list"))
 				//.andDo
 				.andExpect(status().isOk())
-				.andExpect(model().attribute("personList", notNullValue()))
-				.andExpect(view().name("contractorsPage"));
+				.andExpect(model().attribute("contragentList", notNullValue()))
+				.andExpect(view().name("contragentsPage"));
 	}
 
 	@Test
@@ -78,10 +79,10 @@ public class ContractorControllerTest {
 		mockMvc.perform(get(MAPPED_URL + "/add"))
 				//.andDo
 				.andExpect(status().isOk())
-				.andExpect(model().attributeExists("person"))
-				.andExpect(model().attribute("person", notNullValue()))
-				.andExpect(model().attribute("edit", false))
-				.andExpect(view().name("contractorRecordPage"));
+				.andExpect(model().attributeExists("contragent"))
+				.andExpect(model().attribute("contragent", notNullValue()))
+				.andExpect(model().attribute("readOnly", false))
+				.andExpect(view().name("contragentRecordPage"));
 	}
 
 
@@ -99,10 +100,10 @@ public class ContractorControllerTest {
 		mockMvc.perform(get(MAPPED_URL + "/edit-" + contractor.getId()))
 				//.andDo
 				.andExpect(status().isOk())
-				.andExpect(model().attributeExists("person"))
-				.andExpect(model().attribute("person", notNullValue()))
-				.andExpect(model().attribute("edit", true))
-				.andExpect(view().name("contractorRecordPage"));
+				.andExpect(model().attributeExists("contragent"))
+				.andExpect(model().attribute("contragent", notNullValue()))
+				.andExpect(model().attribute("readOnly", false))
+				.andExpect(view().name("contragentRecordPage"));
 	}
 
 	@Test
@@ -117,29 +118,30 @@ public class ContractorControllerTest {
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenUpdateContractorAsAuthorizedWithNullContractor_thenOk() throws Exception {
 		mockMvc.perform(post(MAPPED_URL + "/update")
-				.flashAttr("person", contractor)
+				.flashAttr("contragent", contractor)
 		)
 				//.andDo
 				.andExpect(status().isFound())
 				.andExpect(redirectedUrl(MAPPED_URL));
 
-		verify(mockContractorService, times(1)).updateObject(any());
+		verify(mockContractorService, times(1)).update(any());
 	}
 
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenUpdateContractorAsAuthorizedWithNotNullContractor_thenOk() throws Exception {
+		when(mockContractorService.isExist(any())).thenReturn(true);
 		Contractor newContractor = TestDataUtils.getContractor(null);
 		mockMvc.perform(post(MAPPED_URL + "/update")
-				.flashAttr("person", newContractor)
+				.flashAttr("contragent", newContractor)
 		)
 				//.andDo
 				.andExpect(status().isOk())
-				.andExpect(model().attributeExists("person"))
-				.andExpect(model().attributeHasFieldErrors("person", "corpName"))
-				.andExpect(view().name("contractorRecordPage"));
+				.andExpect(model().attributeExists("contragent"))
+				.andExpect(model().attributeHasFieldErrors("contragent", "corpName"))
+				.andExpect(view().name("contragentRecordPage"));
 
-		verify(mockContractorService, times(0)).updateObject(contractor);
+		verify(mockContractorService, times(0)).update(contractor);
 	}
 
 
@@ -172,12 +174,36 @@ public class ContractorControllerTest {
 
 	@Test
 	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
+	public void whenViewTaskAsAuthorized_thenOk() throws Exception {
+
+		mockMvc.perform(get(MAPPED_URL + "/view-" + contractor.getId()))
+				//.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(model().attributeExists("contragent"))
+				.andExpect(model().attribute("contragent", notNullValue()))
+				.andExpect(model().attribute("contragent", hasProperty("id", notNullValue())))
+				.andExpect(model().attribute("contragent", hasProperty("corpName", equalTo(contractor.getCorpName()))))
+				.andExpect(model().attribute("readOnly", true))
+				.andExpect(view().name("contragentRecordPage"));
+	}
+
+	@Test
+	public void whenViewTaskAsNoAuthorized_thenRedirectToLoginPage() throws Exception {
+		mockMvc.perform(get(MAPPED_URL + "/view-" + contractor.getId()))
+				//.andDo(print())
+				.andExpect(status().isFound())
+				.andExpect(redirectedUrl(TestControllerUtils.HTTP_LOCALHOST_LOGIN_URL));
+	}
+
+	/**/
+	@Test
+	@WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
 	public void whenFilterContractorsAsAuthorizedWithNotNullUser_thenOk() throws Exception {
-		PersonViewFilter personViewFilter = new PersonViewFilter();
-		personViewFilter.setCorpName("corpName");
-		personViewFilter.setManager(manager);
+		ContragentViewFilter contragentViewFilter = new ContragentViewFilter();
+		contragentViewFilter.setCorpName("corpName");
+		contragentViewFilter.setManager(manager);
 		mockMvc.perform(get(MAPPED_URL + "/filter")
-				.param("personFilterData", personViewFilter.toString())
+				.param("contragentFilterData", contragentViewFilter.toString())
 		)
 				.andDo(print())
 				.andExpect(status().isFound())

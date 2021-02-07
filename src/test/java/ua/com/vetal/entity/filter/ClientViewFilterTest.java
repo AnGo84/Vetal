@@ -54,28 +54,28 @@ public class ClientViewFilterTest {
     @Test
     public void onGetPredicate() {
 
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Client> query = builder.createQuery(Client.class);
-        Root<Client> root = query.from(Client.class);
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Client> query = builder.createQuery(Client.class);
+		Root<Client> root = query.from(Client.class);
 
-        ClientViewFilter clientViewFilter = new ClientViewFilter();
-        clientViewFilter.setFullName("TestFullName");
-        clientViewFilter.setManager(TestDataUtils.getManager(1l));
-        Predicate predicate = clientViewFilter.getPredicate(builder, root);
-        assertNotNull(predicate);
+		ContragentViewFilter contragentViewFilter = new ContragentViewFilter();
+		contragentViewFilter.setCorpName("TestCorpName");
+		contragentViewFilter.setManager(TestDataUtils.getManager(1l));
+		Predicate predicate = contragentViewFilter.getPredicate(builder, root);
+		assertNotNull(predicate);
 
-        clientViewFilter.setFullName(null);
-        predicate = clientViewFilter.getPredicate(builder, root);
-        assertNotNull(predicate);
+		contragentViewFilter.setCorpName(null);
+		predicate = contragentViewFilter.getPredicate(builder, root);
+		assertNotNull(predicate);
 
-        clientViewFilter.setFullName("TestFullName");
-        clientViewFilter.setManager(null);
-        predicate = clientViewFilter.getPredicate(builder, root);
-        assertNotNull(predicate);
+		contragentViewFilter.setCorpName("TestCorpName");
+		contragentViewFilter.setManager(null);
+		predicate = contragentViewFilter.getPredicate(builder, root);
+		assertNotNull(predicate);
 
-        clientViewFilter.setFullName(null);
-        clientViewFilter.setManager(null);
-        predicate = clientViewFilter.getPredicate(builder, root);
-        assertNotNull(predicate);
-    }
+		contragentViewFilter.setCorpName(null);
+		contragentViewFilter.setManager(null);
+		predicate = contragentViewFilter.getPredicate(builder, root);
+		assertNotNull(predicate);
+	}
 }

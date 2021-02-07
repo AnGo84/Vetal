@@ -133,31 +133,30 @@ public class TestBuildersUtils {
         return state;
     }
 
-    public static Client getClient(Long id, String fullName, String firstName, String lastName, String middleName, String address, String email, String phone) {
-        Client client = new Client();
-        client.setId(id);
-        client.setFullName(fullName);
-        client.setFirstName(firstName);
-        client.setLastName(lastName);
-        client.setMiddleName(middleName);
-        client.setAddress(address);
-        client.setEmail(email);
-        client.setPhone(phone);
-        return client;
+    public static Client getClient(Long id, String corpName, String firstName, String lastName, String middleName, String address, String email, String phone) {
+		Client client = new Client();
+		client.setId(id);
+		client.setCorpName(corpName);
+		client.setFirstName(firstName);
+		client.setLastName(lastName);
+		client.setMiddleName(middleName);
+		client.setAddress(address);
+		client.setEmail(email);
+		client.setPhone(phone);
+		return client;
     }
 
-    public static Contractor getContractor(Long id, String corpName, String shortName, String firstName, String lastName, String middleName, String address, String email, String phone, String siteURL) {
-        Contractor contractor = new Contractor();
-        contractor.setId(id);
-        contractor.setCorpName(corpName);
-        contractor.setShortName(shortName);
-        contractor.setFirstName(firstName);
-        contractor.setLastName(lastName);
-        contractor.setMiddleName(middleName);
-        contractor.setAddress(address);
-        contractor.setEmail(email);
-        contractor.setPhone(phone);
-        contractor.setSiteURL(siteURL);
+	public static Contractor getContractor(Long id, String corpName, String firstName, String lastName, String middleName, String address, String email, String phone, String siteURL) {
+		Contractor contractor = new Contractor();
+		contractor.setId(id);
+		contractor.setCorpName(corpName);
+		contractor.setFirstName(firstName);
+		contractor.setLastName(lastName);
+		contractor.setMiddleName(middleName);
+		contractor.setAddress(address);
+		contractor.setEmail(email);
+		contractor.setPhone(phone);
+		contractor.setSiteURL(siteURL);
         return contractor;
     }
 

@@ -35,7 +35,7 @@ public class TestDataUtils {
     }
 
     public static Contractor getContractor(Long id) {
-        Contractor contractor = TestBuildersUtils.getContractor(id, "corpName" + id, "shortName" + id,
+        Contractor contractor = TestBuildersUtils.getContractor(id, "corpName" + id,
 				"firstName" + id, "lastName" + id, "middleName" + id, "address" + id,
 				"email" + id, "phone" + id, "siteURL" + id);
         contractor.setManager(getManager(id));
@@ -107,17 +107,17 @@ public class TestDataUtils {
         Task task = new Task();
         task.setId(id);
         task.setNumber(taskNumber);
-        task.setNumberBase(TestBuildersUtils.getNumberBaseDirectory(id, "numberBaseTask" + taskNumber));
-        task.setNumberSuffix(taskNumber);
-        task.setFullNumber("fullNumber" + taskNumber);
-        task.setAccount("account" + taskNumber);
-        Manager manager = TestBuildersUtils.getManager(id, "managerFirstName" + taskNumber, "managerLastName" + taskNumber, "managerMiddleName" + taskNumber, "managerEmail" + taskNumber);
-        task.setManager(manager);
+		task.setNumberBase(TestBuildersUtils.getNumberBaseDirectory(id, "numberBaseTask" + taskNumber));
+		task.setNumberSuffix(taskNumber);
+		task.setFullNumber("fullNumber" + taskNumber);
+		task.setAccount("account" + taskNumber);
+		Manager manager = TestBuildersUtils.getManager(id, "managerFirstName" + taskNumber, "managerLastName" + taskNumber, "managerMiddleName" + taskNumber, "managerEmail" + taskNumber);
+		task.setManager(manager);
 		task.setWorkName("workName" + taskNumber);
 		task.setFileName("fileName" + taskNumber);
 		task.setDbFile(new DBFile("file" + taskNumber, "content_type" + taskNumber, ("file data" + taskNumber).getBytes()));
 
-		Contractor contractor = TestBuildersUtils.getContractor(id, "corpName", "shortName", "firstName", "lastName", "middleName", "address", "email", "phone", "siteURL");
+		Contractor contractor = TestBuildersUtils.getContractor(id, "corpName", "firstName", "lastName", "middleName", "address", "email", "phone", "siteURL");
 		contractor.setManager(manager);
 		task.setContractor(contractor);
 		task.setContractorNumber("ContractorNumber" + taskNumber);

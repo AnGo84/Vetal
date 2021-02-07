@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.Contractor;
 import ua.com.vetal.entity.Manager;
-import ua.com.vetal.entity.filter.PersonViewFilter;
+import ua.com.vetal.entity.filter.ContragentViewFilter;
 import ua.com.vetal.repositories.ContractorRepository;
 import ua.com.vetal.repositories.ManagerRepository;
 
@@ -43,13 +43,13 @@ public class ContractorDAOTest {
 		manager = testEntityManager.persistAndFlush(TestBuildersUtils.getManager(null, "managerFirstName", "managerLastName", "managerMiddleName", "managerEmail"));
 		Manager secondManager = testEntityManager.persistAndFlush(TestBuildersUtils.getManager(null, "managerFirstName2", "managerLastName2", "managerMiddleName2", "managerEmail2"));
 
-		contractor = TestBuildersUtils.getContractor(null, "corpName", "shortName",
+		contractor = TestBuildersUtils.getContractor(null, "corpName",
 				"firstName", "lastName", "middleName", "address",
 				"email", "phone", "siteURL");
 		contractor.setManager(manager);
 		contractor = testEntityManager.persistAndFlush(contractor);
 
-		Contractor secondContractor = TestBuildersUtils.getContractor(null, "secondName", "shortName2",
+		Contractor secondContractor = TestBuildersUtils.getContractor(null, "secondName",
 				"firstName2", "lastName2", "middleName2", "address2",
 				"email2", "phone2", "siteURL2");
 		secondContractor.setManager(secondManager);
@@ -58,46 +58,46 @@ public class ContractorDAOTest {
 
 	@Test
 	void whenFindByFilterData() {
-        int allRecords = 2;
-        List<Contractor> filteredList = contractorDAO.findByFilterData(null);
-        assertTrue(filteredList.isEmpty());
-        assertEquals(0, filteredList.size());
+		int allRecords = 2;
+		List<Contractor> filteredList = contractorDAO.findByFilterData(null);
+		assertTrue(filteredList.isEmpty());
+		assertEquals(0, filteredList.size());
 
-        PersonViewFilter filterData = new PersonViewFilter();
-        filterData.setCorpName(contractor.getFullName());
-        filterData.setManager(contractor.getManager());
+		ContragentViewFilter filterData = new ContragentViewFilter();
+		filterData.setCorpName(contractor.getFullName());
+		filterData.setManager(contractor.getManager());
 
+		filteredList = contractorDAO.findByFilterData(filterData);
+		assertEquals(1, filteredList.size());
+
+		filterData = new ContragentViewFilter();
+		filteredList = contractorDAO.findByFilterData(filterData);
+		assertEquals(allRecords, filteredList.size());
+
+		filterData = new ContragentViewFilter();
+		filterData.setCorpName(contractor.getFullName());
         filteredList = contractorDAO.findByFilterData(filterData);
         assertEquals(1, filteredList.size());
 
-        filterData = new PersonViewFilter();
+		filterData = new ContragentViewFilter();
+		filterData.setManager(contractor.getManager());
+        filteredList = contractorDAO.findByFilterData(filterData);
+        assertEquals(1, filteredList.size());
+
+		filterData = new ContragentViewFilter();
+		filterData.setManager(new Manager());
         filteredList = contractorDAO.findByFilterData(filterData);
         assertEquals(allRecords, filteredList.size());
 
-        filterData = new PersonViewFilter();
-        filterData.setCorpName(contractor.getFullName());
-        filteredList = contractorDAO.findByFilterData(filterData);
-        assertEquals(1, filteredList.size());
-
-        filterData = new PersonViewFilter();
-        filterData.setManager(contractor.getManager());
-        filteredList = contractorDAO.findByFilterData(filterData);
-        assertEquals(1, filteredList.size());
-
-        filterData = new PersonViewFilter();
-        filterData.setManager(new Manager());
-        filteredList = contractorDAO.findByFilterData(filterData);
-        assertEquals(allRecords, filteredList.size());
-
-        filterData = new PersonViewFilter();
+		filterData = new ContragentViewFilter();
         Manager newManager = new Manager();
         newManager.setId(1021L);
         filterData.setManager(newManager);
         filteredList = contractorDAO.findByFilterData(filterData);
         assertEquals(0, filteredList.size());
 
-        filterData = new PersonViewFilter();
-        filterData.setCorpName("not exist name");
+		filterData = new ContragentViewFilter();
+		filterData.setCorpName("not exist name");
         filteredList = contractorDAO.findByFilterData(filterData);
         assertEquals(0, filteredList.size());
     }

@@ -2,12 +2,14 @@ package ua.com.vetal.entity.common;
 
 import lombok.EqualsAndHashCode;
 import org.apache.logging.log4j.util.Strings;
+import ua.com.vetal.utils.StringUtils;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.StringJoiner;
 
 @MappedSuperclass
 @EqualsAndHashCode(callSuper = true)
@@ -86,17 +88,19 @@ public abstract class AbstractEmployeeEntity extends AbstractEntity {
 
     @Transient
     public String getFullName() {
-        String result = "";
+        StringJoiner joiner = new StringJoiner(" ");
+
         if (!Strings.isBlank(lastName)) {
-            result += (result.equals("") ? "" : " ") + lastName;
+            joiner.add(lastName);
         }
         if (!Strings.isBlank(firstName)) {
-            result += (result.equals("") ? "" : " ") + firstName;
+            joiner.add(firstName);
         }
         if (!Strings.isBlank(middleName)) {
-            result += (result.equals("") ? "" : " ") + middleName;
+            joiner.add(middleName);
         }
-        return result;
+        String mergedName = joiner.toString();
+        return StringUtils.isEmpty(mergedName) ? "" : mergedName;
     }
 
     @Override

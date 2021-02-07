@@ -7,14 +7,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
 import ua.com.vetal.TestBuildersUtils;
+import ua.com.vetal.TestDataUtils;
 import ua.com.vetal.dao.ClientDAO;
 import ua.com.vetal.entity.Client;
 import ua.com.vetal.entity.Manager;
-import ua.com.vetal.entity.filter.ClientViewFilter;
+import ua.com.vetal.entity.filter.ContragentViewFilter;
+import ua.com.vetal.exception.EntityException;
 import ua.com.vetal.repositories.ClientRepository;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -43,9 +46,9 @@ public class ClientServiceImplTest {
 
     @Test
     void whenFindById_thenReturnClient() {
-        when(mockClientRepository.getOne(1L)).thenReturn(client);
+        when(mockClientRepository.findById(1L)).thenReturn(Optional.of(client));
         long id = 1;
-        Client foundClient = clientService.findById(id);
+        Client foundClient = clientService.get(id);
 
         // then
         assertNotNull(foundClient);
@@ -65,14 +68,14 @@ public class ClientServiceImplTest {
     void whenFindById_thenReturnNull() {
         when(mockClientRepository.getOne(1L)).thenReturn(client);
         long id = 2;
-        Client found = clientService.findById(id);
+        Client found = clientService.get(id);
         assertNull(found);
     }
 
     @Test
     void whenFindByName_thenReturnClient() {
-        when(mockClientRepository.findByFullName(client.getFullName())).thenReturn(client);
-        Client foundClient = clientService.findByName(client.getFullName());
+        when(mockClientRepository.findByCorpName(client.getFullName())).thenReturn(client);
+        Client foundClient = clientService.findByCorpName(client.getFullName());
 
         assertNotNull(foundClient);
         assertNotNull(foundClient.getId());
@@ -89,8 +92,8 @@ public class ClientServiceImplTest {
 
     @Test
     void whenFindByName_thenReturnNull() {
-        when(mockClientRepository.findByFullName(client.getFullName())).thenReturn(client);
-        Client found = clientService.findByName("wrong name");
+        when(mockClientRepository.findByCorpName(client.getFullName())).thenReturn(client);
+        Client found = clientService.findByCorpName("wrong name");
         assertNull(found);
     }
 
@@ -98,7 +101,7 @@ public class ClientServiceImplTest {
     void whenSaveClient_thenSuccess() {
         Client newClient = TestBuildersUtils.getClient(null, "fullName2", "firstName2", "lastName2", "middleName2", "address2", "email2", "phone2");
         newClient.setManager(manager);
-        clientService.saveObject(newClient);
+        clientService.save(newClient);
         verify(mockClientRepository, times(1)).save(newClient);
     }
 
@@ -106,16 +109,16 @@ public class ClientServiceImplTest {
     void whenSaveClient_thenNPE() {
         when(mockClientRepository.save(any(Client.class))).thenThrow(NullPointerException.class);
         assertThrows(NullPointerException.class, () -> {
-            clientService.saveObject(client);
+            clientService.save(client);
         });
     }
 
     @Test
     void whenUpdateClient_thenSuccess() {
-        client.setFullName("fullName2");
+        client.setCorpName("corpName2");
         client.setFirstName("firstName2");
 
-        clientService.updateObject(client);
+        clientService.update(client);
         verify(mockClientRepository, times(1)).save(client);
     }
 
@@ -123,20 +126,22 @@ public class ClientServiceImplTest {
     void whenUpdateClient_thenThrow() {
         when(mockClientRepository.save(any(Client.class))).thenThrow(NullPointerException.class);
         assertThrows(NullPointerException.class, () -> {
-            clientService.updateObject(client);
+            clientService.update(client);
         });
     }
 
     @Test
     void whenDeleteById_thenSuccess() {
+        when(mockClientRepository.findById(1L)).thenReturn(Optional.of(client));
         clientService.deleteById(1l);
         verify(mockClientRepository, times(1)).deleteById(1l);
     }
 
     @Test
     void whenDeleteById_thenThrowEmptyResultDataAccessException() {
+        when(mockClientRepository.findById(1L)).thenReturn(Optional.of(client));
         doThrow(new EmptyResultDataAccessException(0)).when(mockClientRepository).deleteById(anyLong());
-        assertThrows(EmptyResultDataAccessException.class, () -> {
+        assertThrows(EntityException.class, () -> {
             clientService.deleteById(1000000l);
         });
     }
@@ -144,7 +149,7 @@ public class ClientServiceImplTest {
     @Test
     void whenFindAllObjects() {
         when(mockClientRepository.findAll()).thenReturn(Arrays.asList(client));
-        List<Client> objects = clientService.findAllObjects();
+        List<Client> objects = clientService.getAll();
         assertNotNull(objects);
         assertFalse(objects.isEmpty());
         assertEquals(objects.size(), 1);
@@ -152,25 +157,31 @@ public class ClientServiceImplTest {
 
     @Test
     void whenIsObjectExist() {
-        when(mockClientRepository.getOne(client.getId())).thenReturn(client);
-        assertTrue(clientService.isObjectExist(client));
-        when(mockClientRepository.getOne(anyLong())).thenReturn(null);
-        assertFalse(clientService.isObjectExist(client));
+        assertFalse(clientService.isExist(null));
+
+        Client existClient = TestDataUtils.getClient(2l);
+        when(mockClientRepository.findByCorpName(client.getCorpName())).thenReturn(existClient);
+        existClient.setId(null);
+        when(mockClientRepository.findByCorpName(client.getCorpName())).thenReturn(existClient);
+        assertTrue(clientService.isExist(client));
+
+        when(mockClientRepository.findByCorpName(anyString())).thenReturn(null);
+        assertFalse(clientService.isExist(client));
     }
 
-    @Test
+    /*@Test
     void whenIsFullNameExist() {
-        when(mockClientRepository.findByFullName(client.getFullName())).thenReturn(client);
-        assertTrue(clientService.isFullNameExist(client));
+        when(mockClientRepository.findByCorpName(client.getFullName())).thenReturn(client);
+        assertTrue(clientService.isExistByCorpName(client));
 
         when(mockClientRepository.findByFullName(anyString())).thenReturn(null);
         assertFalse(clientService.isFullNameExist(client));
-    }
+    }*/
 
     @Test
     void whenFindByFilterData() {
-        when(mockClientDAO.findByFilterData(any(ClientViewFilter.class))).thenReturn(Arrays.asList(client));
-        List<Client> objects = clientService.findByFilterData(new ClientViewFilter());
+        when(mockClientDAO.findByFilterData(any(ContragentViewFilter.class))).thenReturn(Arrays.asList(client));
+        List<Client> objects = clientService.findByFilterData(new ContragentViewFilter());
         assertNotNull(objects);
         assertFalse(objects.isEmpty());
         assertEquals(objects.size(), 1);

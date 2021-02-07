@@ -33,7 +33,7 @@ import java.util.*;
 @RequestMapping("/stencils")
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:vetal.properties")
 @Slf4j
-public class StencilsController extends BaseController {
+public class StencilsController extends BaseFilteredController {
 	static final Set<Long> emailingStates = new HashSet<>(Arrays.asList(2l, 4l));
 
 	private String title = "Stencils";

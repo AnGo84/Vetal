@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <!-- <title th:utext="${title}">Edit user</title> -->
     <title>person Record</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <link rel="shortcut icon" th:href="@{/image/logo.ico}" type="image/x-icon">
 
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
@@ -20,20 +20,20 @@
 <div class="container bg-light" style="margin-top: 30px">
     <div class="well">
         <h2>
-            <span th:text="${personName}"></span>
+            <span th:text="${pageName}"></span>
         </h2>
 
-        <form action="#" th:action="@{${pageName}+'/update'}"
-              th:object="${person}" method="POST">
+        <form action="#" method="POST"
+              th:action="@{${pageLink}+'/update'}" th:object="${contragent}">
 
-            <input type="hidden" id="recordId" th:field="*{id}"/>
+            <input id="recordId" th:field="*{id}" type="hidden"/>
 
             <div class="form-group row">
                 <div class="col-6">
-                    <label for="recordCorpName" th:text="#{label.corpName}">Corp name: </label> <input
-                        class="form-control"
-                        type="text" id="recordCorpName" th:field="*{corpName}"
-                        autofocus="autofocus" placeholder="Enter Corp Name"/>
+                    <label for="recordCorpName" th:text="#{label.corpName}">Corp name: </label>
+                    <input autofocus="autofocus" class="form-control" id="recordCorpName"
+                           placeholder="Enter Corp Name" th:disabled="${readOnly}"
+                           th:field="*{corpName}" type="text"/>
                 </div>
 
             </div>
@@ -48,13 +48,13 @@
             <div class="form-group row">
                 <div class="col-sm-6">
                     <label for="taskManager" th:text="#{label.manager}">Manager: </label>
-                    <select id="taskManager" th:field="*{manager}"
-                            class="form-control form-control-sm selectpicker"
-                            data-live-search="true">
-                        <option th:each="dropDownItem : ${managerList}"
-                                th:value="${dropDownItem.id}"
+                    <select class="form-control form-control-sm selectpicker" data-live-search="true" id="taskManager"
+                            th:disabled="${readOnly}"
+                            th:field="*{manager}">
+                        <option th:attr="data-tokens=${dropDownItem.fullName}"
+                                th:each="dropDownItem : ${managerList}"
                                 th:text="${dropDownItem.fullName}"
-                                th:attr="data-tokens=${dropDownItem.fullName}"/>
+                                th:value="${dropDownItem.id}"/>
 
                     </select>
                 </div>
@@ -84,10 +84,10 @@
 
             <div class="form-group row">
                 <div class="col-6">
-                    <label for="recordLastName" th:text="#{label.lastname}">Last name: </label> <input
-                        class="form-control"
-                        type="text" id="recordLastName" th:field="*{lastName}"
-                        autofocus="autofocus" placeholder="Enter Last Name"/>
+                    <label for="recordLastName" th:text="#{label.lastname}">Last name: </label>
+                    <input autofocus="autofocus" class="form-control" id="recordLastName"
+                           placeholder="Enter Last Name" th:disabled="${readOnly}"
+                           th:field="*{lastName}" type="text"/>
                 </div>
 
             </div>
@@ -99,9 +99,9 @@
 
             <div class="form-group row">
                 <div class="col-6">
-                    <label for="recordFirstName" th:text="#{label.firstname}">First name: </label> <input
-                        class="form-control"
-                        type="text" id="recordFirstName" th:field="*{firstName}" placeholder="Enter First Name"/>
+                    <label for="recordFirstName" th:text="#{label.firstname}">First name: </label>
+                    <input class="form-control" id="recordFirstName" placeholder="Enter First Name"
+                           th:disabled="${readOnly}" th:field="*{firstName}" type="text"/>
                 </div>
 
             </div>
@@ -113,9 +113,9 @@
 
             <div class="form-group row">
                 <div class="col-6">
-                    <label for="recordMiddleName" th:text="#{label.middlename}">Middle name: </label> <input
-                        class="form-control"
-                        type="text" id="recordMiddleName" th:field="*{middleName}" placeholder="Enter Middle Name"/>
+                    <label for="recordMiddleName" th:text="#{label.middlename}">Middle name: </label>
+                    <input class="form-control" id="recordMiddleName" placeholder="Enter Middle Name"
+                           th:disabled="${readOnly}" th:field="*{middleName}" type="text"/>
                 </div>
 
             </div>
@@ -127,9 +127,8 @@
             <div class="form-group row">
                 <div class="col-6">
                     <label for="recordEmail" th:text="#{label.email}">Email: </label>
-                    <input id="recordEmail" class="form-control"
-                           type="text" th:field="*{email}"
-                           placeholder="Enter email"/>
+                    <input class="form-control" id="recordEmail" placeholder="Enter email"
+                           th:disabled="${readOnly}" th:field="*{email}" type="text"/>
                     <!--<input class="form-control" type="email" id="recordEmail" th:field="*{email}"
                            placeholder="Enter email"/>-->
                 </div>
@@ -143,8 +142,8 @@
             <div class="form-group row">
                 <div class="col-6">
                     <label for="recordPhone" th:text="#{label.phone}">Phone: </label>
-                    <input class="form-control" type="text" id="recordPhone" th:field="*{phone}"
-                           placeholder="Enter phone number"/>
+                    <input class="form-control" id="recordPhone" placeholder="Enter phone number"
+                           th:disabled="${readOnly}" th:field="*{phone}" type="text"/>
                 </div>
 
             </div>
@@ -157,8 +156,8 @@
             <div class="form-group row">
                 <div class="col-6">
                     <label for="recordAddress" th:text="#{label.address}">Address: </label>
-                    <input class="form-control" type="text" id="recordAddress" th:field="*{address}"
-                           placeholder="Enter address"/>
+                    <input class="form-control" id="recordAddress" placeholder="Enter address"
+                           th:disabled="${readOnly}" th:field="*{address}" type="text"/>
                 </div>
 
             </div>
@@ -171,8 +170,8 @@
             <div class="form-group row">
                 <div class="col-6">
                     <label for="recordSiteURL" th:text="#{label.site}">Site: </label>
-                    <input class="form-control" type="text" id="recordSiteURL" th:field="*{siteURL}"
-                           placeholder="Enter site URL"/>
+                    <input class="form-control" id="recordSiteURL" placeholder="Enter site URL"
+                           th:disabled="${readOnly}" th:field="*{siteURL}" type="text"/>
                 </div>
 
                 <!--<div class="col-6">
@@ -188,21 +187,35 @@
                 <p th:text="${#fields.errors('siteURL')}"></p>
             </div>
 
+            <!-- Buttons -->
 
-            <div class="row">
+            <div th:if="${readOnly}">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <a class="btn btn-info btn-sm btn-info" role="button"
+                           style="width: 100px;" th:href="@{${pageLink}}"
+                           th:text="#{label.back}">Back</a>
+                    </div>
+                    <div class="col-sm-6">
 
-                <div class="col-sm-6">
-                    <input type="submit" style="width: 100px;"
-                           class="btn btn-info btn-sm" value="OK"/>
+                    </div>
                 </div>
-
-                <div class="col-sm-6">
-                    <a th:href="@{${pageName}}" style="width: 100px;"
-                       class="btn btn-info btn-outline-danger btn-sm float-right"
-                       role="button" th:text="#{label.cancel}">Cancel</a>
-                </div>
-
             </div>
+            <div th:if="!${readOnly}">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input class="btn btn-info btn-sm" style="width: 100px;"
+                               type="submit" value="OK"/>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <a class="btn btn-info btn-outline-danger btn-sm float-right" role="button"
+                           style="width: 100px;"
+                           th:href="@{${pageLink}}" th:text="#{label.cancel}">Cancel</a>
+                    </div>
+                </div>
+            </div>
+
 
         </form>
 

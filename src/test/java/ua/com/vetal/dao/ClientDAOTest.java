@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import ua.com.vetal.TestBuildersUtils;
 import ua.com.vetal.entity.Client;
 import ua.com.vetal.entity.Manager;
-import ua.com.vetal.entity.filter.ClientViewFilter;
+import ua.com.vetal.entity.filter.ContragentViewFilter;
 import ua.com.vetal.repositories.ClientRepository;
 import ua.com.vetal.repositories.ManagerRepository;
 
@@ -54,47 +54,47 @@ public class ClientDAOTest {
 
 	@Test
 	void whenFindByFilterData() {
-        int allRecords = 2;
-        List<Client> filteredList = clientDAO.findByFilterData(null);
-        assertTrue(filteredList.isEmpty());
-        assertEquals(0, filteredList.size());
+		int allRecords = 2;
+		List<Client> filteredList = clientDAO.findByFilterData(null);
+		assertTrue(filteredList.isEmpty());
+		assertEquals(0, filteredList.size());
 
-        ClientViewFilter filterData = new ClientViewFilter();
-        filterData.setFullName(client.getFullName());
-        filterData.setManager(client.getManager());
+		ContragentViewFilter filterData = new ContragentViewFilter();
+		filterData.setCorpName(client.getCorpName());
+		filterData.setManager(client.getManager());
 
-        filteredList = clientDAO.findByFilterData(filterData);
-        assertEquals(1, filteredList.size());
+		filteredList = clientDAO.findByFilterData(filterData);
+		assertEquals(1, filteredList.size());
 
-        filterData = new ClientViewFilter();
-        filteredList = clientDAO.findByFilterData(filterData);
-        assertEquals(allRecords, filteredList.size());
+		filterData = new ContragentViewFilter();
+		filteredList = clientDAO.findByFilterData(filterData);
+		assertEquals(allRecords, filteredList.size());
 
-        filterData = new ClientViewFilter();
-        filterData.setFullName(client.getFullName());
-        filteredList = clientDAO.findByFilterData(filterData);
-        assertEquals(1, filteredList.size());
+		filterData = new ContragentViewFilter();
+		filterData.setCorpName(client.getCorpName());
+		filteredList = clientDAO.findByFilterData(filterData);
+		assertEquals(1, filteredList.size());
 
-        filterData = new ClientViewFilter();
-        filterData.setManager(client.getManager());
-        filteredList = clientDAO.findByFilterData(filterData);
-        assertEquals(1, filteredList.size());
+		filterData = new ContragentViewFilter();
+		filterData.setManager(client.getManager());
+		filteredList = clientDAO.findByFilterData(filterData);
+		assertEquals(1, filteredList.size());
 
-        filterData = new ClientViewFilter();
-        filterData.setManager(new Manager());
-        filteredList = clientDAO.findByFilterData(filterData);
-        assertEquals(allRecords, filteredList.size());
+		filterData = new ContragentViewFilter();
+		filterData.setManager(new Manager());
+		filteredList = clientDAO.findByFilterData(filterData);
+		assertEquals(allRecords, filteredList.size());
 
-        filterData = new ClientViewFilter();
-        Manager newManager = new Manager();
-        newManager.setId(1021L);
-        filterData.setManager(newManager);
-        filteredList = clientDAO.findByFilterData(filterData);
-        assertEquals(0, filteredList.size());
+		filterData = new ContragentViewFilter();
+		Manager newManager = new Manager();
+		newManager.setId(1021L);
+		filterData.setManager(newManager);
+		filteredList = clientDAO.findByFilterData(filterData);
+		assertEquals(0, filteredList.size());
 
-        filterData = new ClientViewFilter();
-        filterData.setFullName("not exist name");
-        filteredList = clientDAO.findByFilterData(filterData);
-        assertEquals(0, filteredList.size());
-    }
+		filterData = new ContragentViewFilter();
+		filterData.setCorpName("not exist name");
+		filteredList = clientDAO.findByFilterData(filterData);
+		assertEquals(0, filteredList.size());
+	}
 }

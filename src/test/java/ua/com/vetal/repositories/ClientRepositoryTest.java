@@ -44,7 +44,7 @@ public class ClientRepositoryTest {
     @Test
     public void whenFindByFullName_thenReturnObject() {
         // when
-        Client foundClient = clientRepository.findByFullName(client.getFullName());
+        Client foundClient = clientRepository.findByCorpName(client.getFullName());
 
         // then
         assertNotNull(foundClient);
@@ -62,7 +62,7 @@ public class ClientRepositoryTest {
 
     @Test
     public void whenFindByFullName_thenReturnEmpty() {
-        assertNull(clientRepository.findByFullName("wrong name"));
+        assertNull(clientRepository.findByCorpName("wrong name"));
     }
 
 

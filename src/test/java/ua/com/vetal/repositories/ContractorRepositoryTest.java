@@ -36,7 +36,7 @@ class ContractorRepositoryTest {
         managerRepository.deleteAll();
         manager = entityManager.persistAndFlush(TestBuildersUtils.getManager(null, "managerFirstName", "managerLastName", "managerMiddleName", "managerEmail"));
 
-        contractor = TestBuildersUtils.getContractor(null, "corpName", "shortName", "firstName", "lastName", "middleName", "address", "email", "phone", "siteURL");
+        contractor = TestBuildersUtils.getContractor(null, "corpName", "firstName", "lastName", "middleName", "address", "email", "phone", "siteURL");
         contractor.setManager(manager);
         contractor = entityManager.persistAndFlush(contractor);
     }
@@ -50,7 +50,6 @@ class ContractorRepositoryTest {
         assertNotNull(foundContractor);
         assertNotNull(foundContractor.getId());
         assertEquals(foundContractor.getCorpName(), contractor.getCorpName());
-        assertEquals(foundContractor.getShortName(), contractor.getShortName());
         assertEquals(foundContractor.getFirstName(), contractor.getFirstName());
         assertEquals(foundContractor.getLastName(), contractor.getLastName());
         assertEquals(foundContractor.getMiddleName(), contractor.getMiddleName());
@@ -87,9 +86,11 @@ class ContractorRepositoryTest {
     @Test
     public void whenFindByEmail_thenReturnContractor() {
         // when
-        Contractor foundContractor = contractorRepository.findByEmail(contractor.getEmail());
+        List<Contractor> foundContractor = contractorRepository.findByEmail(contractor.getEmail());
         // then
-        assertEquals(foundContractor, contractor);
+        assertNotNull(foundContractor);
+        assertEquals(1, foundContractor.size());
+        assertEquals(contractor, foundContractor.get(0));
     }
 
     //@Test
@@ -133,7 +134,6 @@ class ContractorRepositoryTest {
         assertNotNull(foundContractor);
         assertNotNull(foundContractor.getId());
         assertEquals(foundContractor.getCorpName(), newContractor.getCorpName());
-        assertEquals(foundContractor.getShortName(), newContractor.getShortName());
         assertEquals(foundContractor.getFirstName(), newContractor.getFirstName());
         assertEquals(foundContractor.getLastName(), newContractor.getLastName());
         assertEquals(foundContractor.getMiddleName(), newContractor.getMiddleName());
@@ -148,7 +148,7 @@ class ContractorRepositoryTest {
     @Test
     public void whenSaveContractorWithCorpNameTooLong_thenThrowConstraintViolationException() {
         Contractor newContractor = TestBuildersUtils.getContractor(null, "corpNameWithLengthMoreThen250SymbolsIsTooLongForSavingfullNameWithLengthMoreThen250SymbolsIsTooLongForSavingfullNameWithLengthMoreThen250SymbolsIsTooLongForSavingfullNameWithLengthMoreThen250SymbolsIsTooLongForSavingfullNameWithLengthMoreThen250SymbolsIsTooLongForSaving",
-                "shortName", "firstName", "lastName", "middleName", "address", "email", "phone", "siteURL");
+                "firstName", "lastName", "middleName", "address", "email", "phone", "siteURL");
         newContractor.setManager(manager);
         assertThrows(ConstraintViolationException.class, () -> {
             contractorRepository.save(newContractor);
@@ -157,7 +157,7 @@ class ContractorRepositoryTest {
 
     @Test
     public void whenSaveContractorWithCorpNameTooShortLength_thenThrowConstraintViolationException() {
-        Contractor newContractor = TestBuildersUtils.getContractor(null, "", "shortName", "firstName", "lastName", "middleName", "address", "email", "phone", "siteURL");
+        Contractor newContractor = TestBuildersUtils.getContractor(null, "", "firstName", "lastName", "middleName", "address", "email", "phone", "siteURL");
         newContractor.setManager(manager);
         assertThrows(ConstraintViolationException.class, () -> {
             contractorRepository.save(newContractor);
@@ -166,7 +166,7 @@ class ContractorRepositoryTest {
 
     @Test
     public void whenSaveContractorWithCorpNameNull_thenThrowConstraintViolationException() {
-        Contractor newContractor = TestBuildersUtils.getContractor(null, null, "shortName", "firstName", "lastName", "middleName", "address", "email", "phone", "siteURL");
+        Contractor newContractor = TestBuildersUtils.getContractor(null, null, "firstName", "lastName", "middleName", "address", "email", "phone", "siteURL");
         assertThrows(ConstraintViolationException.class, () -> {
             contractorRepository.save(newContractor);
         });
@@ -174,7 +174,7 @@ class ContractorRepositoryTest {
 
     @Test
     public void whenSaveContractorWithFirstNameTooLong_thenThrowConstraintViolationException() {
-        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "shortName", "firstNameWithLengthMoreThen50SymbolsIsTooLongForSaving", "lastName", "middleName", "address", "email", "phone", "siteURL");
+        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "firstNameWithLengthMoreThen50SymbolsIsTooLongForSaving", "lastName", "middleName", "address", "email", "phone", "siteURL");
         newContractor.setManager(manager);
         assertThrows(ConstraintViolationException.class, () -> {
             contractorRepository.save(newContractor);
@@ -183,7 +183,7 @@ class ContractorRepositoryTest {
 
     @Test
     public void whenSaveContractorWithFirstNameTooShortLength_thenThrowConstraintViolationException() {
-        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "shortName", "", "lastName", "middleName", "address", "email", "phone", "siteURL");
+        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "", "lastName", "middleName", "address", "email", "phone", "siteURL");
         newContractor.setManager(manager);
         assertThrows(ConstraintViolationException.class, () -> {
             contractorRepository.save(newContractor);
@@ -193,7 +193,7 @@ class ContractorRepositoryTest {
 
     @Test
     public void whenSaveContractorWithFirstNameNull_thenThrowConstraintViolationException() {
-        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "shortName", null, "lastName", "middleName", "address", "email", "phone", "siteURL");
+        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", null, "lastName", "middleName", "address", "email", "phone", "siteURL");
         assertThrows(ConstraintViolationException.class, () -> {
             contractorRepository.save(newContractor);
         });
@@ -202,7 +202,7 @@ class ContractorRepositoryTest {
 
     @Test
     public void whenSaveContractorWithLastNameTooLong_thenThrowConstraintViolationException() {
-        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "shortName", "firstName",
+        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "firstName",
                 "lastNameWithLengthMoreThen50SymbolsIsTooLongForSaving", "middleName",
                 "address", "email", "phone", "siteURL");
         newContractor.setManager(manager);
@@ -214,7 +214,7 @@ class ContractorRepositoryTest {
     @Test
     public void whenSaveContractorWithLastNameTooShortLength_thenThrowConstraintViolationException() {
         Contractor newContractor = TestBuildersUtils.getContractor(
-                null, "corpName", "shortName", "firstName", "", "middleName",
+                null, "corpName", "firstName", "", "middleName",
                 "address", "email", "phone", "siteURL");
         newContractor.setManager(manager);
         assertThrows(ConstraintViolationException.class, () -> {
@@ -226,7 +226,7 @@ class ContractorRepositoryTest {
     @Test
     public void whenSaveContractorWithLastNameNull_thenThrowConstraintViolationException() {
         Contractor newContractor = TestBuildersUtils.getContractor(
-                null, "corpName", "shortName", "firstName", null, "middleName", "address", "email", "phone", "siteURL");
+                null, "corpName", "firstName", null, "middleName", "address", "email", "phone", "siteURL");
         newContractor.setManager(manager);
         assertThrows(ConstraintViolationException.class, () -> {
             contractorRepository.save(newContractor);
@@ -235,7 +235,7 @@ class ContractorRepositoryTest {
 
     @Test
     public void whenSaveContractorWithMiddleNameTooLong_thenThrowConstraintViolationException() {
-        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "shortName", "firstName", "lastName", "middleNameWithLengthMoreThen50SymbolsIsTooLongForSaving", "address", "email", "phone", "siteURL");
+        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "firstName", "lastName", "middleNameWithLengthMoreThen50SymbolsIsTooLongForSaving", "address", "email", "phone", "siteURL");
         newContractor.setManager(manager);
         assertThrows(ConstraintViolationException.class, () -> {
             contractorRepository.save(newContractor);
@@ -244,7 +244,7 @@ class ContractorRepositoryTest {
 
     @Test
     public void whenSaveContractorWithAddressTooLong_thenThrowConstraintViolationException() {
-        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "shortName", "firstName",
+        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "firstName",
                 "lastName", "middleName",
                 "addressWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSaving",
                 "email", "phone", "siteURL");
@@ -256,7 +256,7 @@ class ContractorRepositoryTest {
 
     @Test
     public void whenSaveContractorWithAddressTooShortLength_thenThrowConstraintViolationException() {
-        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "shortName",
+        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName",
                 "firstName", "lastName", "middleName", "",
                 "email", "phone", "siteURL");
         newContractor.setManager(manager);
@@ -268,7 +268,7 @@ class ContractorRepositoryTest {
 
     @Test
     public void whenSaveClientWithAddressNull_thenThrowConstraintViolationException() {
-        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "shortName",
+        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName",
                 "firstName", null, "middleName", null,
                 "email", "phone", "siteURL");
         newContractor.setManager(manager);
@@ -279,7 +279,7 @@ class ContractorRepositoryTest {
 
     @Test
     public void whenSaveContractorWithEmailTooLong_thenThrowConstraintViolationException() {
-        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "shortName", "firstName",
+        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "firstName",
                 "lastName", "middleName", "address",
                 "emailWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSaving"
                 , "phone", "siteURL");
@@ -291,7 +291,7 @@ class ContractorRepositoryTest {
 
     @Test
     public void whenSaveContractorWithEmailTooShortLength_thenThrowConstraintViolationException() {
-        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "shortName",
+        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName",
                 "firstName", "lastName", "middleName", "address",
                 "", "phone", "siteURL");
         newContractor.setManager(manager);
@@ -303,7 +303,7 @@ class ContractorRepositoryTest {
 
     @Test
     public void whenSaveContractorWithEmailNull_thenThrowConstraintViolationException() {
-        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "shortName",
+        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName",
                 "firstName", null, "middleName", "address",
                 null, "phone", "siteURL");
         newContractor.setManager(manager);
@@ -315,7 +315,7 @@ class ContractorRepositoryTest {
 
     @Test
     public void whenSaveContractorWithPhoneTooLong_thenThrowConstraintViolationException() {
-        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "shortName", "firstName",
+        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "firstName",
                 "lastName", "middleName", "address",
                 "email", "WithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSaving"
                 , "siteURL");
@@ -327,7 +327,7 @@ class ContractorRepositoryTest {
 
     @Test
     public void whenSaveContractorWithPhoneTooShortLength_thenThrowConstraintViolationException() {
-        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "shortName",
+        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName",
                 "firstName", "lastName", "middleName", "address",
                 "email", "", "siteURL");
         newContractor.setManager(manager);
@@ -339,7 +339,7 @@ class ContractorRepositoryTest {
 
     @Test
     public void whenSaveContractorWithPhoneNull_thenThrowConstraintViolationException() {
-        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "shortName",
+        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName",
                 "firstName", null, "middleName", "address",
                 "email", null, "siteuLR");
         newContractor.setManager(manager);
@@ -350,7 +350,7 @@ class ContractorRepositoryTest {
 
     @Test
     public void whenSaveContractorWithSiteURLTooLong_thenThrowConstraintViolationException() {
-        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "shortName", "firstName",
+        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "firstName",
                 "lastName", "middleName", "address",
                 "email", "phone"
                 , "siteURLWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSavingWithLengthMoreThen255SymbolsIsTooLongForSaving");
@@ -362,7 +362,7 @@ class ContractorRepositoryTest {
 
     @Test
     public void whenSaveContractorWithSiteURLNull_thenThrowConstraintViolationException() {
-        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName", "shortName",
+        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName",
                 "firstName", null, "middleName", "address",
                 "email", null, "siteuLR");
         newContractor.setManager(manager);
@@ -383,7 +383,6 @@ class ContractorRepositoryTest {
         assertNotNull(foundContractor);
         assertNotNull(foundContractor.getId());
         assertEquals(foundContractor.getCorpName(), newContractor.getCorpName());
-        assertEquals(foundContractor.getShortName(), newContractor.getShortName());
         assertEquals(foundContractor.getFirstName(), newContractor.getFirstName());
         assertEquals(foundContractor.getLastName(), newContractor.getLastName());
         assertEquals(foundContractor.getMiddleName(), newContractor.getMiddleName());
@@ -404,7 +403,6 @@ class ContractorRepositoryTest {
         assertNotNull(foundContractor);
         assertNotNull(foundContractor.getId());
         assertEquals(foundContractor.getCorpName(), newContractor.getCorpName());
-        assertEquals(foundContractor.getShortName(), newContractor.getShortName());
         assertEquals(foundContractor.getFirstName(), newContractor.getFirstName());
         assertEquals(foundContractor.getLastName(), newContractor.getLastName());
         assertEquals(foundContractor.getMiddleName(), newContractor.getMiddleName());
@@ -438,7 +436,7 @@ class ContractorRepositoryTest {
     }
 
     private Contractor getSecondContractor() {
-        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName2", "shortName2", "firstName2", "lastName2", "middleName2", "address2", "email2", "phone2", "siteURL2");
+        Contractor newContractor = TestBuildersUtils.getContractor(null, "corpName2", "firstName2", "lastName2", "middleName2", "address2", "email2", "phone2", "siteURL2");
         newContractor.setManager(manager);
         return newContractor;
     }

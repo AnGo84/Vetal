@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+
     <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
     <script th:src="@{/js/popper.min.js}"></script>
     <script th:src="@{/js/bootstrap.min.js}"></script>
@@ -20,11 +21,11 @@
 <div class="container bg-light" style="margin-top: 30px">
     <div class="well">
         <h2>
-            <span th:text="${employeeName}"></span>
+            <span th:text="${employeePageName}"></span>
         </h2>
 
         <form action="#" method="POST"
-              th:action="@{${pageName}+'/update'}" th:object="${employee}">
+              th:action="@{${pageLink}+'/update'}" th:object="${employee}">
 
             <input id="recordId" th:field="*{id}" type="hidden"/>
 
@@ -95,7 +96,7 @@
                 <div class="col-sm-6">
                     <a class="btn btn-info btn-outline-danger btn-sm float-right" role="button"
                        style="width: 100px;"
-                       th:href="@{${pageName}}" th:text="#{label.cancel}">Cancel</a>
+                       th:href="@{${pageLink}}" th:text="#{label.cancel}">Cancel</a>
                 </div>
 
             </div>

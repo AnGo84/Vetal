@@ -19,7 +19,7 @@ import java.util.Locale;
 @Slf4j
 public abstract class AbstractDirectoryController<E extends AbstractDirectoryEntity, S extends CommonService<E>>
         implements CommonController<E> {
-    private final String DIRECTORY_PAGE = "directoryPage";
+    private final String DIRECTORY_LIST_PAGE = "directoryPage";
     private final String DIRECTORY_RECORD_PAGE = "directoryRecordPage";
     private final Class<E> objectClass;
 
@@ -32,7 +32,7 @@ public abstract class AbstractDirectoryController<E extends AbstractDirectoryEnt
     @Override
     public String allRecords(Model model) {
         model.addAttribute("directoryList", service.getAll());
-        return DIRECTORY_PAGE;
+        return DIRECTORY_LIST_PAGE;
     }
 
     @Override
@@ -68,19 +68,16 @@ public abstract class AbstractDirectoryController<E extends AbstractDirectoryEnt
 
         E updated = service.update(directory);
         log.info("Updated: {}", updated);
-        return "redirect:" + controllerType.getPageName();
+        return "redirect:" + controllerType.getPageLink();
     }
 
     @Override
     public String deleteRecord(Long id) {
         log.info("Delete {} with ID= {}", objectClass, id);
         service.deleteById(id);
-        return "redirect:" + controllerType.getPageName();
+        return "redirect:" + controllerType.getPageLink();
     }
 
-    /**
-     * This method will provide Title to views
-     */
     @ModelAttribute("title")
     public String initializeTitle() {
         return controllerType.getTitle();
@@ -88,16 +85,16 @@ public abstract class AbstractDirectoryController<E extends AbstractDirectoryEnt
 
     @ModelAttribute("directoryName")
     public String initializeDirectoryName() {
-        String name = messageSource.getMessage(controllerType.getLabel(), null, new Locale("ru"));
+        String name = messageSource.getMessage(controllerType.getMessageLabel(), null, new Locale("ru"));
         if (name == null || name.equals("")) {
-            return controllerType.getDirectoryName();
+            return controllerType.getPageName();
         }
         return name;
     }
 
-    @ModelAttribute("pageName")
-    public String initializePageName() {
-        return controllerType.getPageName();
+    @ModelAttribute("pageLink")
+    public String initializePageLink() {
+        return controllerType.getPageLink();
     }
 
 }

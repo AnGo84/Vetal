@@ -33,7 +33,7 @@ import java.util.Map;
 @RequestMapping("/statistic")
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:vetal.properties")
 @Slf4j
-public class StatisticController extends BaseController {
+public class StatisticController extends BaseFilteredController {
 
     private final String title = "Statistic";
     private final String pageName = "/statistic";
