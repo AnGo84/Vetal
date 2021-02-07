@@ -20,7 +20,12 @@
 <!-- Include _menu.html
 <th:block th:include="/_menu"></th:block>
  -->
-<div class="container py-5">
+<div class="container-fluid text-center  py-3">
+    <div>
+        <img class="img-fluid" th:src="@{/image/logo.jpg}"/>
+    </div>
+</div>
+<div class="container">
     <div class="row">
 
         <div class="col-md-6 mx-auto">
@@ -28,7 +33,7 @@
             <div class="card rounded-0">
 
                 <div class="card-header">
-                    <h4 class="card-title text-center mb-4 mt-1"
+                    <h4 class="card-title text-center my-2"
                         th:text="#{label.sign_in}">Sign in</h4>
                 </div>
 
@@ -91,33 +96,30 @@
                         </div>
 
                         <p th:if="${loginError}" class="error"
-                           th:text="#{message.wrong_login_or_password}">Wrong user or
-                            password</p>
+                           th:text="#{message.wrong_login_or_password}">Wrong user or password</p>
 
                         <div class="form-check">
-                            <label class="form-check-label"> <input type="checkbox"
-                                                                    name="remember-me" class="form-check-input"> <span
-                                    class="custom-control-description small text-dark"
-                                    th:text="#{message.remember_me}">Remember me on this
-										computer</span>
+                            <label class="form-check-label">
+                                <input type="checkbox" name="remember-me" class="form-check-input">
+                                <span class="custom-control-description small text-dark"
+                                      th:text="#{message.remember_me}">Remember me on this computer</span>
                             </label>
                         </div>
 
                         <hr/>
 
                         <div class="form-group">
-                            <button name="submit" type="submit"
-                                    class="btn btn-primary btn-block" value="submit"
-                                    th:text="#{label.submit}">Login
+                            <button name="submit" type="submit" class="btn btn-primary btn-block"
+                                    value="submit" th:text="#{label.submit}">Login
                             </button>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group mb-1">
 
-                            <p class="text-center">
+                            <p class="text-center mb-1">
                                 <a href="#" th:href="@{/forgotPassword}" class="btn"
-                                   th:text="#{message.forgot_password}">Forgot
-                                    password?</a>
+                                   th:text="#{message.forgot_password}">Forgot password?
+                                </a>
                             </p>
                         </div>
 
