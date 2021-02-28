@@ -52,7 +52,7 @@ public abstract class AbstractDirectoryController<E extends AbstractDirectoryEnt
     }
 
     @Override
-    public String updateRecord(@Valid @ModelAttribute("directory") E directory, BindingResult bindingResult, Model model) {
+    public String updateRecord(@Valid @ModelAttribute("directory") E directory, BindingResult bindingResult, Model model, Locale locale) {
         log.info("Update '{}': {}", objectClass, directory);
         if (bindingResult.hasErrors()) {
             LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
@@ -61,7 +61,7 @@ public abstract class AbstractDirectoryController<E extends AbstractDirectoryEnt
         if (service.isExist(directory)) {
             log.error("Directory '{}' exist", directory.getName());
             FieldError fieldError = new FieldError("directory", "name", messageSource.getMessage("non.unique.field",
-                    new String[]{"Название", directory.getName()}, new Locale("ru")));
+                    new String[]{"Название", directory.getName()}, locale));
             bindingResult.addError(fieldError);
             return DIRECTORY_RECORD_PAGE;
         }
@@ -84,8 +84,8 @@ public abstract class AbstractDirectoryController<E extends AbstractDirectoryEnt
     }
 
     @ModelAttribute("directoryName")
-    public String initializeDirectoryName() {
-        String name = messageSource.getMessage(controllerType.getMessageLabel(), null, new Locale("ru"));
+    public String initializeDirectoryName(Locale locale) {
+        String name = messageSource.getMessage(controllerType.getMessageLabel(), null, locale);
         if (name == null || name.equals("")) {
             return controllerType.getPageName();
         }

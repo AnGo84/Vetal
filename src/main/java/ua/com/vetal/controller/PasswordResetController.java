@@ -37,12 +37,12 @@ public class PasswordResetController {
     }
 
     @GetMapping
-    public String displayResetPasswordPage(@RequestParam(required = false) String token, Model model) {
+    public String displayResetPasswordPage(@RequestParam(required = false) String token, Model model, Locale locale) {
         PasswordResetToken resetToken = tokenRepository.findByToken(token);
         if (resetToken == null) {
-            model.addAttribute("error", messageSource.getMessage("non.found.token", null, new Locale("ru")));
+            model.addAttribute("error", messageSource.getMessage("non.found.token", null, locale));
         } else if (resetToken.isExpired()) {
-            model.addAttribute("error", messageSource.getMessage("non.token.hasExpired", null, new Locale("ru")));
+            model.addAttribute("error", messageSource.getMessage("non.token.hasExpired", null, locale));
         } else {
             model.addAttribute("token", resetToken.getToken());
         }
@@ -53,20 +53,20 @@ public class PasswordResetController {
     @PostMapping
     @Transactional
     public String handlePasswordReset(@ModelAttribute("passwordResetForm") @Valid PasswordResetDto passwordResetDto,
-                                      BindingResult result, RedirectAttributes redirectAttributes) {
+                                      BindingResult result, RedirectAttributes redirectAttributes, Locale locale) {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute(BindingResult.class.getName() + ".passwordResetForm", result);
             redirectAttributes.addFlashAttribute("passwordResetForm", passwordResetDto);
             return "redirect:/passwordReset?token=" + passwordResetDto.getToken();
         }
         if (StringUtils.isBlank(passwordResetDto.getPassword())) {
-            redirectAttributes.addFlashAttribute("error", messageSource.getMessage("required.password", null, new Locale("ru")));
+            redirectAttributes.addFlashAttribute("error", messageSource.getMessage("required.password", null, locale));
             return "redirect:/passwordReset?token=" + passwordResetDto.getToken();
         } else if (StringUtils.isBlank(passwordResetDto.getConfirmPassword())) {
-            redirectAttributes.addFlashAttribute("error", messageSource.getMessage("required.passwordConfirm", null, new Locale("ru")));
+            redirectAttributes.addFlashAttribute("error", messageSource.getMessage("required.passwordConfirm", null, locale));
             return "redirect:/passwordReset?token=" + passwordResetDto.getToken();
         } else if (!passwordResetDto.getPassword().equals(passwordResetDto.getConfirmPassword())) {
-            redirectAttributes.addFlashAttribute("error", messageSource.getMessage("non.match.passwords", null, new Locale("ru")));
+            redirectAttributes.addFlashAttribute("error", messageSource.getMessage("non.match.passwords", null, locale));
             return "redirect:/passwordReset?token=" + passwordResetDto.getToken();
         }
 

@@ -96,11 +96,11 @@ public class MainController {
     }
 
     @RequestMapping(value = "/file-{id}", method = RequestMethod.GET)
-    public void downloadFile(HttpServletResponse response, @PathVariable Long id) throws IOException {
+    public void downloadFile(HttpServletResponse response, @PathVariable Long id, Locale locale) throws IOException {
         Link link = linkService.findById(id);
         if (link == null) {
             String errorMessage = messageSource.getMessage("message.file.file_not_found",
-                    new String[]{String.valueOf(link)}, new Locale("ru"));
+                    new String[]{String.valueOf(link)}, locale);
             WebUtils.setTextToResponse(errorMessage, response);
             return;
         }
@@ -110,7 +110,7 @@ public class MainController {
 
         if (!file.exists()) {
             String errorMessage = messageSource.getMessage("message.file.file_not_found",
-                    new String[]{String.valueOf(link)}, new Locale("ru"));
+                    new String[]{String.valueOf(link)}, locale);
             WebUtils.setTextToResponse(errorMessage, response);
             return;
         }
