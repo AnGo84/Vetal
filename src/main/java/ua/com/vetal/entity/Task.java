@@ -17,14 +17,14 @@ import javax.validation.constraints.Size;
 @ToString(callSuper = true)
 public class Task extends Order {
 
-    @NotEmpty
-    @Column(name = "Work_Name", nullable = false)
-    private String workName;
+	@NotEmpty
+	@Column(name = "Work_Name", nullable = false)
+	private String workName;
 
-    @Column(name = "File_Name", nullable = false)
-    private String fileName;
+	@Column(name = "File_Name", nullable = false)
+	private String fileName;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "file_id")
 	private DBFile dbFile;
 

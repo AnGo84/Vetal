@@ -172,7 +172,9 @@ public class TasksController extends BaseFilteredController {
 	@ResponseBody
 	public void exportToExcelReportTask(HttpServletResponse response) throws JRException, IOException {
 		log.info("Export {} to Excel", title);
-		JasperReportData jasperReportData = reportData.getReportData(taskService.findByFilterData(getTaskViewFilter()), getTaskViewFilter());
+		final List<Task> taskList = taskService.findByFilterData(getTaskViewFilter());
+		taskList.stream().forEach(t -> t.setDbFile(null));
+		JasperReportData jasperReportData = reportData.getReportData(taskList, getTaskViewFilter());
 		jasperReportService.exportToResponseStream(JasperReportExporterType.XLSX,
 				jasperReportData, title, response);
 
