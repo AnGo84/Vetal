@@ -60,8 +60,7 @@ public class LinksController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String updateLink(@Valid @ModelAttribute("link") Link link, BindingResult bindingResult,
-                             Model model) {
+    public String updateLink(@Valid @ModelAttribute("link") Link link, BindingResult bindingResult, Locale locale) {
         log.info("Update link: " + link);
         if (bindingResult.hasErrors()) {
             LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
@@ -72,7 +71,7 @@ public class LinksController {
             FieldError fieldError =
                     new FieldError("Link", "fullName",
                             messageSource.getMessage("non.unique.field", new String[]{
-                                    link.getFullName()}, Locale.getDefault()));
+                                    link.getFullName()}, locale));
             bindingResult.addError(fieldError);
             return "linkPage";
         }

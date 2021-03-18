@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ua.com.vetal.entity.common.AbstractEntity;
 
 import javax.validation.Valid;
+import java.util.Locale;
 
 public interface CommonController<E extends AbstractEntity> {
 
@@ -22,7 +23,7 @@ public interface CommonController<E extends AbstractEntity> {
 
     @PostMapping(value = "/update")
     String updateRecord(@Valid E directory,
-                        BindingResult bindingResult, Model model);
+                        BindingResult bindingResult, Model model, Locale locale);
 
     @GetMapping(value = {"/delete-{id}"})
     String deleteRecord(@PathVariable Long id);

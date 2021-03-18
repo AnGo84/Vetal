@@ -72,7 +72,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String updateUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
+	public String updateUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model, Locale locale) {
 		log.info("Update User: {}", user);
 		if (bindingResult.hasErrors()) {
 			LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
@@ -87,7 +87,7 @@ public class UserController {
 
 		} catch (DataIntegrityViolationException e) {
 			FieldError ssoError = new FieldError("user", "name", messageSource.getMessage("non.unique.field",
-					new String[]{"Login", user.getName()}, new Locale("ru")));
+					new String[]{"Login", user.getName()}, locale));
 			bindingResult.addError(ssoError);
 			model.addAttribute("edit", (user.getId() != null));
 			return "userPage";

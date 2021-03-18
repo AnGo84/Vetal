@@ -125,7 +125,7 @@ public class TasksController extends BaseFilteredController {
 	@LogExecutionTime
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String updateTask(@Valid @ModelAttribute("task") Task task, BindingResult bindingResult,
-							 @RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile) {
+							 @RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile, Locale locale) {
 		log.info("Update {}: {}", title, task);
 
 		if (bindingResult.hasErrors()) {
@@ -142,8 +142,7 @@ public class TasksController extends BaseFilteredController {
 			log.error("Error on task {} update: {}", task, e.getMessage(), e);
 
 			FieldError fieldError = new FieldError("task", "dbFile",
-					messageSource.getMessage("file.upload.error",
-							new String[]{e.getMessage()}, new Locale("ru")));
+					messageSource.getMessage("file.upload.error", new String[]{e.getMessage()}, locale));
 			bindingResult.addError(fieldError);
 			return "taskPage";
 		}
@@ -180,7 +179,7 @@ public class TasksController extends BaseFilteredController {
 	}
 
 	@RequestMapping(value = {"/sendEmail-{id}"}, method = RequestMethod.GET)
-	public String sendEmail(Model model, @PathVariable Long id, HttpServletResponse response) throws JRException, IOException {
+	public String sendEmail(Model model, @PathVariable Long id, HttpServletResponse response, Locale locale) throws JRException, IOException {
 		log.info("Send {} with ID= {}", title, id);
 
 		model.addAttribute("title", "email");
@@ -205,14 +204,14 @@ public class TasksController extends BaseFilteredController {
 					result = true;
 					log.info("Sent {} with ID= {} from {} to {}", title, id, task.getManager().getEmail(), task.getContractor().getEmail());
 					taskMailingDeclineReason = getLocalizedMessage("message.email.sent_to",
-							new String[]{task.getContractor().getFullName(), task.getContractor().getEmail()});
+							new String[]{task.getContractor().getFullName(), task.getContractor().getEmail()}, locale);
 				} catch (Exception e) {
 					log.error("Email sanding error: {}", e.getMessage(), e);
-					taskMailingDeclineReason = getLocalizedMessage("message.email.service_error", null) + ": " + e.getMessage();
+					taskMailingDeclineReason = getLocalizedMessage("message.email.service_error", null, locale) + ": " + e.getMessage();
 				}
 			}
 		} else {
-			taskMailingDeclineReason = getLocalizedMessage("message.email.miss_task_by_id", new String[]{String.valueOf(id)});
+			taskMailingDeclineReason = getLocalizedMessage("message.email.miss_task_by_id", new String[]{String.valueOf(id)}, locale);
 		}
 		model.addAttribute("resultSuccess", result);
 		model.addAttribute("message", taskMailingDeclineReason);
@@ -220,8 +219,8 @@ public class TasksController extends BaseFilteredController {
 		return "emailResultPage";
 	}
 
-	private String getLocalizedMessage(String label, Object[] labelParams) {
-		return messageSource.getMessage(label, labelParams, new Locale("ru"));
+	private String getLocalizedMessage(String label, Object[] labelParams, Locale locale) {
+		return messageSource.getMessage(label, labelParams, locale);
 	}
 
 	@GetMapping("/downloadFile-{taskId}")

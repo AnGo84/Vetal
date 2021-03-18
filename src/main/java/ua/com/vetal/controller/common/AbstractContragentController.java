@@ -74,7 +74,7 @@ public abstract class AbstractContragentController<E extends AbstractContragentE
 	}
 
 	@Override
-	public String updateRecord(@Valid @ModelAttribute("contragent") E contragent, BindingResult bindingResult, Model model) {
+	public String updateRecord(@Valid @ModelAttribute("contragent") E contragent, BindingResult bindingResult, Model model, Locale locale) {
 		log.info("Update '{}': {}", controllerType.getPageName(), contragent);
 		if (bindingResult.hasErrors()) {
 			LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
@@ -83,7 +83,7 @@ public abstract class AbstractContragentController<E extends AbstractContragentE
 		if (service.isExist(contragent)) {
 			log.error("Contragent '{}' exist", contragent.getCorpName());
 			FieldError fieldError = new FieldError("contragent", "corpName", messageSource.getMessage("non.unique.field",
-					new String[]{"Название", contragent.getCorpName()}, new Locale("ru")));
+					new String[]{"Название", contragent.getCorpName()}, locale));
 
 			bindingResult.addError(fieldError);
 			return CONTRAGENT_RECORD_PAGE;
@@ -148,8 +148,8 @@ public abstract class AbstractContragentController<E extends AbstractContragentE
 	}
 
 	@ModelAttribute("pageName")
-	public String initializePageName() {
-		String name = messageSource.getMessage(controllerType.getMessageLabel(), null, new Locale("ru"));
+	public String initializePageName(Locale locale) {
+		String name = messageSource.getMessage(controllerType.getMessageLabel(), null, locale);
 		if (name == null || name.equals("")) {
 			return controllerType.getPageName();
 		}

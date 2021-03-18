@@ -51,7 +51,7 @@ public abstract class AbstractEmployeeController<E extends AbstractEmployeeEntit
     }
 
     @Override
-    public String updateRecord(@Valid @ModelAttribute("employee") E employee, BindingResult bindingResult, Model model) {
+    public String updateRecord(@Valid @ModelAttribute("employee") E employee, BindingResult bindingResult, Model model, Locale locale) {
         log.info("Update '{}': {}", objectClass, employee);
         if (bindingResult.hasErrors()) {
             LoggerUtils.loggingBindingResultsErrors(bindingResult, log);
@@ -75,8 +75,8 @@ public abstract class AbstractEmployeeController<E extends AbstractEmployeeEntit
     }
 
     @ModelAttribute("employeePageName")
-    public String initializePageName() {
-        String name = messageSource.getMessage(controllerType.getMessageLabel(), null, new Locale("ru"));
+    public String initializePageName(Locale locale) {
+        String name = messageSource.getMessage(controllerType.getMessageLabel(), null, locale);
         if (name == null || name.equals("")) {
             return controllerType.getPageName();
         }
