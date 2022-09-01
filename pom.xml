@@ -28,7 +28,7 @@
         <junit-jupiter.version>5.7.0</junit-jupiter.version>
         <lombock.version>1.18.16</lombock.version>
         <greenmail.version>1.5.13</greenmail.version>
-        <jsoup.version>1.14.2</jsoup.version>
+        <jsoup.version>1.15.3</jsoup.version>
 
         <start-class>ua.com.vetal.VetalApplication</start-class>
     </properties>
